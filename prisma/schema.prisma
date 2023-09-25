@@ -56,6 +56,7 @@ model User {
     accounts      Account[]
     sessions      Session[]
     telegramAccounts TelegramAccount[]
+    bots BotDescription[]
 }
 
 model VerificationToken {
@@ -74,4 +75,15 @@ model TelegramAccount {
     user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
+model BotDescription {
+    id            String    @id @default(cuid())
+    userId        String
+    name   String   @db.Text
+    deleted Boolean @default(false)
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+    user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+// npx prisma generate
 // yarn prisma db push

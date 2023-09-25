@@ -7,6 +7,8 @@ import { DrawerHeader } from './DrawerHeader';
 import { drawerWidth } from '../contstants';
 import CreateIcon from '@mui/icons-material/Create';
 import { useRouter } from 'next/router';
+import InsightsIcon from '@mui/icons-material/Insights';
+import { MY_BOTS_PATH } from '~/constants';
 
 interface MainDrawerProps {
     open: boolean;
@@ -15,7 +17,10 @@ interface MainDrawerProps {
 export const MainDrawer = ({ open }: MainDrawerProps) => {
     const router = useRouter();
 
-    const paths = [{ title: "Create post", icon: <CreateIcon />, path: '/create-post' }];
+    const paths = [
+        { title: "Create post", icon: <CreateIcon />, path: '/create-post' },
+        { title: "Bot builder", icon: <InsightsIcon />, path: MY_BOTS_PATH },
+    ];
 
     return (
         <Drawer
