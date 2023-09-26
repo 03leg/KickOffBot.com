@@ -13,6 +13,5 @@ export const useStyles = makeStyles()(() => ({
 
   viewPort: {
     transformOrigin: '0px 0px',
-    transform: 'translate(327.92px, 778.137px) scale(0.769602)',
   },
 }));

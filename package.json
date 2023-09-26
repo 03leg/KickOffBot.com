@@ -28,6 +28,7 @@
     "@types/draft-js": "^0.11.12",
     "@types/formidable": "^3.4.0",
     "@types/lodash": "^4.14.196",
+    "@use-gesture/react": "^10.3.0",
     "axios": "^1.4.0",
     "draft-js": "^0.11.7",
     "formidable": "^3.5.0",
@@ -41,6 +42,7 @@
     "superjson": "1.12.2",
     "telegraf": "^4.12.2",
     "tss-react": "^4.8.8",
+    "usehooks-ts": "^2.9.1",
     "zod": "^3.21.4"
   },
   "devDependencies": {
