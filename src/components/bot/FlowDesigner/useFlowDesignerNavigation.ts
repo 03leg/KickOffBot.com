@@ -1,6 +1,7 @@
 import { useGesture } from "@use-gesture/react";
 import { useState } from "react";
 import { zoomFlowDesigner } from "./FlowDesigner.utils";
+import { round } from "lodash";
 
 export function useFlowDesignerNavigation() {
   const [startValue, setStartValue] = useState<{ x: number; y: number }>({
@@ -17,7 +18,10 @@ export function useFlowDesignerNavigation() {
     onDrag: (state) => {
       const [valuesX, valuesY] = state.values;
       const [initialX, initialY] = state.initial;
-      const deltaObject = { x: valuesX - initialX, y: valuesY - initialY };
+      const deltaObject = {
+        x: round(valuesX - initialX),
+        y: round(valuesY - initialY),
+      };
 
       if (state.down) {
         setDistance(deltaObject);
@@ -39,10 +43,10 @@ export function useFlowDesignerNavigation() {
       );
 
       setStartValue({
-        x: newTransformDescription.x,
-        y: newTransformDescription.y,
+        x: round(newTransformDescription.x),
+        y: round(newTransformDescription.y),
       });
-      setScale(newTransformDescription.scale);
+      setScale(round(newTransformDescription.scale, 2));
     },
   });
 

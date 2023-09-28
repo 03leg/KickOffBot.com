@@ -5,7 +5,7 @@ import { useFlowDesignerNavigation } from './useFlowDesignerNavigation';
 
 export const FlowDesigner = () => {
     const { classes } = useStyles();
-    const { bind, transforDescription } = useFlowDesignerNavigation()
+    const { bind, transforDescription } = useFlowDesignerNavigation();
 
     return (
         <Box className={classes.root} {...bind()}>
