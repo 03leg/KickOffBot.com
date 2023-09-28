@@ -1,30 +1,28 @@
 import { useGesture } from "@use-gesture/react";
 import { useState } from "react";
-import { zoomFlowDesigner } from "./FlowDesigner.utils";
 import { round } from "lodash";
+import { type TransformDescription } from "../../types";
 
-export function useFlowDesignerNavigation() {
+export function useFlowDesignerBlockNavigation(
+  initPosition: Omit<TransformDescription, "scale">,
+  rootScale: number
+) {
   const [startValue, setStartValue] = useState<{ x: number; y: number }>({
-    x: 0,
-    y: 0,
+    x: initPosition.x,
+    y: initPosition.y,
   });
   const [distance, setDistance] = useState<{ x: number; y: number }>({
     x: 0,
     y: 0,
   });
-  const [scale, setScale] = useState<number>(1);
 
   const bind = useGesture({
     onDrag: (state) => {
-      if (state.target !== state.currentTarget) {
-        return;
-      }
-      
       const [valuesX, valuesY] = state.values;
       const [initialX, initialY] = state.initial;
       const deltaObject = {
-        x: round(valuesX - initialX),
-        y: round(valuesY - initialY),
+        x: round((valuesX - initialX) * (1 / rootScale)),
+        y: round((valuesY - initialY) * (1 / rootScale)),
       };
 
       if (state.down) {
@@ -39,26 +37,12 @@ export function useFlowDesignerNavigation() {
         setDistance({ x: 0, y: 0 });
       }
     },
-    onWheel: (state) => {
-      const newTransformDescription = zoomFlowDesigner(
-        state.event,
-        state.currentTarget as HTMLElement,
-        { x: startValue.x, y: startValue.y, scale }
-      );
-
-      setStartValue({
-        x: round(newTransformDescription.x),
-        y: round(newTransformDescription.y),
-      });
-      setScale(round(newTransformDescription.scale, 2));
-    },
   });
 
-  const transforDescription = {
+  const transformDescription = {
     x: startValue.x + distance.x,
     y: startValue.y + distance.y,
-    scale,
   };
 
-  return { bind, transforDescription };
+  return { bind, transformDescription };
 }
