@@ -1,7 +1,7 @@
 import { Box } from '@mui/material'
 import React from 'react'
 import { Colors } from '~/themes/Colors'
-import { type ToolBoxGroup } from './types'
+import { ElementType, type ToolBoxGroup } from './types'
 import MessageIcon from '@mui/icons-material/Message';
 import ImageIcon from '@mui/icons-material/Image';
 import { ToolBoxGroupComp } from './ToolBoxGroup';
@@ -20,27 +20,27 @@ export const ToolBox = () => {
             {
                 title: 'Content',
                 items: [
-                    { title: 'Text', icon: <MessageIcon /> },
-                    { title: 'Image', icon: <ImageIcon /> },
-                    { title: 'Audio', icon: <AudiotrackIcon /> },
-                    { title: 'Video', icon: <VideocamIcon /> },
+                    { type: ElementType.CONTENT_TEXT, title: 'Text', icon: <MessageIcon /> },
+                    { type: ElementType.CONTENT_IMAGE, title: 'Image', icon: <ImageIcon /> },
+                    { type: ElementType.CONTENT_AUDIO, title: 'Audio', icon: <AudiotrackIcon /> },
+                    { type: ElementType.CONTENT_VIDEO, title: 'Video', icon: <VideocamIcon /> },
                 ]
             },
             {
                 title: 'User Input',
                 items: [
-                    { title: 'Text', icon: <TextFieldsIcon /> },
-                    { title: 'Number', icon: <NumbersIcon /> },
-                    { title: 'Email', icon: <AlternateEmailIcon /> },
-                    { title: 'Date', icon: <DateRangeIcon /> },
-                    { title: 'Phone', icon: <LocalPhoneIcon /> },
+                    { type: ElementType.INPUT_TEXT, title: 'Text', icon: <TextFieldsIcon /> },
+                    { type: ElementType.INPUT_NUMBER, title: 'Number', icon: <NumbersIcon /> },
+                    { type: ElementType.INPUT_EMAIL, title: 'Email', icon: <AlternateEmailIcon /> },
+                    { type: ElementType.INPUT_DATE, title: 'Date', icon: <DateRangeIcon /> },
+                    { type: ElementType.INPUT_PHONE, title: 'Phone', icon: <LocalPhoneIcon /> },
                 ]
             },
         ]
 
     return (
         <Box sx={{
-            height: '100%', 
+            height: '100%',
             minWidth: 300,
             maxWidth: 300,
             backgroundColor: Colors.WHITE,
