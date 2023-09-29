@@ -2,7 +2,7 @@ import { Box } from '@mui/material'
 import React from 'react'
 import { useStyles } from './FlowDesignerBlock.style';
 import { type TransformDescription } from '../../types';
-import { useFlowDesignerBlockNavigation } from './useFlowDesignerBlockMovement';
+import { useFlowDesignerBlockMovements } from './useFlowDesignerBlockMovements';
 
 interface Props {
     color: string;
@@ -12,7 +12,7 @@ interface Props {
 
 export const FlowDesignerBlock = ({ color, transformDescriptionInitial, rootScale }: Props) => {
     const { classes } = useStyles();
-    const { bind, transformDescription } = useFlowDesignerBlockNavigation(transformDescriptionInitial, rootScale);
+    const { bind, transformDescription } = useFlowDesignerBlockMovements(transformDescriptionInitial, rootScale);
 
     return (
         <Box {...bind()} className={classes.root} style={{ transform: `translate(${transformDescription.x}px, ${transformDescription.y}px)` }}>

@@ -3,7 +3,7 @@ import { useState } from "react";
 import { round } from "lodash";
 import { type TransformDescription } from "../../types";
 
-export function useFlowDesignerBlockNavigation(
+export function useFlowDesignerBlockMovements(
   initPosition: Omit<TransformDescription, "scale">,
   rootScale: number
 ) {
