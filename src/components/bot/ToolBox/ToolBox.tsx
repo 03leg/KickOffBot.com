@@ -1,7 +1,7 @@
 import { Box } from '@mui/material'
 import React from 'react'
 import { Colors } from '~/themes/Colors'
-import { ElementType, type ToolBoxGroup } from './types'
+import { type ToolBoxGroup } from './types'
 import MessageIcon from '@mui/icons-material/Message';
 import ImageIcon from '@mui/icons-material/Image';
 import { ToolBoxGroupComp } from './ToolBoxGroup';
@@ -12,6 +12,7 @@ import NumbersIcon from '@mui/icons-material/Numbers';
 import AlternateEmailIcon from '@mui/icons-material/AlternateEmail';
 import DateRangeIcon from '@mui/icons-material/DateRange';
 import LocalPhoneIcon from '@mui/icons-material/LocalPhone';
+import { ElementType } from '../types';
 
 export const ToolBox = () => {
 

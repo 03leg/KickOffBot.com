@@ -4,8 +4,7 @@ import { useStyles } from './FlowDesigner.style'
 import { useFlowDesignerNavigation } from './useFlowDesignerNavigation';
 import { FlowDesignerBlock } from './components/FlowDesignerBlock';
 import { useDroppable } from '@dnd-kit/core';
-import { ElementType } from '../ToolBox/types';
-import { type FlowDesignerUIBlockDescription } from '../types';
+import { ElementType, type FlowDesignerUIBlockDescription } from '../types';
 import { type TransformDescription } from './types';
 
 interface Props {
@@ -31,7 +30,7 @@ export const FlowDesigner = ({ blocks, onTransformDescriptionChange }: Props) =>
     return (
         <Box ref={setNodeRef} className={classes.root} {...bind()}>
             <Box className={classes.viewPort} style={{ transform: `translate(${transforDescription.x}px, ${transforDescription.y}px) scale(${transforDescription.scale})` }}>
-                {blocks.map(b => <FlowDesignerBlock key={b.color} color={b.color} transformDescriptionInitial={b.position} rootScale={transforDescription.scale} />)}
+                {blocks.map(b => <FlowDesignerBlock key={b.id} blockDescription={b} rootScale={transforDescription.scale} />)}
             </Box>
         </Box>
     )
