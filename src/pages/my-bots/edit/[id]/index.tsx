@@ -9,6 +9,7 @@ import { type TransformDescription } from '~/components/bot/FlowDesigner/types';
 import { useMove } from '@use-gesture/react';
 import { useCallback, useRef } from 'react';
 import { isNil } from 'lodash';
+import { restrictToWindowEdges } from '@dnd-kit/modifiers';
 
 export default function EditPage() {
     const flowDesignerTransformDescription = React.useRef<TransformDescription | null>(null);
@@ -64,7 +65,7 @@ export default function EditPage() {
     return (
         <Layout>
             <Box sx={{ padding: (theme) => theme.spacing(2), height: '100%', display: 'flex', flexDirection: 'row' }} {...mouseMoveBind()}>
-                <DndContext onDragEnd={handleDragEnd} onDragStart={handleDragStart}>
+                <DndContext onDragEnd={handleDragEnd} onDragStart={handleDragStart} modifiers={[restrictToWindowEdges]}>
                     <ToolBox />
                     <Box sx={{ flex: 1 }}>
                         <FlowDesigner blocks={blocks} onTransformDescriptionChange={handleTransformDescriptionChange} />
