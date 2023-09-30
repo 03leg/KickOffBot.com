@@ -6,43 +6,68 @@ import { FlowDesigner } from '~/components/bot/FlowDesigner';
 import { DndContext, type DragEndEvent } from '@dnd-kit/core';
 import { type FlowDesignerUIBlockDescription } from '~/components/bot/types';
 import { type TransformDescription } from '~/components/bot/FlowDesigner/types';
+import { useMove } from '@use-gesture/react';
+import { useCallback, useRef } from 'react';
+import { isNil } from 'lodash';
 
 export default function EditPage() {
     const flowDesignerTransformDescription = React.useRef<TransformDescription | null>(null);
     const [blocks, setBlocks] = React.useState<FlowDesignerUIBlockDescription[]>([
-        { color: 'orange', position: { x: 0, y: 0 } },
-        { color: 'yellow', position: { x: 0, y: 200 } },
-        { color: 'green', position: { x: 200, y: 300 } },
-    ])
+        { id: '0', color: 'orange', position: { x: 0, y: 0 } },
+        { id: '1', color: 'yellow', position: { x: 0, y: 200 } },
+        { id: '2', color: 'green', position: { x: 200, y: 300 } },
+    ]);
+    const dragMode = useRef<boolean>(false);
+    const lastMouseDndPosition = useRef<[number, number] | null>(null);
 
-    function handleDragEnd(event: DragEndEvent) {
-        const { active, over, activatorEvent } = event;
+    const handleDragEnd = useCallback((event: DragEndEvent) => {
+        const { active, over } = event;
 
         if (over?.data.current?.accepts.includes(active.data.current?.type)) {
-            const pointerEvent = activatorEvent as PointerEvent;
+            if (isNil(lastMouseDndPosition.current)) {
+                throw new Error('Property "lastMouseDndPosition" can not be null here.')
+            }
+            if (isNil(flowDesignerTransformDescription.current)) {
+                throw new Error('Property "flowDesignerTransformDescription" can not be null here.')
+            }
 
             const newBlockPosition = {
-                x: (((event.delta.x) + pointerEvent.clientX) - (event.over?.rect.left ?? 0)),
-                y: ((event.delta.y) + pointerEvent.clientY - (event.over?.rect.top ?? 0)),
+                x: (lastMouseDndPosition.current[0] - (event.over?.rect.left ?? 0) - flowDesignerTransformDescription.current.x) * (1 / flowDesignerTransformDescription.current.scale),
+                y: (lastMouseDndPosition.current[1] - (event.over?.rect.top ?? 0) - flowDesignerTransformDescription.current.y) * (1 / flowDesignerTransformDescription.current.scale),
             };
 
-            const updatedBlocks = [...blocks, { color: 'black', position: newBlockPosition }];
+            const updatedBlocks = [...blocks, { id: (blocks.length + 1).toString(), color: 'black', position: newBlockPosition }];
             setBlocks(updatedBlocks)
         }
-    }
 
-    const handleScaleChange = React.useCallback((newValue: TransformDescription) => {
+        dragMode.current = false;
+
+    }, [blocks])
+
+    const handleDragStart = useCallback(() => {
+        dragMode.current = true;
+    }, []);
+
+    const handleTransformDescriptionChange = useCallback((newValue: TransformDescription) => {
         flowDesignerTransformDescription.current = newValue;
     }, [])
+
+    const mouseMoveBind = useMove((state) => {
+        if (dragMode.current === false) {
+            return;
+        }
+
+        lastMouseDndPosition.current = state.values;
+    });
 
 
     return (
         <Layout>
-            <Box sx={{ padding: (theme) => theme.spacing(2), height: '100%', display: 'flex', flexDirection: 'row' }}>
-                <DndContext onDragEnd={handleDragEnd}>
+            <Box sx={{ padding: (theme) => theme.spacing(2), height: '100%', display: 'flex', flexDirection: 'row' }} {...mouseMoveBind()}>
+                <DndContext onDragEnd={handleDragEnd} onDragStart={handleDragStart}>
                     <ToolBox />
                     <Box sx={{ flex: 1 }}>
-                        <FlowDesigner blocks={blocks} onTransformDescriptionChange={handleScaleChange} />
+                        <FlowDesigner blocks={blocks} onTransformDescriptionChange={handleTransformDescriptionChange} />
                     </Box>
                 </DndContext>
             </Box>
