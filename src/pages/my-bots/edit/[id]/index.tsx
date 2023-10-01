@@ -1,15 +1,15 @@
 import * as React from 'react';
 import { Box } from '@mui/material';
 import Layout from '~/pages/Layout';
-import { ToolBox } from '~/components/bot/ToolBox';
-import { FlowDesigner } from '~/components/bot/FlowDesigner';
 import { DndContext, type DragEndEvent } from '@dnd-kit/core';
-import { type FlowDesignerUIBlockDescription } from '~/components/bot/types';
-import { type TransformDescription } from '~/components/bot/FlowDesigner/types';
 import { useMove } from '@use-gesture/react';
 import { useCallback, useRef } from 'react';
 import { isNil, round } from 'lodash';
 import { restrictToWindowEdges } from '@dnd-kit/modifiers';
+import { type TransformDescription } from '~/components/bot/bot-builder/FlowDesigner/types';
+import { type ContentTextUIElement, ElementType, type FlowDesignerUIBlockDescription } from '~/components/bot/bot-builder/types';
+import { ToolBox } from '~/components/bot/bot-builder/ToolBox';
+import { FlowDesigner } from '~/components/bot/bot-builder/FlowDesigner';
 
 export default function EditPage() {
     const flowDesignerTransformDescription = React.useRef<TransformDescription | null>(null);
@@ -40,7 +40,17 @@ export default function EditPage() {
                 y: round((lastMouseDndPosition.current[1] - event.over.rect.top - flowDesignerTransformDescription.current.y) * (1 / flowDesignerTransformDescription.current.scale)),
             };
 
-            const updatedBlocks = [...blocks, { id: (blocks.length + 1).toString(), position: newBlockPosition, elements: [] }];
+            const textUIElement: ContentTextUIElement = {
+                type: ElementType.CONTENT_TEXT,
+                text: 'Hello world! Hello world! Hello world! Hello world! Hello world! Hello world! Hello world! Hello world! Hello world! Hello world! Hello world! Hello world! Hello world!',
+                id: 'test1'
+            };
+
+            const updatedBlocks = [...blocks, {
+                id: (blocks.length + 1).toString(), position: newBlockPosition, elements: [
+                    textUIElement
+                ]
+            }];
             setBlocks(updatedBlocks)
         }
 

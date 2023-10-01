@@ -3,7 +3,8 @@ import React from 'react'
 import { useStyles } from './FlowDesignerBlock.style';
 import { useFlowDesignerBlockMovements } from './useFlowDesignerBlockMovements';
 import { Colors } from '~/themes/Colors';
-import { type FlowDesignerUIBlockDescription } from '~/components/bot/types';
+import { ElementView } from '../ElementView';
+import { type FlowDesignerUIBlockDescription } from '../../../types';
 
 interface Props {
     blockDescription: FlowDesignerUIBlockDescription;
@@ -16,8 +17,8 @@ export const FlowDesignerBlock = ({ blockDescription, rootScale }: Props) => {
 
     return (
         <Box {...bind()} className={classes.root} style={{ transform: `translate(${transformDescription.x}px, ${transformDescription.y}px)` }}>
-            <Box sx={{ backgroundColor: Colors.WHITE, border: `1px solid ${Colors.BORDER}`, borderRadius: 1, height: 100, width: 140 }}>
-
+            <Box sx={{ backgroundColor: Colors.WHITE, border: `1px solid ${Colors.BORDER}`, borderRadius: 1, minHeight: 100, width: 350, padding: 1 }}>
+                {blockDescription.elements.map(element => (<ElementView key={element.id} element={element} />))}
             </Box>
         </Box>
     )

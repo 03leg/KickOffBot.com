@@ -1,3 +1,5 @@
+import { type PositionDescription } from "./FlowDesigner/types";
+
 export enum ElementType {
   CONTENT_TEXT = "content-text",
   CONTENT_IMAGE = "content-image",
@@ -13,10 +15,15 @@ export enum ElementType {
 
 export interface UIElement {
   type: ElementType;
+  id: string;
+}
+
+export interface ContentTextUIElement extends UIElement {
+  text: string;
 }
 
 export interface FlowDesignerUIBlockDescription {
   id: string;
-  position: { x: number; y: number };
+  position: PositionDescription;
   elements: UIElement[];
 }
