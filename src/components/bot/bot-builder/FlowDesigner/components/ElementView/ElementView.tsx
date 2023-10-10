@@ -4,12 +4,16 @@ import { TextContent } from '../elements/TextContent';
 import { Colors } from '~/themes/Colors';
 import { ElementType, type UIElement } from '../../../types';
 import { getIconByType } from '../../../utils';
+import { CSS } from '@dnd-kit/utilities';
+import { useSortable } from '@dnd-kit/sortable';
+import { useStyles } from './ElementView.style';
 
 interface Props {
     element: UIElement;
+    scale?: number;
 }
 
-export const ElementView = ({ element }: Props) => {
+export const ElementView = ({ element, scale }: Props) => {
     const child = useMemo(() => {
         let result: React.JSX.Element | null = null;
 
@@ -28,9 +32,32 @@ export const ElementView = ({ element }: Props) => {
         return getIconByType(element.type);
     }, [element.type]);
 
+    const { classes } = useStyles();
+
+    const {
+        attributes,
+        listeners,
+        setNodeRef,
+        transform,
+        transition,
+        isDragging,
+        node,
+        rect,
+    } = useSortable({ id: element.id, animateLayoutChanges: () => false, data: { elementWidth: 333 } });
+
+    // if (transform) {
+    //     transform.scaleX = 1;
+    //     transform.scaleY = 1;
+    // }
+
+    const style = {
+        transform: CSS.Transform.toString(transform),
+        transition,
+        scale
+    };
 
     return (
-        <Box sx={{ display: 'flex', backgroundColor: Colors.BACKGROUND_COLOR, border: Colors.BORDER, borderRadius: 1, mb: 1, alignItems: 'flex-start', padding: 1 }}>
+        <Box ref={setNodeRef} className={isDragging ? classes.dragging : ''} style={style} {...attributes} {...listeners} sx={{ display: 'flex', backgroundColor: Colors.BACKGROUND_COLOR, border: Colors.BORDER, borderRadius: 1, mb: 1, alignItems: 'flex-start', padding: 1 }}>
             <Box sx={{ display: 'flex', alignItems: 'center', mr: 1 }}>{icon}</Box>
             <Box>{child}</Box>
         </Box>

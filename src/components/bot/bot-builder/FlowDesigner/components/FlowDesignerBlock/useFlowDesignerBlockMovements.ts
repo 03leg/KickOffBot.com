@@ -18,6 +18,10 @@ export function useFlowDesignerBlockMovements(
 
   const bind = useGesture({
     onDrag: (state) => {
+      if (state.currentTarget !== (state.target as HTMLElement).parentElement) {
+        return;
+      }
+
       const [valuesX, valuesY] = state.values;
       const [initialX, initialY] = state.initial;
       const deltaObject = {

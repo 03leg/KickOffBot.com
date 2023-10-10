@@ -2,6 +2,7 @@ import { useGesture } from "@use-gesture/react";
 import { useState } from "react";
 import { zoomFlowDesigner } from "./FlowDesigner.utils";
 import { round } from "lodash";
+import { type TransformDescription } from "./types";
 
 export function useFlowDesignerNavigation() {
   const [startValue, setStartValue] = useState<{ x: number; y: number }>({
@@ -58,7 +59,7 @@ export function useFlowDesignerNavigation() {
     x: startValue.x + distance.x,
     y: startValue.y + distance.y,
     scale,
-  };
+  } as TransformDescription;
 
   return { bind, transforDescription };
 }
