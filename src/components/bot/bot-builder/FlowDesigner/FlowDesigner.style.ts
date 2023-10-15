@@ -9,6 +9,7 @@ export const useStyles = makeStyles()(() => ({
     width: "100%",
     backgroundImage: "radial-gradient(#dadada 1px, #fff 1px)",
     backgroundSize: "20px 20px",
+    position: 'relative',
   },
 
   viewPort: {

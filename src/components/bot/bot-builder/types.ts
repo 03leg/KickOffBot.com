@@ -22,6 +22,11 @@ export interface ContentTextUIElement extends UIElement {
   text: string;
 }
 
+export interface InputTextUIElement extends UIElement {
+  label: string;
+  input: string;
+}
+
 export interface FlowDesignerUIBlockDescription {
   id: string;
   position: PositionDescription;

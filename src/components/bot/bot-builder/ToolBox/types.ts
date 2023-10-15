@@ -11,3 +11,9 @@ export interface ToolBoxItem {
   icon: React.ReactNode;
   type: ElementType;
 }
+
+export interface DraggableElementData{
+  type: ElementType;
+  elementWidth: number;
+  isNewElement: boolean;
+}

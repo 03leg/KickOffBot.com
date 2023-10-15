@@ -7,6 +7,7 @@ import { getIconByType } from '../../../utils';
 import { CSS } from '@dnd-kit/utilities';
 import { useSortable } from '@dnd-kit/sortable';
 import { useStyles } from './ElementView.style';
+import { TextInput } from '../elements/TextInput';
 
 interface Props {
     element: UIElement;
@@ -21,6 +22,14 @@ export const ElementView = ({ element, scale }: Props) => {
             case ElementType.CONTENT_TEXT: {
                 result = (<TextContent element={element} />);
                 break;
+            }
+            case ElementType.INPUT_TEXT:{
+                result = (<TextInput element={element}/>)
+                break;
+            }
+
+            default: {
+                throw new Error('NotImplementedError');
             }
         }
 
@@ -43,7 +52,7 @@ export const ElementView = ({ element, scale }: Props) => {
         isDragging,
         node,
         rect,
-    } = useSortable({ id: element.id, animateLayoutChanges: () => false, data: { elementWidth: 333 } });
+    } = useSortable({ id: element.id, animateLayoutChanges: () => false,  data: { elementWidth: 333 } });
 
     // if (transform) {
     //     transform.scaleX = 1;

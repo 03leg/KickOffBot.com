@@ -2,9 +2,10 @@ import { type Modifier } from "@dnd-kit/core";
 import { type Transform } from "@dnd-kit/utilities";
 import type { Active, ClientRect, Over } from "@dnd-kit/core";
 import { type TransformDescription } from "./types";
+import { isNil, transform } from "lodash";
 
 export const flowDesignerTransformModifier = (
-  transformDescription: TransformDescription,
+  transformDescription: TransformDescription | null,
   viewPort: React.MutableRefObject<HTMLElement | null>
 ) => {
   return ((args: {
@@ -20,6 +21,10 @@ export const flowDesignerTransformModifier = (
     transform: Transform;
     windowRect: ClientRect | null;
   }) => {
+    if (isNil(transformDescription)) {
+      return transform;
+    }
+
     const viewportPosition = viewPort?.current?.getBoundingClientRect();
 
     if (args.activeNodeRect) {
@@ -39,8 +44,10 @@ export const flowDesignerTransformModifier = (
       args.activeNodeRect.width = args.active?.data.current?.elementWidth ?? 0;
     }
 
-    args.transform.x = args.transform.x * (1 / transformDescription.scale);
-    args.transform.y = args.transform.y * (1 / transformDescription.scale);
+    args.transform.x =
+      args.transform.x * (1 / transformDescription?.scale ?? 1);
+    args.transform.y =
+      args.transform.y * (1 / transformDescription?.scale ?? 1);
 
     return args.transform;
   }) as Modifier;
