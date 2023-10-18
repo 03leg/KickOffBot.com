@@ -127,8 +127,7 @@ export const EditBotContent = () => {
         const currentData = (activeDraggableItem?.data as DataRef<DraggableElementData>)?.current;
 
         if (isNil(draggableElement) && !isNil(activeId) && !isNil(currentData) && currentData.isNewElement) {
-            const template = getNewUIElementTemplate(currentData) as UIElement;
-            template.id = activeId.toString();
+            const template = getNewUIElementTemplate(activeId.toString(), currentData) as UIElement;
 
             return template;
         }
@@ -190,7 +189,10 @@ export const EditBotContent = () => {
     }
 
     const sensors = useSensors(
-        useSensor(PointerSensor),
+        useSensor(PointerSensor, { activationConstraint: {
+            distance: 1,
+            tolerance: 5,
+          }}),
         useSensor(KeyboardSensor, {
             coordinateGetter: sortableKeyboardCoordinates,
         })
@@ -381,6 +383,7 @@ export const EditBotContent = () => {
         <Box sx={{ padding: (theme) => theme.spacing(2), height: '100%', display: 'flex', flexDirection: 'row' }} {...mouseMoveBind()}>
             {/* <DndContext onDragEnd={handleDragEnd} onDragStart={handleDragStart} modifiers={[restrictToWindowEdges]}> */}
             <DndContext
+            
                 onDragOver={handleDragOver}
                 onDragStart={handleDragStart}
                 sensors={sensors}

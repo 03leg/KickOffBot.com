@@ -8,6 +8,7 @@ import { CSS } from '@dnd-kit/utilities';
 import { useSortable } from '@dnd-kit/sortable';
 import { useStyles } from './ElementView.style';
 import { TextInput } from '../elements/TextInput';
+import { ButtonsInput } from '../elements/ButtonsInput/ButtonsInput';
 
 interface Props {
     element: UIElement;
@@ -23,11 +24,14 @@ export const ElementView = ({ element, scale }: Props) => {
                 result = (<TextContent element={element} />);
                 break;
             }
-            case ElementType.INPUT_TEXT:{
-                result = (<TextInput element={element}/>)
+            case ElementType.INPUT_TEXT: {
+                result = (<TextInput element={element} />)
                 break;
             }
-
+            case ElementType.INPUT_BUTTONS: {
+                result = (<ButtonsInput element={element} />)
+                break;
+            }
             default: {
                 throw new Error('NotImplementedError');
             }
@@ -52,7 +56,7 @@ export const ElementView = ({ element, scale }: Props) => {
         isDragging,
         node,
         rect,
-    } = useSortable({ id: element.id, animateLayoutChanges: () => false,  data: { elementWidth: 333 } });
+    } = useSortable({ id: element.id, animateLayoutChanges: () => false, data: { elementWidth: 333 }});
 
     // if (transform) {
     //     transform.scaleX = 1;
@@ -68,7 +72,7 @@ export const ElementView = ({ element, scale }: Props) => {
     return (
         <Box ref={setNodeRef} className={isDragging ? classes.dragging : ''} style={style} {...attributes} {...listeners} sx={{ display: 'flex', backgroundColor: Colors.BACKGROUND_COLOR, border: Colors.BORDER, borderRadius: 1, mb: 1, alignItems: 'flex-start', padding: 1 }}>
             <Box sx={{ display: 'flex', alignItems: 'center', mr: 1 }}>{icon}</Box>
-            <Box>{child}</Box>
+            <Box sx={{ flex: 1 }}>{child}</Box>
         </Box>
     )
 }

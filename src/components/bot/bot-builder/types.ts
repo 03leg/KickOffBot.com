@@ -7,6 +7,7 @@ export enum ElementType {
   CONTENT_VIDEO = "content-video",
 
   INPUT_TEXT = "input-text",
+  INPUT_BUTTONS = "input-buttons",
   INPUT_NUMBER = "input-number",
   INPUT_EMAIL = "input-email",
   INPUT_DATE = "input-date",
@@ -24,7 +25,16 @@ export interface ContentTextUIElement extends UIElement {
 
 export interface InputTextUIElement extends UIElement {
   label: string;
-  input: string;
+  input: string | null;
+}
+
+export interface ButtonElement {
+  id: string;
+  content: string;
+}
+
+export interface InputButtonsUIElement extends UIElement {
+  buttons: ButtonElement[];
 }
 
 export interface FlowDesignerUIBlockDescription {
