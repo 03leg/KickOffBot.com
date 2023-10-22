@@ -1,5 +1,5 @@
 import { Box } from '@mui/material'
-import React, { useMemo } from 'react'
+import React, { useCallback, useContext, useMemo } from 'react'
 import { TextContent } from '../elements/TextContent';
 import { Colors } from '~/themes/Colors';
 import { ElementType, type UIElement } from '../../../types';
@@ -9,6 +9,8 @@ import { useSortable } from '@dnd-kit/sortable';
 import { useStyles } from './ElementView.style';
 import { TextInput } from '../elements/TextInput';
 import { ButtonsInput } from '../elements/ButtonsInput/ButtonsInput';
+import { FlowDesignerContext } from '../../context';
+import { ElementMenu } from '../ElementMenu';
 
 interface Props {
     element: UIElement;
@@ -56,12 +58,15 @@ export const ElementView = ({ element, scale }: Props) => {
         isDragging,
         node,
         rect,
-    } = useSortable({ id: element.id, animateLayoutChanges: () => false, data: { elementWidth: 333 }});
+    } = useSortable({ id: element.id, animateLayoutChanges: () => false, data: { elementWidth: 333 } });
+    const context = useContext(FlowDesignerContext)
+    const handleElementClick = useCallback((e: React.MouseEvent<HTMLElement>) => {
+        context.setSelectedElement(element);
+        context.setSelectedBlock(null);
+        e.stopPropagation();
+    }, [context, element]);
 
-    // if (transform) {
-    //     transform.scaleX = 1;
-    //     transform.scaleY = 1;
-    // }
+    const selected = context.selectedElement === element;
 
     const style = {
         transform: CSS.Transform.toString(transform),
@@ -70,9 +75,18 @@ export const ElementView = ({ element, scale }: Props) => {
     };
 
     return (
-        <Box ref={setNodeRef} className={isDragging ? classes.dragging : ''} style={style} {...attributes} {...listeners} sx={{ display: 'flex', backgroundColor: Colors.BACKGROUND_COLOR, border: Colors.BORDER, borderRadius: 1, mb: 1, alignItems: 'flex-start', padding: 1 }}>
-            <Box sx={{ display: 'flex', alignItems: 'center', mr: 1 }}>{icon}</Box>
-            <Box sx={{ flex: 1 }}>{child}</Box>
+        <Box sx={{ mb: 1, position: 'relative' }} ref={setNodeRef} onClick={handleElementClick} className={isDragging ? classes.dragging : ''} style={style} {...attributes} {...listeners}>
+            <Box
+                sx={{
+                    display: 'flex', backgroundColor: Colors.BACKGROUND_COLOR, borderRadius: 1, alignItems: 'flex-start', padding: 1,
+                    border: selected ? `1px solid ${Colors.SELECTED}` : `1px solid ${Colors.BORDER}`,
+                }}>
+                <Box sx={{ display: 'flex', alignItems: 'center', mr: 1 }}>{icon}</Box>
+                <Box sx={{ flex: 1 }}>{child}</Box>
+            </Box>
+            {selected && <Box sx={{ position: 'absolute', top: 0, right: -82 }}>
+                <ElementMenu />
+            </Box>}
         </Box>
     )
 }
