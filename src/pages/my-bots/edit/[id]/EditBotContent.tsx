@@ -79,8 +79,8 @@ export const EditBotContent = () => {
         { id: '1', position: { x: 0, y: 500 }, elements: generateElements() },
         // { id: '2', position: { x: 500, y: 300 }, elements: generateElements() },
     ]);
-    const dragMode = useRef<boolean>(false);
-    const lastMouseDndPosition = useRef<[number, number] | null>(null);
+    // const dragMode = useRef<boolean>(false);
+    // const lastMouseDndPosition = useRef<[number, number] | null>(null);
     // const [activeId, setActiveId] = useState<UniqueIdentifier | null>();
     const [activeDraggableItem, setActiveDraggableItem] = useState<Active | null>();
     const [clonedItems, setClonedItems] = useState<FlowDesignerUIBlockDescription[] | null>(null);
@@ -176,13 +176,13 @@ export const EditBotContent = () => {
         flowDesignerTransformDescription.current = newValue;
     }, [])
 
-    const mouseMoveBind = useMove((state) => {
-        if (dragMode.current === false) {
-            return;
-        }
+    // const mouseMoveBind = useMove((state) => {
+    //     if (dragMode.current === false) {
+    //         return;
+    //     }
 
-        lastMouseDndPosition.current = state.values;
-    });
+    //     lastMouseDndPosition.current = state.values;
+    // });
 
     const handleBlocksUpdate = (newBlocks: FlowDesignerUIBlockDescription[]) => {
         setBlocks(newBlocks);
@@ -380,7 +380,7 @@ export const EditBotContent = () => {
     }
 
     return (
-        <Box sx={{ padding: (theme) => theme.spacing(2), height: '100%', display: 'flex', flexDirection: 'row' }} {...mouseMoveBind()}>
+        <Box sx={{ padding: (theme) => theme.spacing(2), height: '100%', display: 'flex', flexDirection: 'row' }} /*{...mouseMoveBind()}*/>
             {/* <DndContext onDragEnd={handleDragEnd} onDragStart={handleDragStart} modifiers={[restrictToWindowEdges]}> */}
             <DndContext
             
