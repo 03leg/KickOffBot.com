@@ -14,5 +14,15 @@ export interface FlowDesignerContextDescription {
   setSelectedBlock: (newBlock: FlowDesignerUIBlockDescription | null) => void;
 
   selectedElement: UIElement | null;
-  setSelectedElement: (newBlock: UIElement| null) => void;
+  setSelectedElement: (newBlock: UIElement | null) => void;
+}
+
+export interface FlowDesignerState {
+  scale: number;
+  changeScale: (newValue: number) => void;
+  showTemporaryLink: boolean;
+  tempLinkPath: string | null;
+  showTempLink: VoidFunction;
+  hideTempLink: VoidFunction;
+  setTempLinkPath: (value: string) => void;
 }

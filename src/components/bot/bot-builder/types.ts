@@ -39,6 +39,30 @@ export interface InputButtonsUIElement extends UIElement {
 
 export interface FlowDesignerUIBlockDescription {
   id: string;
+  title: string;
   position: PositionDescription;
   elements: UIElement[];
+}
+
+export interface PortDescription {
+  blockId: string;
+}
+
+export interface OutputPortDescription extends PortDescription {
+  elementId: string;
+}
+
+export interface ButtonPortDescription extends PortDescription {
+  buttonId: string;
+}
+
+export interface FlowDesignerLink {
+  id: string;
+  output: OutputPortDescription;
+  input: PortDescription;
+}
+
+export interface Project {
+  blocks: FlowDesignerUIBlockDescription[];
+  links: FlowDesignerLink[];
 }

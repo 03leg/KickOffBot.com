@@ -3,5 +3,6 @@ export const Colors = {
   WHITE: "white",
   BORDER: "#e5e6eb",
   SELECTED: "#757ce8",
-  OUTPUT: "#29B6F6"
+  OUTPUT: "#45c5ff",
+  INPUT: "#29f633"
 };

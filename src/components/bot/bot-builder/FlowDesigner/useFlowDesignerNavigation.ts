@@ -55,11 +55,11 @@ export function useFlowDesignerNavigation() {
     },
   });
 
-  const transforDescription = {
+  const transformDescription = {
     x: startValue.x + distance.x,
     y: startValue.y + distance.y,
     scale,
   } as TransformDescription;
 
-  return { bind, transforDescription };
+  return { bind,  transformDescription };
 }

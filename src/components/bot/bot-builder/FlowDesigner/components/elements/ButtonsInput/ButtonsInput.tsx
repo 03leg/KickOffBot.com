@@ -12,8 +12,8 @@ import { makeStyles } from "tss-react/mui";
 export const useStyles = makeStyles()(() => ({
     port: {
         position: 'absolute',
-        top: -4,
-        right: -8
+        top: 8,
+        right: -26
     },
     button: {
         position: 'relative'

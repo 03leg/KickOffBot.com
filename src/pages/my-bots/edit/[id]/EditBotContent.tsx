@@ -1,8 +1,7 @@
 import * as React from 'react';
 import { Box } from '@mui/material';
 import { DndContext, MeasuringStrategy, type DragEndEvent, pointerWithin, type DragOverEvent, type DragStartEvent, type UniqueIdentifier, useDroppable, useSensor, useSensors, PointerSensor, KeyboardSensor, type Active, type DataRef } from '@dnd-kit/core';
-import { useMove } from '@use-gesture/react';
-import { useCallback, useMemo, useRef, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { findIndex, isNil, remove } from 'lodash';
 import { type TransformDescription } from '~/components/bot/bot-builder/FlowDesigner/types';
 import { type ContentTextUIElement, ElementType, type FlowDesignerUIBlockDescription, type UIElement } from '~/components/bot/bot-builder/types';
@@ -12,6 +11,8 @@ import { flowDesignerTransformModifier } from '~/components/bot/bot-builder/Flow
 import { arrayMove, sortableKeyboardCoordinates } from '@dnd-kit/sortable';
 import { getNewBlock, getNewUIElementTemplate, getPositionForNewBlock } from '~/components/bot/bot-builder/utils';
 import { type DraggableElementData } from '~/components/bot/bot-builder/ToolBox/types';
+import { useFlowDesignerStore } from '~/components/bot/bot-builder/store';
+
 
 const generateElements = () => {
     const textUIElement1: ContentTextUIElement = {
@@ -75,8 +76,8 @@ const generateElements = () => {
 export const EditBotContent = () => {
     const flowDesignerTransformDescription = React.useRef<TransformDescription | null>(null);
     const [blocks, setBlocks] = React.useState<FlowDesignerUIBlockDescription[]>([
-        { id: '0', position: { x: 500, y: 0 }, elements: generateElements() },
-        { id: '1', position: { x: 0, y: 500 }, elements: generateElements() },
+        { id: '0', title: 'Block #1', position: { x: 500, y: 0 }, elements: generateElements() },
+        { id: '1', title: 'Block #2', position: { x: 0, y: 500 }, elements: generateElements() },
         // { id: '2', position: { x: 500, y: 300 }, elements: generateElements() },
     ]);
     // const dragMode = useRef<boolean>(false);
@@ -84,6 +85,8 @@ export const EditBotContent = () => {
     // const [activeId, setActiveId] = useState<UniqueIdentifier | null>();
     const [activeDraggableItem, setActiveDraggableItem] = useState<Active | null>();
     const [clonedItems, setClonedItems] = useState<FlowDesignerUIBlockDescription[] | null>(null);
+
+    const changeScale = useFlowDesignerStore((state) => state.changeScale);
 
     const { setNodeRef, node } = useDroppable({
         id: 'droppable-area-for-new-elements',
@@ -173,8 +176,12 @@ export const EditBotContent = () => {
     // }, []);
 
     const handleTransformDescriptionChange = useCallback((newValue: TransformDescription) => {
+        if (flowDesignerTransformDescription.current?.scale !== newValue.scale) {
+            changeScale(newValue.scale);
+        }
+
         flowDesignerTransformDescription.current = newValue;
-    }, [])
+    }, [changeScale])
 
     // const mouseMoveBind = useMove((state) => {
     //     if (dragMode.current === false) {
@@ -189,10 +196,12 @@ export const EditBotContent = () => {
     }
 
     const sensors = useSensors(
-        useSensor(PointerSensor, { activationConstraint: {
-            distance: 1,
-            tolerance: 5,
-          }}),
+        useSensor(PointerSensor, {
+            activationConstraint: {
+                distance: 1,
+                tolerance: 5,
+            }
+        }),
         useSensor(KeyboardSensor, {
             coordinateGetter: sortableKeyboardCoordinates,
         })
@@ -205,7 +214,7 @@ export const EditBotContent = () => {
             if (activeElement) {
                 const newBlockPosition = getPositionForNewBlock(args, node.current, flowDesignerTransformDescription.current);
                 if (!isNil(newBlockPosition)) {
-                    const newBlock = getNewBlock(newBlockPosition, activeElement);
+                    const newBlock = getNewBlock(newBlockPosition, activeElement, `Block #${blocks.length}`);
                     handleBlocksUpdate([...blocks, newBlock]);
                 }
             }
@@ -383,7 +392,7 @@ export const EditBotContent = () => {
         <Box sx={{ padding: (theme) => theme.spacing(2), height: '100%', display: 'flex', flexDirection: 'row' }} /*{...mouseMoveBind()}*/>
             {/* <DndContext onDragEnd={handleDragEnd} onDragStart={handleDragStart} modifiers={[restrictToWindowEdges]}> */}
             <DndContext
-            
+
                 onDragOver={handleDragOver}
                 onDragStart={handleDragStart}
                 sensors={sensors}

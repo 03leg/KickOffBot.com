@@ -5,4 +5,7 @@ export const useStyles = makeStyles()(() => ({
     position: "absolute",
     touchAction: "none",
   },
+  input: {
+    position: 'absolute'
+  },
 }));

@@ -111,6 +111,6 @@ export function getPositionForNewBlock(event: DragEndEvent, container: HTMLEleme
     return { x, y };
 }
 
-export function getNewBlock(position: PositionDescription, firstElement: UIElement): FlowDesignerUIBlockDescription {
-    return { id: v4(), position: { x: position.x, y: position.y }, elements: [{ ...firstElement }] };
+export function getNewBlock(position: PositionDescription, firstElement: UIElement, title: string): FlowDesignerUIBlockDescription {
+    return { id: v4(), title, position: { x: position.x, y: position.y }, elements: [{ ...firstElement }] };
 }
