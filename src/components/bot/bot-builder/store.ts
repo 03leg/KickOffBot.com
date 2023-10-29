@@ -57,7 +57,7 @@ export const useFlowDesignerStore = create<FlowDesignerState>()((set, get) => ({
       if (isNil(project)) {
         project = { blocks: [], links: [] };
       }
-      project.links.push(newLink);
+      project.links = [...project.links, newLink];
 
       return { project };
     }),

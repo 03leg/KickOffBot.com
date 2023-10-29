@@ -5,18 +5,21 @@ import {
   type CoordinateDescription,
 } from "../../types";
 
-enum Square {
+export enum Sector {
   S1,
   S2,
   S3,
   S4,
 }
 
-function getDistance(p1: PositionDescription, p2: PositionDescription): number {
+export function getDistance(p1: PositionDescription, p2: PositionDescription): number {
   return Math.sqrt(Math.pow(p2.x - p1.x, 2) + Math.pow(p2.y - p1.y, 2));
 }
 
-function getPartLinePath(p1: PositionDescription, p2: PositionDescription) {
+export function getPartLinePath(
+  p1: PositionDescription,
+  p2: PositionDescription
+) {
   return `M${p1.x} ${p1.y} L${p2.x} ${p2.y}`;
 }
 
@@ -84,15 +87,43 @@ function get2Path(
   return { path, distance };
 }
 
+export function getSector(
+  startX: number,
+  startY: number,
+  endX: number,
+  endY: number
+): Sector {
+  let sector: Sector | null = null;
+  if (startX <= endX) {
+    if (startY >= endY) {
+      sector = Sector.S2;
+    } else if (startY < endY) {
+      sector = Sector.S4;
+    }
+  } else if (startX > endX) {
+    if (startY <= endY) {
+      sector = Sector.S3;
+    } else if (startY > endY) {
+      sector = Sector.S1;
+    }
+  }
+
+  if (isNil(sector)) {
+    throw Error("InvalidOperationError");
+  }
+
+  return sector;
+}
+
 function getPath(
-  square: Square,
+  square: Sector,
   start: [x: number, y: number],
   end: [x: number, y: number],
   block: CoordinateDescription
 ) {
   let path = `M${start[0]} ${start[1]} L${end[0]} ${start[1]} M${end[0]} ${start[1]} L${end[0]} ${end[1]}`;
 
-  if (square === Square.S1 || square === Square.S3) {
+  if (square === Sector.S1 || square === Sector.S3) {
     const p1 = get1Path(start, end, block);
     const p2 = get2Path(start, end, block);
 
@@ -144,27 +175,9 @@ export function getSvgPathForTempLine(
   const endY =
     (valuesY - viewPortOffset.y - transformDescription.y) * (1 / scale);
 
-  let square: Square | null = null;
-  if (startX <= endX) {
-    if (startY >= endY) {
-      square = Square.S2;
-    } else if (startY < endY) {
-      square = Square.S4;
-    }
-  } else if (startX > endX) {
-    if (startY <= endY) {
-      square = Square.S3;
-    } else if (startY > endY) {
-      square = Square.S1;
-    }
-  }
-
-  if (isNil(square)) {
-    throw Error("InvalidOperationError");
-  }
-
+  const sector = getSector(startX, startY, endX, endY);
   const resultPath = getPath(
-    square,
+    sector,
     [startX, startY],
     [endX, endY],
     blockCoordinates

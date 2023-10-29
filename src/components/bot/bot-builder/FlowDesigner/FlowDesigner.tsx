@@ -49,7 +49,7 @@ export const FlowDesigner = ({ blocks, onTransformDescriptionChange, setNodeRef,
         <Box ref={setNodeRef} className={classes.root} {...bind()}>
             <ToolBox />
             <FlowDesignerContext.Provider value={{ selectedBlock, selectedElement, setSelectedBlock, setSelectedElement }}>
-                <SvgCanvas transformDescription={transformDescription} />
+                <SvgCanvas />
                 <Box ref={blocksOwner} className={classes.viewPort} style={{ transform: `translate(${transformDescription.x}px, ${transformDescription.y}px) scale(${transformDescription.scale})` }}>
                     {blocks.map(b => <FlowDesignerBlock key={b.id} blockDescription={b} rootScale={transformDescription.scale} />)}
                     {blocksOwner.current &&

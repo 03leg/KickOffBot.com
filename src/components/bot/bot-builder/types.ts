@@ -76,7 +76,7 @@ export interface FlowDesignerState {
   showTempLink: VoidFunction;
   hideTempLink: VoidFunction;
   setTempLinkPath: (value: string) => void;
-  project: BotProject | null;
+  project: BotProject;
   updateBlocks: (value: FlowDesignerUIBlockDescription[]) => void;
   viewPortOffset: PositionDescription;
   setViewPortOffset: (value:PositionDescription) => void;

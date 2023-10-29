@@ -34,7 +34,7 @@ export const ButtonsInput = ({ element }: Props) => {
                 </Box>
             ))}
             <Box className={classes.button}>
-                <OutputPort className={classes.port} elementId={uiElement.id} buttonId={'default-button'} />
+                <OutputPort className={classes.port} elementId={uiElement.id} buttonId={`default-button-${uiElement.id}`} />
                 <Button variant="contained" size='small' fullWidth disabled>Default</Button>
             </Box>
         </div>

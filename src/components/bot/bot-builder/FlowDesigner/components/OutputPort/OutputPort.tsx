@@ -90,6 +90,7 @@ export const OutputPort = ({ className, buttonId, elementId }: Props) => {
 
     return (
         <Box {...bind()}
+            data-app-id={buttonId}
             className={className}
             sx={{
                 height: 16,
