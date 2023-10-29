@@ -1,6 +1,9 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
 import { createContext } from "react";
-import { type FlowDesignerContextDescription } from "./types";
+import {
+  type BlockReactContext,
+  type FlowDesignerContextDescription,
+} from "./types";
 
 export const FlowDesignerContext =
   createContext<FlowDesignerContextDescription>({
@@ -9,3 +12,7 @@ export const FlowDesignerContext =
     setSelectedBlock: () => {},
     setSelectedElement: () => {},
   });
+
+export const FlowDesignerBlockContext = createContext<BlockReactContext>({
+  blockElement: null,
+});

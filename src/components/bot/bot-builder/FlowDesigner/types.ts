@@ -5,6 +5,13 @@ export interface PositionDescription {
   y: number;
 }
 
+export interface CoordinateDescription {
+  top: number;
+  left: number;
+  height: number;
+  width: number;
+}
+
 export interface TransformDescription extends PositionDescription {
   scale: number;
 }
@@ -17,12 +24,6 @@ export interface FlowDesignerContextDescription {
   setSelectedElement: (newBlock: UIElement | null) => void;
 }
 
-export interface FlowDesignerState {
-  scale: number;
-  changeScale: (newValue: number) => void;
-  showTemporaryLink: boolean;
-  tempLinkPath: string | null;
-  showTempLink: VoidFunction;
-  hideTempLink: VoidFunction;
-  setTempLinkPath: (value: string) => void;
+export interface BlockReactContext {
+  blockElement: React.MutableRefObject<HTMLElement | null> | null;
 }

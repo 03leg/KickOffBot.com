@@ -29,12 +29,12 @@ export const ButtonsInput = ({ element }: Props) => {
         <div>
             {uiElement.buttons.map(b => (
                 <Box key={b.id} className={classes.button}>
-                    <OutputPort className={classes.port} />
+                    <OutputPort className={classes.port} elementId={uiElement.id} buttonId={b.id} />
                     <Button sx={{ marginBottom: 1 }} variant="contained" size='small' fullWidth disabled>{b.content}</Button>
                 </Box>
             ))}
             <Box className={classes.button}>
-                <OutputPort className={classes.port} />
+                <OutputPort className={classes.port} elementId={uiElement.id} buttonId={'default-button'} />
                 <Button variant="contained" size='small' fullWidth disabled>Default</Button>
             </Box>
         </div>

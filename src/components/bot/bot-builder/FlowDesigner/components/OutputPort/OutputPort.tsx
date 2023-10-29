@@ -1,36 +1,59 @@
 import { Box } from '@mui/material'
 import { useGesture } from '@use-gesture/react';
-import React from 'react'
+import React, { useContext, useRef } from 'react'
 import { Colors } from '~/themes/Colors'
 import { useFlowDesignerStore } from '../../../store';
-import { getSvgPathForTempLine } from './utils';
+import { getBlockBoundingClientRect, getSvgPathForTempLine } from './utils';
 import { isNil } from 'lodash';
 import { APP_ELEMENT_ROLE } from '../../../constants';
+import { FlowDesignerBlockContext } from '../../context';
+import { v4 } from 'uuid';
+import { type ButtonPortDescription } from '../../../types';
+import { type CoordinateDescription } from '../../types';
 
 interface Props {
     className: string;
+    elementId: string;
+    buttonId: string;
 }
 
-export const OutputPort = ({ className }: Props) => {
-
-    const { showTempLink, hideTempLink, setTempLinkPath, scale } = useFlowDesignerStore((state) => ({
+export const OutputPort = ({ className, buttonId, elementId }: Props) => {
+    const { showTempLink, hideTempLink, setTempLinkPath, transformDescription, viewPortOffset, addLink } = useFlowDesignerStore((state) => ({
         showTempLink: state.showTempLink,
         hideTempLink: state.hideTempLink,
         setTempLinkPath: state.setTempLinkPath,
-        scale: state.scale,
-    }))
+        viewPortOffset: state.viewPortOffset,
+        transformDescription: state.transformDescription,
+        addLink: state.addLink
+    }));
+
+    const blockContext = useContext(FlowDesignerBlockContext);
+    const blockCoordinates = useRef<CoordinateDescription>();
+
 
     const bind = useGesture({
         onDrag: (e) => {
-            const path = getSvgPathForTempLine(scale, e.initial, e.values);
-            setTempLinkPath(path);
+            if (isNil(blockCoordinates.current)) {
+                throw new Error('InvalidOperationError');
+            }
 
-            console.log(e);
+            const path = getSvgPathForTempLine(transformDescription, e.initial, e.values, viewPortOffset, blockCoordinates.current);
+            setTempLinkPath(path);
         },
         onDragStart: (e) => {
             e.event.stopPropagation();
-            const [initialX, initialY] = e.initial;
-            console.log(initialX, initialY);
+            // const [initialX, initialY] = e.initial;
+            // console.log(initialX, initialY);
+
+            if (isNil(blockContext.blockElement) || isNil(blockContext.blockElement.current)) {
+                throw new Error('InvalidOperationError');
+            }
+
+            blockCoordinates.current = getBlockBoundingClientRect(
+                blockContext.blockElement.current,
+                viewPortOffset,
+                transformDescription
+              );
 
             showTempLink();
         },
@@ -43,11 +66,25 @@ export const OutputPort = ({ className }: Props) => {
 
             const el = document.elementFromPoint(x, y);
             if (!isNil(el)) {
-               const block =  el.closest(`[data-app-role="${APP_ELEMENT_ROLE.block}"]`);
-               console.log(block);
+                const block = el.closest(`[data-app-role="${APP_ELEMENT_ROLE.block}"]`);
+
+                if (isNil(block)) {
+                    return;
+                }
+
+                const blockId = block.getAttribute('data-app-id');
+
+                if (isNil(blockId)) {
+                    throw new Error('InvalidOperationError');
+                }
+
+                const outputBlock = blockContext.blockElement?.current;
+                const outputBlockId = outputBlock?.getAttribute('data-app-id');
+
+                addLink({ id: v4(), input: { blockId }, output: { blockId: outputBlockId, buttonId, elementId } as ButtonPortDescription })
             }
 
-            console.log(el);
+            // console.log(el);
         },
     })
 

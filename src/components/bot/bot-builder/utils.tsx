@@ -114,3 +114,62 @@ export function getPositionForNewBlock(event: DragEndEvent, container: HTMLEleme
 export function getNewBlock(position: PositionDescription, firstElement: UIElement, title: string): FlowDesignerUIBlockDescription {
     return { id: v4(), title, position: { x: position.x, y: position.y }, elements: [{ ...firstElement }] };
 }
+
+export const generateElements = () => {
+    const textUIElement1: ContentTextUIElement = {
+        type: ElementType.CONTENT_TEXT,
+        text: 'Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1',
+        id: '11111' + v4(),
+    };
+    const textUIElement2: ContentTextUIElement = {
+        type: ElementType.CONTENT_TEXT,
+        text: 'Hey2! Hey2! Hey2! Hey2! Hey2! Hey2! Hey2! Hey2! Hey2! Hey2! Hey2! Hey2! Hey2! ' + v4(),
+        id: '22222' + v4(),
+    };
+    const textUIElement3: ContentTextUIElement = {
+        type: ElementType.CONTENT_TEXT,
+        text: 'Privet3! Privet3! Privet3! ' + v4(),
+        id: '33333' + v4(),
+    };
+    const textUIElement4: ContentTextUIElement = {
+        type: ElementType.CONTENT_TEXT,
+        text: 'Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1',
+        id: '11111' + v4(),
+    };
+    const textUIElement5: ContentTextUIElement = {
+        type: ElementType.CONTENT_TEXT,
+        text: 'Hey2! Hey2! Hey2! Hey2! Hey2! Hey2! Hey2! Hey2! Hey2! Hey2! Hey2! Hey2! Hey2! ' + v4(),
+        id: '22222' + v4(),
+    };
+    const textUIElement6: ContentTextUIElement = {
+        type: ElementType.CONTENT_TEXT,
+        text: 'Privet3!' + v4(),
+        id: '33333' + v4(),
+    };
+    const textUIElement7: ContentTextUIElement = {
+        type: ElementType.CONTENT_TEXT,
+        text: 'Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1',
+        id: '11111' + v4(),
+    };
+    const textUIElement8: ContentTextUIElement = {
+        type: ElementType.CONTENT_TEXT,
+        text: 'Hey2! Hey2! Hey2! Hey2! Hey2! Hey2! Hey2! Hey2! Hey2! Hey2! Hey2! Hey2! Hey2! ' + v4(),
+        id: '22222' + v4(),
+    };
+    const textUIElement9: ContentTextUIElement = {
+        type: ElementType.CONTENT_TEXT,
+        text: 'Privet3! Privet3! Privet3! Privet3!  Privet3!  Privet3!  Privet3!  Privet3!' + v4(),
+        id: '33333' + v4(),
+    };
+    return [
+        textUIElement1,
+        textUIElement2,
+        textUIElement3,
+        textUIElement4,
+        textUIElement5,
+        textUIElement6,
+        textUIElement7,
+        textUIElement8,
+        textUIElement9,
+    ]
+};

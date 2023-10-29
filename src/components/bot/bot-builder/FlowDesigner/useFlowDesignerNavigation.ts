@@ -1,5 +1,5 @@
 import { useGesture } from "@use-gesture/react";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { zoomFlowDesigner } from "./FlowDesigner.utils";
 import { round } from "lodash";
 import { type TransformDescription } from "./types";
@@ -20,7 +20,7 @@ export function useFlowDesignerNavigation() {
       if (state.target !== state.currentTarget) {
         return;
       }
-      
+
       const [valuesX, valuesY] = state.values;
       const [initialX, initialY] = state.initial;
       const deltaObject = {
@@ -55,11 +55,13 @@ export function useFlowDesignerNavigation() {
     },
   });
 
-  const transformDescription = {
-    x: startValue.x + distance.x,
-    y: startValue.y + distance.y,
-    scale,
-  } as TransformDescription;
+  const transformDescription = useMemo(() => {
+    return {
+      x: startValue.x + distance.x,
+      y: startValue.y + distance.y,
+      scale,
+    } as TransformDescription;
+  }, [distance.x, distance.y, scale, startValue.x, startValue.y]);
 
-  return { bind,  transformDescription };
+  return { bind, transformDescription };
 }
