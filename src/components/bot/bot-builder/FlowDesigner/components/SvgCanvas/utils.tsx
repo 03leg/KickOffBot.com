@@ -1,6 +1,5 @@
 import { isNil } from "lodash";
 import { type ButtonPortDescription, type FlowDesignerLink } from "../../../types";
-import React, { } from 'react';
 import { type CoordinateDescription, type PositionDescription, type TransformDescription } from "../../types";
 import { Sector, getDistance, getPartLinePath, getSector } from "../OutputPort/utils";
 
@@ -56,8 +55,8 @@ function get0Path(outputElementPosition: CoordinateDescription, inputElementPosi
     const point3 = { x: point2.x, y: inputElementPosition.top + inputTopStep + deltaIncome };
     const point4 = { x: inputElementPosition.left, y: point3.y }
 
- 
-    const result = getPartLinePath(point1, point2) + getPartLinePath(point2, point3) + getPartLinePath(point3, point4);
+
+    const result = getPartLinePath(point1, point2) + getPartLinePath(point3) + getPartLinePath(point4);
 
     return result;
 }
@@ -83,8 +82,8 @@ function get1Path(outputElementPosition: CoordinateDescription, inputElementPosi
     const point7 = { x: point6.x, y: inputElementPosition.top + deltaIncome };
     const point8 = { x: inputElementPosition.left, y: point7.y }
 
-    const path = getPartLinePath(point1, point2) + getPartLinePath(point2, point3) + getPartLinePath(point3, point4)
-        + getPartLinePath(point4, point5) + getPartLinePath(point5, point6) + getPartLinePath(point6, point7) + getPartLinePath(point7, point8);
+    const path = getPartLinePath(point1, point2) + getPartLinePath(point3) + getPartLinePath(point4)
+        + getPartLinePath(point5) + getPartLinePath(point6) + getPartLinePath(point7) + getPartLinePath(point8);
 
     const distance = getDistance(point1, point2)
         + getDistance(point2, point3)
@@ -118,8 +117,8 @@ function get3Path(outputElementPosition: CoordinateDescription, inputElementPosi
     const point7 = { x: point6.x, y: inputElementPosition.top + deltaIncome };
     const point8 = { x: inputElementPosition.left, y: point7.y }
 
-    const path = getPartLinePath(point1, point2) + getPartLinePath(point2, point3) + getPartLinePath(point3, point4)
-        + getPartLinePath(point4, point5) + getPartLinePath(point5, point6) + getPartLinePath(point6, point7) + getPartLinePath(point7, point8);
+    const path = getPartLinePath(point1, point2) + getPartLinePath(point3) + getPartLinePath(point4)
+        + getPartLinePath(point5) + getPartLinePath(point6) + getPartLinePath(point7) + getPartLinePath(point8);
 
     const distance = getDistance(point1, point2)
         + getDistance(point2, point3)
@@ -153,12 +152,12 @@ function get2Path(outputElementPosition: CoordinateDescription, inputElementPosi
     const point8 = { x: inputElementPosition.left, y: point7.y }
 
     const path = getPartLinePath(point1, point2)
-        + getPartLinePath(point2, point3)
-        + getPartLinePath(point3, point4)
-        + getPartLinePath(point4, point5)
-        + getPartLinePath(point5, point6)
-        + getPartLinePath(point6, point7)
-        + getPartLinePath(point7, point8);
+        + getPartLinePath(point3)
+        + getPartLinePath(point4)
+        + getPartLinePath(point5)
+        + getPartLinePath(point6)
+        + getPartLinePath(point7)
+        + getPartLinePath(point8);
 
     const distance = getDistance(point1, point2)
         + getDistance(point2, point3)
@@ -192,12 +191,12 @@ function get4Path(outputElementPosition: CoordinateDescription, inputElementPosi
     const point8 = { x: inputElementPosition.left, y: point7.y }
 
     const path = getPartLinePath(point1, point2)
-        + getPartLinePath(point2, point3)
-        + getPartLinePath(point3, point4)
-        + getPartLinePath(point4, point5)
-        + getPartLinePath(point5, point6)
-        + getPartLinePath(point6, point7)
-        + getPartLinePath(point7, point8);
+        + getPartLinePath(point3)
+        + getPartLinePath(point4)
+        + getPartLinePath(point5)
+        + getPartLinePath(point6)
+        + getPartLinePath(point7)
+        + getPartLinePath(point8);
 
     const distance = getDistance(point1, point2)
         + getDistance(point2, point3)
@@ -244,7 +243,7 @@ function getPath(outputElementPosition: CoordinateDescription, inputElementPosit
 }
 
 export function getSvgPathForLink(link: FlowDesignerLink, viewPortOffset: PositionDescription,
-    transformDescription: TransformDescription, incomeIndex: number, outcomeIndex: number): React.JSX.Element {
+    transformDescription: TransformDescription, incomeIndex: number, outcomeIndex: number): string {
 
     const output = link.output as ButtonPortDescription;
     const input = link.input;
@@ -258,7 +257,8 @@ export function getSvgPathForLink(link: FlowDesignerLink, viewPortOffset: Positi
     const inputElement = getElement(input.blockId);
     const inputElementPosition = getElementPosition(inputElement, viewPortOffset, transformDescription)
 
+
     const bestPath = getPath(outputElementPosition, inputElementPosition, incomeIndex, outcomeIndex, outputBlockElementPosition);
 
-    return <path stroke="gray" strokeWidth="3" d={bestPath}></path>
+    return bestPath;
 }

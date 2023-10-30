@@ -1,4 +1,4 @@
-import { isNil } from "lodash";
+import { isNil, round } from "lodash";
 import {
   type TransformDescription,
   type PositionDescription,
@@ -12,15 +12,26 @@ export enum Sector {
   S4,
 }
 
-export function getDistance(p1: PositionDescription, p2: PositionDescription): number {
+export function getDistance(
+  p1: PositionDescription,
+  p2: PositionDescription
+): number {
   return Math.sqrt(Math.pow(p2.x - p1.x, 2) + Math.pow(p2.y - p1.y, 2));
 }
 
+export function getPartLinePath(p1: PositionDescription): string;
 export function getPartLinePath(
   p1: PositionDescription,
   p2: PositionDescription
-) {
-  return `M${p1.x} ${p1.y} L${p2.x} ${p2.y}`;
+): string;
+export function getPartLinePath(
+  p1: PositionDescription,
+  p2?: PositionDescription
+): string {
+  if (isNil(p2)) {
+    return `L${round(p1.x)} ${round(p1.y)}`;
+  }
+  return `M${round(p1.x)} ${round(p1.y)} L${round(p2.x)} ${round(p2.y)}`;
 }
 
 const step = 50 as const;

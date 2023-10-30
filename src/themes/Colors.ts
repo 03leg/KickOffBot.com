@@ -4,5 +4,6 @@ export const Colors = {
   BORDER: "#e5e6eb",
   SELECTED: "#757ce8",
   OUTPUT: "#45c5ff",
-  INPUT: "#29f633"
+  INPUT: "#29f633",
+  LINK: '#9E9E9E'
 };

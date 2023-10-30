@@ -3,6 +3,7 @@ import { makeStyles } from "tss-react/mui";
 import { useFlowDesignerStore } from '../../../store';
 import { isNil } from 'lodash';
 import { getSvgPathForLink } from './utils';
+import { Link } from './Link';
 
 export const useStyles = makeStyles()(() => ({
     svgViewPort: {
@@ -12,7 +13,7 @@ export const useStyles = makeStyles()(() => ({
         transformOrigin: '0px 0px',
         position: 'absolute',
         overflow: 'visible',
-    }
+    },
 }));
 
 function getLinkIndex(map: Map<string, number>, blockId: string, linksCount: number) {
@@ -23,7 +24,7 @@ function getLinkIndex(map: Map<string, number>, blockId: string, linksCount: num
         map.set(blockId, resultIndex - 1);
     }
     else {
-      
+
         map.set(blockId, linksCount - 1);
         resultIndex = linksCount;
     }
@@ -55,8 +56,8 @@ export const SvgCanvas = () => {
             const inputIndex = getLinkIndex(mapInputBlock, link.input.blockId, links.filter(p => p.input.blockId === link.input.blockId).length);
             const outputIndex = getLinkIndex(mapOutputBlock, link.output.blockId, links.filter(p => p.output.blockId === link.output.blockId).length);
 
-            const path = getSvgPathForLink(link, viewPortOffset, transformDescription, inputIndex, outputIndex);
-            paths.push(<g key={link.id}>{path}</g>);
+            const d = getSvgPathForLink(link, viewPortOffset, transformDescription, inputIndex, outputIndex);
+            paths.push(<Link key={link.id} d={d} />);
         }
 
         return paths;
