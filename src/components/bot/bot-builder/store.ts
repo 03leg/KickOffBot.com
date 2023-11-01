@@ -15,7 +15,7 @@ export const useFlowDesignerStore = create<FlowDesignerState>()((set, get) => ({
     set((state) => {
       state.transformDescription = newValue;
       state.scale = newValue.scale;
-      return { transformDescription: newValue, scale : newValue.scale};
+      return { transformDescription: newValue, scale: newValue.scale };
     }),
   showTemporaryLink: false,
   tempLinkPath: null,
@@ -47,6 +47,19 @@ export const useFlowDesignerStore = create<FlowDesignerState>()((set, get) => ({
       }
       project.blocks = value;
       return { project };
+    }),
+  updateBlock: (updatedBlock: FlowDesignerUIBlockDescription) =>
+    set((state) => {
+      const project = state.project;
+      if(isNil(project)){
+        throw new Error('InvalidOperationError');
+      }
+
+      // todo: ??
+      const indexBlock = project.blocks.findIndex(b=>b.id === updatedBlock.id);
+      project.blocks[indexBlock] = updatedBlock;
+
+      return { project: {...project} };
     }),
   viewPortOffset: { x: 0, y: 0 },
   setViewPortOffset: (value: PositionDescription) =>

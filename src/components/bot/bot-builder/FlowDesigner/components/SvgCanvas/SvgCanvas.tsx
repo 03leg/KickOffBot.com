@@ -36,7 +36,7 @@ function getLinkIndex(map: Map<string, number>, blockId: string, linksCount: num
 export const SvgCanvas = () => {
     const { classes } = useStyles();
     const svgRef = useRef<SVGSVGElement>(null);
-    const { showTemporaryLink, tempLinkPath, setViewPortOffset, links, viewPortOffset, transformDescription } = useFlowDesignerStore((state) => (
+    const { showTemporaryLink, tempLinkPath, setViewPortOffset, links, viewPortOffset, transformDescription, project } = useFlowDesignerStore((state) => (
         {
             showTemporaryLink: state.showTemporaryLink,
             tempLinkPath: state.tempLinkPath,
@@ -44,9 +44,11 @@ export const SvgCanvas = () => {
             links: state.project.links,
             viewPortOffset: state.viewPortOffset,
             transformDescription: state.transformDescription,
+            project: state.project
         }));
 
     const linkPaths = useMemo(() => {
+        // todo: create component for link - performance issue
         const paths: JSX.Element[] = [];
 
         const mapInputBlock = new Map<string, number>();
@@ -61,7 +63,10 @@ export const SvgCanvas = () => {
         }
 
         return paths;
-    }, [links, transformDescription, viewPortOffset]);
+        // transformDescription, viewPortOffset,
+        
+    // eslint-disable-next-line react-hooks/exhaustive-deps 
+    }, [links, project]);
 
     useLayoutEffect(() => {
         const element = svgRef.current;

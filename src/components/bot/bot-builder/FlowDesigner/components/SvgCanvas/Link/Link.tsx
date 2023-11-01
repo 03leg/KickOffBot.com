@@ -13,7 +13,7 @@ export const useStyles = makeStyles()(() => ({
         pointerEvents: 'auto',
     },
     linkAnimation: {
-        strokeDasharray: '10, 2',
+        strokeDasharray: '12, 4',
         animation: `1s linear 0s infinite normal none running ${keyframes`0% { stroke-dashoffset: 32 } 100% { stroke-dashoffset: 0 }`}`,
         stroke: Colors.OUTPUT
     }

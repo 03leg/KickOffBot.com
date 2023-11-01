@@ -76,6 +76,9 @@ export const ElementView = ({ element, scale }: Props) => {
 
     return (
         <Box sx={{ mb: 1, position: 'relative' }} ref={setNodeRef} onClick={handleElementClick} className={isDragging ? classes.dragging : ''} style={style} {...attributes} {...listeners}>
+            {selected && <Box sx={{ position: 'absolute', top: 0, left: -82 }}>
+                <ElementMenu />
+            </Box>}
             <Box
                 sx={{
                     display: 'flex', backgroundColor: Colors.BACKGROUND_COLOR, borderRadius: 1, alignItems: 'flex-start', padding: 1,
@@ -84,9 +87,6 @@ export const ElementView = ({ element, scale }: Props) => {
                 <Box sx={{ display: 'flex', alignItems: 'center', mr: 1 }}>{icon}</Box>
                 <Box sx={{ flex: 1 }}>{child}</Box>
             </Box>
-            {selected && <Box sx={{ position: 'absolute', top: 0, right: -82 }}>
-                <ElementMenu />
-            </Box>}
         </Box>
     )
 }

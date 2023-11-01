@@ -1,5 +1,5 @@
 import { Box, Typography } from '@mui/material'
-import React, { useCallback, useContext } from 'react'
+import React, { useCallback, useContext, useEffect } from 'react'
 import { useStyles } from './FlowDesignerBlock.style';
 import { useFlowDesignerBlockMovements } from './useFlowDesignerBlockMovements';
 import { Colors } from '~/themes/Colors';
@@ -10,6 +10,7 @@ import { useDroppable } from '@dnd-kit/core';
 import { flowDesignerVerticalListSortingStrategy } from './flowDesignerVerticalListSortingStrategy';
 import { FlowDesignerBlockContext, FlowDesignerContext } from '../../context';
 import { APP_ELEMENT_ROLE } from '../../../constants';
+import { useFlowDesignerStore } from '../../../store';
 
 
 interface Props {
@@ -23,13 +24,21 @@ export const FlowDesignerBlock = ({ blockDescription, rootScale }: Props) => {
     const { setNodeRef, node } = useDroppable({
         id: blockDescription.id
     });
-    const context = useContext(FlowDesignerContext)
+    const context = useContext(FlowDesignerContext);
+    const { updateBlock } = useFlowDesignerStore((state) => ({
+        updateBlock: state.updateBlock
+    }));
 
     const handleBlockClick = useCallback(() => {
         context.setSelectedBlock(blockDescription);
         context.setSelectedElement(null);
 
     }, [blockDescription, context]);
+
+    useEffect(() => {
+        blockDescription.position = { x: transformDescription.x, y: transformDescription.y };
+        updateBlock(blockDescription);
+    }, [blockDescription, transformDescription, updateBlock])
 
     const selectedBlock = context.selectedBlock === blockDescription;
 
@@ -38,7 +47,7 @@ export const FlowDesignerBlock = ({ blockDescription, rootScale }: Props) => {
             transform: `translate(${transformDescription.x}px, ${transformDescription.y}px)`,
             zIndex: selectedBlock ? 1 : undefined,
         }}>
-            <FlowDesignerBlockContext.Provider value={{blockElement: node}}>
+            <FlowDesignerBlockContext.Provider value={{ blockElement: node }}>
                 <Box ref={setNodeRef}
                     data-app-role={APP_ELEMENT_ROLE.block}
                     data-app-id={blockDescription.id}
