@@ -87,6 +87,14 @@ export const useFlowDesignerStore = create<FlowDesignerState>()((set, get) => ({
 
       return { project };
     }),
+  selectedLink: null,
+  selectLink: (link: FlowDesignerLink | null) =>
+    set(() => ({ selectedLink: link })),
+  // (link: FlowDesignerLink) =>
+  //   set(() => (
+  //      { selectedLink: link };
+  //   )),
+
   // viewPortOffset: () => {
   //   const element = document.getElementById("svg-container") as Element;
   //   const rect = element.getBoundingClientRect();

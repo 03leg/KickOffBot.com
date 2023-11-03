@@ -1,8 +1,8 @@
-import React, { useCallback, useMemo, useState } from 'react'
+import React, { useCallback, useMemo } from 'react'
 import { keyframes } from 'tss-react';
 import { makeStyles } from 'tss-react/mui';
 import { useFlowDesignerStore } from '~/components/bot/bot-builder/store';
-import { FlowDesignerLink } from '~/components/bot/bot-builder/types';
+import { type FlowDesignerLink } from '~/components/bot/bot-builder/types';
 import { Colors } from '~/themes/Colors';
 import { getSvgPathForLink } from '../utils';
 
@@ -24,14 +24,17 @@ export const useStyles = makeStyles()(() => ({
 
 export const Link = ({ link }: Props) => {
     const { classes, cx } = useStyles();
-    const [showAnimation, setShowAnimation] = useState(false);
-    const { links, viewPortOffset, transformDescription, blocks } = useFlowDesignerStore((state) => (
+
+    const { links, viewPortOffset, transformDescription, blocks, selectedLink, selectLink } = useFlowDesignerStore((state) => (
         {
             links: state.project.links,
             viewPortOffset: state.viewPortOffset,
             transformDescription: state.transformDescription,
-            blocks: state.project.blocks
+            blocks: state.project.blocks,
+            selectedLink: state.selectedLink,
+            selectLink: state.selectLink
         }));
+    const showAnimation = selectedLink === link;
 
 
     const { inputBlock, outputBlock } = useMemo(() => {
@@ -50,8 +53,10 @@ export const Link = ({ link }: Props) => {
     }, [link, links]);
 
     const handleClick = useCallback(() => {
-        setShowAnimation(!showAnimation);
-    }, [showAnimation]);
+        // setShowAnimation(!showAnimation);
+        selectLink(link);
+
+    }, [link, selectLink]);
 
     const d = useMemo(() => {
         return getSvgPathForLink(link, viewPortOffset, transformDescription, inputIndex, outputIndex)
