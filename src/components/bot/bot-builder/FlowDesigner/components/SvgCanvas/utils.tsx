@@ -221,10 +221,10 @@ function getPath(outputElementPosition: CoordinateDescription, inputElementPosit
         result = get0Path(outputElementPosition, inputElementPosition, incomeIndex, outcomeIndex);
     }
     if (sector === Sector.S1 || sector === Sector.S3) {
-        const path1 = get1Path(outputElementPosition, inputElementPosition, outputBlockElementPosition, incomeIndex, outcomeIndex);
-        const path2 = get2Path(outputElementPosition, inputElementPosition, outputBlockElementPosition, incomeIndex, outcomeIndex);
-        const path3 = get3Path(outputElementPosition, inputElementPosition, outputBlockElementPosition, incomeIndex, outcomeIndex);
-        const path4 = get4Path(outputElementPosition, inputElementPosition, outputBlockElementPosition, incomeIndex, outcomeIndex);
+        const path1 = get1Path(outputElementPosition, inputElementPosition, outputBlockElementPosition, incomeIndex + 1, outcomeIndex);
+        const path2 = get2Path(outputElementPosition, inputElementPosition, outputBlockElementPosition, incomeIndex + 1, outcomeIndex);
+        const path3 = get3Path(outputElementPosition, inputElementPosition, outputBlockElementPosition, incomeIndex + 1, outcomeIndex);
+        const path4 = get4Path(outputElementPosition, inputElementPosition, outputBlockElementPosition, incomeIndex + 1, outcomeIndex);
 
         const paths = {
             [path1.distance]: path1.path,

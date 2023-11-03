@@ -1,4 +1,7 @@
-import { type TransformDescription, type PositionDescription } from "./FlowDesigner/types";
+import {
+  type TransformDescription,
+  type PositionDescription,
+} from "./FlowDesigner/types";
 
 export enum ElementType {
   CONTENT_TEXT = "content-text",
@@ -77,9 +80,10 @@ export interface FlowDesignerState {
   hideTempLink: VoidFunction;
   setTempLinkPath: (value: string) => void;
   project: BotProject;
-  updateBlocks: (value: FlowDesignerUIBlockDescription[]) => void;
   updateBlock: (updatedBlock: FlowDesignerUIBlockDescription) => void;
   viewPortOffset: PositionDescription;
-  setViewPortOffset: (value:PositionDescription) => void;
+  setViewPortOffset: (value: PositionDescription) => void;
   addLink: (newLink: FlowDesignerLink) => void;
+
+  addBlock: (newBlock: FlowDesignerUIBlockDescription) => void;
 }

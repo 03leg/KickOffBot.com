@@ -17,7 +17,6 @@ import { SvgCanvas } from './components/SvgCanvas';
 interface Props {
     blocks: FlowDesignerUIBlockDescription[];
     onTransformDescriptionChange: (newTransform: TransformDescription) => void;
-    onUpdateBlocks: (newBlocks: FlowDesignerUIBlockDescription[]) => void;
 
     setNodeRef?: React.Ref<unknown>;
     activeElement?: UIElement;

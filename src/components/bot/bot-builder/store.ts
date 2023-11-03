@@ -39,27 +39,40 @@ export const useFlowDesignerStore = create<FlowDesignerState>()((set, get) => ({
     ],
     links: [],
   },
-  updateBlocks: (value: FlowDesignerUIBlockDescription[]) =>
+  // updateBlocks: (value: FlowDesignerUIBlockDescription[]) =>
+  //   set((state) => {
+  //     let project = state.project;
+  //     if (isNil(project)) {
+  //       project = { blocks: [], links: [] };
+  //     }
+  //     project.blocks = value;
+  //     console.log("updateBlocks");
+  //     return { project };
+  //   }),
+  addBlock: (newBlock: FlowDesignerUIBlockDescription) =>
     set((state) => {
-      let project = state.project;
+      const project = state.project;
       if (isNil(project)) {
-        project = { blocks: [], links: [] };
+        throw new Error("InvalidOperationError");
       }
-      project.blocks = value;
+
+      project.blocks = [...project.blocks, newBlock];
+
       return { project };
     }),
   updateBlock: (updatedBlock: FlowDesignerUIBlockDescription) =>
     set((state) => {
       const project = state.project;
-      if(isNil(project)){
-        throw new Error('InvalidOperationError');
+      if (isNil(project)) {
+        throw new Error("InvalidOperationError");
       }
 
-      // todo: ??
-      const indexBlock = project.blocks.findIndex(b=>b.id === updatedBlock.id);
+      const indexBlock = project.blocks.findIndex(
+        (b) => b.id === updatedBlock.id
+      );
       project.blocks[indexBlock] = updatedBlock;
 
-      return { project: {...project} };
+      return { project };
     }),
   viewPortOffset: { x: 0, y: 0 },
   setViewPortOffset: (value: PositionDescription) =>

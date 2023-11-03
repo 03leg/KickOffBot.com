@@ -17,9 +17,11 @@ export const EditBotContent = () => {
     const flowDesignerTransformDescription = React.useRef<TransformDescription | null>(null);
     const [activeDraggableItem, setActiveDraggableItem] = useState<Active | null>();
     const [clonedItems, setClonedItems] = useState<FlowDesignerUIBlockDescription[] | null>(null);
-    const { blocks, updateBlocks } = useFlowDesignerStore((state) => ({
-        updateBlocks: state.updateBlocks,
-        blocks: state.project?.blocks ?? []
+    const { blocks, updateBlock, addBlock } = useFlowDesignerStore((state) => ({
+        // updateBlocks: state.updateBlocks,
+        blocks: state.project?.blocks ?? [],
+        addBlock: state.addBlock,
+        updateBlock: state.updateBlock,
     }));
 
     const { changeTransformDescription } = useFlowDesignerStore((state) => ({ changeTransformDescription: state.changeTransformDescription }));
@@ -53,7 +55,8 @@ export const EditBotContent = () => {
         }
 
         return { uiElements, uiElementIds, elementBlockMap };
-    }, [blocks]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [blocks, blocks.map(p => p.elements)]);
 
     const activeElement = useMemo(() => {
         // const allElements = blocks.map(b => b.elements).flat(1);
@@ -78,9 +81,9 @@ export const EditBotContent = () => {
         flowDesignerTransformDescription.current = newValue;
     }, [changeTransformDescription])
 
-    const handleBlocksUpdate = (newBlocks: FlowDesignerUIBlockDescription[]) => {
-        updateBlocks([...newBlocks]);
-    }
+    // const handleBlocksUpdate = (newBlocks: FlowDesignerUIBlockDescription[]) => {
+    //     updateBlocks([...newBlocks]);
+    // }
 
     const sensors = useSensors(
         useSensor(PointerSensor, {
@@ -100,7 +103,7 @@ export const EditBotContent = () => {
                 const newBlockPosition = getPositionForNewBlock(args, node.current, flowDesignerTransformDescription.current);
                 if (!isNil(newBlockPosition)) {
                     const newBlock = getNewBlock(newBlockPosition, activeElement, `Block #${blocks.length}`);
-                    handleBlocksUpdate([...blocks, newBlock]);
+                    addBlock(newBlock);
                 }
             }
         }
@@ -127,7 +130,7 @@ export const EditBotContent = () => {
         }
 
         const overContainer = findContainer(overId);
-        let newBlocks: FlowDesignerUIBlockDescription[] | null = null;
+        // let newBlocks: FlowDesignerUIBlockDescription[] | null = null;
 
         if (overContainer) {
             const activeIndex = findIndex(activeContainer.elements, (elem) => elem.id === active.id);
@@ -135,24 +138,23 @@ export const EditBotContent = () => {
 
             if (activeIndex !== overIndex) {
                 overContainer.elements = arrayMove(overContainer.elements, activeIndex, overIndex);
-                newBlocks = [...blocks];
+                // newBlocks = [...blocks];
+                updateBlock(overContainer)
             }
         }
 
-        if (newBlocks !== null) {
-            handleBlocksUpdate([...newBlocks]);
-        }
+
         setActiveDraggableItem(null);
     }
 
-    const onDragCancel = () => {
-        if (clonedItems) {
-            handleBlocksUpdate(clonedItems);
-        }
+    // const onDragCancel = () => {
+    //     if (clonedItems) {
+    //         handleBlocksUpdate(clonedItems);
+    //     }
 
-        setActiveDraggableItem(null);
-        setClonedItems(null);
-    };
+    //     setActiveDraggableItem(null);
+    //     setClonedItems(null);
+    // };
 
     function findContainer(id: UniqueIdentifier) {
         for (const block of blocks) {
@@ -176,9 +178,7 @@ export const EditBotContent = () => {
     function handleDragOver(event: DragOverEvent) {
         const { active, over } = event;
 
-
         if (isNil(over)) {
-
             const currentData = (activeDraggableItem?.data as DataRef<DraggableElementData>)?.current;
 
             if (currentData && currentData.isNewElement && activeElement && activeId && existsUIElementsInfo.uiElements.includes(activeElement)) {
@@ -186,10 +186,9 @@ export const EditBotContent = () => {
 
                 if (block) {
                     remove(block.elements, e => e === activeElement);
-                    handleBlocksUpdate([...blocks]);
+                    updateBlock(block);
                 }
             }
-
             return;
         }
 
@@ -221,7 +220,7 @@ export const EditBotContent = () => {
             const newIndex = getIndex(overIndex, overContainer.elements);
             overContainer.elements.splice(newIndex, 0, { ...activeElement });
 
-            handleBlocksUpdate([...blocks]);
+            updateBlock(overContainer);
             return;
         }
 
@@ -233,7 +232,7 @@ export const EditBotContent = () => {
             return;
         }
 
-        const getNewBlocks = (prevBlocks: FlowDesignerUIBlockDescription[]) => {
+        const getUpdatedBlocks = () => {
             const activeItems = activeContainer.elements;
             const overItems = overContainer.elements;
             const overIndex = findIndex(overItems, p => p.id === overId);
@@ -245,11 +244,12 @@ export const EditBotContent = () => {
             activeContainer.elements = activeContainer.elements.filter((item) => item.id !== active.id);
             overContainer.elements = [...overContainer.elements.slice(0, newIndex), element, ...overContainer.elements.slice(newIndex, overContainer.elements.length)]
 
-            return prevBlocks;
+            return { block1: activeContainer, block2: overContainer }
         };
 
-        const newBlocks = getNewBlocks(blocks);
-        handleBlocksUpdate(newBlocks);
+        const { block1, block2 } = getUpdatedBlocks();
+        updateBlock(block1);
+        updateBlock(block2);
     }
 
     return (
@@ -259,7 +259,6 @@ export const EditBotContent = () => {
                 onDragStart={handleDragStart}
                 sensors={sensors}
                 onDragEnd={handleDragEnd}
-                onDragCancel={onDragCancel}
                 measuring={{
                     droppable: {
                         strategy: MeasuringStrategy.Always,
@@ -272,7 +271,6 @@ export const EditBotContent = () => {
                     <FlowDesigner
                         blocks={blocks}
                         onTransformDescriptionChange={handleTransformDescriptionChange}
-                        onUpdateBlocks={handleBlocksUpdate}
                         activeElement={activeElement}
                         setNodeRef={setNodeRef} />
                 </Box>

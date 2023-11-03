@@ -1,11 +1,14 @@
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useMemo, useState } from 'react'
 import { keyframes } from 'tss-react';
 import { makeStyles } from 'tss-react/mui';
+import { useFlowDesignerStore } from '~/components/bot/bot-builder/store';
+import { FlowDesignerLink } from '~/components/bot/bot-builder/types';
 import { Colors } from '~/themes/Colors';
+import { getSvgPathForLink } from '../utils';
 
 
 interface Props {
-    d: string;
+    link: FlowDesignerLink;
 }
 
 export const useStyles = makeStyles()(() => ({
@@ -19,13 +22,41 @@ export const useStyles = makeStyles()(() => ({
     }
 }));
 
-export const Link = ({ d }: Props) => {
+export const Link = ({ link }: Props) => {
     const { classes, cx } = useStyles();
     const [showAnimation, setShowAnimation] = useState(false);
+    const { links, viewPortOffset, transformDescription, blocks } = useFlowDesignerStore((state) => (
+        {
+            links: state.project.links,
+            viewPortOffset: state.viewPortOffset,
+            transformDescription: state.transformDescription,
+            blocks: state.project.blocks
+        }));
+
+
+    const { inputBlock, outputBlock } = useMemo(() => {
+        const inputBlock = blocks.find(b => b.id === link.input.blockId);
+        const outputBlock = blocks.find(b => b.id === link.output.blockId);
+
+        return { inputBlock, outputBlock };
+
+    }, [blocks, link.input.blockId, link.output.blockId]);
+
+    const { inputIndex, outputIndex } = useMemo(() => {
+        const inputLinks = links.filter(l => l.input.blockId === link.input.blockId);
+        const outputLinks = links.filter(l => l.output.blockId === link.output.blockId);
+
+        return { inputIndex: inputLinks.indexOf(link), outputIndex: outputLinks.indexOf(link) }
+    }, [link, links]);
 
     const handleClick = useCallback(() => {
         setShowAnimation(!showAnimation);
     }, [showAnimation]);
+
+    const d = useMemo(() => {
+        return getSvgPathForLink(link, viewPortOffset, transformDescription, inputIndex, outputIndex)
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [link, transformDescription, viewPortOffset, inputBlock?.position, outputBlock?.position, inputBlock?.elements, outputBlock?.elements, inputIndex, outputIndex]);
 
     return (
         <g>

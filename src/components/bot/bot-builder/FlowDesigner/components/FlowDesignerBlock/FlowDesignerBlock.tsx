@@ -38,7 +38,8 @@ export const FlowDesignerBlock = ({ blockDescription, rootScale }: Props) => {
     useEffect(() => {
         blockDescription.position = { x: transformDescription.x, y: transformDescription.y };
         updateBlock(blockDescription);
-    }, [blockDescription, transformDescription, updateBlock])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [transformDescription, updateBlock])
 
     const selectedBlock = context.selectedBlock === blockDescription;
 

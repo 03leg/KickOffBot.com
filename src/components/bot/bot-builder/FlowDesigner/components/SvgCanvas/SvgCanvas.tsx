@@ -16,55 +16,27 @@ export const useStyles = makeStyles()(() => ({
     },
 }));
 
-function getLinkIndex(map: Map<string, number>, blockId: string, linksCount: number) {
-    let resultIndex = 0;
-
-    if (map.has(blockId)) {
-        resultIndex = map.get(blockId)!;
-        map.set(blockId, resultIndex - 1);
-    }
-    else {
-
-        map.set(blockId, linksCount - 1);
-        resultIndex = linksCount;
-    }
-
-    return resultIndex;
-}
-
-
 export const SvgCanvas = () => {
     const { classes } = useStyles();
     const svgRef = useRef<SVGSVGElement>(null);
-    const { showTemporaryLink, tempLinkPath, setViewPortOffset, links, viewPortOffset, transformDescription, project } = useFlowDesignerStore((state) => (
+    const { showTemporaryLink, tempLinkPath, setViewPortOffset, links, transformDescription, project } = useFlowDesignerStore((state) => (
         {
             showTemporaryLink: state.showTemporaryLink,
             tempLinkPath: state.tempLinkPath,
             setViewPortOffset: state.setViewPortOffset,
             links: state.project.links,
-            viewPortOffset: state.viewPortOffset,
             transformDescription: state.transformDescription,
             project: state.project
         }));
 
     const linkPaths = useMemo(() => {
-        // todo: create component for link - performance issue
         const paths: JSX.Element[] = [];
 
-        const mapInputBlock = new Map<string, number>();
-        const mapOutputBlock = new Map<string, number>();
-
         for (const link of links) {
-            const inputIndex = getLinkIndex(mapInputBlock, link.input.blockId, links.filter(p => p.input.blockId === link.input.blockId).length);
-            const outputIndex = getLinkIndex(mapOutputBlock, link.output.blockId, links.filter(p => p.output.blockId === link.output.blockId).length);
-
-            const d = getSvgPathForLink(link, viewPortOffset, transformDescription, inputIndex, outputIndex);
-            paths.push(<Link key={link.id} d={d} />);
+            paths.push(<Link key={link.id} link={link} />);
         }
 
         return paths;
-        // transformDescription, viewPortOffset,
-        
     // eslint-disable-next-line react-hooks/exhaustive-deps 
     }, [links, project]);
 
