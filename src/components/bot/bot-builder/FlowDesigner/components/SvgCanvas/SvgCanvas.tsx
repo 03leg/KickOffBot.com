@@ -1,8 +1,6 @@
-import React, { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
+import React, { useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { makeStyles } from "tss-react/mui";
 import { useFlowDesignerStore } from '../../../store';
-import { isNil } from 'lodash';
-import { getSvgPathForLink } from './utils';
 import { Link } from './Link';
 
 export const useStyles = makeStyles()(() => ({

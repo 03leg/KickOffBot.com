@@ -91,4 +91,8 @@ export interface FlowDesignerState {
   selectedLink: null | FlowDesignerLink;
   selectLink: (link: null | FlowDesignerLink) => void;
   removeLink: (link: FlowDesignerLink) => void;
+  removeLinks: (links: FlowDesignerLink[]) => void;
+
+  removeBlock: (block: FlowDesignerUIBlockDescription) => void;
+  updateAllLinks: () => void;
 }

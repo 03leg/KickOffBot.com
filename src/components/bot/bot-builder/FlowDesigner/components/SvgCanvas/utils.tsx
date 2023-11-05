@@ -242,8 +242,12 @@ function getPath(outputElementPosition: CoordinateDescription, inputElementPosit
     return result;
 }
 
-export function getSvgPathForLink(link: FlowDesignerLink, viewPortOffset: PositionDescription,
-    transformDescription: TransformDescription, incomeIndex: number, outcomeIndex: number): string {
+export function getSvgPathForLink(link: FlowDesignerLink,
+    viewPortOffset: PositionDescription,
+    transformDescription: TransformDescription,
+    incomeIndex: number,
+    outcomeIndex: number): string {
+
 
     const output = link.output as ButtonPortDescription;
     const input = link.input;

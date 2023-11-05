@@ -11,6 +11,7 @@ import { flowDesignerVerticalListSortingStrategy } from './flowDesignerVerticalL
 import { FlowDesignerBlockContext, FlowDesignerContext } from '../../context';
 import { APP_ELEMENT_ROLE } from '../../../constants';
 import { useFlowDesignerStore } from '../../../store';
+import { BlockMenu } from '../BlockMenu/BlockMenu';
 
 
 interface Props {
@@ -38,7 +39,7 @@ export const FlowDesignerBlock = ({ blockDescription, rootScale }: Props) => {
     useEffect(() => {
         blockDescription.position = { x: transformDescription.x, y: transformDescription.y };
         updateBlock(blockDescription);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [transformDescription, updateBlock])
 
     const selectedBlock = context.selectedBlock === blockDescription;
@@ -55,9 +56,9 @@ export const FlowDesignerBlock = ({ blockDescription, rootScale }: Props) => {
                     onClick={handleBlockClick} sx={{
                         backgroundColor: Colors.WHITE,
                         border: selectedBlock ? `1px solid ${Colors.SELECTED}` : `1px solid ${Colors.BORDER}`,
-                        boxShadow: selectedBlock ? '0px 2px 4px -1px #c6c9fb, 0px 4px 5px 0px #c7cafb, 0px 1px 10px 0px #c0c2de' : undefined,
                         borderRadius: 1, minHeight: 100, width: 350, padding: 1,
-                        position: 'relative'
+                        position: 'relative',
+                        userSelect: 'none',
                     }}>
                     <Box sx={{ pointerEvents: 'none' }}>
                         <Typography sx={{ marginBottom: 1 }} variant='h4'>{blockDescription.title}</Typography>
@@ -71,6 +72,12 @@ export const FlowDesignerBlock = ({ blockDescription, rootScale }: Props) => {
                     </SortableContext>
                 </Box>
             </FlowDesignerBlockContext.Provider>
+            {selectedBlock &&
+                (
+                    <Box sx={{ position: 'absolute', top: 0, left: -50 }}>
+                        <BlockMenu block={blockDescription} />
+                    </Box>
+                )}
         </Box>
     )
 }

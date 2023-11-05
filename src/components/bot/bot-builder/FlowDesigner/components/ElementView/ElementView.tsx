@@ -77,7 +77,7 @@ export const ElementView = ({ element, scale }: Props) => {
     return (
         <Box sx={{ mb: 1, position: 'relative' }} ref={setNodeRef} onClick={handleElementClick} className={isDragging ? classes.dragging : ''} style={style} {...attributes} {...listeners}>
             {selected && <Box sx={{ position: 'absolute', top: 0, left: -82 }}>
-                <ElementMenu />
+                <ElementMenu element={element} />
             </Box>}
             <Box
                 sx={{

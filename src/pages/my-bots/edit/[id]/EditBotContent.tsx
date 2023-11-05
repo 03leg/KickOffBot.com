@@ -15,26 +15,28 @@ import { api } from '~/utils/api';
 import { useRouter } from 'next/router';
 import { SnackbarProvider } from 'notistack';
 import { showError, showSuccessMessage } from '~/utils/ClientStatusMessage';
+import { ConfirmProvider } from 'material-ui-confirm';
 
 
 export const EditBotContent = () => {
     const router = useRouter()
     const flowDesignerTransformDescription = React.useRef<TransformDescription | null>(null);
     const [activeDraggableItem, setActiveDraggableItem] = useState<Active | null>();
-    const { blocks, updateBlock, addBlock, project, initProject, projectIsInitialized, setViewPortOffset } = useFlowDesignerStore((state) => ({
+    const { blocks, updateBlock, addBlock, project, initProject, projectIsInitialized, setViewPortOffset, updateAllLinks } = useFlowDesignerStore((state) => ({
         blocks: state.project?.blocks ?? [],
         addBlock: state.addBlock,
         updateBlock: state.updateBlock,
         project: state.project,
         initProject: state.initProject,
         projectIsInitialized: state.projectIsInitialized,
-        setViewPortOffset: state.setViewPortOffset
+        setViewPortOffset: state.setViewPortOffset,
+        updateAllLinks: state.updateAllLinks
     }));
     const { mutateAsync } = api.botManagement.saveBotContent.useMutation();
     const { changeTransformDescription } = useFlowDesignerStore((state) => ({ changeTransformDescription: state.changeTransformDescription }));
 
     const projectIdFromQuery = router.query.id ?? 'unknown id';
-    const { data } = api.botManagement.getBotContent.useQuery({ id: projectIdFromQuery as string }, { enabled: typeof projectIdFromQuery === 'string' && Boolean(router.query.id) });
+    const { data } = api.botManagement.getBotContent.useQuery({ id: projectIdFromQuery as string }, { enabled: typeof projectIdFromQuery === 'string' && Boolean(router.query.id) && projectIsInitialized === false });
 
 
     const viewPortRef = React.useRef<HTMLDivElement>(null);
@@ -43,8 +45,6 @@ export const EditBotContent = () => {
         if (data === undefined) {
             return;
         }
-
-        console.log('init project', data);
 
         initProject(data);
     }, [data, initProject, projectIsInitialized, router.query.id]);
@@ -58,14 +58,12 @@ export const EditBotContent = () => {
     });
 
     useLayoutEffect(() => {
-        console.log('useLayoutEffect', viewPortRef.current)
         const element = viewPortRef.current;
         if (isNil(element)) {
             return;
         }
 
         const rect = element.getBoundingClientRect();
-        console.log('set rect', rect);
         setViewPortOffset({ x: rect.left, y: rect.top });
     }, [viewPortRef, setViewPortOffset])
 
@@ -175,22 +173,15 @@ export const EditBotContent = () => {
             if (activeIndex !== overIndex) {
                 overContainer.elements = arrayMove(overContainer.elements, activeIndex, overIndex);
                 // newBlocks = [...blocks];
-                updateBlock(overContainer)
+                updateBlock(overContainer);
             }
         }
 
 
+        updateAllLinks();
+
         setActiveDraggableItem(null);
     }
-
-    // const onDragCancel = () => {
-    //     if (clonedItems) {
-    //         handleBlocksUpdate(clonedItems);
-    //     }
-
-    //     setActiveDraggableItem(null);
-    //     setClonedItems(null);
-    // };
 
     function findContainer(id: UniqueIdentifier) {
         for (const block of blocks) {
@@ -254,6 +245,7 @@ export const EditBotContent = () => {
             const overIndex = findIndex(overContainer.elements, p => p.id === overId);
             const newIndex = getIndex(overIndex, overContainer.elements);
             overContainer.elements.splice(newIndex, 0, { ...activeElement });
+            overContainer.elements = [...overContainer.elements];
 
             updateBlock(overContainer);
             return;
@@ -306,38 +298,40 @@ export const EditBotContent = () => {
     // }
 
     return (
-        <Box sx={{ padding: (theme) => theme.spacing(2), height: '100%', display: 'flex', flexDirection: 'column' }} >
-            <SnackbarProvider />
-            <Box sx={{ display: 'flex', justifyContent: 'flex-end', paddingBottom: 1 }}>
-                <Button variant="contained" color="success" onClick={handleSaveBot}>
-                    Save
-                </Button>
-            </Box>
-            <DndContext
-                onDragOver={handleDragOver}
-                onDragStart={handleDragStart}
-                sensors={sensors}
-                onDragEnd={handleDragEnd}
-                measuring={{
-                    droppable: {
-                        strategy: MeasuringStrategy.Always,
-                    },
-                }}
-                collisionDetection={pointerWithin}
-                modifiers={[flowDesignerTransformModifier(flowDesignerTransformDescription.current, node)]}
-            >
-                <Box sx={{ flex: 1 }} ref={viewPortRef} data-test='hello'>
-                    {projectIsInitialized &&
-                        (
-                            <FlowDesigner
-                                blocks={blocks}
-                                onTransformDescriptionChange={handleTransformDescriptionChange}
-                                activeElement={activeElement}
-                                setNodeRef={setNodeRef} />
-                        )
-                    }
+        <ConfirmProvider>
+            <Box sx={{ padding: (theme) => theme.spacing(2), height: '100%', display: 'flex', flexDirection: 'column' }} onContextMenu={(e) => e.preventDefault()}>
+                <SnackbarProvider />
+                <Box sx={{ display: 'flex', justifyContent: 'flex-end', paddingBottom: 1 }}>
+                    <Button variant="contained" color="success" onClick={handleSaveBot}>
+                        Save
+                    </Button>
                 </Box>
-            </DndContext>
-        </Box>
+                <DndContext
+                    onDragOver={handleDragOver}
+                    onDragStart={handleDragStart}
+                    sensors={sensors}
+                    onDragEnd={handleDragEnd}
+                    measuring={{
+                        droppable: {
+                            strategy: MeasuringStrategy.Always,
+                        },
+                    }}
+                    collisionDetection={pointerWithin}
+                    modifiers={[flowDesignerTransformModifier(flowDesignerTransformDescription.current, node)]}
+                >
+                    <Box sx={{ flex: 1 }} ref={viewPortRef} data-test='hello'>
+                        {projectIsInitialized &&
+                            (
+                                <FlowDesigner
+                                    blocks={blocks}
+                                    onTransformDescriptionChange={handleTransformDescriptionChange}
+                                    activeElement={activeElement}
+                                    setNodeRef={setNodeRef} />
+                            )
+                        }
+                    </Box>
+                </DndContext>
+            </Box>
+        </ConfirmProvider>
     )
 }

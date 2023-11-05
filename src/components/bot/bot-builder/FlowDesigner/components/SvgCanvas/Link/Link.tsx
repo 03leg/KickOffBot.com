@@ -7,6 +7,7 @@ import { Colors } from '~/themes/Colors';
 import { getSvgPathForLink } from '../utils';
 import { ListItemIcon, Menu, MenuItem, Typography } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
+import { useConfirm } from 'material-ui-confirm';
 
 
 interface Props {
@@ -26,6 +27,7 @@ export const useStyles = makeStyles()(() => ({
 
 export const Link = ({ link }: Props) => {
     const { classes, cx } = useStyles();
+    const confirm = useConfirm();
 
     const { links, viewPortOffset, transformDescription, blocks, selectedLink, selectLink, removeLink } = useFlowDesignerStore((state) => (
         {
@@ -64,13 +66,18 @@ export const Link = ({ link }: Props) => {
         );
     };
 
-    const handleClose = () => {
+    const handleCloseContextMenu = () => {
         setContextMenu(null);
     };
 
     const handleRemoveLink = useCallback(() => {
-        removeLink(link);
-    }, [link, removeLink]);
+        handleCloseContextMenu();
+        void confirm({ description: "This will permanently delete the link.", title: 'Are you sure?' })
+            .then(() => {
+                removeLink(link);
+            });
+
+    }, [confirm, link, removeLink]);
 
 
     const { inputBlock, outputBlock } = useMemo(() => {
@@ -89,9 +96,10 @@ export const Link = ({ link }: Props) => {
     }, [link, links]);
 
     const d = useMemo(() => {
+        
         return getSvgPathForLink(link, viewPortOffset, transformDescription, inputIndex, outputIndex)
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [link, transformDescription, viewPortOffset, inputBlock?.position, outputBlock?.position, inputBlock?.elements, outputBlock?.elements, inputIndex, outputIndex]);
+    }, [links, link, transformDescription, viewPortOffset, inputBlock?.position, outputBlock?.position, inputBlock?.elements, outputBlock?.elements, inputIndex, outputIndex]);
 
     return (
         <>
@@ -104,7 +112,7 @@ export const Link = ({ link }: Props) => {
             </g>
             <Menu
                 open={contextMenu !== null}
-                onClose={handleClose}
+                onClose={handleCloseContextMenu}
                 anchorReference="anchorPosition"
                 anchorPosition={
                     contextMenu !== null

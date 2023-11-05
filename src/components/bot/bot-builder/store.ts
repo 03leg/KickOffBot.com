@@ -88,4 +88,38 @@ export const useFlowDesignerStore = create<FlowDesignerState>()((set, get) => ({
       project.links = [...project.links];
       return { project };
     }),
+  removeLinks: (links: FlowDesignerLink[]) =>
+    set((state) => {
+      const project = state.project;
+      if (links.length === 0) {
+        return { project };
+      }
+      const ids = links.map((p) => p.id);
+
+      remove(project.links, (l) => ids.includes(l.id));
+
+      project.links = [...project.links];
+      return { project };
+    }),
+  removeBlock: (block: FlowDesignerUIBlockDescription) =>
+    set((state) => {
+      const project = state.project;
+
+      remove(project.blocks, (b) => b === block);
+      const deleteLinks = project.links.filter(
+        (l) => l.input.blockId === block.id || l.output.blockId === block.id
+      );
+
+      state.removeLinks(deleteLinks);
+
+      return { project };
+    }),
+  updateAllLinks: () =>
+    set((state) => {
+      const project = state.project;
+
+      project.links = [...project.links];
+
+      return { project };
+    }),
 }));
