@@ -9,3 +9,13 @@ export function showError(message: string) {
     },
   });
 }
+
+export function showSuccessMessage(message: string) {
+  enqueueSnackbar(message, {
+    variant: "success",
+    anchorOrigin: {
+      vertical: "top",
+      horizontal: "center",
+    },
+  });
+}

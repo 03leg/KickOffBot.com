@@ -13,6 +13,7 @@ import { ElementView } from './components/ElementView';
 import { ToolBox } from '../ToolBox';
 import { FlowDesignerContext } from './context';
 import { SvgCanvas } from './components/SvgCanvas';
+import { useFlowDesignerStore } from '../store';
 
 interface Props {
     blocks: FlowDesignerUIBlockDescription[];
@@ -34,7 +35,12 @@ const dropAnimation: DropAnimation = {
 
 export const FlowDesigner = ({ blocks, onTransformDescriptionChange, setNodeRef, activeElement }: Props) => {
     const { classes } = useStyles();
-    const { bind, transformDescription } = useFlowDesignerNavigation();
+
+    const { initialTransformDescription } = useFlowDesignerStore((state) => ({
+        initialTransformDescription: state.project.transformDescription
+    }));
+
+    const { bind, transformDescription } = useFlowDesignerNavigation(initialTransformDescription);
     const blocksOwner = useRef<HTMLDivElement>();
     const [selectedBlock, setSelectedBlock] = useState<FlowDesignerUIBlockDescription | null>(null);
     const [selectedElement, setSelectedElement] = useState<UIElement | null>(null);

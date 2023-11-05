@@ -66,20 +66,22 @@ export interface FlowDesignerLink {
 }
 
 export interface BotProject {
+  transformDescription: TransformDescription;
   blocks: FlowDesignerUIBlockDescription[];
   links: FlowDesignerLink[];
 }
 
 export interface FlowDesignerState {
-  scale: number;
-  transformDescription: TransformDescription;
   changeTransformDescription: (newValue: TransformDescription) => void;
   showTemporaryLink: boolean;
   tempLinkPath: string | null;
   showTempLink: VoidFunction;
   hideTempLink: VoidFunction;
   setTempLinkPath: (value: string) => void;
+  projectIsInitialized: boolean;
   project: BotProject;
+  initProject: (value: string | null) => void;
+
   updateBlock: (updatedBlock: FlowDesignerUIBlockDescription) => void;
   viewPortOffset: PositionDescription;
   setViewPortOffset: (value: PositionDescription) => void;

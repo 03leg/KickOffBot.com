@@ -1,4 +1,4 @@
-import React, { useLayoutEffect, useMemo, useRef } from 'react';
+import React, { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { makeStyles } from "tss-react/mui";
 import { useFlowDesignerStore } from '../../../store';
 import { isNil } from 'lodash';
@@ -25,12 +25,18 @@ export const SvgCanvas = () => {
             tempLinkPath: state.tempLinkPath,
             setViewPortOffset: state.setViewPortOffset,
             links: state.project.links,
-            transformDescription: state.transformDescription,
+            transformDescription: state.project.transformDescription,
             project: state.project
         }));
 
+        const [showLinks, setShowLinks] = useState(false);
+
     const linkPaths = useMemo(() => {
         const paths: JSX.Element[] = [];
+
+        if(!showLinks){
+            return paths;
+        }
 
         for (const link of links) {
             paths.push(<Link key={link.id} link={link} />);
@@ -38,16 +44,18 @@ export const SvgCanvas = () => {
 
         return paths;
     // eslint-disable-next-line react-hooks/exhaustive-deps 
-    }, [links, project]);
+    }, [links, project, showLinks]);
 
     useLayoutEffect(() => {
-        const element = svgRef.current;
-        if (isNil(element)) {
-            return;
-        }
+        // const element = svgRef.current;
+        // if (isNil(element)) {
+        //     return;
+        // }
 
-        const rect = element.getBoundingClientRect();
-        setViewPortOffset({ x: rect.left, y: rect.top });
+        // const rect = element.getBoundingClientRect();
+        // setViewPortOffset({ x: rect.left, y: rect.top });
+
+        setShowLinks(true);
 
     }, [setViewPortOffset])
 

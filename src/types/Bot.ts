@@ -10,3 +10,12 @@ export const BotDescriptionScheme = z.object({
   name: z.string(),
   id: z.string().optional(),
 });
+
+export const BotContentScheme = z.object({
+  project: z.string(),
+  projectId: z.string(),
+});
+
+export const IdModelScheme = z.object({
+  id: z.string(),
+});

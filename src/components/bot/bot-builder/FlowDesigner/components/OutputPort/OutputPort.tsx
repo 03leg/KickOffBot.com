@@ -23,7 +23,7 @@ export const OutputPort = ({ className, buttonId, elementId }: Props) => {
         hideTempLink: state.hideTempLink,
         setTempLinkPath: state.setTempLinkPath,
         viewPortOffset: state.viewPortOffset,
-        transformDescription: state.transformDescription,
+        transformDescription: state.project.transformDescription,
         addLink: state.addLink
     }));
 

@@ -29,7 +29,7 @@ export const Link = ({ link }: Props) => {
         {
             links: state.project.links,
             viewPortOffset: state.viewPortOffset,
-            transformDescription: state.transformDescription,
+            transformDescription: state.project.transformDescription,
             blocks: state.project.blocks,
             selectedLink: state.selectedLink,
             selectLink: state.selectLink

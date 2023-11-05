@@ -4,16 +4,16 @@ import { zoomFlowDesigner } from "./FlowDesigner.utils";
 import { round } from "lodash";
 import { type TransformDescription } from "./types";
 
-export function useFlowDesignerNavigation() {
+export function useFlowDesignerNavigation(initialTransformDescription: TransformDescription) {
   const [startValue, setStartValue] = useState<{ x: number; y: number }>({
-    x: 0,
-    y: 0,
+    x: initialTransformDescription.x,
+    y: initialTransformDescription.y,
   });
   const [distance, setDistance] = useState<{ x: number; y: number }>({
     x: 0,
     y: 0,
   });
-  const [scale, setScale] = useState<number>(1);
+  const [scale, setScale] = useState<number>(initialTransformDescription.scale);
 
   const bind = useGesture({
     onDrag: (state) => {

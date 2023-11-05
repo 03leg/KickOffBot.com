@@ -4,41 +4,45 @@ import {
   type FlowDesignerState,
   type FlowDesignerLink,
 } from "./types";
-import { generateElements } from "./utils";
 import { isNil } from "lodash";
 import { type PositionDescription } from "./FlowDesigner/types";
 
 export const useFlowDesignerStore = create<FlowDesignerState>()((set, get) => ({
-  scale: 1,
-  transformDescription: { scale: 1, x: 0, y: 0 },
   changeTransformDescription: (newValue) =>
     set((state) => {
-      state.transformDescription = newValue;
-      state.scale = newValue.scale;
-      return { transformDescription: newValue, scale: newValue.scale };
+      const project = state.project;
+      if (isNil(project)) {
+        throw new Error("InvalidOperationError");
+      }
+      project.transformDescription = newValue;
+      return { project };
     }),
   showTemporaryLink: false,
   tempLinkPath: null,
   showTempLink: () => set(() => ({ showTemporaryLink: true })),
   hideTempLink: () => set(() => ({ showTemporaryLink: false })),
   setTempLinkPath: (value: string) => set(() => ({ tempLinkPath: value })),
+  projectIsInitialized: false,
   project: {
-    blocks: [
-      {
-        id: "0",
-        title: "Block #1",
-        position: { x: 500, y: 0 },
-        elements: generateElements(),
-      },
-      {
-        id: "1",
-        title: "Block #2",
-        position: { x: 0, y: 500 },
-        elements: generateElements(),
-      },
-    ],
+    blocks: [],
     links: [],
+    transformDescription: { scale: 1, x: 0, y: 0 },
   },
+  initProject: (value: string | null) =>
+    set(() => {
+
+      let currentProject = {
+        blocks: [],
+        links: [],
+        transformDescription: { scale: 1, x: 0, y: 0 },
+      };
+      if (value !== null) {
+        currentProject = JSON.parse(value);
+      }
+
+      return { project: currentProject, projectIsInitialized: true };
+    }),
+
   // updateBlocks: (value: FlowDesignerUIBlockDescription[]) =>
   //   set((state) => {
   //     let project = state.project;
@@ -81,7 +85,11 @@ export const useFlowDesignerStore = create<FlowDesignerState>()((set, get) => ({
     set((state) => {
       let project = state.project;
       if (isNil(project)) {
-        project = { blocks: [], links: [] };
+        project = {
+          blocks: [],
+          links: [],
+          transformDescription: { scale: 1, x: 0, y: 0 },
+        };
       }
       project.links = [...project.links, newLink];
 

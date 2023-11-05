@@ -1,7 +1,7 @@
 import * as React from 'react';
-import { Box } from '@mui/material';
+import { Box, Button } from '@mui/material';
 import { DndContext, MeasuringStrategy, type DragEndEvent, pointerWithin, type DragOverEvent, type DragStartEvent, type UniqueIdentifier, useDroppable, useSensor, useSensors, PointerSensor, KeyboardSensor, type Active, type DataRef } from '@dnd-kit/core';
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useEffect, useLayoutEffect, useMemo, useState } from 'react';
 import { findIndex, isNil, remove } from 'lodash';
 import { type TransformDescription } from '~/components/bot/bot-builder/FlowDesigner/types';
 import { ElementType, type FlowDesignerUIBlockDescription, type UIElement } from '~/components/bot/bot-builder/types';
@@ -11,20 +11,44 @@ import { arrayMove, sortableKeyboardCoordinates } from '@dnd-kit/sortable';
 import { getNewBlock, getNewUIElementTemplate, getPositionForNewBlock } from '~/components/bot/bot-builder/utils';
 import { type DraggableElementData } from '~/components/bot/bot-builder/ToolBox/types';
 import { useFlowDesignerStore } from '~/components/bot/bot-builder/store';
+import { api } from '~/utils/api';
+import { useRouter } from 'next/router';
+import { SnackbarProvider } from 'notistack';
+import { showError, showSuccessMessage } from '~/utils/ClientStatusMessage';
 
 
 export const EditBotContent = () => {
+    const router = useRouter()
     const flowDesignerTransformDescription = React.useRef<TransformDescription | null>(null);
     const [activeDraggableItem, setActiveDraggableItem] = useState<Active | null>();
-    const [clonedItems, setClonedItems] = useState<FlowDesignerUIBlockDescription[] | null>(null);
-    const { blocks, updateBlock, addBlock } = useFlowDesignerStore((state) => ({
-        // updateBlocks: state.updateBlocks,
+    const { blocks, updateBlock, addBlock, project, initProject, projectIsInitialized, setViewPortOffset } = useFlowDesignerStore((state) => ({
         blocks: state.project?.blocks ?? [],
         addBlock: state.addBlock,
         updateBlock: state.updateBlock,
+        project: state.project,
+        initProject: state.initProject,
+        projectIsInitialized: state.projectIsInitialized,
+        setViewPortOffset: state.setViewPortOffset
     }));
-
+    const { mutateAsync } = api.botManagement.saveBotContent.useMutation();
     const { changeTransformDescription } = useFlowDesignerStore((state) => ({ changeTransformDescription: state.changeTransformDescription }));
+
+    const projectIdFromQuery = router.query.id ?? 'unknown id';
+    const { data } = api.botManagement.getBotContent.useQuery({ id: projectIdFromQuery as string }, { enabled: typeof projectIdFromQuery === 'string' && Boolean(router.query.id) });
+
+
+    const viewPortRef = React.useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        if (data === undefined) {
+            return;
+        }
+
+        console.log('init project', data);
+
+        initProject(data);
+    }, [data, initProject, projectIsInitialized, router.query.id]);
+
 
     const { setNodeRef, node } = useDroppable({
         id: 'droppable-area-for-new-elements',
@@ -32,6 +56,18 @@ export const EditBotContent = () => {
             accepts: [ElementType.CONTENT_TEXT],
         },
     });
+
+    useLayoutEffect(() => {
+        console.log('useLayoutEffect', viewPortRef.current)
+        const element = viewPortRef.current;
+        if (isNil(element)) {
+            return;
+        }
+
+        const rect = element.getBoundingClientRect();
+        console.log('set rect', rect);
+        setViewPortOffset({ x: rect.left, y: rect.top });
+    }, [viewPortRef, setViewPortOffset])
 
     const activeId = useMemo(() => {
         if (isNil(activeDraggableItem)) {
@@ -172,7 +208,6 @@ export const EditBotContent = () => {
         const { active } = event;
 
         setActiveDraggableItem(active);
-        setClonedItems(blocks);
     }
 
     function handleDragOver(event: DragOverEvent) {
@@ -252,8 +287,32 @@ export const EditBotContent = () => {
         updateBlock(block2);
     }
 
+    const handleSaveBot = useCallback(async () => {
+        if (isNil(router.query.id) || typeof router.query.id !== 'string') {
+            throw new Error('InvalidOperationError');
+        }
+
+        try {
+            await mutateAsync({ project: JSON.stringify(project), projectId: router.query.id });
+            showSuccessMessage('The bot successfully saved');
+        }
+        catch (e) {
+            showError('Failed to save bot content :(');
+        }
+    }, [mutateAsync, project, router.query]);
+
+    // if (projectIsInitialized === false) {
+    //     return <>Loading...</>;
+    // }
+
     return (
-        <Box sx={{ padding: (theme) => theme.spacing(2), height: '100%', display: 'flex', flexDirection: 'row' }} >
+        <Box sx={{ padding: (theme) => theme.spacing(2), height: '100%', display: 'flex', flexDirection: 'column' }} >
+            <SnackbarProvider />
+            <Box sx={{ display: 'flex', justifyContent: 'flex-end', paddingBottom: 1 }}>
+                <Button variant="contained" color="success" onClick={handleSaveBot}>
+                    Save
+                </Button>
+            </Box>
             <DndContext
                 onDragOver={handleDragOver}
                 onDragStart={handleDragStart}
@@ -267,12 +326,16 @@ export const EditBotContent = () => {
                 collisionDetection={pointerWithin}
                 modifiers={[flowDesignerTransformModifier(flowDesignerTransformDescription.current, node)]}
             >
-                <Box sx={{ flex: 1 }}>
-                    <FlowDesigner
-                        blocks={blocks}
-                        onTransformDescriptionChange={handleTransformDescriptionChange}
-                        activeElement={activeElement}
-                        setNodeRef={setNodeRef} />
+                <Box sx={{ flex: 1 }} ref={viewPortRef} data-test='hello'>
+                    {projectIsInitialized &&
+                        (
+                            <FlowDesigner
+                                blocks={blocks}
+                                onTransformDescriptionChange={handleTransformDescriptionChange}
+                                activeElement={activeElement}
+                                setNodeRef={setNodeRef} />
+                        )
+                    }
                 </Box>
             </DndContext>
         </Box>
