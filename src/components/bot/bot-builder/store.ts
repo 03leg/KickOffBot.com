@@ -4,7 +4,7 @@ import {
   type FlowDesignerState,
   type FlowDesignerLink,
 } from "./types";
-import { isNil } from "lodash";
+import { isNil, remove } from "lodash";
 import { type PositionDescription } from "./FlowDesigner/types";
 
 export const useFlowDesignerStore = create<FlowDesignerState>()((set, get) => ({
@@ -30,7 +30,6 @@ export const useFlowDesignerStore = create<FlowDesignerState>()((set, get) => ({
   },
   initProject: (value: string | null) =>
     set(() => {
-
       let currentProject = {
         blocks: [],
         links: [],
@@ -42,17 +41,6 @@ export const useFlowDesignerStore = create<FlowDesignerState>()((set, get) => ({
 
       return { project: currentProject, projectIsInitialized: true };
     }),
-
-  // updateBlocks: (value: FlowDesignerUIBlockDescription[]) =>
-  //   set((state) => {
-  //     let project = state.project;
-  //     if (isNil(project)) {
-  //       project = { blocks: [], links: [] };
-  //     }
-  //     project.blocks = value;
-  //     console.log("updateBlocks");
-  //     return { project };
-  //   }),
   addBlock: (newBlock: FlowDesignerUIBlockDescription) =>
     set((state) => {
       const project = state.project;
@@ -83,14 +71,7 @@ export const useFlowDesignerStore = create<FlowDesignerState>()((set, get) => ({
     set(() => ({ viewPortOffset: value })),
   addLink: (newLink: FlowDesignerLink) =>
     set((state) => {
-      let project = state.project;
-      if (isNil(project)) {
-        project = {
-          blocks: [],
-          links: [],
-          transformDescription: { scale: 1, x: 0, y: 0 },
-        };
-      }
+      const project = state.project;
       project.links = [...project.links, newLink];
 
       return { project };
@@ -98,15 +79,13 @@ export const useFlowDesignerStore = create<FlowDesignerState>()((set, get) => ({
   selectedLink: null,
   selectLink: (link: FlowDesignerLink | null) =>
     set(() => ({ selectedLink: link })),
-  // (link: FlowDesignerLink) =>
-  //   set(() => (
-  //      { selectedLink: link };
-  //   )),
+  removeLink: (link: FlowDesignerLink) =>
+    set((state) => {
+      const project = state.project;
 
-  // viewPortOffset: () => {
-  //   const element = document.getElementById("svg-container") as Element;
-  //   const rect = element.getBoundingClientRect();
+      remove(project.links, (l) => l === link);
 
-  //   return { x: rect.left, y: rect.top };
-  // },
+      project.links = [...project.links];
+      return { project };
+    }),
 }));

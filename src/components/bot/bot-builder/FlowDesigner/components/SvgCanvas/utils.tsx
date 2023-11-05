@@ -257,14 +257,6 @@ export function getSvgPathForLink(link: FlowDesignerLink, viewPortOffset: Positi
     const inputElement = getElement(input.blockId);
     const inputElementPosition = getElementPosition(inputElement, viewPortOffset, transformDescription);
 
-    console.log('viewPortOffset', viewPortOffset);
-    console.log('transformDescription', transformDescription);
-
-    console.log('outputElementPosition', outputElementPosition);
-    console.log('outputBlockElementPosition', outputBlockElementPosition);
-    console.log('inputElementPosition', inputElementPosition);
-
-
 
     const bestPath = getPath(outputElementPosition, inputElementPosition, incomeIndex, outcomeIndex, outputBlockElementPosition);
 

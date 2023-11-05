@@ -5,6 +5,8 @@ import { useFlowDesignerStore } from '~/components/bot/bot-builder/store';
 import { type FlowDesignerLink } from '~/components/bot/bot-builder/types';
 import { Colors } from '~/themes/Colors';
 import { getSvgPathForLink } from '../utils';
+import { ListItemIcon, Menu, MenuItem, Typography } from '@mui/material';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 
 interface Props {
@@ -25,16 +27,50 @@ export const useStyles = makeStyles()(() => ({
 export const Link = ({ link }: Props) => {
     const { classes, cx } = useStyles();
 
-    const { links, viewPortOffset, transformDescription, blocks, selectedLink, selectLink } = useFlowDesignerStore((state) => (
+    const { links, viewPortOffset, transformDescription, blocks, selectedLink, selectLink, removeLink } = useFlowDesignerStore((state) => (
         {
             links: state.project.links,
             viewPortOffset: state.viewPortOffset,
             transformDescription: state.project.transformDescription,
             blocks: state.project.blocks,
             selectedLink: state.selectedLink,
-            selectLink: state.selectLink
+            selectLink: state.selectLink,
+            removeLink: state.removeLink,
         }));
     const showAnimation = selectedLink === link;
+
+    const handleClick = useCallback(() => {
+        selectLink(link);
+    }, [link, selectLink]);
+
+
+    const [contextMenu, setContextMenu] = React.useState<{
+        mouseX: number;
+        mouseY: number;
+    } | null>(null);
+
+    const handleContextMenu = (event: React.MouseEvent) => {
+        event.preventDefault();
+        handleClick();
+        setContextMenu(
+            contextMenu === null
+                ?
+                {
+                    mouseX: event.clientX + 2,
+                    mouseY: event.clientY - 6,
+                }
+                :
+                null,
+        );
+    };
+
+    const handleClose = () => {
+        setContextMenu(null);
+    };
+
+    const handleRemoveLink = useCallback(() => {
+        removeLink(link);
+    }, [link, removeLink]);
 
 
     const { inputBlock, outputBlock } = useMemo(() => {
@@ -52,21 +88,38 @@ export const Link = ({ link }: Props) => {
         return { inputIndex: inputLinks.indexOf(link), outputIndex: outputLinks.indexOf(link) }
     }, [link, links]);
 
-    const handleClick = useCallback(() => {
-        // setShowAnimation(!showAnimation);
-        selectLink(link);
-
-    }, [link, selectLink]);
-
     const d = useMemo(() => {
         return getSvgPathForLink(link, viewPortOffset, transformDescription, inputIndex, outputIndex)
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [link, transformDescription, viewPortOffset, inputBlock?.position, outputBlock?.position, inputBlock?.elements, outputBlock?.elements, inputIndex, outputIndex]);
 
     return (
-        <g>
-            <path className={cx(classes.link, showAnimation ? classes.linkAnimation : undefined)} stroke={Colors.LINK} fill='none' strokeWidth="3" d={d} ></path >
-            <path className={cx(classes.link, showAnimation ? classes.linkAnimation : undefined)} onClick={handleClick} stroke={Colors.LINK} fill="none" strokeWidth="32" d={d} strokeLinecap="round" strokeOpacity="0" ></path>
-        </g>
+        <>
+            <g>
+                <path className={cx(classes.link, showAnimation ? classes.linkAnimation : undefined)} stroke={Colors.LINK} fill='none' strokeWidth="3" d={d} ></path >
+                <path className={cx(classes.link, showAnimation ? classes.linkAnimation : undefined)}
+                    onClick={handleClick}
+                    onContextMenu={handleContextMenu}
+                    stroke={Colors.LINK} fill="none" strokeWidth="32" d={d} strokeLinecap="round" strokeOpacity="0" ></path>
+            </g>
+            <Menu
+                open={contextMenu !== null}
+                onClose={handleClose}
+                anchorReference="anchorPosition"
+                anchorPosition={
+                    contextMenu !== null
+                        ? { top: contextMenu.mouseY, left: contextMenu.mouseX }
+                        : undefined
+                }
+            >
+                <MenuItem onClick={handleRemoveLink}>
+                    <ListItemIcon>
+                        <DeleteIcon fontSize="small" />
+                    </ListItemIcon>
+                    <Typography variant="inherit">Delete link</Typography>
+                </MenuItem>
+            </Menu>
+        </>
+
     )
 }
