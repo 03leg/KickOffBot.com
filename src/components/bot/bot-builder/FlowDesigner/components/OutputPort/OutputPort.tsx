@@ -97,7 +97,8 @@ export const OutputPort = ({ className, buttonId, elementId }: Props) => {
                 width: 16,
                 borderRadius: 8,
                 backgroundColor: Colors.OUTPUT,
-                border: `2px solid ${Colors.BORDER}`
+                border: `2px solid ${Colors.BORDER}`,
+                touchAction: 'none'
             }}></Box>
     )
 }

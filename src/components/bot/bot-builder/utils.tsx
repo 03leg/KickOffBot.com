@@ -1,4 +1,4 @@
-import { ContentTextUIElement, ElementType, InputTextUIElement, type FlowDesignerUIBlockDescription, type UIElement, InputButtonsUIElement } from "./types";
+import { ContentTextUIElement, ElementType, InputTextUIElement, type FlowDesignerUIBlockDescription, type UIElement, InputButtonsUIElement, FlowDesignerLink, ButtonPortDescription } from "./types";
 import MessageIcon from '@mui/icons-material/Message';
 import TextFieldsIcon from '@mui/icons-material/TextFields';
 import SmartButtonIcon from '@mui/icons-material/SmartButton';
@@ -62,7 +62,7 @@ export function getNewUIElementTemplate(id: string, data: DraggableElementData) 
 
     switch (data.type) {
         case ElementType.CONTENT_TEXT: {
-            const result: ContentTextUIElement = { id, text: 'Text...', type: ElementType.CONTENT_TEXT };
+            const result: ContentTextUIElement = { id, type: ElementType.CONTENT_TEXT };
             return result;
         }
         case ElementType.INPUT_TEXT: {
@@ -118,47 +118,47 @@ export function getNewBlock(position: PositionDescription, firstElement: UIEleme
 export const generateElements = () => {
     const textUIElement1: ContentTextUIElement = {
         type: ElementType.CONTENT_TEXT,
-        text: 'Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1',
+        json: 'Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1',
         id: '11111' + v4(),
     };
     const textUIElement2: ContentTextUIElement = {
         type: ElementType.CONTENT_TEXT,
-        text: 'Hey2! Hey2! Hey2! Hey2! Hey2! Hey2! Hey2! Hey2! Hey2! Hey2! Hey2! Hey2! Hey2! ' + v4(),
+        json: 'Hey2! Hey2! Hey2! Hey2! Hey2! Hey2! Hey2! Hey2! Hey2! Hey2! Hey2! Hey2! Hey2! ' + v4(),
         id: '22222' + v4(),
     };
     const textUIElement3: ContentTextUIElement = {
         type: ElementType.CONTENT_TEXT,
-        text: 'Privet3! Privet3! Privet3! ' + v4(),
+        json: 'Privet3! Privet3! Privet3! ' + v4(),
         id: '33333' + v4(),
     };
     const textUIElement4: ContentTextUIElement = {
         type: ElementType.CONTENT_TEXT,
-        text: 'Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1',
+        json: 'Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1',
         id: '11111' + v4(),
     };
     const textUIElement5: ContentTextUIElement = {
         type: ElementType.CONTENT_TEXT,
-        text: 'Hey2! Hey2! Hey2! Hey2! Hey2! Hey2! Hey2! Hey2! Hey2! Hey2! Hey2! Hey2! Hey2! ' + v4(),
+        json: 'Hey2! Hey2! Hey2! Hey2! Hey2! Hey2! Hey2! Hey2! Hey2! Hey2! Hey2! Hey2! Hey2! ' + v4(),
         id: '22222' + v4(),
     };
     const textUIElement6: ContentTextUIElement = {
         type: ElementType.CONTENT_TEXT,
-        text: 'Privet3!' + v4(),
+        json: 'Privet3!' + v4(),
         id: '33333' + v4(),
     };
     const textUIElement7: ContentTextUIElement = {
         type: ElementType.CONTENT_TEXT,
-        text: 'Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1',
+        json: 'Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1',
         id: '11111' + v4(),
     };
     const textUIElement8: ContentTextUIElement = {
         type: ElementType.CONTENT_TEXT,
-        text: 'Hey2! Hey2! Hey2! Hey2! Hey2! Hey2! Hey2! Hey2! Hey2! Hey2! Hey2! Hey2! Hey2! ' + v4(),
+        json: 'Hey2! Hey2! Hey2! Hey2! Hey2! Hey2! Hey2! Hey2! Hey2! Hey2! Hey2! Hey2! Hey2! ' + v4(),
         id: '22222' + v4(),
     };
     const textUIElement9: ContentTextUIElement = {
         type: ElementType.CONTENT_TEXT,
-        text: 'Privet3! Privet3! Privet3! Privet3!  Privet3!  Privet3!  Privet3!  Privet3!' + v4(),
+        json: 'Privet3! Privet3! Privet3! Privet3!  Privet3!  Privet3!  Privet3!  Privet3!' + v4(),
         id: '33333' + v4(),
     };
     return [
@@ -172,4 +172,23 @@ export const generateElements = () => {
         textUIElement8,
         textUIElement9,
     ]
+};
+
+export const canLink = (newLink: FlowDesignerLink, links: FlowDesignerLink[]) => {
+    let result = true;
+
+    if (newLink.input.blockId === newLink.output.blockId) {
+        result = false;
+    }
+
+    const existLink = links.some(l => !isNil((l.output as ButtonPortDescription).buttonId)
+        && (l.output as ButtonPortDescription).buttonId === (newLink.output as ButtonPortDescription).buttonId
+        && l.input.blockId === newLink.input.blockId);
+
+    if (existLink) {
+        result = false;
+    }
+
+    return result;
+
 };

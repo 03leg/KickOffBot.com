@@ -1,27 +1,32 @@
 import { Box, IconButton } from '@mui/material';
 import React, { useCallback } from 'react'
-import { Editor, EditorState, RichUtils, convertToRaw } from 'draft-js';
+import { Editor, EditorState, RichUtils, convertToRaw, convertFromRaw, ContentState } from 'draft-js';
 import 'draft-js/dist/Draft.css';
 import { Colors } from '~/themes/Colors';
 import { FormatBold, FormatItalic } from '@mui/icons-material';
+import { stateToHTML } from "draft-js-export-html";
+import { isNil } from 'lodash';
 
 interface TextEditorProps {
-    onContentChange: (newContent: string) => void;
+    initialState?: EditorState | undefined;
+    onContentChange: (jsonState: string, htmlContent: string, telegramContent: string) => void;
 }
 
-export const TextEditor = ({ onContentChange }: TextEditorProps) => {
-    const [editorState, setEditorState] = React.useState<EditorState>(EditorState.createEmpty());
-
-    // const blocks = convertToRaw(editorState.getCurrentContent()).blocks;
-
-    // console.log('blocks', blocks);
+export const TextEditor = ({ onContentChange, initialState }: TextEditorProps) => {
+    const [editorState, setEditorState] = React.useState<EditorState>(initialState ?? EditorState.createEmpty());
 
     const generatePublicContentChange = useCallback((newState: EditorState) => {
         const content = newState.getCurrentContent();
+
         const rawObject = convertToRaw(content);
         const jsonContent = JSON.stringify(rawObject);
 
-        onContentChange(jsonContent);
+        // console.log(stateToHTML(newState.getCurrentContent()));
+        console.log(stateToHTML(convertFromRaw(JSON.parse(jsonContent))));
+        const htmlContent = stateToHTML(newState.getCurrentContent());
+        const telegramContent = stateToHTML(newState.getCurrentContent());
+
+        onContentChange(jsonContent, htmlContent, telegramContent);
     }, [onContentChange]);
 
     const handleBoldClick = useCallback(() => {

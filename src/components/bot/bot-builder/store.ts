@@ -6,6 +6,7 @@ import {
 } from "./types";
 import { isNil, remove } from "lodash";
 import { type PositionDescription } from "./FlowDesigner/types";
+import { canLink } from "./utils";
 
 export const useFlowDesignerStore = create<FlowDesignerState>()((set, get) => ({
   changeTransformDescription: (newValue) =>
@@ -72,6 +73,11 @@ export const useFlowDesignerStore = create<FlowDesignerState>()((set, get) => ({
   addLink: (newLink: FlowDesignerLink) =>
     set((state) => {
       const project = state.project;
+
+      if (!canLink(newLink, project.links)) {
+        return { project };
+      }
+
       project.links = [...project.links, newLink];
 
       return { project };

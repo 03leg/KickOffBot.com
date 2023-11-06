@@ -23,7 +23,9 @@ export interface UIElement {
 }
 
 export interface ContentTextUIElement extends UIElement {
-  text: string;
+  json?: string;
+  htmlContent?: string;
+  telegramContent?: string;
 }
 
 export interface InputTextUIElement extends UIElement {
