@@ -4,10 +4,11 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import { Colors } from '~/themes/Colors';
 import { useFlowDesignerStore } from '../../../store';
-import { ElementType, type ContentTextUIElement, type UIElement } from '../../../types';
+import { ElementType, type ContentTextUIElement, type UIElement, type InputButtonsUIElement } from '../../../types';
 import { isNil, remove } from 'lodash';
 import { useConfirm } from 'material-ui-confirm';
 import { TextContentEditor } from '../elements/TextContent/Editor';
+import { ButtonsEditor } from '../elements/ButtonsInput/Editor';
 
 interface Props {
     element: UIElement;
@@ -52,14 +53,19 @@ export const ElementMenu = ({ element }: Props) => {
             case ElementType.CONTENT_TEXT: {
                 const initialElement = elementArg as ContentTextUIElement;
                 const newElement: ContentTextUIElement = {
-                    htmlContent: initialElement.htmlContent,
-                    id: initialElement.id,
-                    json: initialElement.json,
-                    telegramContent: initialElement.telegramContent,
-                    type: initialElement.type
+                    ...initialElement
                 };
 
                 return { content: (<TextContentEditor element={newElement} />), title: 'Message Editor', newElement };
+            }
+            case ElementType.INPUT_BUTTONS: {
+                const initialElement = elementArg as InputButtonsUIElement;
+                const newElement: InputButtonsUIElement = {
+                    ...initialElement,
+                    buttons: initialElement.buttons.map(b => ({ ...b }))
+                };
+
+                return { content: (<ButtonsEditor element={newElement} />), title: 'Buttons Editor', newElement };
             }
             default: {
                 throw new Error('NotImplementedError');

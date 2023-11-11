@@ -72,9 +72,9 @@ export function getNewUIElementTemplate(id: string, data: DraggableElementData) 
         case ElementType.INPUT_BUTTONS: {
             const result: InputButtonsUIElement = {
                 id, type: ElementType.INPUT_BUTTONS, buttons: [
-                    { content: "Click me...", id: v4() },
-                    { content: "Button #1", id: v4() },
-                    { content: "Button #2", id: v4() }
+                    { content: "click me, plz...", id: v4() },
+                    // { content: "Button #1", id: v4() },
+                    // { content: "Button #2", id: v4() }
                 ]
             };
             return result;
