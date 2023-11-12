@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Box, Button } from '@mui/material';
+import { Box, Button, Checkbox, IconButton } from '@mui/material';
 import { DndContext, MeasuringStrategy, type DragEndEvent, pointerWithin, type DragOverEvent, type DragStartEvent, type UniqueIdentifier, useDroppable, useSensor, useSensors, PointerSensor, KeyboardSensor, type Active, type DataRef } from '@dnd-kit/core';
 import { useCallback, useEffect, useLayoutEffect, useMemo, useState } from 'react';
 import { findIndex, isNil, remove } from 'lodash';
@@ -16,13 +16,16 @@ import { useRouter } from 'next/router';
 import { SnackbarProvider } from 'notistack';
 import { showError, showSuccessMessage } from '~/utils/ClientStatusMessage';
 import { ConfirmProvider } from 'material-ui-confirm';
+import AbcIcon from '@mui/icons-material/Abc';
+import AbcRounded from '@mui/icons-material/AbcRounded';
+import { VariableViewers } from '~/components/bot/bot-builder/VariablesViewer';
 
 
 export const EditBotContent = () => {
     const router = useRouter()
     const flowDesignerTransformDescription = React.useRef<TransformDescription | null>(null);
     const [activeDraggableItem, setActiveDraggableItem] = useState<Active | null>();
-    const { blocks, updateBlock, addBlock, project, initProject, projectIsInitialized, setViewPortOffset, updateAllLinks } = useFlowDesignerStore((state) => ({
+    const { blocks, updateBlock, addBlock, project, initProject, projectIsInitialized, setViewPortOffset, updateAllLinks, toggleVariablesViewer } = useFlowDesignerStore((state) => ({
         blocks: state.project?.blocks ?? [],
         addBlock: state.addBlock,
         updateBlock: state.updateBlock,
@@ -30,7 +33,8 @@ export const EditBotContent = () => {
         initProject: state.initProject,
         projectIsInitialized: state.projectIsInitialized,
         setViewPortOffset: state.setViewPortOffset,
-        updateAllLinks: state.updateAllLinks
+        updateAllLinks: state.updateAllLinks,
+        toggleVariablesViewer: state.toggleVariablesViewer
     }));
     const { mutateAsync } = api.botManagement.saveBotContent.useMutation();
     const { changeTransformDescription } = useFlowDesignerStore((state) => ({ changeTransformDescription: state.changeTransformDescription }));
@@ -297,40 +301,51 @@ export const EditBotContent = () => {
     //     return <>Loading...</>;
     // }
 
+    const handleToggleVariables = useCallback(() => {
+        toggleVariablesViewer();
+    }, [toggleVariablesViewer])
+
     return (
         <ConfirmProvider>
             <Box sx={{ padding: (theme) => theme.spacing(2), height: '100%', display: 'flex', flexDirection: 'column' }} onContextMenu={(e) => e.preventDefault()}>
                 <SnackbarProvider />
-                <Box sx={{ display: 'flex', justifyContent: 'flex-end', paddingBottom: 1 }}>
-                    <Button variant="contained" color="success" onClick={handleSaveBot}>
-                        Save
-                    </Button>
-                </Box>
-                <DndContext
-                    onDragOver={handleDragOver}
-                    onDragStart={handleDragStart}
-                    sensors={sensors}
-                    onDragEnd={handleDragEnd}
-                    measuring={{
-                        droppable: {
-                            strategy: MeasuringStrategy.Always,
-                        },
-                    }}
-                    collisionDetection={pointerWithin}
-                    modifiers={[flowDesignerTransformModifier(flowDesignerTransformDescription.current, node)]}
-                >
-                    <Box sx={{ flex: 1 }} ref={viewPortRef} data-test='hello'>
-                        {projectIsInitialized &&
-                            (
-                                <FlowDesigner
-                                    blocks={blocks}
-                                    onTransformDescriptionChange={handleTransformDescriptionChange}
-                                    activeElement={activeElement}
-                                    setNodeRef={setNodeRef} />
-                            )
-                        }
+                <Box sx={{ display: 'flex', paddingBottom: 1 }}>
+                    <Box sx={{ display: 'flex', justifyContent: 'flex-end', flex: 1 }}>
+                        <Button variant="contained" color="success" onClick={handleSaveBot}>
+                            Save
+                        </Button>
+                        <Checkbox sx={{ marginLeft: 2 }} icon={<AbcRounded />} checkedIcon={<AbcIcon />} onChange={handleToggleVariables} />
                     </Box>
-                </DndContext>
+                </Box>
+
+                <Box sx={{ display: 'flex', flexDirection: 'row', flex: 1 }}>
+                    <DndContext
+                        onDragOver={handleDragOver}
+                        onDragStart={handleDragStart}
+                        sensors={sensors}
+                        onDragEnd={handleDragEnd}
+                        measuring={{
+                            droppable: {
+                                strategy: MeasuringStrategy.Always,
+                            },
+                        }}
+                        collisionDetection={pointerWithin}
+                        modifiers={[flowDesignerTransformModifier(flowDesignerTransformDescription.current, node)]}
+                    >
+                        <Box sx={{ flex: 1 }} ref={viewPortRef}>
+                            {projectIsInitialized &&
+                                (
+                                    <FlowDesigner
+                                        blocks={blocks}
+                                        onTransformDescriptionChange={handleTransformDescriptionChange}
+                                        activeElement={activeElement}
+                                        setNodeRef={setNodeRef} />
+                                )
+                            }
+                        </Box>
+                    </DndContext>
+                    <VariableViewers />
+                </Box>
             </Box>
         </ConfirmProvider>
     )

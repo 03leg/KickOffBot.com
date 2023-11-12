@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Breakpoint, styled } from '@mui/material/styles';
+import { type Breakpoint, styled } from '@mui/material/styles';
 import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';

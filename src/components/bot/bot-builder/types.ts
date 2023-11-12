@@ -67,10 +67,26 @@ export interface FlowDesignerLink {
   input: PortDescription;
 }
 
+export enum VariableType {
+  STRING = "string",
+  NUMBER = "number",
+  OBJECT = "object",
+  ARRAY = "array",
+  BOOLEAN = "boolean",
+}
+
+export interface BotVariable {
+  id: string;
+  name: string;
+  type: VariableType;
+  value: unknown;
+}
+
 export interface BotProject {
   transformDescription: TransformDescription;
   blocks: FlowDesignerUIBlockDescription[];
   links: FlowDesignerLink[];
+  variables: BotVariable[];
 }
 
 export interface FlowDesignerState {
@@ -97,4 +113,11 @@ export interface FlowDesignerState {
 
   removeBlock: (block: FlowDesignerUIBlockDescription) => void;
   updateAllLinks: () => void;
+
+  showVariablesViewer: boolean;
+  toggleVariablesViewer: VoidFunction;
+
+  addVariable: (newVariable: BotVariable) => void;
+  updateVariable: (variable: BotVariable) => void;
+  removeVariable: (variable: BotVariable) => void;
 }

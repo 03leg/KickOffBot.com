@@ -3,6 +3,7 @@ import {
   type FlowDesignerUIBlockDescription,
   type FlowDesignerState,
   type FlowDesignerLink,
+  type BotVariable,
 } from "./types";
 import { isNil, remove } from "lodash";
 import { type PositionDescription } from "./FlowDesigner/types";
@@ -18,6 +19,7 @@ export const useFlowDesignerStore = create<FlowDesignerState>()((set, get) => ({
       project.transformDescription = newValue;
       return { project };
     }),
+  showVariablesViewer: false,
   showTemporaryLink: false,
   tempLinkPath: null,
   showTempLink: () => set(() => ({ showTemporaryLink: true })),
@@ -27,6 +29,7 @@ export const useFlowDesignerStore = create<FlowDesignerState>()((set, get) => ({
   project: {
     blocks: [],
     links: [],
+    variables: [],
     transformDescription: { scale: 1, x: 0, y: 0 },
   },
   initProject: (value: string | null) =>
@@ -34,6 +37,7 @@ export const useFlowDesignerStore = create<FlowDesignerState>()((set, get) => ({
       let currentProject = {
         blocks: [],
         links: [],
+        variables: [],
         transformDescription: { scale: 1, x: 0, y: 0 },
       };
       if (value !== null) {
@@ -125,6 +129,40 @@ export const useFlowDesignerStore = create<FlowDesignerState>()((set, get) => ({
       const project = state.project;
 
       project.links = [...project.links];
+
+      return { project };
+    }),
+
+  toggleVariablesViewer: () =>
+    set((state) => {
+      return { showVariablesViewer: !state.showVariablesViewer };
+    }),
+
+  addVariable: (newVariable: BotVariable) =>
+    set((state) => {
+      const project = state.project;
+
+      project.variables = [...project.variables, newVariable];
+
+      return { project };
+    }),
+  updateVariable: (variable: BotVariable) =>
+    set((state) => {
+      const project = state.project;
+      const index = project.variables.findIndex((v) => v.id === variable.id);
+
+      project.variables.splice(index, 1, variable);
+      project.variables = [...project.variables];
+
+      return { project };
+    }),
+  removeVariable: (variable: BotVariable) =>
+    set((state) => {
+      const project = state.project;
+      const index = project.variables.findIndex((v) => v.id === variable.id);
+
+      project.variables.splice(index, 1);
+      project.variables = [...project.variables];
 
       return { project };
     }),
