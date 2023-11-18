@@ -80,6 +80,23 @@ export const EditVariableButton = ({ variable }: Props) => {
             disabled = true;
         }
 
+        if (variable.type === VariableType.OBJECT || variable.type === VariableType.ARRAY) {
+
+            try {
+                const inputObject = JSON.parse(variable.value as string);
+                if (variable.type === VariableType.OBJECT && inputObject.constructor !== ({}).constructor) {
+                    disabled = true;
+                }
+                if (variable.type === VariableType.ARRAY && inputObject.constructor !== [].constructor) {
+                    disabled = true;
+                }
+            }
+            catch {
+                disabled = true;
+            }
+
+        }
+
         setDisabledConfirmationButton(disabled);
     }, [variables]);
 

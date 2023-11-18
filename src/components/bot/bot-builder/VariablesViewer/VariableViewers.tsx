@@ -47,36 +47,39 @@ export const VariableViewers = () => {
                 Variables
                 <EditVariableButton />
             </Typography>
+            {variables.length === 0 && <Typography textAlign='center' sx={{ padding: 1 }}>Bot does not have variables.</Typography>}
 
-            <List dense={true} sx={{ maxHeight: '400px', overflow: 'auto' }}>
-                {variables.map(v =>
-                (
-                    <ListItem key={v.id}>
-                        <ListItemIcon>
-                            <AbcIcon />
-                        </ListItemIcon>
-                        <ListItemText
-                            primaryTypographyProps={{
-                                variant: 'subtitle2',
-                                style: {
-                                    whiteSpace: 'nowrap',
-                                    overflow: 'hidden',
-                                    textOverflow: 'ellipsis'
-                                }
-                            }}
-                            primary={v.name}
-                        />
-                        <Box sx={{ display: 'flex' }}>
-                            <EditVariableButton variable={v} />
+            {variables.length > 0 &&
+                <List dense={true} sx={{ maxHeight: '400px', overflow: 'auto' }}>
+                    {variables.map(v =>
+                    (
+                        <ListItem key={v.id}>
+                            <ListItemIcon>
+                                <AbcIcon />
+                            </ListItemIcon>
+                            <ListItemText
+                                primaryTypographyProps={{
+                                    variant: 'subtitle2',
+                                    style: {
+                                        whiteSpace: 'nowrap',
+                                        overflow: 'hidden',
+                                        textOverflow: 'ellipsis'
+                                    }
+                                }}
+                                primary={v.name}
+                            />
+                            <Box sx={{ display: 'flex' }}>
+                                <EditVariableButton variable={v} />
 
-                            <IconButton sx={{ marginLeft: 2 }} edge="end" aria-label="delete" onClick={() => handleRemoveVariable(v)}>
-                                <DeleteIcon />
-                            </IconButton>
-                        </Box>
-                    </ListItem>
-                ))}
+                                <IconButton sx={{ marginLeft: 2 }} edge="end" aria-label="delete" onClick={() => handleRemoveVariable(v)}>
+                                    <DeleteIcon />
+                                </IconButton>
+                            </Box>
+                        </ListItem>
+                    ))}
 
-            </List>
+                </List>
+            }
 
         </Box>
     )
