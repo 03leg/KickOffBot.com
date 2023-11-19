@@ -4,11 +4,12 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import { Colors } from '~/themes/Colors';
 import { useFlowDesignerStore } from '../../../store';
-import { ElementType, type ContentTextUIElement, type UIElement, type InputButtonsUIElement } from '../../../types';
+import { ElementType, type ContentTextUIElement, type UIElement, type InputButtonsUIElement, type InputTextUIElement } from '../../../types';
 import { isNil, remove } from 'lodash';
 import { useConfirm } from 'material-ui-confirm';
 import { TextContentEditor } from '../elements/TextContent/Editor';
 import { ButtonsEditor } from '../elements/ButtonsInput/Editor';
+import { TextInputEditor } from '../elements/TextInput/Editor';
 
 interface Props {
     element: UIElement;
@@ -67,6 +68,15 @@ export const ElementMenu = ({ element }: Props) => {
 
                 return { content: (<ButtonsEditor element={newElement} />), title: 'Buttons Editor', newElement };
             }
+            case ElementType.INPUT_TEXT: {
+                const initialElement = elementArg as InputTextUIElement;
+                const newElement: InputTextUIElement = {
+                    ...initialElement
+                };
+
+                return { content: (<TextInputEditor element={newElement} />), title: 'Text Input Editor', newElement };
+
+            }
             default: {
                 throw new Error('NotImplementedError');
             }
@@ -79,6 +89,8 @@ export const ElementMenu = ({ element }: Props) => {
 
         confirm({ content, title })
             .then(() => {
+                // console.log('newElement', newElement);
+
                 const index = block.elements.findIndex(e => e.id === newElement.id);
                 block.elements[index] = newElement;
                 updateBlock(block);

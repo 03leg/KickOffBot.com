@@ -30,7 +30,7 @@ export interface ContentTextUIElement extends UIElement {
 
 export interface InputTextUIElement extends UIElement {
   label: string;
-  input: string | null;
+  variableId: string | undefined;
 }
 
 export interface ButtonElement {

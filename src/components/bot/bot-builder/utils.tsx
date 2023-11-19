@@ -1,4 +1,4 @@
-import { ContentTextUIElement, ElementType, InputTextUIElement, type FlowDesignerUIBlockDescription, type UIElement, InputButtonsUIElement, FlowDesignerLink, ButtonPortDescription } from "./types";
+import { type ContentTextUIElement, ElementType, type InputTextUIElement, type FlowDesignerUIBlockDescription, type UIElement, type InputButtonsUIElement, type FlowDesignerLink, type ButtonPortDescription, type BotVariable } from "./types";
 import MessageIcon from '@mui/icons-material/Message';
 import TextFieldsIcon from '@mui/icons-material/TextFields';
 import SmartButtonIcon from '@mui/icons-material/SmartButton';
@@ -192,3 +192,7 @@ export const canLink = (newLink: FlowDesignerLink, links: FlowDesignerLink[]) =>
     return result;
 
 };
+
+export const getTextVariableReference = (variable: BotVariable): string => {
+    return `<%variables.${variable.name}%>`;
+}

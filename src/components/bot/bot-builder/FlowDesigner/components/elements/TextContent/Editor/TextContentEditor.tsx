@@ -2,8 +2,8 @@ import { Box } from '@mui/material'
 import { EditorState, convertFromRaw } from 'draft-js';
 import { isNil } from 'lodash';
 import React, { useCallback } from 'react'
-import { TextEditor } from '~/components/PostCreator/components/TextEditor';
 import { type ContentTextUIElement } from '~/components/bot/bot-builder/types';
+import { TextEditor } from '../TextEditor';
 
 interface Props {
     element: ContentTextUIElement;

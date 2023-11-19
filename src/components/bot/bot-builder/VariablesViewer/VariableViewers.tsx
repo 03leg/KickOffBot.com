@@ -7,7 +7,6 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import { EditVariableButton } from './EditVariableButton';
 import { type BotVariable } from '../types';
 import { useConfirm } from 'material-ui-confirm';
-import { v4 } from 'uuid';
 
 
 

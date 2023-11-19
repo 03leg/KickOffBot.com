@@ -75,7 +75,7 @@ export const Link = ({ link }: Props) => {
         void confirm({ description: "This will permanently delete the link.", title: 'Are you sure?' })
             .then(() => {
                 removeLink(link);
-            });
+            }).catch();
 
     }, [confirm, link, removeLink]);
 

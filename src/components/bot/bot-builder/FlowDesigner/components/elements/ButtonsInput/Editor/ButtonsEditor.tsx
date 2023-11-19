@@ -1,11 +1,13 @@
 import { Box, Button, IconButton, List, ListItemButton, ListItemText, TextField } from '@mui/material'
 import { isNil } from 'lodash';
-import React, { useCallback, useMemo, useState } from 'react'
-import { ButtonPortDescription, type ButtonElement, type InputButtonsUIElement } from '~/components/bot/bot-builder/types';
+import React, { SyntheticEvent, useCallback, useMemo, useState } from 'react'
+import { ButtonPortDescription, type ButtonElement, type InputButtonsUIElement, BotVariable } from '~/components/bot/bot-builder/types';
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddIcon from '@mui/icons-material/Add';
 import { v4 } from 'uuid';
 import { useFlowDesignerStore } from '~/components/bot/bot-builder/store';
+import { VariableSelectorDialog } from '../../../VariableSelectorDialog';
+import { getTextVariableReference } from '~/components/bot/bot-builder/utils';
 
 
 interface Props {
@@ -13,15 +15,21 @@ interface Props {
 }
 
 export const ButtonsEditor = ({ element }: Props) => {
-
+    const inputRef = React.useRef<HTMLInputElement>();
+    const [selectionStart, setSelectionStart] = React.useState<number>();
     const [selectedButton, setSelectedButton] = useState<ButtonElement>();
     const [buttonContent, setButtonContent] = useState<string>();
     const { links } = useFlowDesignerStore((state) => ({
         links: state.project.links,
     }));
 
-    const handleButtonTitleChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
+    const updateSelectionStart = () => {
+        if (!isNil(inputRef.current) && !isNil(inputRef.current.selectionStart)) {
+            setSelectionStart(inputRef.current.selectionStart);
+        }
+    }
 
+    const handleButtonTitleChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
         if (isNil(selectedButton)) {
             throw new Error('InvalidOperationError');
         }
@@ -65,12 +73,27 @@ export const ButtonsEditor = ({ element }: Props) => {
     }, [element.buttons.length, links, selectedButton?.id]);
 
 
+    const handleInsertVariable = useCallback((variable: BotVariable) => {
+        if (isNil(selectedButton)) {
+            throw new Error('InvalidOperationError');
+        }
+        const position = selectionStart ?? buttonContent?.length ?? 0;
+        const content = buttonContent ?? '';
+        const output = [content.slice(0, position), getTextVariableReference(variable), content.slice(position)].join('');
+
+        setButtonContent(output);
+        selectedButton.content = output;
+    }, [buttonContent, selectedButton, selectionStart]);
+
+
     return (
         <Box sx={{ flex: 1, display: 'flex', backgroundColor: '#F3F6F9', height: '300px', padding: 1 }}>
             <Box sx={{ width: '200px', backgroundColor: 'white', display: 'flex', flexDirection: 'column' }}>
                 <List dense={true} sx={{ flex: 1, height: 'calc(100% - 55px)', overflowY: 'auto' }}>
                     {element.buttons.map(b => (
-                        <ListItemButton onClick={() => handleSelectButton(b)} selected={selectedButton === b} key={b.id}><ListItemText primary={b.content} /></ListItemButton>
+                        <ListItemButton onClick={() => handleSelectButton(b)} selected={selectedButton === b} key={b.id}><ListItemText
+                            primary={b.content}
+                            primaryTypographyProps={{ style: { whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' } }} /></ListItemButton>
                     ))}
                 </List>
                 <Box sx={{ padding: 1 }}>
@@ -80,15 +103,20 @@ export const ButtonsEditor = ({ element }: Props) => {
             {!isNil(selectedButton) &&
                 (
                     <Box sx={{ flex: 1, backgroundColor: 'white', marginLeft: 1, padding: 1, flexDirection: 'column', display: 'flex', alignItems: 'flex-end' }}>
-                        <TextField fullWidth variant="outlined" value={buttonContent} onChange={handleButtonTitleChange} />
-                        <IconButton sx={{ marginTop: 1 }}
-                            disabled={!canDeleteButton}
-                            aria-label="delete"
-                            color="primary"
-                            title='Delete button'
-                            onClick={handleDeleteButton} >
-                            <DeleteIcon />
-                        </IconButton>
+                        <TextField inputRef={inputRef} fullWidth onSelect={updateSelectionStart} variant="outlined" value={buttonContent} onChange={handleButtonTitleChange} />
+
+                        <Box sx={{ marginTop: 1, display: 'flex' }}>
+                            <IconButton
+                                disabled={!canDeleteButton}
+                                aria-label="delete"
+                                color="primary"
+                                title='Delete button'
+                                onClick={handleDeleteButton} >
+                                <DeleteIcon />
+                            </IconButton>
+                            <VariableSelectorDialog onInsertVariable={handleInsertVariable} />
+                        </Box>
+
                     </Box>
                 )
             }
