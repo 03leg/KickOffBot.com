@@ -7,20 +7,28 @@ const mapAppIdElement = new Map<string, Element>();
 const step = 50 as const;
 const inputTopStep = 10 as const;
 
-function getElement(id: string) {
+function getOutputPortElement(id: string) {
+    return getElementBySelector(`[data-app-output-port="${id}"]`);
+}
 
-    const cachedElement = mapAppIdElement.get(id);
+function getElement(id: string) {
+    return getElementBySelector(`[data-app-id="${id}"]`);
+}
+
+function getElementBySelector(selector: string) {
+
+    const cachedElement = mapAppIdElement.get(selector);
     if (!isNil(cachedElement)) {
         return cachedElement;
     }
 
-    const element = document.querySelector(`[data-app-id="${id}"]`);
+    const element = document.querySelector(selector);
 
     if (isNil(element)) {
         throw new Error('InvalidOperationError');
     }
 
-    mapAppIdElement.set(id, element);
+    mapAppIdElement.set(selector, element);
 
     return element;
 }
@@ -252,7 +260,7 @@ export function getSvgPathForLink(link: FlowDesignerLink,
     const output = link.output as ButtonPortDescription;
     const input = link.input;
 
-    const outputElement = getElement(output.buttonId);
+    const outputElement = getOutputPortElement(output.buttonId ?? output.blockId);
     const outputElementPosition = getElementPosition(outputElement, viewPortOffset, transformDescription);
 
     const outputBlockElement = getElement(output.blockId);

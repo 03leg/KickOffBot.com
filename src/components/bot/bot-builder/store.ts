@@ -7,7 +7,7 @@ import {
 } from "./types";
 import { isNil, remove } from "lodash";
 import { type PositionDescription } from "./FlowDesigner/types";
-import { canLink } from "./utils";
+import { canLink, getDefaultBlocks } from "./utils";
 
 export const useFlowDesignerStore = create<FlowDesignerState>()((set, get) => ({
   changeTransformDescription: (newValue) =>
@@ -35,7 +35,7 @@ export const useFlowDesignerStore = create<FlowDesignerState>()((set, get) => ({
   initProject: (value: string | null) =>
     set(() => {
       let currentProject = {
-        blocks: [],
+        blocks: [...getDefaultBlocks()],
         links: [],
         variables: [],
         transformDescription: { scale: 1, x: 0, y: 0 },

@@ -1,4 +1,4 @@
-import { type ContentTextUIElement, ElementType, type InputTextUIElement, type FlowDesignerUIBlockDescription, type UIElement, type InputButtonsUIElement, type FlowDesignerLink, type ButtonPortDescription, type BotVariable } from "./types";
+import { type ContentTextUIElement, ElementType, type InputTextUIElement, type FlowDesignerUIBlockDescription, type UIElement, type InputButtonsUIElement, type FlowDesignerLink, type ButtonPortDescription, type BotVariable, BlockType } from "./types";
 import MessageIcon from '@mui/icons-material/Message';
 import TextFieldsIcon from '@mui/icons-material/TextFields';
 import SmartButtonIcon from '@mui/icons-material/SmartButton';
@@ -112,7 +112,13 @@ export function getPositionForNewBlock(event: DragEndEvent, container: HTMLEleme
 }
 
 export function getNewBlock(position: PositionDescription, firstElement: UIElement, title: string): FlowDesignerUIBlockDescription {
-    return { id: v4(), title, position: { x: position.x, y: position.y }, elements: [{ ...firstElement }] };
+    return { id: v4(), blockType: BlockType.ELEMENTS, title, position: { x: position.x, y: position.y }, elements: [{ ...firstElement }] };
+}
+
+export function getDefaultBlocks() {
+    return [
+        { id: '/start', blockType: BlockType.START, title: '/start', position: { x: 0, y: 0 }, elements: [] }
+    ];
 }
 
 export const generateElements = () => {

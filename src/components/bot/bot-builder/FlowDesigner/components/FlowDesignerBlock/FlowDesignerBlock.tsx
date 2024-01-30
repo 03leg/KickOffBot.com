@@ -4,7 +4,7 @@ import { useStyles } from './FlowDesignerBlock.style';
 import { useFlowDesignerBlockMovements } from './useFlowDesignerBlockMovements';
 import { Colors } from '~/themes/Colors';
 import { ElementView } from '../ElementView';
-import { type FlowDesignerUIBlockDescription } from '../../../types';
+import { BlockType, type FlowDesignerUIBlockDescription } from '../../../types';
 import { SortableContext } from '@dnd-kit/sortable';
 import { useDroppable } from '@dnd-kit/core';
 import { flowDesignerVerticalListSortingStrategy } from './flowDesignerVerticalListSortingStrategy';
@@ -12,6 +12,7 @@ import { FlowDesignerBlockContext, FlowDesignerContext } from '../../context';
 import { APP_ELEMENT_ROLE } from '../../../constants';
 import { useFlowDesignerStore } from '../../../store';
 import { BlockMenu } from '../BlockMenu/BlockMenu';
+import { OutputPort } from '../OutputPort';
 
 
 interface Props {
@@ -60,19 +61,37 @@ export const FlowDesignerBlock = ({ blockDescription, rootScale }: Props) => {
                         position: 'relative',
                         userSelect: 'none',
                     }}>
-                    <Box sx={{ pointerEvents: 'none' }}>
-                        <Typography sx={{ marginBottom: 1 }} variant='h4'>{blockDescription.title}</Typography>
-                    </Box>
-                    <SortableContext
-                        strategy={flowDesignerVerticalListSortingStrategy(rootScale)}
-                        id={blockDescription.id}
-                        items={blockDescription.elements.map(e => e.id)}>
+                    {blockDescription.blockType === BlockType.ELEMENTS &&
+                        <>
+                            <Box sx={{ pointerEvents: 'none' }}>
+                                <Typography sx={{ marginBottom: 1 }} variant='h4'>{blockDescription.title}</Typography>
+                            </Box>
+                            <SortableContext
+                                strategy={flowDesignerVerticalListSortingStrategy(rootScale)}
+                                id={blockDescription.id}
+                                items={blockDescription.elements.map(e => e.id)}>
 
-                        {blockDescription.elements.map(element => (<ElementView key={element.id} element={element} scale={rootScale} />))}
-                    </SortableContext>
+                                {blockDescription.elements.map(element => (<ElementView key={element.id} element={element} scale={rootScale} />))}
+                            </SortableContext>
+                        </>
+                    }
+                    {blockDescription.blockType === BlockType.START &&
+                        <Box sx={{ height: '100%', display: 'flex', justifyContent: 'center', pointerEvents: 'none' }}>
+                            <Box sx={{
+                                fontSize: 24,
+                                fontWeight: 'bold',
+                                padding: '10px',
+                                backgroundColor: '#4CAF50',
+                                borderRadius: '15px',
+                                color: 'white',
+                                marginTop: '12px'
+                            }}>/start</Box>
+                            <OutputPort className={classes.blockPort} blockId={blockDescription.id} />
+                        </Box>
+                    }
                 </Box>
             </FlowDesignerBlockContext.Provider>
-            {selectedBlock &&
+            {selectedBlock && blockDescription.blockType === BlockType.ELEMENTS &&
                 (
                     <Box sx={{ position: 'absolute', top: 0, left: -50 }}>
                         <BlockMenu block={blockDescription} />

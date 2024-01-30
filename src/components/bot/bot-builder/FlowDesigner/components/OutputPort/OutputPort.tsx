@@ -1,6 +1,6 @@
 import { Box } from '@mui/material'
 import { useGesture } from '@use-gesture/react';
-import React, { useContext, useRef } from 'react'
+import React, { useContext, useMemo, useRef } from 'react'
 import { Colors } from '~/themes/Colors'
 import { useFlowDesignerStore } from '../../../store';
 import { getBlockBoundingClientRect, getSvgPathForTempLine } from './utils';
@@ -13,11 +13,12 @@ import { type CoordinateDescription } from '../../types';
 
 interface Props {
     className: string;
-    elementId: string;
-    buttonId: string;
+    blockId?: string;
+    elementId?: string;
+    buttonId?: string;
 }
 
-export const OutputPort = ({ className, buttonId, elementId }: Props) => {
+export const OutputPort = ({ className, buttonId, elementId, blockId }: Props) => {
     const { showTempLink, hideTempLink, setTempLinkPath, transformDescription, viewPortOffset, addLink } = useFlowDesignerStore((state) => ({
         showTempLink: state.showTempLink,
         hideTempLink: state.hideTempLink,
@@ -53,7 +54,7 @@ export const OutputPort = ({ className, buttonId, elementId }: Props) => {
                 blockContext.blockElement.current,
                 viewPortOffset,
                 transformDescription
-              );
+            );
 
             showTempLink();
         },
@@ -86,11 +87,24 @@ export const OutputPort = ({ className, buttonId, elementId }: Props) => {
 
             // console.log(el);
         },
-    })
+    });
+
+    const outputPortId = useMemo(() => {
+        if (!isNil(buttonId)) {
+            return buttonId;
+        }
+
+        if (!isNil(blockId)) {
+            return blockId;
+        }
+
+        throw new Error('InvalidOperationError');
+    }, [blockId, buttonId])
 
     return (
         <Box {...bind()}
             data-app-id={buttonId}
+            data-app-output-port={outputPortId}
             className={className}
             sx={{
                 height: 16,

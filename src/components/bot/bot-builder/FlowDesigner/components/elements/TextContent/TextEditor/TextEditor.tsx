@@ -17,7 +17,6 @@ interface TextEditorProps {
 
 export const TextEditor = ({ onContentChange, initialState }: TextEditorProps) => {
     const [editorState, setEditorState] = React.useState<EditorState>(initialState ?? EditorState.createEmpty());
-    // const [selectedVariableInsert, setSelectedVariableInsert] = useState<BotVariable | null>(null);
 
     const generatePublicContentChange = useCallback((newState: EditorState) => {
         const content = newState.getCurrentContent();
@@ -26,7 +25,11 @@ export const TextEditor = ({ onContentChange, initialState }: TextEditorProps) =
         const jsonContent = JSON.stringify(rawObject);
 
         const htmlContent = stateToHTML(newState.getCurrentContent());
-        const telegramContent = stateToHTML(newState.getCurrentContent());
+        const telegramContent = stateToHTML(newState.getCurrentContent(), {
+            inlineStyles: {
+                BOLD: { element: 'b' },
+            }
+        }).replaceAll('<p>', '').replaceAll('</p>', '');
 
         onContentChange(jsonContent, htmlContent, telegramContent);
     }, [onContentChange]);

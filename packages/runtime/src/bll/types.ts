@@ -1,8 +1,3 @@
-import {
-  type TransformDescription,
-  type PositionDescription,
-} from "./FlowDesigner/types";
-
 export enum ElementType {
   CONTENT_TEXT = "content-text",
   CONTENT_IMAGE = "content-image",
@@ -18,7 +13,7 @@ export enum ElementType {
 }
 
 export interface UIElement {
-  type: ElementType;
+  type: ElementType | string;
   id: string;
 }
 
@@ -50,7 +45,7 @@ export enum BlockType {
 export interface FlowDesignerUIBlockDescription {
   id: string;
   title: string;
-  position: PositionDescription;
+  position: unknown;
   elements: UIElement[];
   blockType: BlockType;
 }
@@ -84,46 +79,13 @@ export enum VariableType {
 export interface BotVariable {
   id: string;
   name: string;
-  type: VariableType;
+  type: VariableType | string;
   value: unknown;
 }
 
 export interface BotProject {
-  transformDescription: TransformDescription;
+  transformDescription: unknown;
   blocks: FlowDesignerUIBlockDescription[];
   links: FlowDesignerLink[];
   variables: BotVariable[];
-}
-
-export interface FlowDesignerState {
-  changeTransformDescription: (newValue: TransformDescription) => void;
-  showTemporaryLink: boolean;
-  tempLinkPath: string | null;
-  showTempLink: VoidFunction;
-  hideTempLink: VoidFunction;
-  setTempLinkPath: (value: string) => void;
-  projectIsInitialized: boolean;
-  project: BotProject;
-  initProject: (value: string | null) => void;
-
-  updateBlock: (updatedBlock: FlowDesignerUIBlockDescription) => void;
-  viewPortOffset: PositionDescription;
-  setViewPortOffset: (value: PositionDescription) => void;
-  addLink: (newLink: FlowDesignerLink) => void;
-
-  addBlock: (newBlock: FlowDesignerUIBlockDescription) => void;
-  selectedLink: null | FlowDesignerLink;
-  selectLink: (link: null | FlowDesignerLink) => void;
-  removeLink: (link: FlowDesignerLink) => void;
-  removeLinks: (links: FlowDesignerLink[]) => void;
-
-  removeBlock: (block: FlowDesignerUIBlockDescription) => void;
-  updateAllLinks: () => void;
-
-  showVariablesViewer: boolean;
-  toggleVariablesViewer: VoidFunction;
-
-  addVariable: (newVariable: BotVariable) => void;
-  updateVariable: (variable: BotVariable) => void;
-  removeVariable: (variable: BotVariable) => void;
 }

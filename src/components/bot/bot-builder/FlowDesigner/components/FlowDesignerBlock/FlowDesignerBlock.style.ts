@@ -6,6 +6,11 @@ export const useStyles = makeStyles()(() => ({
     touchAction: "none",
   },
   input: {
-    position: 'absolute'
+    position: "absolute",
+  },
+  blockPort: {
+    position: 'absolute',
+    top: '70px',
+    right: '-9px'
   },
 }));
