@@ -3,21 +3,12 @@ import {
   Message,
   InlineKeyboardButton,
 } from "telegraf/typings/core/types/typegram";
-import {
-  BotProject,
-  ButtonPortDescription,
-  ContentTextUIElement,
-  ElementType,
-  FlowDesignerUIBlockDescription,
-  InputButtonsUIElement,
-  InputTextUIElement,
-  UIElement,
-} from "./bll/types";
 import { Context, NarrowedContext, Telegraf } from "telegraf";
 import { UserContext } from "./UserContext";
 import { isNil } from "lodash";
 import { getUserContextKey } from "./utils";
 import { MyBotUtils } from "./MyBotUtils";
+import { BotProject, ButtonPortDescription, ContentTextUIElement, ElementType, FlowDesignerUIBlockDescription, InputButtonsUIElement, InputTextUIElement, UIElement } from "@kickoffbot.com/types";
 
 export class MyTelegramBot {
   private _bot: Telegraf;
@@ -214,7 +205,7 @@ export class MyTelegramBot {
     const nextElement =
       block.elements[block.elements.findIndex((e) => e.id === element.id) + 1];
 
-    if (nextElement.type === ElementType.INPUT_BUTTONS.toString()) {
+    if (nextElement.type === ElementType.INPUT_BUTTONS) {
       const buttonsElement = nextElement as InputButtonsUIElement;
       for (const button of buttonsElement.buttons) {
         result.push([{ callback_data: button.id, text: button.content }]);

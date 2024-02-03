@@ -1,0 +1,36 @@
+{
+  "name": "@kickoffbot.com/types",
+  "version": "1.0.0",
+  "description": "",
+  "main": "dist/index.min.js",
+  "module": "dist/index.esm.js",
+  "browser": "dist/index.umd.js",
+  "types": "dist/types/index.d.ts",
+  "type": "module",
+  "author": {
+    "name": "Me"
+  },
+  "scripts": {
+    "build": "rollup -c",
+    "dev": "rollup -c -w"
+  },
+  "keywords": [],
+  "devDependencies": {
+    "@types/ms": "^0.7.30",
+    "rollup": "latest",
+    "rollup-plugin-commonjs": "latest",
+    "rollup-plugin-json": "latest",
+    "rollup-plugin-license": "latest",
+    "rollup-plugin-node-resolve": "latest",
+    "rollup-plugin-terser": "latest",
+    "rollup-plugin-typescript": "latest",
+    "tslib": "latest",
+    "typescript": "^5.0.4"
+  },
+  "dependencies": {
+    "@rollup/plugin-node-resolve": "^15.2.3",
+    "@rollup/plugin-commonjs": "latest",
+    "@rollup/plugin-typescript": "latest",
+    "rollup-plugin-peer-deps-external": "latest"
+  }
+}

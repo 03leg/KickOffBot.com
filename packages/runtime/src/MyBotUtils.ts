@@ -1,12 +1,7 @@
 import { isNil } from "lodash";
-import {
-  BotProject,
-  BotVariable,
-  FlowDesignerLink,
-  FlowDesignerUIBlockDescription,
-  UIElement,
-} from "./bll/types";
+
 import { UserContext } from "./UserContext";
+import { BotProject, BotVariable, FlowDesignerLink, FlowDesignerUIBlockDescription, UIElement } from "@kickoffbot.com/types";
 
 export class MyBotUtils {
   private _botProject: BotProject;

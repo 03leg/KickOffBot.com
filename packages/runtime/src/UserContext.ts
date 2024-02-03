@@ -1,7 +1,8 @@
 import { Message, Update } from "telegraf/typings/core/types/typegram";
-import { BotProject, BotVariable } from "./bll/types";
 import { NarrowedContext, Context } from "telegraf";
 import { isNil } from "lodash";
+import { BotProject, BotVariable } from "@kickoffbot.com/types";
+
 
 export interface NextBotStep {
   blockId: string;

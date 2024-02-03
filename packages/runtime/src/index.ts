@@ -1,9 +1,13 @@
+import { BotProject } from "@kickoffbot.com/types";
 import { MyTelegramBot } from "./MyTelegramBot";
 import process from "process";
 
-// console.log('ddd')
-const token = "" as const;
-const botDescription = {
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+require("dotenv").config({
+  path: "../.env",
+});
+
+const botDescription: BotProject = {
   blocks: [
     {
       id: "/start",
@@ -124,21 +128,16 @@ const botDescription = {
 };
 
 (function start() {
-  console.log('start!')
-
-  const newBot = new MyTelegramBot(token, botDescription);
+  const newBot = new MyTelegramBot(
+    process.env.TELEGRAM_BOT_TOKEN ?? "",
+    botDescription
+  );
   // eslint-disable-next-line @typescript-eslint/no-floating-promises
   newBot.setup();
 
   process.on("SIGINT", () => {
     process.exit();
   });
-
-  console.log('Hello!')
-
-  //   setInterval(function() {
-  //     console.log("timer that keeps nodejs processing running");
-  // }, 1000 * 60 * 60);
 
   process.stdin.resume();
 })();
