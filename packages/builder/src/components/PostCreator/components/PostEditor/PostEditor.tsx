@@ -31,7 +31,6 @@ export const PostEditor = ({ onPostChange }: PostEditorProps) => {
     return (
         <Box sx={{ flex: 1, padding: ({ spacing }) => spacing(2) }}>
             <TextEditor onContentChange={handleContentChange} />
-            <AttachEditor onAttachmentsChange={handleAttachmentsChange} />
         </Box>
     )
 }

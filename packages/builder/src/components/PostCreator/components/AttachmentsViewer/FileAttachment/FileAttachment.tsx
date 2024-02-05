@@ -5,10 +5,11 @@ import AttachmentIcon from '@mui/icons-material/Attachment';
 import { Colors } from '~/themes/Colors';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { useFileAttachmentStyles } from './FileAttachment.style';
+import { getSizeString } from '../../AttachEditor/utility';
 
 interface FileAttachmentProps {
     file: FileDescription;
-    onDelete: (file: FileDescription) => void;
+    onDelete?: (file: FileDescription) => void;
 }
 
 export const FileAttachment = ({ file, onDelete }: FileAttachmentProps) => {
@@ -18,13 +19,13 @@ export const FileAttachment = ({ file, onDelete }: FileAttachmentProps) => {
             <AttachmentIcon sx={{ fontSize: '2rem', marginRight: ({ spacing }) => spacing(1) }} />
             <Box sx={{ display: 'flex', flexDirection: 'column', maxWidth: 150 }}>
                 <Typography sx={{ textOverflow: 'ellipsis', overflow: 'hidden', whiteSpace: 'nowrap' }}>{file.name}</Typography>
-                <Typography>{file.size}</Typography>
+                <Typography>{getSizeString(file.size, 1)}</Typography>
             </Box>
-            <Box sx={{ marginLeft: ({ spacing }) => spacing(1) }}>
+            {onDelete && <Box sx={{ marginLeft: ({ spacing }) => spacing(1) }}>
                 <IconButton onClick={() => { onDelete(file) }} aria-label="delete" size="small" classes={{ root: classes.action }}>
                     <DeleteIcon fontSize="small" />
                 </IconButton>
-            </Box>
+            </Box>}
         </Box>
     )
 }

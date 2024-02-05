@@ -7,7 +7,7 @@ import { Colors } from '~/themes/Colors';
 
 interface AttachmentsViewerProps {
     files: FileDescription[];
-    onDelete: (file: FileDescription) => void;
+    onDelete?: (file: FileDescription) => void;
 }
 
 export const AttachmentsViewer = ({ files, onDelete }: AttachmentsViewerProps) => {
@@ -17,11 +17,11 @@ export const AttachmentsViewer = ({ files, onDelete }: AttachmentsViewerProps) =
 
         for (const file of files) {
             if (file.typeContent === ContentType.Image) {
-                result.push((<PhotoAttachment onDelete={onDelete} key={file.name} file={file} />));
+                result.push((<PhotoAttachment onDelete={onDelete} key={file.url} file={file} />));
                 continue;
             }
 
-            result.push((<FileAttachment onDelete={onDelete} key={file.name} file={file} />));
+            result.push((<FileAttachment onDelete={onDelete} key={file.url} file={file} />));
         }
 
         return result;

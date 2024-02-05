@@ -9,7 +9,6 @@ import { type BotVariable } from '@kickoffbot.com/types';
 import { VariableSelectorDialog } from '../../../VariableSelectorDialog';
 import { getTextVariableReference } from '~/components/bot/bot-builder/utils';
 
-
 interface TextEditorProps {
     initialState?: EditorState | undefined;
     onContentChange: (jsonState: string, htmlContent: string, telegramContent: string) => void;
@@ -74,18 +73,20 @@ export const TextEditor = ({ onContentChange, initialState }: TextEditorProps) =
     }, [editorState, generatePublicContentChange, insertText]);
 
     return (
-        <Box sx={{ border: `1px solid ${Colors.BORDER}`, padding: ({ spacing }) => (spacing(1)), display: 'flex', flexDirection: 'column' }}>
-            <Editor editorState={editorState} onChange={handleContentChange} placeholder="Enter some text..." />
+        <>
+            <Box sx={{ border: `1px solid ${Colors.BORDER}`, padding: ({ spacing }) => (spacing(1)), display: 'flex', flexDirection: 'column' }}>
+                <Editor editorState={editorState} onChange={handleContentChange} placeholder="Enter some text..." />
 
-            <Box sx={{ display: 'flex', marginTop: ({ spacing }) => (spacing(2)), justifyContent: 'flex-end' }}>
-                <IconButton aria-label="bold" onClick={handleBoldClick}>
-                    <FormatBold />
-                </IconButton>
-                <IconButton aria-label="italic" onClick={handleItalicClick}>
-                    <FormatItalic />
-                </IconButton>
-                <VariableSelectorDialog onInsertVariable={handleInsertVariable} />
+                <Box sx={{ display: 'flex', marginTop: ({ spacing }) => (spacing(2)), justifyContent: 'flex-end' }}>
+                    <IconButton aria-label="bold" onClick={handleBoldClick}>
+                        <FormatBold />
+                    </IconButton>
+                    <IconButton aria-label="italic" onClick={handleItalicClick}>
+                        <FormatItalic />
+                    </IconButton>
+                    <VariableSelectorDialog onInsertVariable={handleInsertVariable} />
+                </Box>
             </Box>
-        </Box>
+        </>
     )
 }

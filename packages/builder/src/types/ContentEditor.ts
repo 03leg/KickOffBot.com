@@ -7,7 +7,7 @@ export interface FileDescription {
   name: string;
   url: string;
   typeContent: ContentType;
-  size: string;
+  size: number;
 }
 
 export interface ClientFileDescription extends FileDescription {

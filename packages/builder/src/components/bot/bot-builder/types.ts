@@ -1,6 +1,11 @@
-import { BotProject, BotVariable, FlowDesignerLink, FlowDesignerUIBlockDescription, PositionDescription, TransformDescription } from "@kickoffbot.com/types";
-
-
+import {
+  BotProject,
+  BotVariable,
+  FlowDesignerLink,
+  FlowDesignerUIBlockDescription,
+  PositionDescription,
+  TransformDescription,
+} from "@kickoffbot.com/types";
 
 export interface FlowDesignerState {
   changeTransformDescription: (newValue: TransformDescription) => void;
@@ -33,4 +38,5 @@ export interface FlowDesignerState {
   addVariable: (newVariable: BotVariable) => void;
   updateVariable: (variable: BotVariable) => void;
   removeVariable: (variable: BotVariable) => void;
+  getVariableById: (variableId: BotVariable["id"]) => BotVariable | null;
 }

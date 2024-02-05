@@ -85,7 +85,7 @@ export const ElementView = ({ element, scale }: Props) => {
                     border: selected ? `1px solid ${Colors.SELECTED}` : `1px solid ${Colors.BORDER}`,
                 }}>
                 <Box sx={{ display: 'flex', alignItems: 'center', mr: 1 }}>{icon}</Box>
-                <Box sx={{ flex: 1 }}>{child}</Box>
+                <Box sx={{ width: 'calc(100% - 35px)'}}>{child}</Box>
             </Box>
         </Box>
     )

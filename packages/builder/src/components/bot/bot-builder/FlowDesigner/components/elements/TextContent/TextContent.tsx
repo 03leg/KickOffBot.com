@@ -3,6 +3,7 @@ import { isNil } from 'lodash';
 import React, { useMemo } from 'react'
 import { makeStyles } from 'tss-react/mui';
 import { type ContentTextUIElement, type UIElement } from '@kickoffbot.com/types';
+import { AttachmentsViewer } from '~/components/PostCreator/components/AttachmentsViewer/AttachmentsViewer';
 
 interface Props {
     element: UIElement;
@@ -49,6 +50,7 @@ export const TextContent = ({ element }: Props) => {
     return (
         <Box className={classes.root}>
             <div dangerouslySetInnerHTML={{ __html: textContent ?? 'Text...' }}></div>
+            {contentTextElement.attachments && <AttachmentsViewer files={contentTextElement.attachments} />}
         </Box>
     )
 }

@@ -1,13 +1,13 @@
 import { create } from "zustand";
 import {
   type FlowDesignerUIBlockDescription,
-  type FlowDesignerState,
   type FlowDesignerLink,
   type BotVariable,
-} from "./types";
+} from "@kickoffbot.com/types";
 import { isNil, remove } from "lodash";
-import { type PositionDescription } from "./FlowDesigner/types";
+import { type PositionDescription } from "@kickoffbot.com/types";
 import { canLink, getDefaultBlocks } from "./utils";
+import { FlowDesignerState } from "./types";
 
 export const useFlowDesignerStore = create<FlowDesignerState>()((set, get) => ({
   changeTransformDescription: (newValue) =>
@@ -166,4 +166,6 @@ export const useFlowDesignerStore = create<FlowDesignerState>()((set, get) => ({
 
       return { project };
     }),
+  getVariableById: (variableId: string) =>
+    get().project.variables.find((v) => v.id == variableId) ?? null,
 }));

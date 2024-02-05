@@ -1,7 +1,7 @@
 import { Box, Button } from '@mui/material'
-import React, { type SyntheticEvent, useCallback, useRef, useState } from 'react'
+import React, { type SyntheticEvent, useCallback, useRef } from 'react'
 import AddIcon from '@mui/icons-material/Add';
-import { isNil, remove } from 'lodash';
+import { isNil } from 'lodash';
 import { ClientFileDescription, ContentType, type FileDescription } from '~/types/ContentEditor';
 import { IMAGE_EXTENSIONS } from './constants';
 import { AttachmentsViewer } from '../AttachmentsViewer/AttachmentsViewer';
@@ -9,12 +9,13 @@ import { getSizeString } from './utility';
 
 
 interface AttachEditorProps {
-    onAttachmentsChange: (files: FileDescription[]) => void;
+    onAttachmentsAdd: (files: ClientFileDescription[]) => void;
+    onAttachmentRemove: (file: FileDescription) => void;
+    uploadedFiles: FileDescription[];
 }
 
-export const AttachEditor = ({ onAttachmentsChange }: AttachEditorProps) => {
+export const AttachEditor = ({ onAttachmentsAdd, onAttachmentRemove, uploadedFiles }: AttachEditorProps) => {
     const fileInputRef = useRef<HTMLInputElement>(null);
-    const [selectedFiles, setSelectedFiles] = useState<FileDescription[]>([]);
 
     const handleFileInputChange = useCallback((event: SyntheticEvent<HTMLInputElement>) => {
         const files = (event.target as HTMLInputElement).files;
@@ -28,24 +29,20 @@ export const AttachEditor = ({ onAttachmentsChange }: AttachEditorProps) => {
             const fileExt = file.name.slice(file.name.lastIndexOf('.')).toLowerCase();
             fileDescriptions.push({
                 url: URL.createObjectURL(file), typeContent: IMAGE_EXTENSIONS.includes(fileExt) ? ContentType.Image : ContentType.Other, name: file.name,
-                size: getSizeString(file.size, 1),
+                size: file.size, 
                 browserFile: file
             });
         }
-
-        setSelectedFiles(fileDescriptions);
-        onAttachmentsChange(fileDescriptions);
-    }, [onAttachmentsChange]);
+        onAttachmentsAdd(fileDescriptions);
+    }, [onAttachmentsAdd]);
 
     const handleAddFilesClick = useCallback(() => {
         fileInputRef.current?.click();
     }, []);
 
     const handleAttachmentDelete = useCallback((file: FileDescription) => {
-        const items = [...selectedFiles];
-        remove(items, file);
-        setSelectedFiles(items);
-    }, [selectedFiles]);
+        onAttachmentRemove(file);
+    }, [onAttachmentRemove]);
 
     return (
         <Box sx={{ marginTop: (theme) => theme.spacing(2), display: 'flex', flexDirection: 'column' }}>
@@ -61,7 +58,7 @@ export const AttachEditor = ({ onAttachmentsChange }: AttachEditorProps) => {
                     onChange={handleFileInputChange}
                 />
             </Box>
-            <AttachmentsViewer files={selectedFiles} onDelete={handleAttachmentDelete} />
+            <AttachmentsViewer files={uploadedFiles} onDelete={handleAttachmentDelete} />
         </Box>
     )
 }

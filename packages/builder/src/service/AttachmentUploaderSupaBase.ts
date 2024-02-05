@@ -34,18 +34,25 @@ export class AttachmentUploaderSupaBase implements AttachmentUploaderProvider {
         result.push({
           clientFileName: item.originalFilename ?? "",
           uploadStatus: UploadAttachmentStatus.Error,
+          size: item.size,
+          name: item.originalFilename,
+          typeContent: item.mimetype,
         });
         continue;
       }
 
-      const { data: getPublicUrlResult } = AttachmentUploaderSupaBase.supabase.storage
-        .from(env.SUPABASE_BUCKET_ID)
-        .getPublicUrl(uploadResult.path);
+      const { data: getPublicUrlResult } =
+        AttachmentUploaderSupaBase.supabase.storage
+          .from(env.SUPABASE_BUCKET_ID)
+          .getPublicUrl(uploadResult.path);
 
       result.push({
         clientFileName: item.originalFilename ?? "",
         uploadStatus: UploadAttachmentStatus.Success,
         storageUrl: getPublicUrlResult.publicUrl,
+        size: item.size,
+        name: item.originalFilename,
+        typeContent: item.mimetype,
       });
     }
 
