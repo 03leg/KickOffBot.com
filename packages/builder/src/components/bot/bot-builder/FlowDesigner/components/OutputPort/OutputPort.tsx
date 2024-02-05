@@ -43,8 +43,6 @@ export const OutputPort = ({ className, buttonId, elementId, blockId }: Props) =
         },
         onDragStart: (e) => {
             e.event.stopPropagation();
-            // const [initialX, initialY] = e.initial;
-            // console.log(initialX, initialY);
 
             if (isNil(blockContext.blockElement) || isNil(blockContext.blockElement.current)) {
                 throw new Error('InvalidOperationError');

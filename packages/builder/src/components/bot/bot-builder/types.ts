@@ -1,7 +1,4 @@
-import {
-  type TransformDescription,
-  type PositionDescription,
-} from "./FlowDesigner/types";
+import { BotProject, BotVariable, FlowDesignerLink, FlowDesignerUIBlockDescription, PositionDescription, TransformDescription } from "@kickoffbot.com/types";
 
 
 

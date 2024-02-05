@@ -76,18 +76,20 @@ export const FlowDesignerBlock = ({ blockDescription, rootScale }: Props) => {
                         </>
                     }
                     {blockDescription.blockType === BlockType.START &&
-                        <Box sx={{ height: '100%', display: 'flex', justifyContent: 'center', pointerEvents: 'none' }}>
-                            <Box sx={{
-                                fontSize: 24,
-                                fontWeight: 'bold',
-                                padding: '10px',
-                                backgroundColor: '#4CAF50',
-                                borderRadius: '15px',
-                                color: 'white',
-                                marginTop: '12px'
-                            }}>/start</Box>
+                        <>
+                            <Box sx={{ height: '100%', display: 'flex', justifyContent: 'center', pointerEvents: 'none' }}>
+                                <Box sx={{
+                                    fontSize: 24,
+                                    fontWeight: 'bold',
+                                    padding: '10px',
+                                    backgroundColor: '#4CAF50',
+                                    borderRadius: '15px',
+                                    color: 'white',
+                                    marginTop: '12px'
+                                }}>/start</Box>
+                            </Box>
                             <OutputPort className={classes.blockPort} blockId={blockDescription.id} />
-                        </Box>
+                        </>
                     }
                 </Box>
             </FlowDesignerBlockContext.Provider>
