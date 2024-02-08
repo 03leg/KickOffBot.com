@@ -41,7 +41,7 @@ export class UserContext {
   }
 
   public setNextStep(nextStep: NextBotStep | null) {
-    console.log("next step", nextStep);
+    // console.log("next step", nextStep);
     this._nextStep = nextStep;
   }
 

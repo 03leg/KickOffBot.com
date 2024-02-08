@@ -2,13 +2,28 @@ import {
   Update,
   Message,
   InlineKeyboardButton,
+  InputMediaPhoto,
+  InputMediaVideo,
+  InputMediaDocument,
+  InputFile,
 } from "telegraf/typings/core/types/typegram";
 import { Context, NarrowedContext, Telegraf } from "telegraf";
 import { UserContext } from "./UserContext";
 import { isNil } from "lodash";
 import { getUserContextKey } from "./utils";
 import { MyBotUtils } from "./MyBotUtils";
-import { BotProject, ButtonPortDescription, ContentTextUIElement, ElementType, FlowDesignerUIBlockDescription, InputButtonsUIElement, InputTextUIElement, UIElement } from "@kickoffbot.com/types";
+import {
+  BotProject,
+  ButtonPortDescription,
+  ContentTextUIElement,
+  ContentType,
+  ElementType,
+  FlowDesignerUIBlockDescription,
+  InputButtonsUIElement,
+  InputTextUIElement,
+  UIElement,
+} from "@kickoffbot.com/types";
+import { MediaGroup } from "telegraf/typings/telegram-types";
 
 export class MyTelegramBot {
   private _bot: Telegraf;
@@ -39,7 +54,7 @@ export class MyTelegramBot {
   private async handleStart(
     context: NarrowedContext<Context<Update>, Update.MessageUpdate<Message>>
   ) {
-    console.log('start')
+    console.log("start");
     const userContext = new UserContext(this._botProject);
     userContext.updateTelegramVariableBasedOnMessage(context);
 
@@ -104,13 +119,30 @@ export class MyTelegramBot {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const buttonId = (context.callbackQuery as any).data;
 
-    const link = this._botProject.links.find(
+    let link = this._botProject.links.find(
       (l) => (l.output as ButtonPortDescription).buttonId === buttonId
     );
 
     if (isNil(link)) {
-      await context.answerCbQuery("Link is empty!");
-      return;
+      const inputButtonsElement = (
+        this._botProject.blocks
+          .map((e) => e.elements)
+          .flat(1)
+          .filter(
+            (e) => e.type === ElementType.INPUT_BUTTONS
+          ) as InputButtonsUIElement[]
+      ).find((e) => e.buttons.some((b) => b.id === buttonId));
+
+      link = this._botProject.links.find(
+        (l) =>
+          (l.output as ButtonPortDescription).buttonId ===
+          `default-button-${inputButtonsElement?.id ?? ""}`
+      );
+
+      if (isNil(link)) {
+        await context.answerCbQuery("Link is empty!");
+        return;
+      }
     }
 
     const block = this._utils.getBlockById(link.input.blockId);
@@ -158,17 +190,97 @@ export class MyTelegramBot {
           contentTextElement.telegramContent,
           userContext
         );
-
         const messageButtons = this.getButtonsForMessage(block, element);
 
-        await context.sendMessage(answerText, {
-          parse_mode: "HTML",
-          reply_markup: !isNil(messageButtons)
-            ? {
-                inline_keyboard: messageButtons,
+        const sendPlainMessage = async (serviceMessage?: string) => {
+          await context.sendMessage(
+            answerText +
+              (!isNil(serviceMessage) ? "<br/>" + serviceMessage : ""),
+            {
+              parse_mode: "HTML",
+              reply_markup: !isNil(messageButtons)
+                ? {
+                    inline_keyboard: messageButtons,
+                  }
+                : undefined,
+            }
+          );
+        };
+
+        if (
+          !isNil(contentTextElement.attachments) &&
+          contentTextElement.attachments.length > 0
+        ) {
+          if (contentTextElement.attachments.length === 1) {
+            const attachment = contentTextElement.attachments[0];
+            const request = {
+              caption: answerText,
+              parse_mode: "HTML",
+              reply_markup: !isNil(messageButtons)
+                ? {
+                    inline_keyboard: messageButtons,
+                  }
+                : undefined,
+            } as const;
+
+            if (attachment.typeContent === ContentType.Image) {
+              if (attachment.name.endsWith(".gif")) {
+                await context.sendAnimation(attachment.url, request);
+              } else {
+                await context.sendPhoto(attachment.url, request);
               }
-            : undefined,
-        });
+            } else {
+              const inputFile: InputFile = {
+                url: attachment.url,
+                filename: attachment.name,
+              };
+
+              await context.sendDocument(inputFile, request);
+            }
+          } else {
+            let request: MediaGroup = [];
+            if (
+              contentTextElement.attachments.every(
+                (a) => a.typeContent === ContentType.Image
+              )
+            ) {
+              const images = [] as (InputMediaPhoto | InputMediaVideo)[];
+              for (const item of contentTextElement.attachments) {
+                const isFirstPhoto = contentTextElement.attachments[0] === item;
+                images.push({
+                  media: item.url,
+                  type: "photo",
+                  caption: isFirstPhoto ? answerText : undefined,
+                  parse_mode: "HTML",
+                });
+              }
+
+              request = images;
+            } else {
+              const documents = [] as InputMediaDocument[];
+              for (const item of contentTextElement.attachments) {
+                const isLastDocument =
+                  contentTextElement.attachments[contentTextElement.attachments.length - 1] === item;
+
+                documents.push({
+                  media: {
+                    url: item.url,
+                    filename: item.name,
+                  },
+                  type: "document",
+                  caption: isLastDocument ? answerText : undefined,
+                  parse_mode: "HTML",
+                });
+              }
+
+              request = documents;
+            }
+
+            await context.sendMediaGroup(request);
+          }
+        } else {
+          await sendPlainMessage();
+        }
         break;
       }
       case ElementType.INPUT_TEXT: {

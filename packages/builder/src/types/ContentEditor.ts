@@ -1,14 +1,4 @@
-export enum ContentType {
-  Image,
-  Other,
-}
-
-export interface FileDescription {
-  name: string;
-  url: string;
-  typeContent: ContentType;
-  size: number;
-}
+import { FileDescription } from "@kickoffbot.com/types";
 
 export interface ClientFileDescription extends FileDescription {
   browserFile: File;

@@ -4,6 +4,7 @@ import React, { useMemo } from 'react'
 import { makeStyles } from 'tss-react/mui';
 import { type ContentTextUIElement, type UIElement } from '@kickoffbot.com/types';
 import { AttachmentsViewer } from '~/components/PostCreator/components/AttachmentsViewer/AttachmentsViewer';
+import { AttachmentViewer } from '../../AttachmentViewer';
 
 interface Props {
     element: UIElement;
@@ -50,7 +51,8 @@ export const TextContent = ({ element }: Props) => {
     return (
         <Box className={classes.root}>
             <div dangerouslySetInnerHTML={{ __html: textContent ?? 'Text...' }}></div>
-            {contentTextElement.attachments && <AttachmentsViewer files={contentTextElement.attachments} />}
+            {contentTextElement.attachments?.length > 1 && <AttachmentsViewer files={contentTextElement.attachments} />}
+            {contentTextElement.attachments?.length === 1 && <AttachmentViewer file={contentTextElement.attachments[0]} />}
         </Box>
     )
 }

@@ -5,7 +5,8 @@ import React, { useCallback, useEffect, useState } from 'react'
 import { type ContentTextUIElement } from '@kickoffbot.com/types';
 import { TextEditor } from '../TextEditor';
 import { AttachEditor } from '~/components/PostCreator/components/AttachEditor';
-import { ClientFileDescription, ContentType, FileDescription } from '~/types/ContentEditor';
+import { ClientFileDescription } from '~/types/ContentEditor';
+import { ContentType, FileDescription } from '@kickoffbot.com/types';
 import { UploadAttachmentFileDescription } from '~/types/UploadAttachments';
 import { uploadAttachments } from '~/components/PostCreator/utils';
 import { showError, showSuccessMessage } from '~/utils/ClientStatusMessage';

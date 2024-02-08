@@ -4,130 +4,14 @@ import process from "process";
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 require("dotenv").config({
-  path: "../.env",
+  path: "../../builder/.env",
 });
 
-const botDescription: BotProject = {
-  blocks: [
-    {
-      id: "/start",
-      blockType: 1,
-      title: "/start",
-      position: { x: 291, y: 44 },
-      elements: [],
-    },
-    {
-      id: "18b194a3-e4a1-401a-9568-5634d18fca24",
-      blockType: 0,
-      title: "Block #1",
-      position: { x: 346.79998779296875, y: 430.6000061035156 },
-      elements: [
-        {
-          id: "content-text-1aabb487-0a44-499f-a0e4-f3b220b1d87b",
-          type: "content-text",
-          json: '{"blocks":[{"key":"fcf14","text":"Hello! What is your name?","type":"unstyled","depth":0,"inlineStyleRanges":[{"offset":20,"length":4,"style":"ITALIC"}],"entityRanges":[],"data":{}}],"entityMap":{}}',
-          htmlContent: "<p>Hello! What is your <em>name</em>?</p>",
-          telegramContent: "Hello! What is your <em>name</em>?",
-        },
-        {
-          id: "input-text-a8880bac-03e1-4db2-bb38-218ff6b10f60",
-          label: "User input...",
-          type: "input-text",
-          input: null,
-          variableId: "62babd4e-72db-4bb7-9632-848c00977482",
-        },
-        {
-          id: "content-text-87652f30-863b-492d-9893-353d078ca4e8",
-          type: "content-text",
-          json: '{"blocks":[{"key":"87bik","text":"Nice to meet with you, <%variables.user_name_input%>! How is your day, <%variables.user_name_input%>?","type":"unstyled","depth":0,"inlineStyleRanges":[{"offset":0,"length":21,"style":"BOLD"},{"offset":71,"length":29,"style":"BOLD"}],"entityRanges":[],"data":{}}],"entityMap":{}}',
-          htmlContent:
-            "<p><strong>Nice to meet with you</strong>, &lt;%variables.user_name_input%&gt;! How is your day, <strong>&lt;%variables.user_name_input%&gt;</strong>?</p>",
-          telegramContent:
-            "<b>Nice to meet with you</b>, &lt;%variables.user_name_input%&gt;! How is your day, <b>&lt;%variables.user_name_input%&gt;</b>?",
-        },
-        {
-          id: "input-buttons-07326d43-e718-43a9-8c7b-dc02f6ae6490",
-          type: "input-buttons",
-          buttons: [
-            {
-              content: "Great day!",
-              id: "e5e5f8e7-e80a-4640-9cbe-885da616323b",
-            },
-            { content: "Bad day!", id: "7d2a566c-9899-4769-8761-c7d653682c16" },
-          ],
-        },
-      ],
-    },
-    {
-      id: "089532b0-1d9c-4204-a5ff-2d3ead43baaa",
-      blockType: 0,
-      title: "Block #2",
-      position: { x: 1259.9551874416975, y: -33.82089552238806 },
-      elements: [
-        {
-          id: "content-text-19594c15-481d-43ac-ac56-522e6d5a7454",
-          type: "content-text",
-          json: '{"blocks":[{"key":"6elum","text":"I like that you have a great day!","type":"unstyled","depth":0,"inlineStyleRanges":[],"entityRanges":[],"data":{}}],"entityMap":{}}',
-          htmlContent: "<p>I like that you have a great day!</p>",
-          telegramContent: "I like that you have a great day!",
-        },
-      ],
-    },
-    {
-      id: "4fffc478-bbcf-4137-9fae-06c1a6b06a35",
-      blockType: 0,
-      title: "Block #3",
-      position: { x: 1317.6418639225744, y: 123.47760283057369 },
-      elements: [
-        {
-          id: "content-text-d52ea102-4db2-4e94-bf94-8162052fa907",
-          type: "content-text",
-          json: '{"blocks":[{"key":"cnqdf","text":"Don\'t worry, be happy, <%variables.user_name_input%>!","type":"unstyled","depth":0,"inlineStyleRanges":[{"offset":0,"length":23,"style":"BOLD"},{"offset":52,"length":1,"style":"BOLD"}],"entityRanges":[],"data":{}}],"entityMap":{}}',
-          htmlContent:
-            "<p><strong>Don't worry, be happy, </strong>&lt;%variables.user_name_input%&gt;<strong>!</strong></p>",
-          telegramContent:
-            "<b>Don't worry, be happy, </b>&lt;%variables.user_name_input%&gt;<b>!</b>",
-        },
-      ],
-    },
-  ],
-  links: [
-    {
-      id: "69a0c780-bcd8-4a25-abdc-3c9f63a16870",
-      input: { blockId: "18b194a3-e4a1-401a-9568-5634d18fca24" },
-      output: { blockId: "/start" },
-    },
-    {
-      id: "310d5bf6-812b-4612-934d-4781cdb61dc5",
-      input: { blockId: "089532b0-1d9c-4204-a5ff-2d3ead43baaa" },
-      output: {
-        blockId: "18b194a3-e4a1-401a-9568-5634d18fca24",
-        buttonId: "e5e5f8e7-e80a-4640-9cbe-885da616323b",
-        elementId: "input-buttons-07326d43-e718-43a9-8c7b-dc02f6ae6490",
-      },
-    },
-    {
-      id: "51e21059-ef09-42c4-b01e-e418c21929b7",
-      input: { blockId: "4fffc478-bbcf-4137-9fae-06c1a6b06a35" },
-      output: {
-        blockId: "18b194a3-e4a1-401a-9568-5634d18fca24",
-        buttonId: "7d2a566c-9899-4769-8761-c7d653682c16",
-        elementId: "input-buttons-07326d43-e718-43a9-8c7b-dc02f6ae6490",
-      },
-    },
-  ],
-  variables: [
-    {
-      id: "62babd4e-72db-4bb7-9632-848c00977482",
-      name: "user_name_input",
-      type: "string",
-      value: "friend",
-    },
-  ],
-  transformDescription: { x: 258, y: 153, scale: 0.67 },
-};
+const botDescription: BotProject = {"blocks":[{"id":"/start","blockType":1,"title":"/start","position":{"x":-592,"y":-134},"elements":[]},{"id":"8622723c-4595-4f7c-8200-cb473b74e66a","blockType":0,"title":"Block #1","position":{"x":-170.199951171875,"y":223},"elements":[{"id":"content-text-75c2ff99-5c46-4eec-b10f-dc4766c241b2","type":"content-text","attachments":[{"name":"copy1.docx","size":15460,"typeContent":1,"url":"https://hjzvmehimumkehfknjlw.supabase.co/storage/v1/object/public/plz-post-bucket/attachments/clke8q9j80000u9po8d0pb3hs/1707320789565_copy1.docx"}],"json":"{\"blocks\":[{\"key\":\"dksje\",\"text\":\"some document\",\"type\":\"unstyled\",\"depth\":0,\"inlineStyleRanges\":[],\"entityRanges\":[],\"data\":{}}],\"entityMap\":{}}","htmlContent":"<p>some document</p>","telegramContent":"some document"},{"id":"content-text-72126b3a-74c7-40f8-9ffa-657e487e19f2","type":"content-text","attachments":[{"name":"copy1.docx","size":15460,"typeContent":1,"url":"https://hjzvmehimumkehfknjlw.supabase.co/storage/v1/object/public/plz-post-bucket/attachments/clke8q9j80000u9po8d0pb3hs/1707252014541_copy1.docx"},{"name":"copy2.docx","size":15460,"typeContent":1,"url":"https://hjzvmehimumkehfknjlw.supabase.co/storage/v1/object/public/plz-post-bucket/attachments/clke8q9j80000u9po8d0pb3hs/1707252014541_copy2.docx"}],"json":"{\"blocks\":[{\"key\":\"bbrq3\",\"text\":\"2 docs\",\"type\":\"unstyled\",\"depth\":0,\"inlineStyleRanges\":[],\"entityRanges\":[],\"data\":{}}],\"entityMap\":{}}","htmlContent":"<p>2 docs</p>","telegramContent":"2 docs"},{"id":"content-text-f16a3498-699c-48cf-8a30-488fbab8c4e9","type":"content-text","json":"{\"blocks\":[{\"key\":\"65cn5\",\"text\":\"Welcome to AA (Awesome Agency)\",\"type\":\"unstyled\",\"depth\":0,\"inlineStyleRanges\":[{\"offset\":11,\"length\":2,\"style\":\"BOLD\"}],\"entityRanges\":[],\"data\":{}}],\"entityMap\":{}}","htmlContent":"<p>Welcome to <strong>AA</strong> (Awesome Agency)</p>","telegramContent":"Welcome to <b>AA</b> (Awesome Agency)","attachments":[{"name":"3.jpg","size":730174,"typeContent":0,"url":"https://hjzvmehimumkehfknjlw.supabase.co/storage/v1/object/public/plz-post-bucket/attachments/clke8q9j80000u9po8d0pb3hs/1707157720015_3.jpg"}]},{"id":"input-buttons-1636572f-1f9b-4046-9456-57029ac73052","type":"input-buttons","buttons":[{"content":"Hi!","id":"8d9d2228-c3bf-4a44-80c2-543c9721196d"}]}]},{"id":"21ba85b9-0f60-4c88-862d-b2257e9a5c68","blockType":0,"title":"Block #2","position":{"x":338,"y":-48.600006103515625},"elements":[{"id":"content-text-d13edc2a-0c45-4d01-8308-d34a9d4d7a4c","type":"content-text","json":"{\"blocks\":[{\"key\":\"utmg\",\"text\":\"What's your name?\",\"type\":\"unstyled\",\"depth\":0,\"inlineStyleRanges\":[],\"entityRanges\":[],\"data\":{}}],\"entityMap\":{}}","htmlContent":"<p>What's your name?</p>","telegramContent":"What's your name?","attachments":[{"name":"XOsX.gif","size":144134,"typeContent":0,"url":"https://hjzvmehimumkehfknjlw.supabase.co/storage/v1/object/public/plz-post-bucket/attachments/clke8q9j80000u9po8d0pb3hs/1707247279166_XOsX.gif"}]},{"id":"input-text-397ca834-715f-4a88-b526-420a298f1867","label":"User input...","type":"input-text","input":null,"variableId":"aa7c1f9f-6aef-4be8-ba73-39071cd83c2d"},{"id":"content-text-5b866a14-1e4f-4011-ad5b-5fcfe856f86f","type":"content-text","json":"{\"blocks\":[{\"key\":\"2njj\",\"text\":\"Great! Nice to meet you <%variables.userName%>!\",\"type\":\"unstyled\",\"depth\":0,\"inlineStyleRanges\":[{\"offset\":24,\"length\":22,\"style\":\"BOLD\"}],\"entityRanges\":[],\"data\":{}}],\"entityMap\":{}}","htmlContent":"<p>Great! Nice to meet you <strong>&lt;%variables.userName%&gt;</strong>!</p>","telegramContent":"Great! Nice to meet you <b>&lt;%variables.userName%&gt;</b>!"},{"id":"content-text-bcd2a706-c9b1-4f42-835b-b7c5490fc936","type":"content-text","json":"{\"blocks\":[{\"key\":\"4j837\",\"text\":\"What's the best email we can reach you at?\",\"type\":\"unstyled\",\"depth\":0,\"inlineStyleRanges\":[],\"entityRanges\":[],\"data\":{}}],\"entityMap\":{}}","htmlContent":"<p>What's the best email we can reach you at?</p>","telegramContent":"What's the best email we can reach you at?"},{"id":"input-text-3b2fa0da-07b6-49bc-9abe-2355a985a249","label":"User input...","type":"input-text","input":null,"variableId":"ebbe24e4-f015-4802-af56-3028d1f09405"},{"id":"content-text-ab637d23-dbda-45dc-a5a2-a589dc10530c","type":"content-text","json":"{\"blocks\":[{\"key\":\"d4bpa\",\"text\":\"What services are you interested in?\",\"type\":\"unstyled\",\"depth\":0,\"inlineStyleRanges\":[],\"entityRanges\":[],\"data\":{}}],\"entityMap\":{}}","htmlContent":"<p>What services are you interested in?</p>","telegramContent":"What services are you interested in?"},{"id":"input-buttons-a6ae3dd8-5303-4749-a6d3-1381c81b2ce0","type":"input-buttons","buttons":[{"content":"Web dev","id":"fcb24705-3374-4911-b9a2-9fbc97b38c47"},{"content":"Content Marketing","id":"866f3dc4-e40a-4d3e-9460-aee404a5f1e3"},{"content":"Social Media","id":"d35a89bf-1743-4c06-bc1b-b2d2dee68809"},{"content":"UI / UX Design","id":"97cb9c8e-cc9c-42ee-8470-a9de6a4e4e26"},{"content":"<%variables.userName%>","id":"f69299b5-225c-4220-afd4-71e6e402d551"}]}]},{"id":"e6b19e9d-3e75-4db2-9d5f-96c8efdcb331","blockType":0,"title":"Block #3","position":{"x":876.4000244140625,"y":147.20001220703125},"elements":[{"id":"content-text-e32837bc-eba9-4d10-83a2-747e442381a9","type":"content-text","json":"{\"blocks\":[{\"key\":\"ef1lu\",\"text\":\"Can you tell me a bit more about your needs?\",\"type\":\"unstyled\",\"depth\":0,\"inlineStyleRanges\":[],\"entityRanges\":[],\"data\":{}}],\"entityMap\":{}}","htmlContent":"<p>Can you tell me a bit more about your needs?</p>","telegramContent":"Can you tell me a bit more about your needs?"},{"id":"input-text-46ad7109-f7b5-4bc1-8eee-39d0d74ec9d8","label":"User input...","type":"input-text","input":null,"variableId":"eaaf8d58-b958-4388-b020-088496f2df3b"},{"id":"content-text-922dd866-b182-4908-9b24-d97ca6eb2e91","type":"content-text","json":"{\"blocks\":[{\"key\":\"7dbh\",\"text\":\"Perfect!\",\"type\":\"unstyled\",\"depth\":0,\"inlineStyleRanges\":[{\"offset\":0,\"length\":8,\"style\":\"BOLD\"}],\"entityRanges\":[],\"data\":{}}],\"entityMap\":{}}","htmlContent":"<p><strong>Perfect!</strong></p>","telegramContent":"<b>Perfect!</b>"},{"id":"content-text-07ae7550-2048-4d46-a848-f377c6b05fc0","type":"content-text","json":"{\"blocks\":[{\"key\":\"bgaqg\",\"text\":\"We'll get back to you at <%variables.userEmail%>!\",\"type\":\"unstyled\",\"depth\":0,\"inlineStyleRanges\":[],\"entityRanges\":[],\"data\":{}}],\"entityMap\":{}}","htmlContent":"<p>We'll get back to you at &lt;%variables.userEmail%&gt;!</p>","telegramContent":"We'll get back to you at &lt;%variables.userEmail%&gt;!"}]}],"links":[{"id":"7c00a7ea-83d8-4aa6-b5be-2e9ab4a16d4d","input":{"blockId":"21ba85b9-0f60-4c88-862d-b2257e9a5c68"},"output":{"blockId":"8622723c-4595-4f7c-8200-cb473b74e66a","buttonId":"8d9d2228-c3bf-4a44-80c2-543c9721196d","elementId":"input-buttons-1636572f-1f9b-4046-9456-57029ac73052"}},{"id":"76b558ef-e0dc-4e09-b95b-beb83997fa98","input":{"blockId":"e6b19e9d-3e75-4db2-9d5f-96c8efdcb331"},"output":{"blockId":"21ba85b9-0f60-4c88-862d-b2257e9a5c68","buttonId":"default-button-input-buttons-a6ae3dd8-5303-4749-a6d3-1381c81b2ce0","elementId":"input-buttons-a6ae3dd8-5303-4749-a6d3-1381c81b2ce0"}},{"id":"b17cf3b6-5d53-4eb8-bd23-c7f75d3da689","input":{"blockId":"8622723c-4595-4f7c-8200-cb473b74e66a"},"output":{"blockId":"/start"}}],"variables":[{"id":"aa7c1f9f-6aef-4be8-ba73-39071cd83c2d","name":"userName","type":"string","value":"-"},{"id":"ebbe24e4-f015-4802-af56-3028d1f09405","name":"userEmail","type":"string","value":"-"},{"id":"eaaf8d58-b958-4388-b020-088496f2df3b","name":"additionalInput","type":"string","value":"-"}],"transformDescription":{"x":434,"y":-22,"scale":0.76}};
 
 (function start() {
+  console.log("started!");
+
   const newBot = new MyTelegramBot(
     process.env.TELEGRAM_BOT_TOKEN ?? "",
     botDescription

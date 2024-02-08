@@ -2,7 +2,8 @@ import { Box, Button } from '@mui/material'
 import React, { type SyntheticEvent, useCallback, useRef } from 'react'
 import AddIcon from '@mui/icons-material/Add';
 import { isNil } from 'lodash';
-import { ClientFileDescription, ContentType, type FileDescription } from '~/types/ContentEditor';
+import { ClientFileDescription } from '~/types/ContentEditor';
+import { ContentType, type FileDescription } from '@kickoffbot.com/types';
 import { IMAGE_EXTENSIONS } from './constants';
 import { AttachmentsViewer } from '../AttachmentsViewer/AttachmentsViewer';
 import { getSizeString } from './utility';

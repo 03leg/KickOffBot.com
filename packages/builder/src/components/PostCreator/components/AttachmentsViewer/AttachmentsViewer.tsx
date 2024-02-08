@@ -1,5 +1,5 @@
 import React, { type ReactNode, useMemo } from 'react'
-import { ContentType, type FileDescription } from '~/types/ContentEditor'
+import { ContentType, type FileDescription } from '@kickoffbot.com/types'
 import { PhotoAttachment } from './PhotoAttachment';
 import { FileAttachment } from './FileAttachment';
 import { Box } from '@mui/material';

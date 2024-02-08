@@ -1,1 +1,1 @@
-export const IMAGE_EXTENSIONS = [".jpg", ".jpeg", ".jfif", ".pjpeg", ".pjp", ".png"];
+export const IMAGE_EXTENSIONS = [".jpg", ".jpeg", ".jfif", ".pjpeg", ".pjp", ".png", '.gif'];
