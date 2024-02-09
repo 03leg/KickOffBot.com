@@ -190,7 +190,7 @@ export class MyTelegramBot {
           contentTextElement.telegramContent,
           userContext
         );
-        const messageButtons = this.getButtonsForMessage(block, element);
+        const messageButtons = this.getButtonsForMessage(userContext, block, element);
 
         const sendPlainMessage = async (serviceMessage?: string) => {
           await context.sendMessage(
@@ -305,6 +305,7 @@ export class MyTelegramBot {
   }
 
   private getButtonsForMessage(
+    userContext: UserContext,
     block: FlowDesignerUIBlockDescription,
     element: UIElement
   ): InlineKeyboardButton.CallbackButton[][] | null {
@@ -320,10 +321,16 @@ export class MyTelegramBot {
     if (nextElement.type === ElementType.INPUT_BUTTONS) {
       const buttonsElement = nextElement as InputButtonsUIElement;
       for (const button of buttonsElement.buttons) {
-        result.push([{ callback_data: button.id, text: button.content }]);
+
+        const buttonContent =  this._utils.getMessage(
+          button.content,
+          userContext
+        );
+
+        result.push([{ callback_data: button.id, text: buttonContent }]);
       }
 
-      const nextBlockButtons = this.getButtonsForMessage(block, nextElement);
+      const nextBlockButtons = this.getButtonsForMessage(userContext, block, nextElement);
       if (nextBlockButtons !== null) {
         result.push(...nextBlockButtons);
       }

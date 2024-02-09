@@ -67,7 +67,9 @@ export const useFlowDesignerStore = create<FlowDesignerState>()((set, get) => ({
       const indexBlock = project.blocks.findIndex(
         (b) => b.id === updatedBlock.id
       );
-      project.blocks[indexBlock] = updatedBlock;
+      project.blocks[indexBlock] = { ...updatedBlock };
+
+      project.blocks = [...project.blocks];
 
       return { project };
     }),

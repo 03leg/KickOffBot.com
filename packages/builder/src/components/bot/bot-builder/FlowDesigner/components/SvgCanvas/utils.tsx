@@ -1,7 +1,7 @@
 import { isNil } from "lodash";
-import { type ButtonPortDescription, type FlowDesignerLink } from "../../../types";
-import { type CoordinateDescription, type PositionDescription, type TransformDescription } from "../../types";
 import { Sector, getDistance, getPartLinePath, getSector } from "../OutputPort/utils";
+import { ButtonPortDescription, FlowDesignerLink, PositionDescription, TransformDescription } from "@kickoffbot.com/types";
+import { CoordinateDescription } from "../../types";
 
 const mapAppIdElement = new Map<string, Element>();
 const step = 50 as const;

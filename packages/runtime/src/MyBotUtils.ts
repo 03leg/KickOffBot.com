@@ -57,8 +57,14 @@ export class MyBotUtils {
   }
 
   getMessage(telegramContent: string, userContext: UserContext): string {
-    const matches = telegramContent.matchAll(/&lt;%variables.(.*?)%&gt;/g);
-    for (const m of matches) {
+    const matches1 = telegramContent.matchAll(/&lt;%variables.(.*?)%&gt;/g);
+    for (const m of matches1) {
+      const value = userContext.getVariableValueByName(m[1]);
+      telegramContent = telegramContent.replace(m[0], value);
+    }
+
+    const matches2 = telegramContent.matchAll(/<%variables.(.*?)%>/g);
+    for (const m of matches2) {
       const value = userContext.getVariableValueByName(m[1]);
       telegramContent = telegramContent.replace(m[0], value);
     }

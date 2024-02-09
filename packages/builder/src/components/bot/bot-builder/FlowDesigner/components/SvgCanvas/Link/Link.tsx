@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo } from 'react'
+import React, { useCallback, useLayoutEffect, useMemo, useState } from 'react'
 import { keyframes } from 'tss-react';
 import { makeStyles } from 'tss-react/mui';
 import { useFlowDesignerStore } from '~/components/bot/bot-builder/store';
@@ -28,6 +28,7 @@ export const useStyles = makeStyles()(() => ({
 export const Link = ({ link }: Props) => {
     const { classes, cx } = useStyles();
     const confirm = useConfirm();
+    const [d, setD] = useState<string>('')
 
     const { links, viewPortOffset, transformDescription, blocks, selectedLink, selectLink, removeLink } = useFlowDesignerStore((state) => (
         {
@@ -95,11 +96,10 @@ export const Link = ({ link }: Props) => {
         return { inputIndex: inputLinks.indexOf(link), outputIndex: outputLinks.indexOf(link) }
     }, [link, links]);
 
-    const d = useMemo(() => {
-        
-        return getSvgPathForLink(link, viewPortOffset, transformDescription, inputIndex, outputIndex)
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [links, link, transformDescription, viewPortOffset, inputBlock?.position, outputBlock?.position, inputBlock?.elements, outputBlock?.elements, inputIndex, outputIndex]);
+    useLayoutEffect(() => {
+        const newPath = getSvgPathForLink(link, viewPortOffset, transformDescription, inputIndex, outputIndex);;
+        setD(newPath)
+    }, [links, link, transformDescription, viewPortOffset, inputBlock?.position, outputBlock?.position, inputBlock?.elements, outputBlock?.elements, inputIndex, outputIndex, inputBlock, outputBlock]);
 
     return (
         <>
