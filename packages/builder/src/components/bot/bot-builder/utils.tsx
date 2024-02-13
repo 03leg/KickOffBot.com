@@ -1,4 +1,4 @@
-import { type ContentTextUIElement, ElementType, type InputTextUIElement, type FlowDesignerUIBlockDescription, type UIElement, type InputButtonsUIElement, type FlowDesignerLink, type ButtonPortDescription, type BotVariable, BlockType, TransformDescription } from "@kickoffbot.com/types";
+import { type ContentTextUIElement, ElementType, type InputTextUIElement, type FlowDesignerUIBlockDescription, type UIElement, type InputButtonsUIElement, type FlowDesignerLink, type ButtonPortDescription, type BotVariable, BlockType, TransformDescription, ChangeVariableUIElement } from "@kickoffbot.com/types";
 import MessageIcon from '@mui/icons-material/Message';
 import TextFieldsIcon from '@mui/icons-material/TextFields';
 import SmartButtonIcon from '@mui/icons-material/SmartButton';
@@ -10,6 +10,7 @@ import { throwIfNil } from "~/utils/guard";
 
 import { APP_ELEMENT_ROLE } from "./constants";
 import { PositionDescription } from "@kickoffbot.com/types";
+import EditNoteIcon from '@mui/icons-material/EditNote';
 
 export function getContentElements() {
     return [
@@ -31,8 +32,14 @@ export function getInputElements() {
     ];
 }
 
+export function getLogicElements() {
+    return [
+        { type: ElementType.LOGIC_CHANGE_VARIABLE, title: 'Change variable', icon: <EditNoteIcon /> },
+    ];
+}
+
 export function getIconByType(type: ElementType) {
-    const description = [...getInputElements(), ...getContentElements()].find(d => d.type === type);
+    const description = [...getInputElements(), ...getContentElements(), ...getLogicElements()].find(d => d.type === type);
 
     if (isNil(description)) {
         throw new Error('Property "description" can not be null here');
@@ -63,11 +70,11 @@ export function getNewUIElementTemplate(id: string, data: DraggableElementData) 
 
     switch (data.type) {
         case ElementType.CONTENT_TEXT: {
-            const result: ContentTextUIElement = { id, type: ElementType.CONTENT_TEXT };
+            const result: ContentTextUIElement = { id, type: ElementType.CONTENT_TEXT, attachments: [] };
             return result;
         }
         case ElementType.INPUT_TEXT: {
-            const result: InputTextUIElement = { id, label: 'User input...', type: ElementType.INPUT_TEXT, input: null };
+            const result: InputTextUIElement = { id, label: 'User input...', type: ElementType.INPUT_TEXT, variableId: undefined };
             return result;
         }
         case ElementType.INPUT_BUTTONS: {
@@ -78,6 +85,16 @@ export function getNewUIElementTemplate(id: string, data: DraggableElementData) 
                     // { content: "Button #2", id: v4() }
                 ]
             };
+            return result;
+        }
+        case ElementType.LOGIC_CHANGE_VARIABLE: {
+            const result: ChangeVariableUIElement = {
+                id,
+                type: ElementType.LOGIC_CHANGE_VARIABLE,
+                selectedVariableId: undefined,
+                workflowDescription: undefined
+            };
+
             return result;
         }
         default: {
@@ -122,64 +139,64 @@ export function getDefaultBlocks() {
     ];
 }
 
-export const generateElements = () => {
-    const textUIElement1: ContentTextUIElement = {
-        type: ElementType.CONTENT_TEXT,
-        json: 'Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1',
-        id: '11111' + v4(),
-    };
-    const textUIElement2: ContentTextUIElement = {
-        type: ElementType.CONTENT_TEXT,
-        json: 'Hey2! Hey2! Hey2! Hey2! Hey2! Hey2! Hey2! Hey2! Hey2! Hey2! Hey2! Hey2! Hey2! ' + v4(),
-        id: '22222' + v4(),
-    };
-    const textUIElement3: ContentTextUIElement = {
-        type: ElementType.CONTENT_TEXT,
-        json: 'Privet3! Privet3! Privet3! ' + v4(),
-        id: '33333' + v4(),
-    };
-    const textUIElement4: ContentTextUIElement = {
-        type: ElementType.CONTENT_TEXT,
-        json: 'Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1',
-        id: '11111' + v4(),
-    };
-    const textUIElement5: ContentTextUIElement = {
-        type: ElementType.CONTENT_TEXT,
-        json: 'Hey2! Hey2! Hey2! Hey2! Hey2! Hey2! Hey2! Hey2! Hey2! Hey2! Hey2! Hey2! Hey2! ' + v4(),
-        id: '22222' + v4(),
-    };
-    const textUIElement6: ContentTextUIElement = {
-        type: ElementType.CONTENT_TEXT,
-        json: 'Privet3!' + v4(),
-        id: '33333' + v4(),
-    };
-    const textUIElement7: ContentTextUIElement = {
-        type: ElementType.CONTENT_TEXT,
-        json: 'Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1',
-        id: '11111' + v4(),
-    };
-    const textUIElement8: ContentTextUIElement = {
-        type: ElementType.CONTENT_TEXT,
-        json: 'Hey2! Hey2! Hey2! Hey2! Hey2! Hey2! Hey2! Hey2! Hey2! Hey2! Hey2! Hey2! Hey2! ' + v4(),
-        id: '22222' + v4(),
-    };
-    const textUIElement9: ContentTextUIElement = {
-        type: ElementType.CONTENT_TEXT,
-        json: 'Privet3! Privet3! Privet3! Privet3!  Privet3!  Privet3!  Privet3!  Privet3!' + v4(),
-        id: '33333' + v4(),
-    };
-    return [
-        textUIElement1,
-        textUIElement2,
-        textUIElement3,
-        textUIElement4,
-        textUIElement5,
-        textUIElement6,
-        textUIElement7,
-        textUIElement8,
-        textUIElement9,
-    ]
-};
+// export const generateElements = () => {
+//     const textUIElement1: ContentTextUIElement = {
+//         type: ElementType.CONTENT_TEXT,
+//         json: 'Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1',
+//         id: '11111' + v4(),
+//     };
+//     const textUIElement2: ContentTextUIElement = {
+//         type: ElementType.CONTENT_TEXT,
+//         json: 'Hey2! Hey2! Hey2! Hey2! Hey2! Hey2! Hey2! Hey2! Hey2! Hey2! Hey2! Hey2! Hey2! ' + v4(),
+//         id: '22222' + v4(),
+//     };
+//     const textUIElement3: ContentTextUIElement = {
+//         type: ElementType.CONTENT_TEXT,
+//         json: 'Privet3! Privet3! Privet3! ' + v4(),
+//         id: '33333' + v4(),
+//     };
+//     const textUIElement4: ContentTextUIElement = {
+//         type: ElementType.CONTENT_TEXT,
+//         json: 'Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1',
+//         id: '11111' + v4(),
+//     };
+//     const textUIElement5: ContentTextUIElement = {
+//         type: ElementType.CONTENT_TEXT,
+//         json: 'Hey2! Hey2! Hey2! Hey2! Hey2! Hey2! Hey2! Hey2! Hey2! Hey2! Hey2! Hey2! Hey2! ' + v4(),
+//         id: '22222' + v4(),
+//     };
+//     const textUIElement6: ContentTextUIElement = {
+//         type: ElementType.CONTENT_TEXT,
+//         json: 'Privet3!' + v4(),
+//         id: '33333' + v4(),
+//     };
+//     const textUIElement7: ContentTextUIElement = {
+//         type: ElementType.CONTENT_TEXT,
+//         json: 'Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1',
+//         id: '11111' + v4(),
+//     };
+//     const textUIElement8: ContentTextUIElement = {
+//         type: ElementType.CONTENT_TEXT,
+//         json: 'Hey2! Hey2! Hey2! Hey2! Hey2! Hey2! Hey2! Hey2! Hey2! Hey2! Hey2! Hey2! Hey2! ' + v4(),
+//         id: '22222' + v4(),
+//     };
+//     const textUIElement9: ContentTextUIElement = {
+//         type: ElementType.CONTENT_TEXT,
+//         json: 'Privet3! Privet3! Privet3! Privet3!  Privet3!  Privet3!  Privet3!  Privet3!' + v4(),
+//         id: '33333' + v4(),
+//     };
+//     return [
+//         textUIElement1,
+//         textUIElement2,
+//         textUIElement3,
+//         textUIElement4,
+//         textUIElement5,
+//         textUIElement6,
+//         textUIElement7,
+//         textUIElement8,
+//         textUIElement9,
+//     ]
+// };
 
 export const canLink = (newLink: FlowDesignerLink, links: FlowDesignerLink[]) => {
     let result = true;

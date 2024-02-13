@@ -13,6 +13,7 @@ export enum ElementType {
   INPUT_EMAIL = "input-email",
   INPUT_DATE = "input-date",
   INPUT_PHONE = "input-phone",
+  LOGIC_CHANGE_VARIABLE = "logic-change-variable",
 }
 
 export interface UIElement {
@@ -30,6 +31,27 @@ export interface FileDescription {
   url: string;
   typeContent: ContentType;
   size: number;
+}
+
+export interface ChangeVariableUIElement extends UIElement {
+  selectedVariableId?: BotVariable["id"];
+  workflowDescription?:
+    | ChangeNumberStringVariableWorkflow
+    | ChangeBooleanVariableWorkflow;
+}
+
+export enum ChangeBooleanVariableWorkflowStrategy {
+  SET_TRUE,
+  SET_FALSE,
+  TOGGLE
+}
+
+export interface ChangeBooleanVariableWorkflow {
+  strategy: ChangeBooleanVariableWorkflowStrategy;
+}
+
+export interface ChangeNumberStringVariableWorkflow {
+  expression: string;
 }
 
 export interface ContentTextUIElement extends UIElement {

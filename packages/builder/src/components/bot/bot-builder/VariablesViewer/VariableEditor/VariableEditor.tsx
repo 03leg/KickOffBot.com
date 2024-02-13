@@ -25,7 +25,6 @@ export const VariableEditor = ({ variable, onVariableChange }: Props) => {
     }, [setValue, variable])
 
     const handleValueChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
-        console.log('newValue', event.target.value);
         setVariableValue(event.target.value);
         onVariableChange(variable);
     }, [onVariableChange, setVariableValue, variable]);

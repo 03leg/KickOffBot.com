@@ -3,7 +3,6 @@ import { NarrowedContext, Context } from "telegraf";
 import { isNil } from "lodash";
 import { BotProject, BotVariable } from "@kickoffbot.com/types";
 
-
 export interface NextBotStep {
   blockId: string;
   elementId: string;
@@ -45,7 +44,7 @@ export class UserContext {
     this._nextStep = nextStep;
   }
 
-  public updateVariable(name: string, newValue: string) {
+  public updateVariable(name: string, newValue: string | number | boolean) {
     this._variables.set(name, newValue);
   }
 

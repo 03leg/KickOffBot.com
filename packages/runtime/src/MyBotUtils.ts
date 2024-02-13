@@ -1,7 +1,15 @@
 import { isNil } from "lodash";
 
 import { UserContext } from "./UserContext";
-import { BotProject, BotVariable, FlowDesignerLink, FlowDesignerUIBlockDescription, UIElement } from "@kickoffbot.com/types";
+import {
+  BotProject,
+  BotVariable,
+  ChangeBooleanVariableWorkflowStrategy,
+  FlowDesignerLink,
+  FlowDesignerUIBlockDescription,
+  UIElement,
+} from "@kickoffbot.com/types";
+import { Parser } from "expr-eval";
 
 export class MyBotUtils {
   private _botProject: BotProject;
@@ -56,19 +64,80 @@ export class MyBotUtils {
     return currentVariable;
   }
 
-  getMessage(telegramContent: string, userContext: UserContext): string {
-    const matches1 = telegramContent.matchAll(/&lt;%variables.(.*?)%&gt;/g);
+  getParsedText(text: string, userContext: UserContext): string {
+    const matches1 = text.matchAll(/&lt;%variables.(.*?)%&gt;/g);
     for (const m of matches1) {
       const value = userContext.getVariableValueByName(m[1]);
-      telegramContent = telegramContent.replace(m[0], value);
+      text = text.replace(m[0], value);
     }
 
-    const matches2 = telegramContent.matchAll(/<%variables.(.*?)%>/g);
+    const matches2 = text.matchAll(/<%variables.(.*?)%>/g);
     for (const m of matches2) {
       const value = userContext.getVariableValueByName(m[1]);
-      telegramContent = telegramContent.replace(m[0], value);
+      text = text.replace(m[0], value);
     }
 
-    return telegramContent;
+    return text;
+  }
+
+  getNumberValueFromExpression(
+    expression: string,
+    userContext: UserContext
+  ): number | null {
+    try {
+      const parsedExpression = this.getParsedText(expression, userContext);
+      const result = Parser.evaluate(parsedExpression);
+
+      if (typeof result === "number") {
+        return result;
+      }
+    } catch {}
+
+    return null;
+  }
+
+  getStringValueFromExpression(
+    expression: string,
+    userContext: UserContext
+  ): string | null {
+    try {
+      const result = this.getParsedText(expression, userContext);
+
+      if (typeof result === "string") {
+        return result;
+      }
+    } catch {}
+
+    return null;
+  }
+
+  getBooleanValue(
+    strategy: ChangeBooleanVariableWorkflowStrategy,
+    variable: BotVariable,
+    userContext: UserContext
+  ): boolean | null {
+    try {
+      switch (strategy) {
+        case ChangeBooleanVariableWorkflowStrategy.SET_FALSE: {
+          return false;
+        }
+        case ChangeBooleanVariableWorkflowStrategy.SET_TRUE: {
+          return true;
+        }
+        case ChangeBooleanVariableWorkflowStrategy.TOGGLE: {
+          const currentValue = userContext.getVariableValueByName(
+            variable.name
+          );
+
+          if (typeof currentValue === "boolean") {
+            return !currentValue;
+          }
+
+          break;
+        }
+      }
+    } catch {}
+
+    return null;
   }
 }

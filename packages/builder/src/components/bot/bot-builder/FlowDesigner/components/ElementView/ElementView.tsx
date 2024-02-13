@@ -11,6 +11,7 @@ import { TextInput } from '../elements/TextInput';
 import { ButtonsInput } from '../elements/ButtonsInput/ButtonsInput';
 import { FlowDesignerContext } from '../../context';
 import { ElementMenu } from '../ElementMenu';
+import { ChangeVariable } from '../elements/ChangeVariable';
 
 interface Props {
     element: UIElement;
@@ -32,6 +33,10 @@ export const ElementView = ({ element, scale }: Props) => {
             }
             case ElementType.INPUT_BUTTONS: {
                 result = (<ButtonsInput element={element} />)
+                break;
+            }
+            case ElementType.LOGIC_CHANGE_VARIABLE: {
+                result = (<ChangeVariable element={element} />)
                 break;
             }
             default: {
@@ -56,8 +61,6 @@ export const ElementView = ({ element, scale }: Props) => {
         transform,
         transition,
         isDragging,
-        node,
-        rect,
     } = useSortable({ id: element.id, animateLayoutChanges: () => false, data: { elementWidth: 333 } });
     const context = useContext(FlowDesignerContext)
     const handleElementClick = useCallback((e: React.MouseEvent<HTMLElement>) => {
@@ -85,7 +88,7 @@ export const ElementView = ({ element, scale }: Props) => {
                     border: selected ? `1px solid ${Colors.SELECTED}` : `1px solid ${Colors.BORDER}`,
                 }}>
                 <Box sx={{ display: 'flex', alignItems: 'center', mr: 1 }}>{icon}</Box>
-                <Box sx={{ width: 'calc(100% - 35px)'}}>{child}</Box>
+                <Box sx={{ width: 'calc(100% - 35px)' }}>{child}</Box>
             </Box>
         </Box>
     )

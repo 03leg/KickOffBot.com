@@ -30,6 +30,7 @@
     "telegraf": "^4.12.2",
     "lodash": "latest",
     "@kickoffbot.com/types": "1.0.0",
-    "dotenv": "16.4.1"
+    "dotenv": "16.4.1",
+    "expr-eval": "2.0.2"
   }
 }

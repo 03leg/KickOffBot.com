@@ -9,7 +9,10 @@ import { useConfirm } from 'material-ui-confirm';
 import { TextContentEditor } from '../elements/TextContent/Editor';
 import { ButtonsEditor } from '../elements/ButtonsInput/Editor';
 import { TextInputEditor } from '../elements/TextInput/Editor';
-import { ContentTextUIElement, ElementType, InputButtonsUIElement, InputTextUIElement, UIElement } from '@kickoffbot.com/types';
+import { ChangeVariableUIElement, ContentTextUIElement, ElementType, InputButtonsUIElement, InputTextUIElement, OutputPortDescription, UIElement } from '@kickoffbot.com/types';
+import { ChangeVariableEditor } from '../elements/ChangeVariable/Editor';
+
+
 
 interface Props {
     element: UIElement;
@@ -35,7 +38,7 @@ export const ElementMenu = ({ element }: Props) => {
     const handleRemoveElement = useCallback(() => {
         void confirm({ description: "This will permanently delete the element.", title: 'Are you sure?' })
             .then(() => {
-                const outputLinks = links.filter(l => l.output.elementId === element.id);
+                const outputLinks = links.filter(l => (l.output as OutputPortDescription).elementId === element.id);
 
                 if (outputLinks.length > 0) {
                     removeLinks(outputLinks);
@@ -75,6 +78,15 @@ export const ElementMenu = ({ element }: Props) => {
                 };
 
                 return { content: (<TextInputEditor element={newElement} />), title: 'Text Input Editor', newElement };
+
+            }
+            case ElementType.LOGIC_CHANGE_VARIABLE:{
+                const initialElement = elementArg as ChangeVariableUIElement;
+                const newElement: ChangeVariableUIElement = {
+                    ...initialElement
+                };
+
+                return { content: (<ChangeVariableEditor element={newElement} />), title: 'Change variable value', newElement };
 
             }
             default: {

@@ -1,10 +1,7 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { DraggableElementData, type ToolBoxItem } from '../../types'
 import { Box, Typography } from '@mui/material';
 import { useDraggable } from '@dnd-kit/core';
-import { CSS } from '@dnd-kit/utilities';
-import { useSortable } from '@dnd-kit/sortable';
-import { string } from 'zod';
 import { v4 } from 'uuid';
 
 interface Props {

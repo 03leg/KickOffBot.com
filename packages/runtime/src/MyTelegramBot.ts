@@ -15,6 +15,9 @@ import { MyBotUtils } from "./MyBotUtils";
 import {
   BotProject,
   ButtonPortDescription,
+  ChangeBooleanVariableWorkflow,
+  ChangeNumberStringVariableWorkflow,
+  ChangeVariableUIElement,
   ContentTextUIElement,
   ContentType,
   ElementType,
@@ -22,6 +25,7 @@ import {
   InputButtonsUIElement,
   InputTextUIElement,
   UIElement,
+  VariableType,
 } from "@kickoffbot.com/types";
 import { MediaGroup } from "telegraf/typings/telegram-types";
 
@@ -186,11 +190,15 @@ export class MyTelegramBot {
           throw new Error("InvalidOperationError: telegramContent is null");
         }
 
-        const answerText = this._utils.getMessage(
+        const answerText = this._utils.getParsedText(
           contentTextElement.telegramContent,
           userContext
         );
-        const messageButtons = this.getButtonsForMessage(userContext, block, element);
+        const messageButtons = this.getButtonsForMessage(
+          userContext,
+          block,
+          element
+        );
 
         const sendPlainMessage = async (serviceMessage?: string) => {
           await context.sendMessage(
@@ -260,7 +268,9 @@ export class MyTelegramBot {
               const documents = [] as InputMediaDocument[];
               for (const item of contentTextElement.attachments) {
                 const isLastDocument =
-                  contentTextElement.attachments[contentTextElement.attachments.length - 1] === item;
+                  contentTextElement.attachments[
+                    contentTextElement.attachments.length - 1
+                  ] === item;
 
                 documents.push({
                   media: {
@@ -297,11 +307,78 @@ export class MyTelegramBot {
         );
         break;
       }
+      case ElementType.LOGIC_CHANGE_VARIABLE: {
+        this.handleChangeVariableElement(
+          element as ChangeVariableUIElement,
+          userContext
+        );
+        break;
+      }
     }
 
     this.saveNextStepInUserContext(userContext, block, element);
 
     void this.checkNextElement(userContext, context, block, element);
+  }
+
+  private handleChangeVariableElement(
+    element: ChangeVariableUIElement,
+    userContext: UserContext
+  ) {
+    if (!element.selectedVariableId) {
+      throw new Error("InvalidOperationError: variable is null");
+    }
+
+    const variable = this._utils.getVariableById(element.selectedVariableId);
+    let newValue: number | string | null | boolean = null;
+
+    switch (variable.type) {
+      case VariableType.NUMBER: {
+        if (isNil(element.workflowDescription)) {
+          break;
+        }
+
+        const expression = (
+          element.workflowDescription as ChangeNumberStringVariableWorkflow
+        ).expression;
+
+        newValue = this._utils.getNumberValueFromExpression(
+          expression,
+          userContext
+        );
+
+        break;
+      }
+      case VariableType.STRING: {
+        if (isNil(element.workflowDescription)) {
+          break;
+        }
+
+        const expression = (
+          element.workflowDescription as ChangeNumberStringVariableWorkflow
+        ).expression;
+
+        newValue = this._utils.getStringValueFromExpression(
+          expression,
+          userContext
+        );
+
+        break;
+      }
+      case VariableType.BOOLEAN: {
+        if (isNil(element.workflowDescription)) {
+          break;
+        }
+
+        const workflowDescription = element.workflowDescription as ChangeBooleanVariableWorkflow;
+
+        newValue = this._utils.getBooleanValue(workflowDescription.strategy, variable, userContext);
+      }
+    }
+
+    if (!isNil(newValue)) {
+      userContext.updateVariable(variable.name, newValue);
+    }
   }
 
   private getButtonsForMessage(
@@ -321,8 +398,7 @@ export class MyTelegramBot {
     if (nextElement.type === ElementType.INPUT_BUTTONS) {
       const buttonsElement = nextElement as InputButtonsUIElement;
       for (const button of buttonsElement.buttons) {
-
-        const buttonContent =  this._utils.getMessage(
+        const buttonContent = this._utils.getParsedText(
           button.content,
           userContext
         );
@@ -330,7 +406,11 @@ export class MyTelegramBot {
         result.push([{ callback_data: button.id, text: buttonContent }]);
       }
 
-      const nextBlockButtons = this.getButtonsForMessage(userContext, block, nextElement);
+      const nextBlockButtons = this.getButtonsForMessage(
+        userContext,
+        block,
+        nextElement
+      );
       if (nextBlockButtons !== null) {
         result.push(...nextBlockButtons);
       }
@@ -357,6 +437,7 @@ export class MyTelegramBot {
     }
 
     switch (nextElement.type) {
+      case ElementType.LOGIC_CHANGE_VARIABLE:
       case ElementType.CONTENT_TEXT: {
         await this.handleElement(userContext, context, block, nextElement);
         break;

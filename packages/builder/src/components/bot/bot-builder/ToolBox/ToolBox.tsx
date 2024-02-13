@@ -3,7 +3,7 @@ import React, { useMemo } from 'react'
 import { Colors } from '~/themes/Colors'
 import { type ToolBoxGroup } from './types'
 import { ToolBoxGroupComp } from './ToolBoxGroup';
-import { getContentElements, getInputElements } from '../utils';
+import { getContentElements, getInputElements, getLogicElements } from '../utils';
 import { useDndContext } from '@dnd-kit/core';
 import { isNil } from 'lodash';
 import { APP_ELEMENT_ROLE } from '../constants';
@@ -19,12 +19,14 @@ export const ToolBox = () => {
                 title: 'User Input',
                 items: getInputElements()
             },
+            {
+                title: 'Logic',
+                items: getLogicElements()
+            },
         ]
     }, []);
 
     const { active } = useDndContext();
-
-    // console.log('Active', active);
 
     return (
         <Box
