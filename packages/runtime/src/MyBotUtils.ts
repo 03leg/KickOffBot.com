@@ -7,6 +7,7 @@ import {
   ChangeBooleanVariableWorkflowStrategy,
   FlowDesignerLink,
   FlowDesignerUIBlockDescription,
+  PortType,
   UIElement,
 } from "@kickoffbot.com/types";
 import { Parser } from "expr-eval";
@@ -47,6 +48,20 @@ export class MyBotUtils {
 
     if (isNil(currentLink)) {
       throw new Error("InvalidOperationError: link is null");
+    }
+
+    return currentLink;
+  }
+
+  public getLinkFromBlock(
+    block: FlowDesignerUIBlockDescription
+  ): FlowDesignerLink | null {
+    const currentLink = this._botProject.links.find(
+      (l) => l.output.blockId === block.id && l.output.type === PortType.BLOCK
+    );
+
+    if (isNil(currentLink)) {
+      return null;
     }
 
     return currentLink;

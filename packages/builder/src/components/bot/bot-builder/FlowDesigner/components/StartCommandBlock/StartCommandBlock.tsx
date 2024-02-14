@@ -11,7 +11,7 @@ export const StartCommandBlock = () => {
             position: 'relative',
             userSelect: 'none',
         }}>
-            /start
+            /start 123
         </Box>
     )
 }

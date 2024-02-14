@@ -83,15 +83,12 @@ export class MyTelegramBot {
     if (
       currentBlock.elements[currentBlock.elements.length - 1] === currentElement
     ) {
-      const link = this._botProject.links.find(
-        (link) => link.output.blockId === currentBlock.id
-      );
-
+      const link = this._utils.getLinkFromBlock(currentBlock);
       if (!isNil(link)) {
         nextBlock =
           this._botProject.blocks.find((b) => b.id === link.input.blockId) ??
           null;
-        if (!isNil(nextBlock)) {
+        if (!isNil(nextBlock) && nextBlock.elements.length >= 1) {
           nextElement = nextBlock.elements[0];
         }
       }
@@ -316,9 +313,30 @@ export class MyTelegramBot {
       }
     }
 
-    this.saveNextStepInUserContext(userContext, block, element);
+    this.setNextStep(userContext, context, block, element);
+  }
 
-    void this.checkNextElement(userContext, context, block, element);
+  private setNextStep(
+    userContext: UserContext,
+    context: NarrowedContext<Context<Update>, Update.MessageUpdate<Message>>,
+    currentBlock: FlowDesignerUIBlockDescription,
+    currentElement: UIElement
+  ) {
+    // const isLastElement = block.elements[block.elements.length - 1] === element;
+    // let currentBlock = block;
+    // let currentElement = element;
+
+    // if (isLastElement) {
+    //   const link = this._utils.getLinkFromBlock(currentBlock);
+    //   if()
+    // }
+
+    this.saveNextStepInUserContext(userContext, currentBlock, currentElement);
+
+    void this.checkNextElement(
+      userContext,
+      context
+    );
   }
 
   private handleChangeVariableElement(
@@ -370,9 +388,14 @@ export class MyTelegramBot {
           break;
         }
 
-        const workflowDescription = element.workflowDescription as ChangeBooleanVariableWorkflow;
+        const workflowDescription =
+          element.workflowDescription as ChangeBooleanVariableWorkflow;
 
-        newValue = this._utils.getBooleanValue(workflowDescription.strategy, variable, userContext);
+        newValue = this._utils.getBooleanValue(
+          workflowDescription.strategy,
+          variable,
+          userContext
+        );
       }
     }
 
@@ -425,12 +448,27 @@ export class MyTelegramBot {
 
   private async checkNextElement(
     userContext: UserContext,
-    context: NarrowedContext<Context<Update>, Update.MessageUpdate<Message>>,
-    block: FlowDesignerUIBlockDescription,
-    element: UIElement
+    context: NarrowedContext<Context<Update>, Update.MessageUpdate<Message>>
+    // block: FlowDesignerUIBlockDescription,
+    // element: UIElement
   ) {
-    const currentElementIndex = block.elements.findIndex((e) => e === element);
-    const nextElement = block.elements[currentElementIndex + 1];
+    const nextStep = userContext.nextStep;
+    if (isNil(nextStep)) {
+      return;
+    }
+
+    const block = this._botProject.blocks.find(
+      (b) => b.id === nextStep?.blockId
+    );
+
+    if (isNil(block)) {
+      return;
+    }
+
+    const nextElement = block.elements.find((e) => e.id === nextStep.elementId);
+
+    // const currentElementIndex = block.elements.findIndex((e) => e === element);
+    // const nextElement = block.elements[currentElementIndex + 1];
 
     if (isNil(nextElement)) {
       return;

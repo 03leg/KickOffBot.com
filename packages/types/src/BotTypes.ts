@@ -43,7 +43,7 @@ export interface ChangeVariableUIElement extends UIElement {
 export enum ChangeBooleanVariableWorkflowStrategy {
   SET_TRUE,
   SET_FALSE,
-  TOGGLE
+  TOGGLE,
 }
 
 export interface ChangeBooleanVariableWorkflow {
@@ -88,8 +88,15 @@ export interface FlowDesignerUIBlockDescription {
   blockType: BlockType;
 }
 
+export enum PortType {
+  BLOCK,
+  ELEMENT,
+  BUTTONS_ELEMENT
+}
+
 export interface PortDescription {
   blockId: string;
+  type: PortType;
 }
 
 export interface OutputPortDescription extends PortDescription {

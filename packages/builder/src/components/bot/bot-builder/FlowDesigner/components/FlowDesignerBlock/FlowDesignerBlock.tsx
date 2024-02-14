@@ -4,7 +4,7 @@ import { useStyles } from './FlowDesignerBlock.style';
 import { useFlowDesignerBlockMovements } from './useFlowDesignerBlockMovements';
 import { Colors } from '~/themes/Colors';
 import { ElementView } from '../ElementView';
-import { BlockType, type FlowDesignerUIBlockDescription } from '@kickoffbot.com/types';
+import { BlockType, PortType, type FlowDesignerUIBlockDescription } from '@kickoffbot.com/types';
 import { SortableContext } from '@dnd-kit/sortable';
 import { useDroppable } from '@dnd-kit/core';
 import { flowDesignerVerticalListSortingStrategy } from './flowDesignerVerticalListSortingStrategy';
@@ -73,6 +73,7 @@ export const FlowDesignerBlock = ({ blockDescription, rootScale }: Props) => {
 
                                 {blockDescription.elements.map(element => (<ElementView key={element.id} element={element} scale={rootScale} />))}
                             </SortableContext>
+                            <OutputPort className={classes.standardBlockPort} blockId={blockDescription.id} outPortType={PortType.BLOCK}/>
                         </>
                     }
                     {blockDescription.blockType === BlockType.START &&
@@ -88,7 +89,7 @@ export const FlowDesignerBlock = ({ blockDescription, rootScale }: Props) => {
                                     marginTop: '12px'
                                 }}>/start</Box>
                             </Box>
-                            <OutputPort className={classes.blockPort} blockId={blockDescription.id} />
+                            <OutputPort className={classes.commandBlockPort} blockId={blockDescription.id} outPortType={PortType.BLOCK}/>
                         </>
                     }
                 </Box>

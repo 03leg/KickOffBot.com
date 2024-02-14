@@ -1,6 +1,6 @@
 import { Box, Button } from '@mui/material';
 import React from 'react'
-import { type InputButtonsUIElement, type UIElement } from '@kickoffbot.com/types';
+import { PortType, type InputButtonsUIElement, type UIElement } from '@kickoffbot.com/types';
 import { OutputPort } from '../../OutputPort';
 
 interface Props {
@@ -48,7 +48,7 @@ export const ButtonsInput = ({ element }: Props) => {
 
                 return (
                     <Box key={b.id} className={classes.button}>
-                        <OutputPort className={classes.port} elementId={uiElement.id} buttonId={b.id} />
+                        <OutputPort className={classes.port} elementId={uiElement.id} buttonId={b.id} outPortType={PortType.BUTTONS_ELEMENT}/>
                         <Button sx={{ marginBottom: 1 }} variant="contained" size='small' fullWidth disabled>
                             <div dangerouslySetInnerHTML={{ __html: buttonContent }}></div>
                         </Button>
@@ -56,7 +56,7 @@ export const ButtonsInput = ({ element }: Props) => {
                 )
             })}
             <Box className={classes.button}>
-                <OutputPort className={classes.port} elementId={uiElement.id} buttonId={`default-button-${uiElement.id}`} />
+                <OutputPort className={classes.port} elementId={uiElement.id} buttonId={`default-button-${uiElement.id}`} outPortType={PortType.BUTTONS_ELEMENT}/>
                 <Button variant="contained" size='small' fullWidth disabled>Default</Button>
             </Box>
         </div>

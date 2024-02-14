@@ -8,7 +8,7 @@ import { isNil } from 'lodash';
 import { APP_ELEMENT_ROLE } from '../../../constants';
 import { FlowDesignerBlockContext } from '../../context';
 import { v4 } from 'uuid';
-import { type ButtonPortDescription } from '@kickoffbot.com/types';
+import { PortType, type ButtonPortDescription } from '@kickoffbot.com/types';
 import { type CoordinateDescription } from '../../types';
 
 interface Props {
@@ -16,9 +16,10 @@ interface Props {
     blockId?: string;
     elementId?: string;
     buttonId?: string;
+    outPortType: PortType;
 }
 
-export const OutputPort = ({ className, buttonId, elementId, blockId }: Props) => {
+export const OutputPort = ({ className, buttonId, elementId, blockId, outPortType }: Props) => {
     const { showTempLink, hideTempLink, setTempLinkPath, transformDescription, viewPortOffset, addLink } = useFlowDesignerStore((state) => ({
         showTempLink: state.showTempLink,
         hideTempLink: state.hideTempLink,
@@ -80,7 +81,7 @@ export const OutputPort = ({ className, buttonId, elementId, blockId }: Props) =
                 const outputBlock = blockContext.blockElement?.current;
                 const outputBlockId = outputBlock?.getAttribute('data-app-id');
 
-                addLink({ id: v4(), input: { blockId }, output: { blockId: outputBlockId, buttonId, elementId } as ButtonPortDescription })
+                addLink({ id: v4(), input: { blockId, type: PortType.BLOCK }, output: { blockId: outputBlockId, buttonId, elementId, type: outPortType } as ButtonPortDescription })
             }
 
             // console.log(el);
