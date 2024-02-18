@@ -20,7 +20,7 @@ export const TextInputEditor = ({ element }: Props) => {
         <Box>
             <Typography>Select variable to save user input:</Typography>
             <Box sx={{ marginTop: 2 }}>
-                <VariableSelector valueId={selectedVariableId} variableType={VariableType.STRING} onVariableChange={handleVariableChange} />
+                <VariableSelector valueId={selectedVariableId} variableTypes={[VariableType.STRING, VariableType.NUMBER]} onVariableChange={handleVariableChange} />
             </Box>
         </Box>
     )

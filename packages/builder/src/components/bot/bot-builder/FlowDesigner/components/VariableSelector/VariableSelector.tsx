@@ -6,23 +6,23 @@ import { isNil } from 'lodash';
 
 interface Props {
     valueId?: string;
-    variableType?: VariableType;
+    variableTypes?: VariableType[];
     onVariableChange: (variable: BotVariable) => void;
 }
 
-export const VariableSelector = ({ valueId, variableType, onVariableChange }: Props) => {
+export const VariableSelector = ({ valueId, variableTypes, onVariableChange }: Props) => {
     const { variables } = useFlowDesignerStore((state) => ({
         variables: state.project.variables,
     }));
 
 
     const currentVariables = useMemo(() => {
-        if (isNil(variableType)) {
+        if (isNil(variableTypes)) {
             return variables;
         }
 
-        return variables.filter(v => v.type === variableType);
-    }, [variableType, variables]);
+        return variables.filter(v => variableTypes.includes(v.type));
+    }, [variableTypes, variables]);
 
 
     const handleVariableChange = useCallback((event: SelectChangeEvent<string>) => {
@@ -40,7 +40,6 @@ export const VariableSelector = ({ valueId, variableType, onVariableChange }: Pr
             {currentVariables.length === 0 &&
                 <Typography textAlign={'center'}>
                     You project doesn&lsquo;t have variables yet.<br/>
-                    {!isNil(variableType) && `Variable type: ${variableType}.`}
                 </Typography>
             }
             {currentVariables.length > 0 &&

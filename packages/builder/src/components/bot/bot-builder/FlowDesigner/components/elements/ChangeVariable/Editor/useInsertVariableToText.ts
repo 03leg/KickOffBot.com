@@ -5,7 +5,7 @@ import { getTextVariableReference } from "~/components/bot/bot-builder/utils";
 
 export function useInsertVariableToText([value, setValue]: [
   string,
-  React.Dispatch<React.SetStateAction<string>>
+  React.Dispatch<React.SetStateAction<string>> | ((newValue: string) => void)
 ]) {
   const [selectionStart, setSelectionStart] = React.useState<number>();
   const inputRef = React.useRef<HTMLInputElement>();
@@ -18,8 +18,13 @@ export function useInsertVariableToText([value, setValue]: [
 
   const handleInsertVariable = useCallback(
     (variable: BotVariable) => {
-      const position = selectionStart;
+      let position = selectionStart;
       const content = value ?? "";
+
+      if (isNil(position)) {
+        position = content.length;
+      }
+      
       const output = [
         content.slice(0, position),
         getTextVariableReference(variable),

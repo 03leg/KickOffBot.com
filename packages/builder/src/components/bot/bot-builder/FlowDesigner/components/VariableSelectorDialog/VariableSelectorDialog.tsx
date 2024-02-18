@@ -3,14 +3,15 @@ import AbcIcon from '@mui/icons-material/Abc';
 import { Box, Button, IconButton, Typography } from '@mui/material';
 import SmhDialog from '~/components/commons/Dialog/SmhDialog';
 import { VariableSelector } from '../VariableSelector';
-import { type BotVariable } from '@kickoffbot.com/types';
+import { VariableType, type BotVariable } from '@kickoffbot.com/types';
 import { isNil } from 'lodash';
 
 interface Props {
     onInsertVariable: (variable: BotVariable) => void;
+    requiredVariableType?: VariableType;
 }
 
-export const VariableSelectorDialog = ({ onInsertVariable }: Props) => {
+export const VariableSelectorDialog = ({ onInsertVariable, requiredVariableType }: Props) => {
     const [open, setOpen] = useState(false);
     const [selectedVariableInsert, setSelectedVariableInsert] = useState<BotVariable | null>(null);
 
@@ -30,7 +31,7 @@ export const VariableSelectorDialog = ({ onInsertVariable }: Props) => {
         onInsertVariable(selectedVariableInsert);
         handleClose();
         setSelectedVariableInsert(null);
-        
+
     }, [handleClose, onInsertVariable, selectedVariableInsert]);
 
     const handleVariableChange = useCallback((selectedVariable: BotVariable) => {
@@ -53,7 +54,7 @@ export const VariableSelectorDialog = ({ onInsertVariable }: Props) => {
                 open={open} title={'Insert variable'}>
                 <Box sx={{ marginBottom: 2 }}>
                     <Typography sx={{ marginBottom: 2 }}> Please select variable to insert:</Typography>
-                    <VariableSelector valueId={selectedVariableInsert?.id ?? ''} onVariableChange={handleVariableChange} />
+                    <VariableSelector variableTypes={requiredVariableType ? [requiredVariableType] : undefined} valueId={selectedVariableInsert?.id ?? ''} onVariableChange={handleVariableChange} />
                 </Box>
             </SmhDialog >
         </>

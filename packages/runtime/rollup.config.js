@@ -46,6 +46,7 @@ export default {
       namedExports: {
         "node_modules/lodash/lodash.js": [
           "isNil",
+          "isEmpty"
         ],
       },
     }),

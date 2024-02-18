@@ -18,6 +18,7 @@ import {
   ChangeBooleanVariableWorkflow,
   ChangeNumberStringVariableWorkflow,
   ChangeVariableUIElement,
+  ConditionUIElement,
   ContentTextUIElement,
   ContentType,
   ElementType,
@@ -28,6 +29,7 @@ import {
   VariableType,
 } from "@kickoffbot.com/types";
 import { MediaGroup } from "telegraf/typings/telegram-types";
+import { ConditionChecker } from "./ConditionChecker";
 
 export class MyTelegramBot {
   private _bot: Telegraf;
@@ -67,12 +69,12 @@ export class MyTelegramBot {
 
     await this.handleElement(userContext, context, block, block.elements[0]);
 
-    this.saveNextStepInUserContext(userContext, block, block.elements[0]);
+    this.calcNextStep(userContext, block, block.elements[0]);
 
     this._state.set(getUserContextKey(context), userContext);
   }
 
-  private saveNextStepInUserContext(
+  private calcNextStep(
     userContext: UserContext,
     currentBlock: FlowDesignerUIBlockDescription,
     currentElement: UIElement
@@ -180,6 +182,8 @@ export class MyTelegramBot {
     block: FlowDesignerUIBlockDescription,
     element: UIElement
   ) {
+    let shouldCalcNextStep = true;
+
     switch (element.type) {
       case ElementType.CONTENT_TEXT: {
         const contentTextElement = element as ContentTextUIElement;
@@ -298,10 +302,13 @@ export class MyTelegramBot {
         const inputVariable = this._utils.getVariableById(
           inputTextElement.variableId
         );
-        userContext.updateVariable(
-          inputVariable.name,
-          (context.message as Message.TextMessage).text
+
+        const typedValueFromText = this._utils.getTypedValueFromText(
+          (context.message as Message.TextMessage).text,
+          inputVariable.type
         );
+        
+        userContext.updateVariable(inputVariable.name, typedValueFromText);
         break;
       }
       case ElementType.LOGIC_CHANGE_VARIABLE: {
@@ -311,32 +318,51 @@ export class MyTelegramBot {
         );
         break;
       }
+      case ElementType.LOGIC_CONDITION: {
+        shouldCalcNextStep = this.handleLogicConditionElement(
+          element as ConditionUIElement,
+          userContext
+        );
+        break;
+      }
     }
 
-    this.setNextStep(userContext, context, block, element);
+    if (shouldCalcNextStep) {
+      this.calcNextStep(userContext, block, element);
+    }
+
+    void this.checkNextElement(userContext, context);
   }
 
-  private setNextStep(
-    userContext: UserContext,
-    context: NarrowedContext<Context<Update>, Update.MessageUpdate<Message>>,
-    currentBlock: FlowDesignerUIBlockDescription,
-    currentElement: UIElement
-  ) {
-    // const isLastElement = block.elements[block.elements.length - 1] === element;
-    // let currentBlock = block;
-    // let currentElement = element;
-
-    // if (isLastElement) {
-    //   const link = this._utils.getLinkFromBlock(currentBlock);
-    //   if()
-    // }
-
-    this.saveNextStepInUserContext(userContext, currentBlock, currentElement);
-
-    void this.checkNextElement(
-      userContext,
-      context
+  private handleLogicConditionElement(
+    element: ConditionUIElement,
+    userContext: UserContext
+  ): boolean {
+    const conditionIsTrue = ConditionChecker.check(
+      element,
+      this._utils,
+      userContext
     );
+
+    if (conditionIsTrue) {
+      const link = this._botProject.links.find(
+        (l) => (l.output as ButtonPortDescription).buttonId === element.id
+      );
+      if (isNil(link)) {
+        return true;
+      }
+
+      const block = this._utils.getBlockById(link.input.blockId);
+
+      userContext.setNextStep({
+        blockId: block.id,
+        elementId: block.elements[0].id,
+      });
+
+      return false;
+    }
+
+    return true;
   }
 
   private handleChangeVariableElement(
@@ -475,6 +501,7 @@ export class MyTelegramBot {
     }
 
     switch (nextElement.type) {
+      case ElementType.LOGIC_CONDITION:
       case ElementType.LOGIC_CHANGE_VARIABLE:
       case ElementType.CONTENT_TEXT: {
         await this.handleElement(userContext, context, block, nextElement);

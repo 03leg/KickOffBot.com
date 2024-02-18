@@ -1,4 +1,4 @@
-import { type ContentTextUIElement, ElementType, type InputTextUIElement, type FlowDesignerUIBlockDescription, type UIElement, type InputButtonsUIElement, type FlowDesignerLink, type ButtonPortDescription, type BotVariable, BlockType, TransformDescription, ChangeVariableUIElement } from "@kickoffbot.com/types";
+import { type ContentTextUIElement, ElementType, type InputTextUIElement, type FlowDesignerUIBlockDescription, type UIElement, type InputButtonsUIElement, type FlowDesignerLink, type ButtonPortDescription, type BotVariable, BlockType, TransformDescription, ChangeVariableUIElement, ConditionUIElement } from "@kickoffbot.com/types";
 import MessageIcon from '@mui/icons-material/Message';
 import TextFieldsIcon from '@mui/icons-material/TextFields';
 import SmartButtonIcon from '@mui/icons-material/SmartButton';
@@ -11,6 +11,7 @@ import { throwIfNil } from "~/utils/guard";
 import { APP_ELEMENT_ROLE } from "./constants";
 import { PositionDescription } from "@kickoffbot.com/types";
 import EditNoteIcon from '@mui/icons-material/EditNote';
+import ForkLeftIcon from '@mui/icons-material/ForkLeft';
 
 export function getContentElements() {
     return [
@@ -35,6 +36,7 @@ export function getInputElements() {
 export function getLogicElements() {
     return [
         { type: ElementType.LOGIC_CHANGE_VARIABLE, title: 'Change variable', icon: <EditNoteIcon /> },
+        { type: ElementType.LOGIC_CONDITION, title: 'Condition', icon: <ForkLeftIcon /> },
     ];
 }
 
@@ -62,7 +64,7 @@ export function needToChangeId(id: string): boolean {
 //     ]
 // );
 
-export function getNewUIElementTemplate(id: string, data: DraggableElementData) {
+export function getNewUIElementTemplate(id: string, data: DraggableElementData): UIElement {
     // if (map.has(data.type)) {
     //     const template = map.get(data.type);
     //     return template;
@@ -97,6 +99,15 @@ export function getNewUIElementTemplate(id: string, data: DraggableElementData) 
 
             return result;
         }
+        case ElementType.LOGIC_CONDITION:
+            {
+                const result: ConditionUIElement = {
+                    id,
+                    type: ElementType.LOGIC_CONDITION,
+                };
+
+                return result;
+            }
         default: {
             throw Error('NotImplementedError');
         }

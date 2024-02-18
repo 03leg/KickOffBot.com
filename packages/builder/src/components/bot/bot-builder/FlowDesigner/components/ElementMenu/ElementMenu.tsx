@@ -9,8 +9,9 @@ import { useConfirm } from 'material-ui-confirm';
 import { TextContentEditor } from '../elements/TextContent/Editor';
 import { ButtonsEditor } from '../elements/ButtonsInput/Editor';
 import { TextInputEditor } from '../elements/TextInput/Editor';
-import { ChangeVariableUIElement, ContentTextUIElement, ElementType, InputButtonsUIElement, InputTextUIElement, OutputPortDescription, UIElement } from '@kickoffbot.com/types';
+import { ChangeVariableUIElement, ConditionUIElement, ContentTextUIElement, ElementType, InputButtonsUIElement, InputTextUIElement, OutputPortDescription, UIElement } from '@kickoffbot.com/types';
 import { ChangeVariableEditor } from '../elements/ChangeVariable/Editor';
+import { ConditionEditor } from '../elements/Condition/Editor';
 
 
 
@@ -80,7 +81,7 @@ export const ElementMenu = ({ element }: Props) => {
                 return { content: (<TextInputEditor element={newElement} />), title: 'Text Input Editor', newElement };
 
             }
-            case ElementType.LOGIC_CHANGE_VARIABLE:{
+            case ElementType.LOGIC_CHANGE_VARIABLE: {
                 const initialElement = elementArg as ChangeVariableUIElement;
                 const newElement: ChangeVariableUIElement = {
                     ...initialElement
@@ -89,6 +90,14 @@ export const ElementMenu = ({ element }: Props) => {
                 return { content: (<ChangeVariableEditor element={newElement} />), title: 'Change variable value', newElement };
 
             }
+            case ElementType.LOGIC_CONDITION:
+                {
+                    const initialElement = elementArg as ConditionUIElement;
+                    const newElement: ConditionUIElement = JSON.parse(JSON.stringify(initialElement));
+
+                    return { content: (<ConditionEditor element={newElement} />), title: 'Configure condition', newElement };
+
+                }
             default: {
                 throw new Error('NotImplementedError');
             }
@@ -101,7 +110,7 @@ export const ElementMenu = ({ element }: Props) => {
 
         confirm({ content, title })
             .then(() => {
-                // console.log('newElement', newElement);
+                console.log('newElement', newElement);
 
                 const index = block.elements.findIndex(e => e.id === newElement.id);
                 block.elements[index] = newElement;

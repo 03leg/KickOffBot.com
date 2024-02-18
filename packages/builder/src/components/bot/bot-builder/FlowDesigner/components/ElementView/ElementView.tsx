@@ -12,6 +12,7 @@ import { ButtonsInput } from '../elements/ButtonsInput/ButtonsInput';
 import { FlowDesignerContext } from '../../context';
 import { ElementMenu } from '../ElementMenu';
 import { ChangeVariable } from '../elements/ChangeVariable';
+import { Condition } from '../elements/Condition';
 
 interface Props {
     element: UIElement;
@@ -37,6 +38,10 @@ export const ElementView = ({ element, scale }: Props) => {
             }
             case ElementType.LOGIC_CHANGE_VARIABLE: {
                 result = (<ChangeVariable element={element} />)
+                break;
+            }
+            case ElementType.LOGIC_CONDITION:{
+                result = <Condition  element={element}/>
                 break;
             }
             default: {

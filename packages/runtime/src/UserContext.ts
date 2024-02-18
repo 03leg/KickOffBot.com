@@ -48,7 +48,7 @@ export class UserContext {
     this._variables.set(name, newValue);
   }
 
-  public getVariableValueByName(name: string): string {
+  public getVariableValueByName(name: string): string | number | boolean {
     const result = this._variables.get(name);
 
     if (isNil(result)) {

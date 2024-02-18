@@ -13,7 +13,9 @@ export enum ElementType {
   INPUT_EMAIL = "input-email",
   INPUT_DATE = "input-date",
   INPUT_PHONE = "input-phone",
+
   LOGIC_CHANGE_VARIABLE = "logic-change-variable",
+  LOGIC_CONDITION = "logic-condition",
 }
 
 export interface UIElement {
@@ -31,6 +33,40 @@ export interface FileDescription {
   url: string;
   typeContent: ContentType;
   size: number;
+}
+
+export enum ConditionOperator {
+  //base
+  EQUAL_TO = "EQUAL_TO",
+  NOT_EQUAL_TO = "NOT_EQUAL_TO",
+  // number
+  GREATER_THAN = "GREATER_THAN",
+  LESS_THAN = "LESS_THAN",
+  // string
+  CONTAINS = "CONTAINS",
+  DOES_NOT_CONTAIN = "DOES_NOT_CONTAIN",
+  IS_EMPTY = "IS_EMPTY",
+  STARTS_WITH = "STARTS_WITH",
+  END_WITH = "END_WITH",
+  MATCHES_REGEX = "MATCHES_REGEX",
+  DOES_NOT_MATCHES_REGEX = "DOES_NOT_MATCHES_REGEX",
+}
+
+export enum LogicalOperator {
+  AND = "AND",
+  OR = "OR",
+}
+export interface ConditionItem {
+  id: string;
+  variableId: BotVariable["id"];
+  operator?: ConditionOperator;
+  value?: string | number | boolean;
+  variableIdValue: string;
+}
+
+export interface ConditionUIElement extends UIElement {
+  items: ConditionItem[];
+  logicalOperator: LogicalOperator;
 }
 
 export interface ChangeVariableUIElement extends UIElement {
@@ -91,7 +127,7 @@ export interface FlowDesignerUIBlockDescription {
 export enum PortType {
   BLOCK,
   ELEMENT,
-  BUTTONS_ELEMENT
+  BUTTONS_ELEMENT,
 }
 
 export interface PortDescription {

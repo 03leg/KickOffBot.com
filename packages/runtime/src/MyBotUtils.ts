@@ -9,6 +9,7 @@ import {
   FlowDesignerUIBlockDescription,
   PortType,
   UIElement,
+  VariableType,
 } from "@kickoffbot.com/types";
 import { Parser } from "expr-eval";
 
@@ -83,13 +84,13 @@ export class MyBotUtils {
     const matches1 = text.matchAll(/&lt;%variables.(.*?)%&gt;/g);
     for (const m of matches1) {
       const value = userContext.getVariableValueByName(m[1]);
-      text = text.replace(m[0], value);
+      text = text.replace(m[0], value as string);
     }
 
     const matches2 = text.matchAll(/<%variables.(.*?)%>/g);
     for (const m of matches2) {
       const value = userContext.getVariableValueByName(m[1]);
-      text = text.replace(m[0], value);
+      text = text.replace(m[0], value as string);
     }
 
     return text;
@@ -154,5 +155,26 @@ export class MyBotUtils {
     } catch {}
 
     return null;
+  }
+
+  getTypedValueFromText(text: string, type: VariableType) {
+    switch (type) {
+      case VariableType.STRING: {
+        return text;
+      }
+      case VariableType.NUMBER: {
+        const strNumber = text.replace(/\s/g, "");
+        let numberResult = Number(strNumber);
+
+        if (numberResult === Number.NaN) {
+          numberResult = Number(strNumber.replace(",", "."));
+        }
+
+        return numberResult;
+      }
+      default: {
+        throw new Error("NotImplementedError");
+      }
+    }
   }
 }
