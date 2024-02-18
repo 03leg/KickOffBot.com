@@ -64,8 +64,8 @@ export const ConditionValueEditor = ({ value, onConditionValueChange, variableTy
         <Box sx={{ marginTop: 2, display: 'flex', alignItems: 'center' }}>
             {isNil(variableIdValue) &&
                 <>
-                    {variableType === VariableType.STRING && <TextField sx={{ marginRight: 1 }} fullWidth variant="outlined" value={value} onChange={handleValueChange} />}
-                    {variableType === VariableType.NUMBER && <TextField type="number" sx={{ marginRight: 1 }} fullWidth variant="outlined" value={value} onChange={handleValueChange} />}
+                    {variableType === VariableType.STRING && <TextField label='Value' sx={{ marginRight: 1 }} fullWidth variant="outlined" value={value} onChange={handleValueChange} />}
+                    {variableType === VariableType.NUMBER && <TextField label='Value' type="number" sx={{ marginRight: 1 }} fullWidth variant="outlined" value={value} onChange={handleValueChange} />}
 
                     {variableType === VariableType.BOOLEAN &&
                         <RadioGroup sx={{ flex: 1 }} value={value} onChange={handleValueChange}>

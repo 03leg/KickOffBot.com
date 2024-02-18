@@ -27,6 +27,13 @@ export const ConditionEditor = ({ element }: Props) => {
         element.logicalOperator = operator;
     }, [element]);
 
+
+    const handleDeleteConditionItem = useCallback((item: ConditionItem) => {
+        const newItems = conditionItems.filter(c => c !== item);
+        setConditionItems(newItems);
+        element.items = newItems;
+    }, [conditionItems, element]);
+
     return (
         <Box>
             {conditionItems.map((conditionItem, index) => <ConditionItemComponent
@@ -35,6 +42,8 @@ export const ConditionEditor = ({ element }: Props) => {
                 showLogicalOperatorSelector={index !== conditionItems.length - 1}
                 nextItemLogicalOperator={nextItemLogicalOperator}
                 onNextItemLogicalOperatorChange={handleNextItemLogicalOperatorChange}
+                index={index + 1}
+                onDeleteCondition={handleDeleteConditionItem}
             />)}
             <Button sx={{ marginTop: 3 }} fullWidth onClick={handleAddCondition} variant='contained' color='success'>Add condition</Button>
         </Box>

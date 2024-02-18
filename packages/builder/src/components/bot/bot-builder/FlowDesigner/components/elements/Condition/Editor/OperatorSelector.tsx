@@ -1,5 +1,5 @@
 import { ConditionOperator, VariableType } from '@kickoffbot.com/types';
-import { FormControl, MenuItem, Select, SelectChangeEvent } from '@mui/material';
+import { FormControl, InputLabel, MenuItem, Select, SelectChangeEvent } from '@mui/material';
 import { isNil } from 'lodash';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { getConditionOperatorLabelByType } from '../utils';
@@ -57,7 +57,11 @@ export const OperatorSelector = ({ variableType, onOperatorChange, operator }: P
 
     return (
         <FormControl fullWidth sx={{ marginTop: 2 }}>
+            <InputLabel id="operator-selector-label">Operator</InputLabel>
+
             <Select
+                labelId='operator-selector-label'
+                label='Operator'
                 value={operator}
                 onChange={handleOperatorChange}
             >

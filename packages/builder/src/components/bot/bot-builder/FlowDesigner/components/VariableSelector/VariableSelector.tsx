@@ -1,4 +1,4 @@
-import { FormControl, MenuItem, Select, Typography, type SelectChangeEvent } from '@mui/material'
+import { FormControl, MenuItem, Select, Typography, type SelectChangeEvent, InputLabel } from '@mui/material'
 import React, { useCallback, useMemo } from 'react'
 import { type VariableType, type BotVariable } from '@kickoffbot.com/types';
 import { useFlowDesignerStore } from '../../../store';
@@ -39,14 +39,16 @@ export const VariableSelector = ({ valueId, variableTypes, onVariableChange }: P
         <>
             {currentVariables.length === 0 &&
                 <Typography textAlign={'center'}>
-                    You project doesn&lsquo;t have variables yet.<br/>
+                    You project doesn&lsquo;t have variables yet.<br />
                 </Typography>
             }
             {currentVariables.length > 0 &&
                 <FormControl fullWidth>
+                    <InputLabel id="variable-selector-label">Variable</InputLabel>
                     <Select
                         labelId="variable-selector-label"
                         value={valueId}
+                        label='Variable'
                         onChange={handleVariableChange}
                     >
                         {currentVariables.map(v =>

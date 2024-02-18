@@ -1,21 +1,25 @@
 import React, { useCallback, useMemo, useState } from 'react'
 import { VariableSelector } from '../../../VariableSelector'
-import { Box } from '@mui/material'
+import { Box, IconButton, Typography } from '@mui/material'
 import { BotVariable, ConditionItem, ConditionOperator, LogicalOperator, VariableType } from '@kickoffbot.com/types'
 import { OperatorSelector } from './OperatorSelector'
 import { ConditionValueEditor } from './ConditionValueEditor';
 import { LogicalOperatorComponent } from './LogicalOperatorComponent'
 import { useFlowDesignerStore } from '~/components/bot/bot-builder/store'
-import { isNil } from 'lodash'
+import { isNil } from 'lodash';
+import DeleteIcon from '@mui/icons-material/Delete';
+
 
 interface Props {
     item: ConditionItem;
     showLogicalOperatorSelector: boolean;
     nextItemLogicalOperator: LogicalOperator;
     onNextItemLogicalOperatorChange: (value: LogicalOperator) => void;
+    index: number;
+    onDeleteCondition: (item: ConditionItem) => void;
 }
 
-export const ConditionItemComponent = ({ item, showLogicalOperatorSelector, nextItemLogicalOperator, onNextItemLogicalOperatorChange }: Props) => {
+export const ConditionItemComponent = ({ item, showLogicalOperatorSelector, nextItemLogicalOperator, onNextItemLogicalOperatorChange, index, onDeleteCondition }: Props) => {
     const [selectedVariableId, setSelectedVariableId] = useState<BotVariable['id'] | undefined>(item.variableId ?? undefined);
     const [conditionOperator, setConditionOperator] = useState<ConditionOperator | undefined>(item.operator ?? undefined);
     const { getVariableById } = useFlowDesignerStore((state) => ({
@@ -78,6 +82,11 @@ export const ConditionItemComponent = ({ item, showLogicalOperatorSelector, next
 
     return (
         <Box sx={{ padding: 2, paddingTop: 0 }}>
+            <Typography variant='h6' sx={{ marginBottom: 1 }}>Condition #{index}
+                <IconButton sx={{ marginLeft: 1 }} onClick={() => onDeleteCondition(item)}>
+                    <DeleteIcon />
+                </IconButton>
+            </Typography>
             <VariableSelector onVariableChange={handleVariableChange} valueId={item.variableId} />
             {variableType &&
                 <>
