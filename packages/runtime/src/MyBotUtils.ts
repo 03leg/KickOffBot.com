@@ -166,7 +166,7 @@ export class MyBotUtils {
         const strNumber = text.replace(/\s/g, "");
         let numberResult = Number(strNumber);
 
-        if (numberResult === Number.NaN) {
+        if (Number.isNaN(numberResult)) {
           numberResult = Number(strNumber.replace(",", "."));
         }
 

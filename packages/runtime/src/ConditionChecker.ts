@@ -161,10 +161,10 @@ export class ConditionChecker {
         return currentVariableValue.endsWith(conditionValue);
       }
       case ConditionOperator.MATCHES_REGEX: {
-        return currentVariableValue.match(conditionValue) != null; // (/^([a-z0-9]{4,})$/)
+        return currentVariableValue.match(new RegExp(conditionValue)) != null; // (/^([a-z0-9]{4,})$/)
       }
       case ConditionOperator.DOES_NOT_MATCHES_REGEX: {
-        return currentVariableValue.match(conditionValue) == null; // (/^([a-z0-9]{4,})$/)
+        return currentVariableValue.match(new RegExp(conditionValue)) == null; // (/^([a-z0-9]{4,})$/)
       }
       default: {
         throw new Error("NotImplementedError");

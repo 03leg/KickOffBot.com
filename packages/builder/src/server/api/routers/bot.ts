@@ -7,6 +7,7 @@ import {
   BotDescriptionScheme,
   IdModelScheme,
 } from "~/types/Bot";
+import fs from 'fs';
 
 const prisma = new PrismaClient();
 
@@ -60,6 +61,8 @@ export const botManagementRouter = createTRPCRouter({
       }
 
       console.log("save bot content!", input.project, input.projectId);
+
+      fs.writeFileSync("../runtime/dist/bot.json", input.project);
     }),
 
   getAll: protectedProcedure.query(({ ctx }) => {
