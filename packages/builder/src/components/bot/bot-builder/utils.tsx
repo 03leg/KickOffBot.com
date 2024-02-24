@@ -1,4 +1,4 @@
-import { type ContentTextUIElement, ElementType, type InputTextUIElement, type FlowDesignerUIBlockDescription, type UIElement, type InputButtonsUIElement, type FlowDesignerLink, type ButtonPortDescription, type BotVariable, BlockType, TransformDescription, ChangeVariableUIElement, ConditionUIElement } from "@kickoffbot.com/types";
+import { type ContentTextUIElement, ElementType, type InputTextUIElement, type FlowDesignerUIBlockDescription, type UIElement, type InputButtonsUIElement, type FlowDesignerLink, type ButtonPortDescription, type BotVariable, BlockType, TransformDescription, ChangeVariableUIElement, ConditionUIElement, LogicalOperator } from "@kickoffbot.com/types";
 import MessageIcon from '@mui/icons-material/Message';
 import TextFieldsIcon from '@mui/icons-material/TextFields';
 import SmartButtonIcon from '@mui/icons-material/SmartButton';
@@ -104,6 +104,7 @@ export function getNewUIElementTemplate(id: string, data: DraggableElementData):
                 const result: ConditionUIElement = {
                     id,
                     type: ElementType.LOGIC_CONDITION,
+                    logicalOperator: LogicalOperator.AND
                 };
 
                 return result;
@@ -231,3 +232,4 @@ export const canLink = (newLink: FlowDesignerLink, links: FlowDesignerLink[]) =>
 export const getTextVariableReference = (variable: BotVariable): string => {
     return `<%variables.${variable.name}%>`;
 }
+
