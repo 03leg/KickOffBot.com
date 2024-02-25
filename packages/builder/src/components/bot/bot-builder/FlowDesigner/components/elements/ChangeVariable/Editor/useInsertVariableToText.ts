@@ -3,10 +3,7 @@ import { isNil } from "lodash";
 import React, { useCallback } from "react";
 import { getTextVariableReference } from "~/components/bot/bot-builder/utils";
 
-export function useInsertVariableToText([value, setValue]: [
-  string,
-  React.Dispatch<React.SetStateAction<string>> | ((newValue: string) => void)
-]) {
+export function useInsertVariableToText(value: string, onChangeValue: (value: string) => void) {
   const [selectionStart, setSelectionStart] = React.useState<number>();
   const inputRef = React.useRef<HTMLInputElement>();
 
@@ -31,9 +28,9 @@ export function useInsertVariableToText([value, setValue]: [
         content.slice(position),
       ].join("");
 
-      setValue(output);
+      onChangeValue(output);
     },
-    [selectionStart, setValue, value]
+    [onChangeValue, selectionStart, value]
   );
 
   return { handleInsertVariable, inputRef, updateSelectionStart };

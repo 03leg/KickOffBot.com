@@ -64,6 +64,14 @@ export interface ConditionItem {
   variableIdValue: string;
 }
 
+export interface PropertyConditionItem {
+  id: string;
+  propertyName: string;
+  operator?: ConditionOperator;
+  value?: string | number | boolean;
+  variableIdValue: string;
+}
+
 export interface ConditionUIElement extends UIElement {
   items: ConditionItem[];
   logicalOperator: LogicalOperator;
@@ -73,13 +81,44 @@ export interface ChangeVariableUIElement extends UIElement {
   selectedVariableId?: BotVariable["id"];
   workflowDescription?:
     | ChangeNumberStringVariableWorkflow
-    | ChangeBooleanVariableWorkflow;
+    | ChangeBooleanVariableWorkflow
+    | ChangeObjectVariableWorkflow;
 }
 
 export enum ChangeBooleanVariableWorkflowStrategy {
   SET_TRUE,
   SET_FALSE,
   TOGGLE,
+}
+
+export enum ChangeObjectVariableDataSource {
+  JSON,
+  VARIABLE,
+}
+
+export enum ArrayFilterType {
+  FIRST = "FIRST",
+  LAST = "LAST",
+  RANDOM_ITEM = "RANDOM_ITEM",
+  CONDITIONS = "CONDITIONS",
+}
+
+export interface ArrayFilter {
+  mode: ArrayFilterType;
+  conditions?: PropertyConditionItem[];
+  logicalOperator: LogicalOperator;
+}
+
+export interface VariableValueSource {
+  variableId: BotVariable["id"];
+  path?: string;
+  arrayFilter?: ArrayFilter;
+}
+
+export interface ChangeObjectVariableWorkflow {
+  source: ChangeObjectVariableDataSource;
+  json?: string;
+  variableSource?: VariableValueSource;
 }
 
 export interface ChangeBooleanVariableWorkflow {
@@ -161,6 +200,7 @@ export interface BotVariable {
   id: string;
   name: string;
   type: VariableType;
+  arrayItemType?: Omit<VariableType, VariableType.ARRAY>;
   value: unknown;
 }
 

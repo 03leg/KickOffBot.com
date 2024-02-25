@@ -1,10 +1,11 @@
-import { BotVariable, ChangeBooleanVariableWorkflow, ChangeNumberStringVariableWorkflow, ChangeVariableUIElement, VariableType } from '@kickoffbot.com/types';
+import { BotVariable, ChangeBooleanVariableWorkflow, ChangeNumberStringVariableWorkflow, ChangeObjectVariableWorkflow, ChangeVariableUIElement, VariableType } from '@kickoffbot.com/types';
 import { Box, Typography } from '@mui/material';
 import React, { useCallback, useMemo, useState } from 'react'
 import { VariableSelector } from '../../../VariableSelector';
 import { NumberStringTypeVariableEditor } from './NumberStringTypeVariableEditor';
 import { useFlowDesignerStore } from '~/components/bot/bot-builder/store';
 import { BooleanTypeVariableEditor } from './BooleanTypeVariableEditor';
+import { ObjectTypeVariableEditor } from './ObjectTypeVariableEditor';
 
 interface Props {
     element: ChangeVariableUIElement;
@@ -39,7 +40,7 @@ export const ChangeVariableEditor = ({ element }: Props) => {
 
 
     // eslint-disable-next-line @typescript-eslint/no-redundant-type-constituents
-    const handleWorkflowChange = useCallback((workflow: ChangeNumberStringVariableWorkflow | ChangeBooleanVariableWorkflow) => {
+    const handleWorkflowChange = useCallback((workflow: ChangeNumberStringVariableWorkflow | ChangeBooleanVariableWorkflow | ChangeObjectVariableWorkflow) => {
         element.workflowDescription = workflow;
     }, [element]);
 
@@ -53,7 +54,10 @@ export const ChangeVariableEditor = ({ element }: Props) => {
             {(variableType !== null && (variableType === VariableType.BOOLEAN) &&
                 <BooleanTypeVariableEditor workflow={element.workflowDescription as ChangeBooleanVariableWorkflow} onWorkflowChange={handleWorkflowChange} />
             )}
-            {(variableType !== null && (variableType === VariableType.ARRAY || variableType === VariableType.OBJECT) &&
+             {(variableType !== null && (variableType === VariableType.OBJECT) &&
+                <ObjectTypeVariableEditor workflow={element.workflowDescription as ChangeObjectVariableWorkflow} onWorkflowChange={handleWorkflowChange} />
+            )}
+            {(variableType !== null && (variableType === VariableType.ARRAY) &&
                 <Typography>Sorry we yet don&#39;t have editor for type {variableType}</Typography>
             )}
 

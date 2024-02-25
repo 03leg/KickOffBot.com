@@ -10,7 +10,7 @@ interface Props {
 
 export const NumberStringTypeVariableEditor = ({ workflow, onWorkflowChange }: Props) => {
     const [expression, setExpression] = useState<string>(workflow?.expression ?? '');
-    const { handleInsertVariable, inputRef, updateSelectionStart } = useInsertVariableToText([expression, setExpression]);
+    const { handleInsertVariable, inputRef, updateSelectionStart } = useInsertVariableToText(expression, (newValue)=>setExpression(newValue));
 
     const handleValueChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
         onWorkflowChange({ expression: event.target.value });

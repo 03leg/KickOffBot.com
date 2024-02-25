@@ -16,13 +16,14 @@ interface Props {
 
 export const ConditionValueEditor = ({ value, onConditionValueChange, variableType, variableIdValue }: Props) => {
     const { classes: variableClasses } = useVariableInTextStyles();
+    //   console.log('rerender condition value editor', value);kv
 
     const handleValueChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
         let newValue: boolean | number | string | undefined = undefined;
 
         switch (variableType) {
             case VariableType.BOOLEAN: {
-                newValue = Boolean(event.target.value);
+                newValue = event.target.value === 'true';
                 break;
             }
             case VariableType.NUMBER: {
@@ -82,7 +83,7 @@ export const ConditionValueEditor = ({ value, onConditionValueChange, variableTy
                 </IconButton>
             </Box>}
 
-            <VariableSelectorDialog onInsertVariable={handleInsertVariable} requiredVariableType={variableType}/>
+            <VariableSelectorDialog onInsertVariable={handleInsertVariable} requiredVariableType={variableType} />
         </Box >
     )
 }

@@ -12,6 +12,8 @@ export const VariableEditor = ({ variable, onVariableChange }: Props) => {
     const [name, setName] = useState<string>(variable.name);
     const [type, setType] = useState<string>(variable.type);
     const [value, setValue] = useState<string | number | boolean>(variable.value as never);
+    const [arrayItemtype, setArrayItemType] = useState<string | undefined>(variable.type === VariableType.ARRAY ? variable.arrayItemType?.toString() : undefined);
+
 
     const handleNameChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
         setName(event.target.value);
@@ -52,6 +54,35 @@ export const VariableEditor = ({ variable, onVariableChange }: Props) => {
                 break;
             }
             case VariableType.ARRAY: {
+                setArrayItemType(VariableType.OBJECT);
+                setVariableValue('[\n{\n "productId": 1,\n "productName": "Product #123",\n "price": 123\n},\n{\n "productId": 2,\n "productName": "Product #321",\n "price": 321\n}\n]')
+                break;
+            }
+        }
+
+        onVariableChange(variable);
+
+    }, [onVariableChange, setVariableValue, variable]);
+
+    const handleArrayItemTypeChange = useCallback((event: SelectChangeEvent<string>) => {
+        setArrayItemType(event.target.value);
+        variable.arrayItemType = event.target.value as VariableType;
+
+
+        switch (variable.arrayItemType) {
+            case VariableType.STRING: {
+                setVariableValue("['item1', 'item2', 'item3']")
+                break;
+            }
+            case VariableType.NUMBER: {
+                setVariableValue("[1, 2, 6, 7, 8]")
+                break;
+            }
+            case VariableType.BOOLEAN: {
+                setVariableValue("[true, false, false, true, true]")
+                break;
+            }
+            case VariableType.OBJECT: {
                 setVariableValue('[\n{\n "productId": 1,\n "productName": "Product #123",\n "price": 123\n},\n{\n "productId": 2,\n "productName": "Product #321",\n "price": 321\n}\n]')
                 break;
             }
@@ -80,6 +111,23 @@ export const VariableEditor = ({ variable, onVariableChange }: Props) => {
                     <MenuItem value={VariableType.ARRAY.toString()}>array</MenuItem>
                 </Select>
             </FormControl>
+
+            {type === VariableType.ARRAY.toString() && <FormControl fullWidth sx={{ marginTop: 2 }}>
+                <InputLabel id="type-array-item-select-label">Type of array items</InputLabel>
+                <Select
+                    labelId="type-array-item-select-label"
+                    value={arrayItemtype}
+                    label="Type of array items"
+                    onChange={handleArrayItemTypeChange}
+                >
+                    <MenuItem value={VariableType.STRING.toString()}>string</MenuItem>
+                    <MenuItem value={VariableType.NUMBER.toString()}>number</MenuItem>
+                    <MenuItem value={VariableType.BOOLEAN.toString()}>boolean</MenuItem>
+                    <MenuItem value={VariableType.OBJECT.toString()}>object</MenuItem>
+                </Select>
+            </FormControl>}
+
+
 
             {(type === VariableType.STRING.toString() || type === VariableType.OBJECT.toString() || type === VariableType.ARRAY.toString()) &&
                 (<TextField

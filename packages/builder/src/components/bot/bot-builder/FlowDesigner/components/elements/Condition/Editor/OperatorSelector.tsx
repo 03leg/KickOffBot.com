@@ -62,7 +62,7 @@ export const OperatorSelector = ({ variableType, onOperatorChange, operator }: P
             <Select
                 labelId='operator-selector-label'
                 label='Operator'
-                value={operator}
+                value={operator ?? ''}
                 onChange={handleOperatorChange}
             >
                 {dataSource.map(v =>

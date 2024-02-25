@@ -8,21 +8,26 @@ interface Props {
     valueId?: string;
     variableTypes?: VariableType[];
     onVariableChange: (variable: BotVariable) => void;
+    onCustomVariableFilter?: (variable: BotVariable) => boolean;
 }
 
-export const VariableSelector = ({ valueId, variableTypes, onVariableChange }: Props) => {
+export const VariableSelector = ({ valueId, variableTypes, onVariableChange, onCustomVariableFilter }: Props) => {
     const { variables } = useFlowDesignerStore((state) => ({
         variables: state.project.variables,
     }));
 
 
     const currentVariables = useMemo(() => {
+        if (!isNil(onCustomVariableFilter)) {
+            return variables.filter(v => onCustomVariableFilter(v))
+        }
+
         if (isNil(variableTypes)) {
             return variables;
         }
 
         return variables.filter(v => variableTypes.includes(v.type));
-    }, [variableTypes, variables]);
+    }, [onCustomVariableFilter, variableTypes, variables]);
 
 
     const handleVariableChange = useCallback((event: SelectChangeEvent<string>) => {
@@ -47,7 +52,7 @@ export const VariableSelector = ({ valueId, variableTypes, onVariableChange }: P
                     <InputLabel id="variable-selector-label">Variable</InputLabel>
                     <Select
                         labelId="variable-selector-label"
-                        value={valueId}
+                        value={valueId ?? ''}
                         label='Variable'
                         onChange={handleVariableChange}
                     >
