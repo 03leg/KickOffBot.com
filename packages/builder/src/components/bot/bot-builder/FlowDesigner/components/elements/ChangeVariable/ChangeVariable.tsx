@@ -1,4 +1,4 @@
-import { ChangeBooleanVariableWorkflow, ChangeBooleanVariableWorkflowStrategy, ChangeNumberStringVariableWorkflow, ChangeVariableUIElement, UIElement, VariableType } from '@kickoffbot.com/types';
+import { ChangeBooleanVariableWorkflow, ChangeBooleanVariableWorkflowStrategy, ChangeNumberStringVariableWorkflow, ChangeObjectVariableDataSource, ChangeObjectVariableWorkflow, ChangeVariableUIElement, UIElement, VariableType } from '@kickoffbot.com/types';
 import React, { useMemo } from 'react'
 import { useContentWithVariable, useVariableInTextStyles } from './useContentWithVariable';
 import { useFlowDesignerStore } from '~/components/bot/bot-builder/store';
@@ -58,6 +58,18 @@ export const ChangeVariable = ({ element }: Props) => {
                         {
                             throw new Error('NotImplementedError');
                         }
+                }
+            }
+            case VariableType.OBJECT: {
+                const item = uiElement.workflowDescription as ChangeObjectVariableWorkflow;
+
+                switch (item.source) {
+                    case ChangeObjectVariableDataSource.JSON: {
+                        return '(from JSON)';
+                    }
+                    case ChangeObjectVariableDataSource.VARIABLE: {
+                        return '(from variable)';
+                    }
                 }
             }
 

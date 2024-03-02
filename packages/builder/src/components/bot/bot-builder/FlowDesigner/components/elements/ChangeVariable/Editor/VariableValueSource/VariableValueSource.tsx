@@ -11,9 +11,10 @@ import { object } from 'zod';
 interface Props {
     variableValueSource?: VariableValueSource;
     onVariableValueSourceChange: (variableValueSource: VariableValueSource) => void;
+    filterVariableType: VariableType;
 }
 
-export const VariableValueSourceComponent = ({ variableValueSource, onVariableValueSourceChange }: Props) => {
+export const VariableValueSourceComponent = ({ variableValueSource, onVariableValueSourceChange, filterVariableType }: Props) => {
     const [variableValueSourceLocal, setVariableValueSourceLocal] = useState<VariableValueSource>(variableValueSource ?? {} as VariableValueSource);
 
     const handleVariableChange = useCallback((variable: BotVariable) => {
@@ -30,8 +31,16 @@ export const VariableValueSourceComponent = ({ variableValueSource, onVariableVa
 
     const handleCustomVariableFilter = useCallback((variable: BotVariable) => {
         try {
-            if (variable.type === VariableType.OBJECT && JSON.parse(variable.value as string) instanceof Object || (variable.type === VariableType.ARRAY && JSON.parse(variable.value as string) instanceof Array)) {
+            if (variable.type === VariableType.OBJECT && JSON.parse(variable.value as string) instanceof Object) {
                 return true;
+            }
+
+            if ((variable.type === VariableType.ARRAY && JSON.parse(variable.value as string) instanceof Array)) {
+                const defaultValue = JSON.parse(variable.value as string) as unknown[];
+                if (defaultValue.length > 0 && (typeof defaultValue[0] === 'object' && filterVariableType === VariableType.OBJECT)) {
+                    return true;
+                }
+
             }
         }
         catch {
@@ -39,7 +48,7 @@ export const VariableValueSourceComponent = ({ variableValueSource, onVariableVa
         }
 
         return false;
-    }, []);
+    }, [filterVariableType]);
 
     const arrayObject = useMemo(() => {
         const defaultValue = (isNil(selectedVariable) || isEmpty(selectedVariable.value)) ? null : JSON.parse(selectedVariable.value as string);
@@ -58,6 +67,20 @@ export const VariableValueSourceComponent = ({ variableValueSource, onVariableVa
 
         return null;
     }, [selectedVariable, variableValueSource?.path]);
+
+    const isSuitableSourceType = useMemo(() => {
+        if (isNil(arrayObject)) {
+            return false;
+        }
+
+        if (filterVariableType === VariableType.OBJECT) {
+            if (typeof arrayObject === 'object') {
+                return true;
+            }
+        }
+
+        return false;
+    }, [arrayObject, filterVariableType])
 
     useEffect(() => {
         onVariableValueSourceChange(variableValueSourceLocal);
@@ -80,13 +103,14 @@ export const VariableValueSourceComponent = ({ variableValueSource, onVariableVa
 
         if (typeof dataObject === 'object' && !isNil(dataObject)) {
             for (const propName of Object.keys(dataObject)) {
-                if (dataObject[propName] instanceof Array || typeof dataObject[propName] === 'object') {
+                if (!isNil(dataObject[propName]) && (dataObject[propName] instanceof Array ||
+                    (typeof dataObject[propName] === 'object' && filterVariableType === VariableType.OBJECT))) {
                     result.push(propName);
                 }
             }
         }
         return result;
-    }, [selectedVariable]);
+    }, [filterVariableType, selectedVariable]);
 
     return (
         <Box sx={{ marginTop: 2 }}>
@@ -99,7 +123,7 @@ export const VariableValueSourceComponent = ({ variableValueSource, onVariableVa
                         propsDataSource={availableProps}
                     />
                 </Box>}
-            {(arrayObject !== null) &&
+            {(arrayObject !== null && isSuitableSourceType) &&
                 <ArrayFilterComponent arrayObject={arrayObject}
                     arrayFilter={variableValueSourceLocal.arrayFilter}
                     onArrayFilterChange={handleArrayFilterChange} />}

@@ -1,4 +1,4 @@
-import { BotVariable, ChangeObjectVariableDataSource, ChangeObjectVariableWorkflow, VariableValueSource } from '@kickoffbot.com/types';
+import { BotVariable, ChangeObjectVariableDataSource, ChangeObjectVariableWorkflow, VariableType, VariableValueSource } from '@kickoffbot.com/types';
 import { Box, FormControlLabel, Radio, RadioGroup, TextField } from '@mui/material';
 import React, { useCallback, useEffect } from 'react'
 import { useInsertVariableToText } from '../useInsertVariableToText';
@@ -63,7 +63,7 @@ export const ObjectTypeVariableEditor = ({ workflow, onWorkflowChange }: Props) 
             </Box>}
 
             {workflowValue.source === ChangeObjectVariableDataSource.VARIABLE &&
-                <VariableValueSourceComponent variableValueSource={workflowValue.variableSource} onVariableValueSourceChange={handleVariableValueSourceChange} />
+                <VariableValueSourceComponent filterVariableType={VariableType.OBJECT} variableValueSource={workflowValue.variableSource} onVariableValueSourceChange={handleVariableValueSourceChange} />
             }
         </Box>
     )
