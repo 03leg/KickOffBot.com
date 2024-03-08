@@ -1,4 +1,4 @@
-import { BotVariable, ChangeBooleanVariableWorkflow, ChangeNumberStringVariableWorkflow, ChangeObjectVariableWorkflow, ChangeVariableUIElement, VariableType } from '@kickoffbot.com/types';
+import { BotVariable, ChangeArrayVariableWorkflow, ChangeBooleanVariableWorkflow, ChangeNumberStringVariableWorkflow, ChangeObjectVariableWorkflow, ChangeVariableUIElement, VariableType } from '@kickoffbot.com/types';
 import { Box, Typography } from '@mui/material';
 import React, { useCallback, useMemo, useState } from 'react'
 import { VariableSelector } from '../../../VariableSelector';
@@ -6,6 +6,7 @@ import { NumberStringTypeVariableEditor } from './NumberStringTypeVariableEditor
 import { useFlowDesignerStore } from '~/components/bot/bot-builder/store';
 import { BooleanTypeVariableEditor } from './BooleanTypeVariableEditor';
 import { ObjectTypeVariableEditor } from './ObjectTypeVariableEditor';
+import { ArrayTypeVariableEditor } from './ArrayTypeVariableEditor';
 
 interface Props {
     element: ChangeVariableUIElement;
@@ -37,10 +38,28 @@ export const ChangeVariableEditor = ({ element }: Props) => {
         }
     }, [element]);
 
+    const arrayItemType = useMemo(() => {
+        return getVariableById(selectedVariableId)?.arrayItemType ?? null;
+    }, [getVariableById, selectedVariableId]);
+
+    const firstItemOfArray = useMemo(() => {
+        const variable = getVariableById(selectedVariableId);
+        if (variable?.type !== VariableType.ARRAY) {
+            return null;
+        }
+
+        const arrayValue = JSON.parse(variable.value as string);
+        if (arrayValue instanceof Array && arrayValue.length > 0) {
+            return arrayValue[0] as unknown;
+        }
+
+        return null;
+    }, [getVariableById, selectedVariableId]);
+
 
 
     // eslint-disable-next-line @typescript-eslint/no-redundant-type-constituents
-    const handleWorkflowChange = useCallback((workflow: ChangeNumberStringVariableWorkflow | ChangeBooleanVariableWorkflow | ChangeObjectVariableWorkflow) => {
+    const handleWorkflowChange = useCallback((workflow: ChangeNumberStringVariableWorkflow | ChangeBooleanVariableWorkflow | ChangeObjectVariableWorkflow | ChangeArrayVariableWorkflow) => {
         element.workflowDescription = workflow;
     }, [element]);
 
@@ -54,11 +73,11 @@ export const ChangeVariableEditor = ({ element }: Props) => {
             {(variableType !== null && (variableType === VariableType.BOOLEAN) &&
                 <BooleanTypeVariableEditor workflow={element.workflowDescription as ChangeBooleanVariableWorkflow} onWorkflowChange={handleWorkflowChange} />
             )}
-             {(variableType !== null && (variableType === VariableType.OBJECT) &&
+            {(variableType !== null && (variableType === VariableType.OBJECT) &&
                 <ObjectTypeVariableEditor workflow={element.workflowDescription as ChangeObjectVariableWorkflow} onWorkflowChange={handleWorkflowChange} />
             )}
-            {(variableType !== null && (variableType === VariableType.ARRAY) &&
-                <Typography>Sorry we yet don&#39;t have editor for type {variableType}</Typography>
+            {(variableType !== null && (variableType === VariableType.ARRAY) && arrayItemType &&
+                <ArrayTypeVariableEditor jsonTypeOfArrayItem={arrayItemType} firstItemOfArray={firstItemOfArray} workflow={element.workflowDescription as ChangeArrayVariableWorkflow} onWorkflowChange={handleWorkflowChange} />
             )}
 
         </Box>

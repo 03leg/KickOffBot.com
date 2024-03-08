@@ -82,7 +82,8 @@ export interface ChangeVariableUIElement extends UIElement {
   workflowDescription?:
     | ChangeNumberStringVariableWorkflow
     | ChangeBooleanVariableWorkflow
-    | ChangeObjectVariableWorkflow;
+    | ChangeObjectVariableWorkflow
+    | ChangeArrayVariableWorkflow;
 }
 
 export enum ChangeBooleanVariableWorkflowStrategy {
@@ -119,6 +120,47 @@ export interface ChangeObjectVariableWorkflow {
   source: ChangeObjectVariableDataSource;
   json?: string;
   variableSource?: VariableValueSource;
+}
+
+export enum ChangeArrayOperation {
+  Add = "Add",
+  Remove = "Remove",
+  Set = "Set",
+}
+
+export enum AddValueToArraySource {
+  JSON = "JSON",
+  Variable = "Variable",
+}
+
+export interface ValuePathDescription {
+  variableId: BotVariable["id"];
+  path?: string;
+}
+
+// todo: rename to ArrayFilterDescription???
+export interface AddValueToArrayFilterDescription {
+  conditions?: PropertyConditionItem[];
+  logicalOperator?: LogicalOperator;
+}
+
+export interface AddValueToArrayVariableSourceDescription {
+  path: ValuePathDescription;
+  extraFilter?: AddValueToArrayFilterDescription;
+}
+
+export interface AddValueToArrayDescription {
+  source: AddValueToArraySource;
+  variableSourceDescription?: AddValueToArrayVariableSourceDescription;
+}
+
+export type RemoveItemsFromArrayDescription  = AddValueToArrayFilterDescription;
+
+export interface ChangeArrayVariableWorkflow {
+  operation: ChangeArrayOperation;
+  addDescription?: AddValueToArrayDescription;
+  setDescription?: AddValueToArrayDescription;
+  removeDescription?: RemoveItemsFromArrayDescription;
 }
 
 export interface ChangeBooleanVariableWorkflow {
@@ -188,6 +230,7 @@ export interface FlowDesignerLink {
   input: PortDescription;
 }
 
+// todo: rename to JsonType
 export enum VariableType {
   STRING = "string",
   NUMBER = "number",

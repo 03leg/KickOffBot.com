@@ -41,11 +41,13 @@ export const PropertyConditionsComponent = ({ arrayObject, logicalOperator, cond
 
     useEffect(() => {
         onPropertyConditionsChange(conditionItems);
-    }, [conditionItems, onPropertyConditionsChange])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [conditionItems])
 
     useEffect(() => {
         onLogicalOperatorChange(nextItemLogicalOperator);
-    }, [nextItemLogicalOperator, onLogicalOperatorChange]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [nextItemLogicalOperator]);
 
     return (
         <Box>

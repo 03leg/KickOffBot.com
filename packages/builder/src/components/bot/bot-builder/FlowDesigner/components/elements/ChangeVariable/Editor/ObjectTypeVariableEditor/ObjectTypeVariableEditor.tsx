@@ -1,4 +1,4 @@
-import { BotVariable, ChangeObjectVariableDataSource, ChangeObjectVariableWorkflow, VariableType, VariableValueSource } from '@kickoffbot.com/types';
+import { ChangeObjectVariableDataSource, ChangeObjectVariableWorkflow, VariableType, VariableValueSource } from '@kickoffbot.com/types';
 import { Box, FormControlLabel, Radio, RadioGroup, TextField } from '@mui/material';
 import React, { useCallback, useEffect } from 'react'
 import { useInsertVariableToText } from '../useInsertVariableToText';

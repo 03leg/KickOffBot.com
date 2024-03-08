@@ -6,7 +6,6 @@ import { useFlowDesignerStore } from '~/components/bot/bot-builder/store';
 import { ArrayFilterComponent } from './ArrayFilterComponent';
 import { isEmpty, isNil } from 'lodash';
 import { PropertySelector } from './condition/PropertySelector';
-import { object } from 'zod';
 
 interface Props {
     variableValueSource?: VariableValueSource;
