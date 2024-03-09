@@ -188,8 +188,22 @@ export interface ButtonElement {
   content: string;
 }
 
+export enum ButtonsSourceStrategy {
+  Manual ='manual',
+  FromVariable = 'fromVariable',
+}
+
+export interface VariableButtonsSourceStrategyDescription {
+  variableSource?: VariableValueSource;
+  answerVariableId?: string | undefined;
+  propertyName?: string;
+  customTextTemplate?: string;
+}
+
 export interface InputButtonsUIElement extends UIElement {
-  buttons: ButtonElement[];
+  strategy: ButtonsSourceStrategy;
+  buttons?: ButtonElement[];
+  variableButtonsSource?: VariableButtonsSourceStrategyDescription;
 }
 
 export enum BlockType {

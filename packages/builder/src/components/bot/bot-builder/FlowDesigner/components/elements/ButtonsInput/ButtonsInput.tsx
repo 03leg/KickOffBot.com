@@ -1,6 +1,6 @@
 import { Box, Button } from '@mui/material';
 import React from 'react'
-import { PortType, type InputButtonsUIElement, type UIElement } from '@kickoffbot.com/types';
+import { PortType, type InputButtonsUIElement, type UIElement, ButtonsSourceStrategy } from '@kickoffbot.com/types';
 import { OutputPort } from '../../OutputPort';
 
 interface Props {
@@ -37,7 +37,13 @@ export const ButtonsInput = ({ element }: Props) => {
 
     return (
         <div>
-            {uiElement.buttons.map(b => {
+            {uiElement.strategy === ButtonsSourceStrategy.FromVariable && <Box sx={{
+                display: 'flex',
+                justifyContent: 'center',
+                marginBottom: 2,
+                fontWeight: 'bold'
+            }}>(buttons from variable)</Box>}
+            {uiElement.strategy === ButtonsSourceStrategy.Manual && uiElement.buttons?.map(b => {
                 const matches = b.content.matchAll(/<%variables.(.*?)%>/g);
                 let buttonContent = b.content;
 
@@ -48,7 +54,7 @@ export const ButtonsInput = ({ element }: Props) => {
 
                 return (
                     <Box key={b.id} className={classes.button}>
-                        <OutputPort className={classes.port} elementId={uiElement.id} buttonId={b.id} outPortType={PortType.BUTTONS_ELEMENT}/>
+                        <OutputPort className={classes.port} elementId={uiElement.id} buttonId={b.id} outPortType={PortType.BUTTONS_ELEMENT} />
                         <Button sx={{ marginBottom: 1 }} variant="contained" size='small' fullWidth disabled>
                             <div dangerouslySetInnerHTML={{ __html: buttonContent }}></div>
                         </Button>
@@ -56,7 +62,7 @@ export const ButtonsInput = ({ element }: Props) => {
                 )
             })}
             <Box className={classes.button}>
-                <OutputPort className={classes.port} elementId={uiElement.id} buttonId={`default-button-${uiElement.id}`} outPortType={PortType.BUTTONS_ELEMENT}/>
+                <OutputPort className={classes.port} elementId={uiElement.id} buttonId={`default-button-${uiElement.id}`} outPortType={PortType.BUTTONS_ELEMENT} />
                 <Button variant="contained" size='small' fullWidth disabled>Default</Button>
             </Box>
         </div>

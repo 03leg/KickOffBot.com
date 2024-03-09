@@ -67,7 +67,7 @@ export const ElementMenu = ({ element }: Props) => {
                 const initialElement = elementArg as InputButtonsUIElement;
                 const newElement: InputButtonsUIElement = {
                     ...initialElement,
-                    buttons: initialElement.buttons.map(b => ({ ...b }))
+                    buttons: initialElement.buttons?.map(b => ({ ...b })) ?? []
                 };
 
                 return { content: (<ButtonsEditor element={newElement} />), title: 'Buttons Editor', newElement };

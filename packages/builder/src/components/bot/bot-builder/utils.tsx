@@ -1,4 +1,4 @@
-import { type ContentTextUIElement, ElementType, type InputTextUIElement, type FlowDesignerUIBlockDescription, type UIElement, type InputButtonsUIElement, type FlowDesignerLink, type ButtonPortDescription, type BotVariable, BlockType, TransformDescription, ChangeVariableUIElement, ConditionUIElement, LogicalOperator } from "@kickoffbot.com/types";
+import { type ContentTextUIElement, ElementType, type InputTextUIElement, type FlowDesignerUIBlockDescription, type UIElement, type InputButtonsUIElement, type FlowDesignerLink, type ButtonPortDescription, type BotVariable, BlockType, TransformDescription, ChangeVariableUIElement, ConditionUIElement, LogicalOperator, ButtonsSourceStrategy } from "@kickoffbot.com/types";
 import MessageIcon from '@mui/icons-material/Message';
 import TextFieldsIcon from '@mui/icons-material/TextFields';
 import SmartButtonIcon from '@mui/icons-material/SmartButton';
@@ -81,10 +81,11 @@ export function getNewUIElementTemplate(id: string, data: DraggableElementData):
         }
         case ElementType.INPUT_BUTTONS: {
             const result: InputButtonsUIElement = {
-                id, type: ElementType.INPUT_BUTTONS, buttons: [
+                id, 
+                strategy: ButtonsSourceStrategy.Manual,
+                type: ElementType.INPUT_BUTTONS, 
+                buttons: [
                     { content: "click me, plz...", id: v4() },
-                    // { content: "Button #1", id: v4() },
-                    // { content: "Button #2", id: v4() }
                 ]
             };
             return result;
@@ -104,7 +105,8 @@ export function getNewUIElementTemplate(id: string, data: DraggableElementData):
                 const result: ConditionUIElement = {
                     id,
                     type: ElementType.LOGIC_CONDITION,
-                    logicalOperator: LogicalOperator.AND
+                    logicalOperator: LogicalOperator.AND,
+                    items: []
                 };
 
                 return result;
@@ -231,5 +233,9 @@ export const canLink = (newLink: FlowDesignerLink, links: FlowDesignerLink[]) =>
 
 export const getTextVariableReference = (variable: BotVariable): string => {
     return `<%variables.${variable.name}%>`;
+}
+
+export const getTextPropertyReference = (propertyName: string): string => {
+    return `<%${propertyName}%>`;
 }
 
