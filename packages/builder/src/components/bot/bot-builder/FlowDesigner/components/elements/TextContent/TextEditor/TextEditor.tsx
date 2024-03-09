@@ -5,7 +5,7 @@ import 'draft-js/dist/Draft.css';
 import { Colors } from '~/themes/Colors';
 import { FormatBold, FormatItalic } from '@mui/icons-material';
 import { stateToHTML } from "draft-js-export-html";
-import { type BotVariable } from '@kickoffbot.com/types';
+import { VariableType, type BotVariable } from '@kickoffbot.com/types';
 import { VariableSelectorDialog } from '../../../VariableSelectorDialog';
 import { getTextVariableReference } from '~/components/bot/bot-builder/utils';
 
@@ -65,8 +65,8 @@ export const TextEditor = ({ onContentChange, initialState }: TextEditorProps) =
     }, []);
 
 
-    const handleInsertVariable = useCallback((variable: BotVariable) => {
-        const newState = insertText(getTextVariableReference(variable), editorState)
+    const handleInsertVariable = useCallback((variable: BotVariable, path?: string) => {
+        const newState = insertText(getTextVariableReference(variable, path), editorState)
 
         setEditorState(newState);
         generatePublicContentChange(newState);
@@ -84,7 +84,7 @@ export const TextEditor = ({ onContentChange, initialState }: TextEditorProps) =
                     <IconButton aria-label="italic" onClick={handleItalicClick}>
                         <FormatItalic />
                     </IconButton>
-                    <VariableSelectorDialog onInsertVariable={handleInsertVariable} />
+                    <VariableSelectorDialog onInsertVariable={handleInsertVariable} supportPathForObject={true} availableVariableTypes={[VariableType.STRING, VariableType.NUMBER, VariableType.BOOLEAN, VariableType.OBJECT]} />
                 </Box>
             </Box>
         </>

@@ -26,6 +26,8 @@ export const PropertyConditionItemComponent = ({ arrayObject, item, showLogicalO
   const [conditionOperator, setConditionOperator] = useState<ConditionOperator | undefined>(item.operator ?? undefined);
   const [conditionValue, setConditionValue] = useState<string | number | boolean | undefined>(item.value);
   const [conditionVariableIdValue, setConditionVariableIdValue] = useState<string | undefined>(item.variableIdValue);
+  const [pathVariableIdValue, setPathVariableIdValue] = useState<string | undefined>(item.pathVariableIdValue);
+
 
   const pathItemType = useMemo(() => {
     if (typeof arrayObject === 'object') {
@@ -89,7 +91,7 @@ export const PropertyConditionItemComponent = ({ arrayObject, item, showLogicalO
     item.operator = newOperator;
   }, [item]);
 
-  const handleConditionValueChange = useCallback((value: string | number | boolean | undefined, isVariableId: boolean) => {
+  const handleConditionValueChange = useCallback((value: string | number | boolean | undefined, isVariableId: boolean, pathVariableIdValue?: string) => {
     console.log('handleConditionValueChange', value, isVariableId);
     if (isVariableId === false) {
       setConditionValue(value);
@@ -97,7 +99,11 @@ export const PropertyConditionItemComponent = ({ arrayObject, item, showLogicalO
     }
     else {
       item.variableIdValue = value as string;
+      item.pathVariableIdValue = pathVariableIdValue;
+
       setConditionVariableIdValue(item.variableIdValue);
+      setPathVariableIdValue(pathVariableIdValue);
+
 
       if (value === undefined && pathItemType)
         setDefaultValue(pathItemType);
@@ -118,6 +124,7 @@ export const PropertyConditionItemComponent = ({ arrayObject, item, showLogicalO
         <>
           <OperatorSelector variableType={pathItemType} operator={conditionOperator} onOperatorChange={handleConditionOperatorChange} />
           <ConditionValueEditor variableType={pathItemType} value={conditionValue} variableIdValue={conditionVariableIdValue}
+          pathVariableIdValue={pathVariableIdValue}
             onConditionValueChange={handleConditionValueChange} />
         </>
       }

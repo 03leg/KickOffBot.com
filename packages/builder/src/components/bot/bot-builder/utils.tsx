@@ -81,9 +81,9 @@ export function getNewUIElementTemplate(id: string, data: DraggableElementData):
         }
         case ElementType.INPUT_BUTTONS: {
             const result: InputButtonsUIElement = {
-                id, 
+                id,
                 strategy: ButtonsSourceStrategy.Manual,
-                type: ElementType.INPUT_BUTTONS, 
+                type: ElementType.INPUT_BUTTONS,
                 buttons: [
                     { content: "click me, plz...", id: v4() },
                 ]
@@ -231,8 +231,12 @@ export const canLink = (newLink: FlowDesignerLink, links: FlowDesignerLink[]) =>
 
 };
 
-export const getTextVariableReference = (variable: BotVariable): string => {
-    return `<%variables.${variable.name}%>`;
+export const getTextVariableReference = (variable: BotVariable, path?: string): string => {
+    if (isNil(path)) {
+        return `<%variables.${variable.name}%>`;
+    }
+
+    return `<%variables.${variable.name}.${path}%>`
 }
 
 export const getTextPropertyReference = (propertyName: string): string => {

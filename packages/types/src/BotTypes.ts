@@ -59,6 +59,7 @@ export enum LogicalOperator {
 export interface ConditionItem {
   id: string;
   variableId: BotVariable["id"];
+  path?: string;
   operator?: ConditionOperator;
   value?: string | number | boolean;
   variableIdValue: string;
@@ -70,6 +71,7 @@ export interface PropertyConditionItem {
   operator?: ConditionOperator;
   value?: string | number | boolean;
   variableIdValue: string;
+  pathVariableIdValue?: string;
 }
 
 export interface ConditionUIElement extends UIElement {
@@ -259,6 +261,7 @@ export interface BotVariable {
   type: VariableType;
   arrayItemType?: Omit<VariableType, VariableType.ARRAY>;
   value: unknown;
+  runtimeValue: unknown;
 }
 
 export interface BotProject {

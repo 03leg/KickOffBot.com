@@ -16,13 +16,13 @@ const isTypeMatching = (arrayItemType: VariableType, variableType: string | null
     switch (variableType) {
         case 'boolean':
             return arrayItemType === VariableType.BOOLEAN
-        case 'number': 
+        case 'number':
             return arrayItemType === VariableType.NUMBER
         case 'string':
             return arrayItemType === VariableType.STRING
         case 'object':
             return arrayItemType === VariableType.OBJECT
-        default: 
+        default:
             return false
     }
 }
@@ -61,11 +61,25 @@ export const FromVariableStrategyButtonsEditor = ({ value: defaultValue, onValue
             return null;
         }
 
+        const getSuitableKeys = (obj: Record<string, unknown>) => {
+            const result = [];
+
+            for(const key of Object.keys(obj)) {
+                if(obj[key] instanceof Object) {
+                    continue;
+                }
+
+                result.push(key);
+            }
+
+            return result;
+        }
+
         const variableDefaultValue = JSON.parse(variable.value as string);
         if (variableDefaultValue instanceof Array && variableDefaultValue.length > 0) {
             const firstValueOfArray = variableDefaultValue[0];
             if (firstValueOfArray instanceof Object) {
-                return Object.keys(firstValueOfArray);
+                return getSuitableKeys(firstValueOfArray);
             }
 
             return ['value'];
@@ -77,7 +91,7 @@ export const FromVariableStrategyButtonsEditor = ({ value: defaultValue, onValue
             if (variableValue instanceof Array && variableValue.length > 0) {
                 const firstValueOfArray = variableValue[0];
                 if (firstValueOfArray instanceof Object) {
-                    return Object.keys(firstValueOfArray);
+                    return getSuitableKeys(firstValueOfArray);
                 }
 
                 return ['value'];
@@ -103,7 +117,7 @@ export const FromVariableStrategyButtonsEditor = ({ value: defaultValue, onValue
         const variableDefaultValue = JSON.parse(variable.value as string);
         if (variableDefaultValue instanceof Array && variableDefaultValue.length > 0) {
             const firstValueOfArray = variableDefaultValue[0];
-            if(firstValueOfArray instanceof Array){
+            if (firstValueOfArray instanceof Array) {
                 return null;
             }
 
@@ -115,7 +129,7 @@ export const FromVariableStrategyButtonsEditor = ({ value: defaultValue, onValue
 
             if (variableValue instanceof Array && variableValue.length > 0) {
                 const firstValueOfArray = variableValue[0];
-                if(firstValueOfArray instanceof Array){
+                if (firstValueOfArray instanceof Array) {
                     return null;
                 }
 
@@ -132,7 +146,7 @@ export const FromVariableStrategyButtonsEditor = ({ value: defaultValue, onValue
 
     const handleCustomVariableFilter = useCallback((variable: BotVariable) => {
 
-        if(isTypeMatching(variable.type, arrayItemType)){
+        if (isTypeMatching(variable.type, arrayItemType)) {
             return true;
         }
 
@@ -142,9 +156,13 @@ export const FromVariableStrategyButtonsEditor = ({ value: defaultValue, onValue
     return (
         <Box sx={{ display: 'flex', marginTop: 1, flexDirection: 'column' }}>
             <ArrayPathSelectorComponent variableValueSource={value.variableSource} onVariableValueSourceChange={handleVariableValueSourceChange} />
-            {propertyNames && <TextTemplateEditor value={value.customTextTemplate} onValueChange={handleCustomTemplateChange} propertyNames={propertyNames} />}
-            <Typography sx={{ marginTop: 2, marginBottom: 1.5 }}>Save user input to variable:</Typography>
-            <VariableSelector valueId={value.answerVariableId} onVariableChange={handleAnswerVariableChange} onCustomVariableFilter={handleCustomVariableFilter} />
+            {propertyNames &&
+                <>
+                    <TextTemplateEditor value={value.customTextTemplate} onValueChange={handleCustomTemplateChange} propertyNames={propertyNames} />
+                    <Typography sx={{ marginTop: 2, marginBottom: 1.5 }}>Save user input to variable:</Typography>
+                    <VariableSelector valueId={value.answerVariableId} onVariableChange={handleAnswerVariableChange} onCustomVariableFilter={handleCustomVariableFilter} />
+                </>
+            }
         </Box>
     )
 }

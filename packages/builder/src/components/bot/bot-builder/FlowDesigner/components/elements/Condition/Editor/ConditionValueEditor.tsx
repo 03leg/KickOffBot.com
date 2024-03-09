@@ -10,11 +10,12 @@ import DeleteIcon from '@mui/icons-material/Delete';
 interface Props {
     value: string | number | boolean | undefined;
     variableType: VariableType;
-    onConditionValueChange: (newValue: string | number | boolean | undefined, isVariableId: boolean) => void;
+    onConditionValueChange: (newValue: string | number | boolean | undefined, isVariableId: boolean, path?: string) => void;
     variableIdValue: BotVariable['id'] | undefined;
+    pathVariableIdValue?: string | undefined;
 }
 
-export const ConditionValueEditor = ({ value, onConditionValueChange, variableType, variableIdValue }: Props) => {
+export const ConditionValueEditor = ({ value, onConditionValueChange, variableType, variableIdValue, pathVariableIdValue }: Props) => {
     const { classes: variableClasses } = useVariableInTextStyles();
     //   console.log('rerender condition value editor', value);kv
 
@@ -42,8 +43,8 @@ export const ConditionValueEditor = ({ value, onConditionValueChange, variableTy
         onConditionValueChange(newValue, false);
     }, [onConditionValueChange, variableType]);
 
-    const handleInsertVariable = (variable: BotVariable) => {
-        onConditionValueChange(variable.id, true);
+    const handleInsertVariable = (variable: BotVariable, path?: string) => {
+        onConditionValueChange(variable.id, true, path);
     };
 
     const handleDeleteVariable = () => {
@@ -78,12 +79,13 @@ export const ConditionValueEditor = ({ value, onConditionValueChange, variableTy
             }
             {!isNil(variableIdValue) && <Box sx={{ flex: 1 }}>
                 value of <span className={variableClasses.variable}>{variable?.name}</span>
+                {pathVariableIdValue && <span> (property <span className={variableClasses.variable}>{pathVariableIdValue}</span>)</span>}
                 <IconButton sx={{ marginLeft: 1 }} onClick={handleDeleteVariable}>
                     <DeleteIcon />
                 </IconButton>
             </Box>}
 
-            <VariableSelectorDialog onInsertVariable={handleInsertVariable} requiredVariableType={variableType} />
+            <VariableSelectorDialog onInsertVariable={handleInsertVariable} supportPathForObject={true} availableVariableTypes={[variableType]} />
         </Box >
     )
 }

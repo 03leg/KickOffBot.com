@@ -133,7 +133,7 @@ export const VariableEditor = ({ variable, onVariableChange }: Props) => {
                 (<TextField
                     sx={{ marginTop: 2 }}
                     id="string-value"
-                    label="Value"
+                    label="Initial Value"
                     multiline
                     fullWidth
                     rows={8}
@@ -145,14 +145,14 @@ export const VariableEditor = ({ variable, onVariableChange }: Props) => {
                 (<TextField
                     type="number"
                     sx={{ marginTop: 2 }}
-                    label="Default value"
+                    label="Initial value"
                     value={value}
                     onChange={handleValueChange}
                 />)}
 
             {type === VariableType.BOOLEAN.toString() &&
                 (<FormControl sx={{ marginTop: 2 }}>
-                    <FormLabel id="default-value-boolean-editor">Default value</FormLabel>
+                    <FormLabel id="default-value-boolean-editor">Initial value</FormLabel>
 
                     <RadioGroup value={value} onChange={handleValueChange}>
                         <FormControlLabel value={true} control={<Radio />} label="True" />
