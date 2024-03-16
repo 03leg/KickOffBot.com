@@ -52,7 +52,8 @@
     "uuid": "^9.0.1",
     "zod": "^3.21.4",
     "zustand": "^4.4.4",
-    "@kickoffbot.com/types": "1.0.0"
+    "@kickoffbot.com/types": "1.0.0",
+    "emoji-picker-react": "4.8.0"
   },
   "devDependencies": {
     "@types/eslint": "^8.37.0",

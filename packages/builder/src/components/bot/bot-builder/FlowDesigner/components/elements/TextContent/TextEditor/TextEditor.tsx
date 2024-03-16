@@ -8,6 +8,8 @@ import { stateToHTML } from "draft-js-export-html";
 import { VariableType, type BotVariable } from '@kickoffbot.com/types';
 import { VariableSelectorDialog } from '../../../VariableSelectorDialog';
 import { getTextVariableReference } from '~/components/bot/bot-builder/utils';
+import EmojiPicker from 'emoji-picker-react';
+// import InsertEmoticonIcon from '@mui/icons-material/InsertEmoticon';
 
 interface TextEditorProps {
     initialState?: EditorState | undefined;
@@ -16,6 +18,7 @@ interface TextEditorProps {
 
 export const TextEditor = ({ onContentChange, initialState }: TextEditorProps) => {
     const [editorState, setEditorState] = React.useState<EditorState>(initialState ?? EditorState.createEmpty());
+    // const [showEmojiPicker, setShowEmojiPicker] = React.useState<boolean>(false);
 
     const generatePublicContentChange = useCallback((newState: EditorState) => {
         const content = newState.getCurrentContent();
@@ -72,9 +75,13 @@ export const TextEditor = ({ onContentChange, initialState }: TextEditorProps) =
         generatePublicContentChange(newState);
     }, [editorState, generatePublicContentChange, insertText]);
 
+    // const handleShowEmojiPicker = useCallback(() => {
+    //     setShowEmojiPicker(true);
+    // }, []);
+
     return (
         <>
-            <Box sx={{ border: `1px solid ${Colors.BORDER}`, padding: ({ spacing }) => (spacing(1)), display: 'flex', flexDirection: 'column' }}>
+            <Box sx={{ border: `1px solid ${Colors.BORDER}`, padding: ({ spacing }) => (spacing(1)), display: 'flex', flexDirection: 'column',  position: 'relative'}}>
                 <Editor editorState={editorState} onChange={handleContentChange} placeholder="Enter some text..." />
 
                 <Box sx={{ display: 'flex', marginTop: ({ spacing }) => (spacing(2)), justifyContent: 'flex-end' }}>
@@ -84,9 +91,15 @@ export const TextEditor = ({ onContentChange, initialState }: TextEditorProps) =
                     <IconButton aria-label="italic" onClick={handleItalicClick}>
                         <FormatItalic />
                     </IconButton>
+                    {/* <IconButton aria-label="italic" onClick={handleShowEmojiPicker}>
+                        <InsertEmoticonIcon />
+                    </IconButton> */}
                     <VariableSelectorDialog onInsertVariable={handleInsertVariable} supportPathForObject={true} availableVariableTypes={[VariableType.STRING, VariableType.NUMBER, VariableType.BOOLEAN, VariableType.OBJECT]} />
+                    
                 </Box>
+
             </Box>
+            {/* {showEmojiPicker && <div style={{ position: 'absolute', right: 0, top: 0, zIndex: 999999 }}><EmojiPicker /></div>} */}
         </>
     )
 }
