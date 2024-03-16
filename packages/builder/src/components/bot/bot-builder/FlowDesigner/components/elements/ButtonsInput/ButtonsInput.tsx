@@ -9,6 +9,7 @@ interface Props {
 
 import { makeStyles } from "tss-react/mui";
 import { isNil } from 'lodash';
+import { ButtonsFromVariableDescriptionView } from './ButtonsFromVariableDescriptionView';
 
 export const useStyles = makeStyles()(() => ({
     port: {
@@ -41,8 +42,9 @@ export const ButtonsInput = ({ element }: Props) => {
                 display: 'flex',
                 justifyContent: 'center',
                 marginBottom: 2,
-                fontWeight: 'bold'
-            }}>(buttons from variable)</Box>}
+            }}>
+                <ButtonsFromVariableDescriptionView variableButtonSource={uiElement.variableButtonsSource} />
+            </Box>}
             {uiElement.strategy === ButtonsSourceStrategy.Manual && uiElement.buttons?.map(b => {
                 const matches = b.content.matchAll(/<%variables.(.*?)%>/g);
                 let buttonContent = b.content;

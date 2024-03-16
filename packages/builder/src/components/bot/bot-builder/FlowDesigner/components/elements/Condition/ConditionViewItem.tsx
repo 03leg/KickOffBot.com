@@ -54,7 +54,9 @@ export const ConditionViewItem = ({ item, showLogicalOperatorSelector, nextItemL
 
 
     return (
-        <span>WHEN <span className={variableClasses.variable}>{variable?.name}</span> {getConditionOperatorLabelByType(item.operator)}
+        <span>WHEN <span className={variableClasses.variable}>{variable?.name}</span>
+        {item.path && <span> (property <span className={variableClasses.propertyName}>{item.path}</span>) </span>}
+         {' '}{getConditionOperatorLabelByType(item.operator)}
             {isNil(item.variableIdValue) && <span dangerouslySetInnerHTML={{ __html: ` ${value} ` }}></span>}
             {!isNil(item.variableIdValue) && <> value of <span className={variableClasses.variable}>{variableValue?.name}</span></>}
 
