@@ -4,7 +4,7 @@ import { useStyles } from './FlowDesignerBlock.style';
 import { useFlowDesignerBlockMovements } from './useFlowDesignerBlockMovements';
 import { Colors } from '~/themes/Colors';
 import { ElementView } from '../ElementView';
-import { BlockType, PortType, type FlowDesignerUIBlockDescription } from '@kickoffbot.com/types';
+import { BlockType, PortType, type FlowDesignerUIBlockDescription, CommandsUIElement } from '@kickoffbot.com/types';
 import { SortableContext } from '@dnd-kit/sortable';
 import { useDroppable } from '@dnd-kit/core';
 import { flowDesignerVerticalListSortingStrategy } from './flowDesignerVerticalListSortingStrategy';
@@ -13,6 +13,7 @@ import { APP_ELEMENT_ROLE } from '../../../constants';
 import { useFlowDesignerStore } from '../../../store';
 import { BlockMenu } from '../BlockMenu/BlockMenu';
 import { OutputPort } from '../OutputPort';
+import { CommandsViewer } from '../elements/CommandsViewer';
 
 
 interface Props {
@@ -76,20 +77,11 @@ export const FlowDesignerBlock = ({ blockDescription, rootScale }: Props) => {
                             <OutputPort className={classes.standardBlockPort} blockId={blockDescription.id} outPortType={PortType.BLOCK}/>
                         </>
                     }
-                    {blockDescription.blockType === BlockType.START &&
+                    {blockDescription.blockType === BlockType.COMMANDS &&
                         <>
-                            <Box sx={{ height: '100%', display: 'flex', justifyContent: 'center', pointerEvents: 'none' }}>
-                                <Box sx={{
-                                    fontSize: 24,
-                                    fontWeight: 'bold',
-                                    padding: '10px',
-                                    backgroundColor: '#4CAF50',
-                                    borderRadius: '15px',
-                                    color: 'white',
-                                    marginTop: '12px'
-                                }}>/start</Box>
+                            <Box sx={{ height: '100%', display: 'flex' }}>
+                                <CommandsViewer blockDescription={blockDescription}/>
                             </Box>
-                            <OutputPort className={classes.commandBlockPort} blockId={blockDescription.id} outPortType={PortType.BLOCK}/>
                         </>
                     }
                 </Box>

@@ -1,4 +1,4 @@
-import { type ContentTextUIElement, ElementType, type InputTextUIElement, type FlowDesignerUIBlockDescription, type UIElement, type InputButtonsUIElement, type FlowDesignerLink, type ButtonPortDescription, type BotVariable, BlockType, TransformDescription, ChangeVariableUIElement, ConditionUIElement, LogicalOperator, ButtonsSourceStrategy } from "@kickoffbot.com/types";
+import { type ContentTextUIElement, ElementType, type InputTextUIElement, type FlowDesignerUIBlockDescription, type UIElement, type InputButtonsUIElement, type FlowDesignerLink, type ButtonPortDescription, type BotVariable, BlockType, TransformDescription, ChangeVariableUIElement, ConditionUIElement, LogicalOperator, ButtonsSourceStrategy, CommandsUIElement } from "@kickoffbot.com/types";
 import MessageIcon from '@mui/icons-material/Message';
 import TextFieldsIcon from '@mui/icons-material/TextFields';
 import SmartButtonIcon from '@mui/icons-material/SmartButton';
@@ -149,7 +149,17 @@ export function getNewBlock(position: PositionDescription, firstElement: UIEleme
 
 export function getDefaultBlocks() {
     return [
-        { id: '/start', blockType: BlockType.START, title: '/start', position: { x: 0, y: 0 }, elements: [] }
+        {
+            id: '/start', blockType: BlockType.COMMANDS, title: '/start', position: { x: 0, y: 0 }, elements: [{
+                commands: [
+                    {
+                        id: '/start',
+                        command: '/start',
+                        description: 'Start the bot',
+                    }
+                ],
+            } as CommandsUIElement]
+        }
     ];
 }
 

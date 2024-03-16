@@ -113,7 +113,7 @@ export const ManualStrategyButtonsEditor = ({ element }: Props) => {
                                 onClick={handleDeleteButton} >
                                 <DeleteIcon />
                             </IconButton>
-                            <VariableSelectorDialog onInsertVariable={handleInsertVariable} />
+                            <VariableSelectorDialog onInsertVariable={handleInsertVariable} supportPathForObject={false} />
                         </Box>
 
                     </Box>

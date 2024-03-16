@@ -209,9 +209,21 @@ export interface InputButtonsUIElement extends UIElement {
   variableButtonsSource?: VariableButtonsSourceStrategyDescription;
 }
 
+export interface CommandDescription {
+  id: string;
+  command: string;
+  description: string;
+}
+
+export interface CommandsUIElement extends UIElement {
+  commands: CommandDescription[];
+  id: 'botCommands';
+}
+
 export enum BlockType {
   ELEMENTS,
   START,
+  COMMANDS,
 }
 
 export interface FlowDesignerUIBlockDescription {
