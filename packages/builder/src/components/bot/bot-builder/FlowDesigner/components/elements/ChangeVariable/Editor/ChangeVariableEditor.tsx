@@ -1,5 +1,5 @@
 import { BotVariable, ChangeArrayVariableWorkflow, ChangeBooleanVariableWorkflow, ChangeNumberStringVariableWorkflow, ChangeObjectVariableWorkflow, ChangeVariableUIElement, VariableType } from '@kickoffbot.com/types';
-import { Box, Typography } from '@mui/material';
+import { Box, Checkbox, FormControlLabel, Typography } from '@mui/material';
 import React, { useCallback, useMemo, useState } from 'react'
 import { VariableSelector } from '../../../VariableSelector';
 import { NumberStringTypeVariableEditor } from './NumberStringTypeVariableEditor';
@@ -7,16 +7,26 @@ import { useFlowDesignerStore } from '~/components/bot/bot-builder/store';
 import { BooleanTypeVariableEditor } from './BooleanTypeVariableEditor';
 import { ObjectTypeVariableEditor } from './ObjectTypeVariableEditor';
 import { ArrayTypeVariableEditor } from './ArrayTypeVariableEditor';
+import { makeStyles } from 'tss-react/mui';
 
 interface Props {
     element: ChangeVariableUIElement;
 }
+
+const useStyles = makeStyles()(() => ({
+    disabled: {
+        opacity: 0.6,
+        pointerEvents: 'none'
+    }
+}));
 
 export const ChangeVariableEditor = ({ element }: Props) => {
     const [selectedVariableId, setSelectedVariableId] = useState<BotVariable["id"]>(element?.selectedVariableId ?? '');
     const { getVariableById } = useFlowDesignerStore((state) => ({
         getVariableById: state.getVariableById
     }));
+    const [restoreInitialValue, setRestoreInitialValue] = useState(element?.restoreInitialValue ?? false);
+    const { classes} = useStyles();
 
     const variableType = useMemo(() => {
         return getVariableById(selectedVariableId)?.type ?? null;
@@ -63,22 +73,33 @@ export const ChangeVariableEditor = ({ element }: Props) => {
         element.workflowDescription = workflow;
     }, [element]);
 
+    const handleRestoreInitialValueChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
+        setRestoreInitialValue(event.target.checked);
+        element.restoreInitialValue = event.target.checked;
+    }, [element])
+
     return (
         <Box sx={{ padding: 1 }}>
             <VariableSelector valueId={selectedVariableId} onVariableChange={handleVariableChange} />
 
-            {(variableType !== null && (variableType === VariableType.NUMBER || variableType === VariableType.STRING) &&
-                <NumberStringTypeVariableEditor workflow={element.workflowDescription as ChangeNumberStringVariableWorkflow} onWorkflowChange={handleWorkflowChange} />
-            )}
-            {(variableType !== null && (variableType === VariableType.BOOLEAN) &&
-                <BooleanTypeVariableEditor workflow={element.workflowDescription as ChangeBooleanVariableWorkflow} onWorkflowChange={handleWorkflowChange} />
-            )}
-            {(variableType !== null && (variableType === VariableType.OBJECT) &&
-                <ObjectTypeVariableEditor workflow={element.workflowDescription as ChangeObjectVariableWorkflow} onWorkflowChange={handleWorkflowChange} />
-            )}
-            {(variableType !== null && (variableType === VariableType.ARRAY) && arrayItemType &&
-                <ArrayTypeVariableEditor jsonTypeOfArrayItem={arrayItemType} firstItemOfArray={firstItemOfArray} workflow={element.workflowDescription as ChangeArrayVariableWorkflow} onWorkflowChange={handleWorkflowChange} />
-            )}
+
+            <FormControlLabel control={<Checkbox checked={restoreInitialValue} onChange={handleRestoreInitialValueChange} />} label="Restore initial value" />
+
+
+            <Box className={restoreInitialValue? classes.disabled : ''}>
+                {(variableType !== null && (variableType === VariableType.NUMBER || variableType === VariableType.STRING) &&
+                    <NumberStringTypeVariableEditor workflow={element.workflowDescription as ChangeNumberStringVariableWorkflow} onWorkflowChange={handleWorkflowChange} />
+                )}
+                {(variableType !== null && (variableType === VariableType.BOOLEAN) &&
+                    <BooleanTypeVariableEditor workflow={element.workflowDescription as ChangeBooleanVariableWorkflow} onWorkflowChange={handleWorkflowChange} />
+                )}
+                {(variableType !== null && (variableType === VariableType.OBJECT) &&
+                    <ObjectTypeVariableEditor workflow={element.workflowDescription as ChangeObjectVariableWorkflow} onWorkflowChange={handleWorkflowChange} />
+                )}
+                {(variableType !== null && (variableType === VariableType.ARRAY) && arrayItemType &&
+                    <ArrayTypeVariableEditor jsonTypeOfArrayItem={arrayItemType} firstItemOfArray={firstItemOfArray} workflow={element.workflowDescription as ChangeArrayVariableWorkflow} onWorkflowChange={handleWorkflowChange} />
+                )}
+            </Box>
 
         </Box>
     )

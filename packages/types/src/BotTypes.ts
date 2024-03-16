@@ -81,6 +81,7 @@ export interface ConditionUIElement extends UIElement {
 
 export interface ChangeVariableUIElement extends UIElement {
   selectedVariableId?: BotVariable["id"];
+  restoreInitialValue?: boolean;
   workflowDescription?:
     | ChangeNumberStringVariableWorkflow
     | ChangeBooleanVariableWorkflow

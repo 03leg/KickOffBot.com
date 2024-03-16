@@ -102,7 +102,7 @@ export const EditBotContent = () => {
         const currentData = (activeDraggableItem?.data as DataRef<DraggableElementData>)?.current;
 
         if (isNil(draggableElement) && !isNil(activeId) && !isNil(currentData) && currentData.isNewElement) {
-            const template = getNewUIElementTemplate(activeId.toString(), currentData) as UIElement;
+            const template = getNewUIElementTemplate(activeId.toString(), currentData);
 
             return template;
         }

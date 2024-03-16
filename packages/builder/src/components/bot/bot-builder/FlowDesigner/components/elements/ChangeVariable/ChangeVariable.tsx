@@ -1,8 +1,11 @@
-import { ChangeBooleanVariableWorkflow, ChangeBooleanVariableWorkflowStrategy, ChangeNumberStringVariableWorkflow, ChangeObjectVariableDataSource, ChangeObjectVariableWorkflow, ChangeVariableUIElement, UIElement, VariableType } from '@kickoffbot.com/types';
+import { ChangeArrayVariableWorkflow, ChangeBooleanVariableWorkflow, ChangeBooleanVariableWorkflowStrategy, ChangeNumberStringVariableWorkflow, ChangeObjectVariableDataSource, ChangeObjectVariableWorkflow, ChangeVariableUIElement, UIElement, VariableType } from '@kickoffbot.com/types';
 import React, { useMemo } from 'react'
 import { useContentWithVariable, useVariableInTextStyles } from './useContentWithVariable';
 import { useFlowDesignerStore } from '~/components/bot/bot-builder/store';
 import { makeStyles } from 'tss-react/mui';
+import { isNil } from 'lodash';
+import { ObjectVariableDescriptionView } from './ObjectVariableDescriptionView';
+import { ArrayVariableDescriptionView } from './ArrayVariableDescriptionView';
 
 interface Props {
     element: UIElement;
@@ -11,6 +14,9 @@ interface Props {
 export const useStyles = makeStyles()(() => ({
     numberExpression: {
         display: 'inline-block'
+    },
+    initialValue:{
+        fontWeight: 'bold',
     }
 }));
 
@@ -60,18 +66,18 @@ export const ChangeVariable = ({ element }: Props) => {
                         }
                 }
             }
-            case VariableType.OBJECT: {
-                const item = uiElement.workflowDescription as ChangeObjectVariableWorkflow;
+            // case VariableType.OBJECT: {
+            //     const item = uiElement.workflowDescription as ChangeObjectVariableWorkflow;
 
-                switch (item.source) {
-                    case ChangeObjectVariableDataSource.JSON: {
-                        return '(from JSON)';
-                    }
-                    case ChangeObjectVariableDataSource.VARIABLE: {
-                        return '(from variable)';
-                    }
-                }
-            }
+            //     switch (item.source) {
+            //         case ChangeObjectVariableDataSource.JSON: {
+            //             return '(from JSON)';
+            //         }
+            //         case ChangeObjectVariableDataSource.VARIABLE: {
+            //             return <FromVariableDescriptionView/>;
+            //         }
+            //     }
+            // }
 
         }
 
@@ -84,8 +90,11 @@ export const ChangeVariable = ({ element }: Props) => {
 
     return (
         <div>
-            {variable && <><span className={classes.variable}>{variable?.name}</span> = <div className={componentClasses.numberExpression} dangerouslySetInnerHTML={{ __html: content }}></div></>}
-            {!variable && text}
+            {isNil(variable) && <span>Configure...</span>}
+            {variable && variable.type !== VariableType.OBJECT && variable.type !== VariableType.ARRAY && !uiElement.restoreInitialValue && <><span className={classes.variable}>{variable?.name}</span> = <div className={componentClasses.numberExpression} dangerouslySetInnerHTML={{ __html: content }}></div></>}
+            {variable && uiElement.restoreInitialValue && <><span className={classes.variable}>{variable?.name}</span> = <span className={componentClasses.initialValue}>initial value</span></>}
+            {!isNil(variable) && variable.type === VariableType.OBJECT && <ObjectVariableDescriptionView workflow={uiElement.workflowDescription as ChangeObjectVariableWorkflow} variable={variable} />}
+            {!isNil(variable) && variable.type === VariableType.ARRAY && <ArrayVariableDescriptionView workflow={uiElement.workflowDescription as ChangeArrayVariableWorkflow} variable={variable} />}
         </div>
     )
 }
