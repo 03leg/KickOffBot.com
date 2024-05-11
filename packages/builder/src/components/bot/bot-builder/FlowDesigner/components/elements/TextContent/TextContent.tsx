@@ -1,10 +1,11 @@
-import { Box } from '@mui/material';
+import { Box, Divider } from '@mui/material';
 import { isNil } from 'lodash';
 import React, { useMemo } from 'react'
 import { makeStyles } from 'tss-react/mui';
-import { type ContentTextUIElement, type UIElement } from '@kickoffbot.com/types';
+import { ElementType, type ContentTextUIElement, type UIElement } from '@kickoffbot.com/types';
 import { AttachmentsViewer } from '~/components/PostCreator/components/AttachmentsViewer/AttachmentsViewer';
 import { AttachmentViewer } from '../../AttachmentViewer';
+import { ButtonsInput } from '../ButtonsInput/ButtonsInput';
 
 interface Props {
     element: UIElement;
@@ -53,6 +54,14 @@ export const TextContent = ({ element }: Props) => {
             <div dangerouslySetInnerHTML={{ __html: textContent ?? 'Text...' }}></div>
             {contentTextElement.attachments?.length > 1 && <AttachmentsViewer files={contentTextElement.attachments} />}
             {contentTextElement.attachments?.length === 1 && <AttachmentViewer file={contentTextElement.attachments[0]} />}
+            {contentTextElement.showButtons &&
+                <>
+                    <Divider sx={{ marginTop: 2 }}/>
+                    <Box sx={{ marginTop: 2 }}>
+                        <ButtonsInput element={{ ...contentTextElement.buttonsDescription, id: contentTextElement.id, type: ElementType.INPUT_BUTTONS }} />
+                    </Box>
+                </>
+            }
         </Box>
     )
 }

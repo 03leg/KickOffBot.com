@@ -200,7 +200,7 @@ export class MyTelegramBot {
         }
 
         const answerText = this._utils.getParsedText(contentTextElement.telegramContent, userContext);
-        const messageButtons = MessageButtonsManager.getButtonsForMessage(userContext, block, element, this._utils);
+        const messageButtons = MessageButtonsManager.getButtonsForMessage(userContext, contentTextElement, this._utils);
 
         const sendPlainMessage = async (serviceMessage?: string) => {
           await context.sendMessage(answerText + (!isNil(serviceMessage) ? "<br/>" + serviceMessage : ""), {

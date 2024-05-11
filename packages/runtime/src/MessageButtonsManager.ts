@@ -2,10 +2,9 @@ import {
   BotProject,
   ButtonPortDescription,
   ButtonsSourceStrategy,
+  ContentTextUIElement,
   ElementType,
-  FlowDesignerUIBlockDescription,
-  InputButtonsUIElement,
-  UIElement,
+  MessageButtonsDescription,
 } from "@kickoffbot.com/types";
 import { UserContext } from "./UserContext";
 import { InlineKeyboardButton } from "telegraf/typings/core/types/typegram";
@@ -17,31 +16,20 @@ import { throwIfNil } from "./guard";
 export class MessageButtonsManager {
   public static getButtonsForMessage(
     userContext: UserContext,
-    block: FlowDesignerUIBlockDescription,
-    element: UIElement,
+    element: ContentTextUIElement,
     utils: MyBotUtils
   ): InlineKeyboardButton.CallbackButton[][] | null {
-    let result: InlineKeyboardButton.CallbackButton[][] = [];
-
-    if (block.elements[block.elements.length - 1] == element) {
+    if(!element.showButtons){
       return null;
     }
 
-    const nextElement = block.elements[block.elements.findIndex((e) => e.id === element.id) + 1];
+    const messageButtonsDescription = element.buttonsDescription;
+    let result: InlineKeyboardButton.CallbackButton[][] = [];
 
-    if (nextElement.type === ElementType.INPUT_BUTTONS) {
-      const buttonsElement = nextElement as InputButtonsUIElement;
-
-      if (buttonsElement.strategy === ButtonsSourceStrategy.Manual) {
-        result = this.getManualButtons(buttonsElement, utils, userContext);
-      } else if (buttonsElement.strategy === ButtonsSourceStrategy.FromVariable) {
-        result = this.getButtonsFromVariable(buttonsElement, utils, userContext);
-      }
-
-      const nextBlockButtons = this.getButtonsForMessage(userContext, block, nextElement, utils);
-      if (nextBlockButtons !== null) {
-        result.push(...nextBlockButtons);
-      }
+    if (messageButtonsDescription.strategy === ButtonsSourceStrategy.Manual) {
+      result = this.getManualButtons(messageButtonsDescription, utils, userContext);
+    } else if (messageButtonsDescription.strategy === ButtonsSourceStrategy.FromVariable) {
+      result = this.getButtonsFromVariable(element.id, messageButtonsDescription, utils, userContext);
     }
 
     if (result.length === 0) {
@@ -49,26 +37,27 @@ export class MessageButtonsManager {
     }
 
     return result;
+
   }
 
-  private static getButtonsFromVariable(buttonsElement: InputButtonsUIElement, utils: MyBotUtils, userContext: UserContext) {
+  private static getButtonsFromVariable(messageId: string, buttonsDescription: MessageButtonsDescription, utils: MyBotUtils, userContext: UserContext) {
     const result: InlineKeyboardButton.CallbackButton[][] = [];
 
-    if (isNil(buttonsElement.variableButtonsSource?.variableSource)) {
+    if (isNil(buttonsDescription.variableButtonsSource?.variableSource)) {
       throw new Error("InvalidOperationError: variableSource is null");
     }
 
-    const items = ChangeArrayVariableHelper.getArrayValueByPath(buttonsElement.variableButtonsSource?.variableSource, userContext, utils);
+    const items = ChangeArrayVariableHelper.getArrayValueByPath(buttonsDescription.variableButtonsSource?.variableSource, userContext, utils);
 
     for (const item of items) {
-      if (isNil(buttonsElement.variableButtonsSource.customTextTemplate)) {
+      if (isNil(buttonsDescription.variableButtonsSource.customTextTemplate)) {
         throw new Error("InvalidOperationError: customTextTemplate is null");
       }
 
       result.push([
         {
-          callback_data: `v_${buttonsElement.id}_${items.indexOf(item)}`,
-          text: this.getButtonText(item, buttonsElement.variableButtonsSource.customTextTemplate, utils, userContext),
+          callback_data: `v_${messageId}_${items.indexOf(item)}`,
+          text: this.getButtonText(item, buttonsDescription.variableButtonsSource.customTextTemplate, utils, userContext),
         },
       ]);
     }
@@ -80,10 +69,10 @@ export class MessageButtonsManager {
     return utils.getParsedPropertyTemplate(customTextTemplate, item as Record<string, string>, userContext);
   }
 
-  private static getManualButtons(buttonsElement: InputButtonsUIElement, utils: MyBotUtils, userContext: UserContext) {
+  private static getManualButtons(buttonsDescription: MessageButtonsDescription, utils: MyBotUtils, userContext: UserContext) {
     const result: InlineKeyboardButton.CallbackButton[][] = [];
 
-    for (const button of buttonsElement.buttons ?? []) {
+    for (const button of buttonsDescription.buttons ?? []) {
       const buttonContent = utils.getParsedText(button.content, userContext);
 
       result.push([{ callback_data: `m_${button.id}`, text: buttonContent }]);
@@ -107,15 +96,15 @@ export class MessageButtonsManager {
     let link = botProject.links.find((l) => (l.output as ButtonPortDescription).buttonId === buttonId);
 
     if (isNil(link)) {
-      const inputButtonsElement = (
+      const messageButtonsDescription = (
         botProject.blocks
           .map((e) => e.elements)
           .flat(1)
-          .filter((e) => e.type === ElementType.INPUT_BUTTONS) as InputButtonsUIElement[]
-      ).find((e) => (e.buttons ?? []).some((b) => b.id === buttonId));
+          .filter((e) => e.type === ElementType.CONTENT_TEXT) as ContentTextUIElement[]
+      ).find((e) => (e.buttonsDescription.buttons ?? []).some((b) => b.id === buttonId));
 
       link = botProject.links.find(
-        (l) => (l.output as ButtonPortDescription).buttonId === `default-button-${inputButtonsElement?.id ?? ""}`
+        (l) => (l.output as ButtonPortDescription).buttonId === `default-button-${messageButtonsDescription?.id ?? ""}`
       );
 
       if (isNil(link)) {
@@ -139,18 +128,18 @@ export class MessageButtonsManager {
       botProject.blocks
         .map((e) => e.elements)
         .flat(1)
-        .filter((e) => e.type === ElementType.INPUT_BUTTONS) as InputButtonsUIElement[]
+        .filter((e) => e.type === ElementType.CONTENT_TEXT) as ContentTextUIElement[]
     ).find((e) => e.id === elementId);
 
     if (isNil(buttonsElement)) {
       throw new Error("ButtonsElement not found");
     }
 
-    throwIfNil(buttonsElement.variableButtonsSource?.variableSource);
-    throwIfNil(buttonsElement.variableButtonsSource?.answerVariableId);
+    throwIfNil(buttonsElement.buttonsDescription.variableButtonsSource?.variableSource);
+    throwIfNil(buttonsElement.buttonsDescription.variableButtonsSource?.answerVariableId);
 
-    const items = ChangeArrayVariableHelper.getArrayValueByPath(buttonsElement.variableButtonsSource?.variableSource, userContext, utils);
-    const answerVariable = utils.getVariableById(buttonsElement.variableButtonsSource?.answerVariableId);
+    const items = ChangeArrayVariableHelper.getArrayValueByPath(buttonsElement.buttonsDescription.variableButtonsSource?.variableSource, userContext, utils);
+    const answerVariable = utils.getVariableById(buttonsElement.buttonsDescription.variableButtonsSource?.answerVariableId);
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     userContext.updateVariable(answerVariable.name, items[buttonIndex] as any);

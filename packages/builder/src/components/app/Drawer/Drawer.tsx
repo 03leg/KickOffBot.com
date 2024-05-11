@@ -1,11 +1,8 @@
 
 // material-ui
-import { Divider, Drawer, List, ListItem, ListItemButton, ListItemIcon, ListItemText } from '@mui/material';
-import InboxIcon from '@mui/icons-material/MoveToInbox';
-import MailIcon from '@mui/icons-material/Mail';
+import { Drawer, List, ListItem, ListItemButton, ListItemIcon, ListItemText } from '@mui/material';
 import { DrawerHeader } from './DrawerHeader';
 import { drawerWidth } from '../contstants';
-import CreateIcon from '@mui/icons-material/Create';
 import { useRouter } from 'next/router';
 import InsightsIcon from '@mui/icons-material/Insights';
 import { MY_BOTS_PATH } from '~/constants';
@@ -18,8 +15,8 @@ export const MainDrawer = ({ open }: MainDrawerProps) => {
     const router = useRouter();
 
     const paths = [
-        { title: "Create post", icon: <CreateIcon />, path: '/create-post' },
-        { title: "Bot builder", icon: <InsightsIcon />, path: MY_BOTS_PATH },
+        // { title: "Create post", icon: <CreateIcon />, path: '/create-post' },
+        { title: "My bots", icon: <InsightsIcon />, path: MY_BOTS_PATH },
     ];
 
     return (
@@ -49,19 +46,6 @@ export const MainDrawer = ({ open }: MainDrawerProps) => {
                     </ListItem>
                 ))}
             </List>
-            {/* <Divider /> */}
-            {/* <List>
-                {['All mail', 'Trash', 'Spam'].map((text, index) => (
-                    <ListItem key={text} disablePadding>
-                        <ListItemButton>
-                            <ListItemIcon>
-                                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-                            </ListItemIcon>
-                            <ListItemText primary={text} />
-                        </ListItemButton>
-                    </ListItem>
-                ))}
-            </List> */}
         </Drawer>
     );
 };

@@ -1,8 +1,8 @@
-import { Box, LinearProgress } from '@mui/material'
+import { Box, Checkbox, FormControlLabel, LinearProgress } from '@mui/material'
 import { EditorState, convertFromRaw } from 'draft-js';
 import { isNil } from 'lodash';
 import React, { useCallback, useEffect, useState } from 'react'
-import { type ContentTextUIElement } from '@kickoffbot.com/types';
+import { ButtonsSourceStrategy, ElementType, type ContentTextUIElement } from '@kickoffbot.com/types';
 import { TextEditor } from '../TextEditor';
 import { AttachEditor } from '~/components/PostCreator/components/AttachEditor';
 import { ClientFileDescription } from '~/types/ContentEditor';
@@ -12,6 +12,7 @@ import { uploadAttachments } from '~/components/PostCreator/utils';
 import { showError, showSuccessMessage } from '~/utils/ClientStatusMessage';
 import { throwIfNil } from '~/utils/guard';
 import { IMAGE_EXTENSIONS } from '~/components/PostCreator/components/AttachEditor/constants';
+import { ButtonsEditor } from '../../ButtonsInput/Editor';
 
 interface Props {
     element: ContentTextUIElement;
@@ -27,9 +28,13 @@ export const TextContentEditor = ({ element }: Props) => {
 
     const [uploadedFiles, setUploadedFiles] = useState<FileDescription[]>(element.attachments ?? []);
     const [isUploading, setIsUploading] = useState<boolean>(false);
+    const [showButtons, setShowButtons] = useState<boolean>(element.showButtons ?? false);
+    const [disableButtons, setDisableButtons] = useState<boolean>(element.attachments === undefined || element.attachments.length === 0 ? false : true);
 
     useEffect(() => {
         element.attachments = uploadedFiles;
+
+        setDisableButtons(uploadedFiles.length > 0);
     }, [element, uploadedFiles]);
 
     const handleAttachmentsAdd = useCallback(async (files: FileDescription[]) => {
@@ -62,11 +67,18 @@ export const TextContentEditor = ({ element }: Props) => {
         setUploadedFiles([...uploadedFiles.filter(f => f.url !== file.url)]);
     }, [uploadedFiles]);
 
+    const handleClickUseButtons = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
+        setShowButtons(event.target.checked);
+        element.showButtons = event.target.checked;
+    }, [element]);
+
     return (
         <Box sx={{ flex: 1 }}>
             <TextEditor onContentChange={handleContentChange} initialState={a} />
             {isUploading && <LinearProgress sx={{ marginTop: 3 }} />}
             {!isUploading && <AttachEditor onAttachmentsAdd={handleAttachmentsAdd} onAttachmentRemove={handleAttachmentRemove} uploadedFiles={uploadedFiles} />}
+            <FormControlLabel disabled={disableButtons} sx={{ marginTop: 2 }} control={<Checkbox checked={showButtons} onChange={handleClickUseButtons} />} label="Show buttons" />
+            {showButtons && !disableButtons && <ButtonsEditor element={element.buttonsDescription} />}
         </Box>
     )
 }

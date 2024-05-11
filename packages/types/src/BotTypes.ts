@@ -179,6 +179,8 @@ export interface ContentTextUIElement extends UIElement {
   htmlContent?: string;
   telegramContent?: string;
   attachments: FileDescription[];
+  showButtons: boolean;
+  buttonsDescription: MessageButtonsDescription;
 }
 
 export interface InputTextUIElement extends UIElement {
@@ -201,6 +203,12 @@ export interface VariableButtonsSourceStrategyDescription {
   answerVariableId?: string | undefined;
   propertyName?: string;
   customTextTemplate?: string;
+}
+
+export interface MessageButtonsDescription {
+  strategy: ButtonsSourceStrategy;
+  buttons?: ButtonElement[];
+  variableButtonsSource?: VariableButtonsSourceStrategyDescription;
 }
 
 export interface InputButtonsUIElement extends UIElement {

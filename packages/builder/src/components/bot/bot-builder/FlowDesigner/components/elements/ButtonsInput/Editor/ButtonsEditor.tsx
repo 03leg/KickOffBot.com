@@ -1,5 +1,5 @@
 
-import { ButtonsSourceStrategy, InputButtonsUIElement, VariableButtonsSourceStrategyDescription } from '@kickoffbot.com/types';
+import { ButtonsSourceStrategy, InputButtonsUIElement, MessageButtonsDescription, VariableButtonsSourceStrategyDescription } from '@kickoffbot.com/types';
 import { Box, FormControlLabel, Radio, RadioGroup } from '@mui/material';
 import React, { useCallback } from 'react'
 import { ManualStrategyButtonsEditor } from './ManualStrategyButtonsEditor';
@@ -8,7 +8,7 @@ import { FromVariableStrategyButtonsEditor } from './FromVariableStrategyButtons
 
 
 interface Props {
-    element: InputButtonsUIElement;
+    element: InputButtonsUIElement | MessageButtonsDescription;
 }
 
 export const ButtonsEditor = ({ element }: Props) => {

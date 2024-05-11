@@ -1,7 +1,6 @@
 import { type ContentTextUIElement, ElementType, type InputTextUIElement, type FlowDesignerUIBlockDescription, type UIElement, type InputButtonsUIElement, type FlowDesignerLink, type ButtonPortDescription, type BotVariable, BlockType, TransformDescription, ChangeVariableUIElement, ConditionUIElement, LogicalOperator, ButtonsSourceStrategy, CommandsUIElement } from "@kickoffbot.com/types";
 import MessageIcon from '@mui/icons-material/Message';
 import TextFieldsIcon from '@mui/icons-material/TextFields';
-import SmartButtonIcon from '@mui/icons-material/SmartButton';
 import { isNil } from "lodash";
 import { type DraggableElementData } from "./ToolBox/types";
 import { v4 } from "uuid";
@@ -25,7 +24,7 @@ export function getContentElements() {
 export function getInputElements() {
     return [
         { type: ElementType.INPUT_TEXT, title: 'Text', icon: <TextFieldsIcon /> },
-        { type: ElementType.INPUT_BUTTONS, title: 'Buttons', icon: <SmartButtonIcon /> },
+        // { type: ElementType.INPUT_BUTTONS, title: 'Buttons', icon: <SmartButtonIcon /> },
         // { type: ElementType.INPUT_NUMBER, title: 'Number', icon: <NumbersIcon /> },
         // { type: ElementType.INPUT_EMAIL, title: 'Email', icon: <AlternateEmailIcon /> },
         // { type: ElementType.INPUT_DATE, title: 'Date', icon: <DateRangeIcon /> },
@@ -56,23 +55,15 @@ export function needToChangeId(id: string): boolean {
     return values.includes(id);
 }
 
-// const map = new Map<ElementType, unknown>(
-//     [
-//         [ElementType.CONTENT_TEXT, { text: 'Text...', type: ElementType.CONTENT_TEXT }],
-//         [ElementType.INPUT_TEXT, { label: 'User input...', type: ElementType.INPUT_TEXT }],
-//         [ElementType.INPUT_BUTTONS, { type: ElementType.INPUT_BUTTONS }],
-//     ]
-// );
-
 export function getNewUIElementTemplate(id: string, data: DraggableElementData): UIElement {
-    // if (map.has(data.type)) {
-    //     const template = map.get(data.type);
-    //     return template;
-    // }
-
     switch (data.type) {
         case ElementType.CONTENT_TEXT: {
-            const result: ContentTextUIElement = { id, type: ElementType.CONTENT_TEXT, attachments: [] };
+            const result: ContentTextUIElement = { 
+                id, 
+                type: ElementType.CONTENT_TEXT, attachments: [],
+                showButtons: false,
+                buttonsDescription: { strategy: ButtonsSourceStrategy.Manual, buttons: [] }
+             };
             return result;
         }
         case ElementType.INPUT_TEXT: {
