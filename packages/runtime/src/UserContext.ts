@@ -22,7 +22,7 @@ export class UserContext {
 
   private initVariables(botVariables: BotVariable[]) {
     for (const botVariable of botVariables) {
-      this._variables.set(botVariable.name, botVariable.value);
+      this._variables.set(botVariable.name, JSON.parse(botVariable.value as string));
     }
   }
 
@@ -44,11 +44,16 @@ export class UserContext {
     this._nextStep = nextStep;
   }
 
-  public updateVariable(name: string, newValue: string | number | boolean) {
+  public updateVariable(
+    name: string,
+    newValue: string | number | boolean | unknown[] | object
+  ) {
     this._variables.set(name, newValue);
   }
 
-  public getVariableValueByName(name: string): string | number | boolean {
+  public getVariableValueByName(
+    name: string
+  ): string | number | boolean | unknown[] | Record<string, unknown> {
     const result = this._variables.get(name);
 
     if (isNil(result)) {

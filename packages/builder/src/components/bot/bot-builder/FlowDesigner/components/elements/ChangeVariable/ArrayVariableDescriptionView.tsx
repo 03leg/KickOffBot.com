@@ -98,8 +98,7 @@ export const ArrayVariableDescriptionView = ({ workflow, variable }: Props) => {
                 pathComponent = <span> from property <span className={classes.propertyName}>{path}</span> of variable <span className={classes.variable}>{sourceVariableLocal.name}</span></span>
             }
             else {
-                <span>from variable
-                    <span className={classes.variable}>{sourceVariableLocal.name}</span></span>
+                pathComponent = <span> from variable <span className={classes.variable}>{sourceVariableLocal.name}</span></span>
             }
         }
 

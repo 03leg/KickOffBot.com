@@ -1,10 +1,23 @@
 {
   "private": true,
   "workspaces": {
-    "packages": ["packages/*"],
-    "nohoist": ["**/lodash", "lodash/**", "lodash", "**/lodash/**",
-    "**/telegraf", "telegraf/**", "telegraf", "**/telegraf/**",
-    "**/fs/promises", "fs/promises/**", "fs/promises", "**/fs/promises/**"]
+    "packages": [
+      "packages/*"
+    ],
+    "nohoist": [
+      "**/lodash",
+      "lodash/**",
+      "lodash",
+      "**/lodash/**",
+      "**/telegraf",
+      "telegraf/**",
+      "telegraf",
+      "**/telegraf/**",
+      "**/fs/promises",
+      "fs/promises/**",
+      "fs/promises",
+      "**/fs/promises/**"
+    ]
   },
   "scripts": {
     "start": "wsrun -m -e -t -a dev"
@@ -22,5 +35,8 @@
     "prettier": "^2.8.8",
     "typescript": "^5.0.4",
     "wsrun": "5.2.4"
+  },
+  "prettier": {
+    "printWidth": 140
   }
 }

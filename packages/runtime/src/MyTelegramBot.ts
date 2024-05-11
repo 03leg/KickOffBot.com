@@ -15,9 +15,13 @@ import { MyBotUtils } from "./MyBotUtils";
 import {
   BotProject,
   ButtonPortDescription,
+  ButtonsSourceStrategy,
+  ChangeArrayVariableWorkflow,
   ChangeBooleanVariableWorkflow,
   ChangeNumberStringVariableWorkflow,
+  ChangeObjectVariableWorkflow,
   ChangeVariableUIElement,
+  CommandDescription,
   ConditionUIElement,
   ContentTextUIElement,
   ContentType,
@@ -30,6 +34,9 @@ import {
 } from "@kickoffbot.com/types";
 import { MediaGroup } from "telegraf/typings/telegram-types";
 import { ConditionChecker } from "./ConditionChecker";
+import { ChangeArrayVariableHelper } from "./ChangeArrayVariableHelper";
+import { ChangeObjectVariableHelper } from "./ChangeObjectVariableHelper";
+import { MessageButtonsManager } from "./MessageButtonsManager";
 
 export class MyTelegramBot {
   private _bot: Telegraf;
@@ -43,8 +50,27 @@ export class MyTelegramBot {
     this._utils.setProject(this._botProject);
   }
 
+  private setupCommands() {
+    // void this._bot.telegram.setMyCommands([
+    //   {
+    //     command: "greetings",
+    //     description: "Start bot",
+    //   }
+    // ]);
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const commands: CommandDescription[] = (this._botProject.blocks.find((b) => b.id === "/start")?.elements[0] as any).commands ?? [];
+    for (const command of commands) {
+      const realCommand = command.command.slice(1);
+      this._bot.command(realCommand, this.handleCommand.bind(this, command));
+    }
+  }
+
   async setup() {
     this._bot.start(this.handleStart.bind(this));
+
+    this.setupCommands();
+
     this._bot.on("message", this.handleMessage.bind(this));
     // this._bot.on("inline_query", () => {
     //   console.log("inline_query");
@@ -53,13 +79,25 @@ export class MyTelegramBot {
     // this._bot.on("chosen_inline_result", () => {
     //   console.log("chosen_inline_result");
     // });
-
     await this._bot.launch();
   }
 
-  private async handleStart(
-    context: NarrowedContext<Context<Update>, Update.MessageUpdate<Message>>
-  ) {
+  private async handleCommand(command: CommandDescription, context: NarrowedContext<Context<Update>, Update.MessageUpdate<Message>>) {
+    const userContext = this._state.get(getUserContextKey(context));
+    if (isNil(userContext)) {
+      throw new Error("InvalidOperationError: userContext is null");
+    }
+
+    const commandId = command.id;
+
+    const commandLink = this._utils.getLinkForButton('/start', commandId);
+    const block = this._utils.getBlockById(commandLink.input.blockId);
+
+    await this.handleElement(userContext, context, block, block.elements[0]);
+    this.calcNextStep(userContext, block, block.elements[0]);
+  }
+
+  private async handleStart(context: NarrowedContext<Context<Update>, Update.MessageUpdate<Message>>) {
     console.log("start");
     const userContext = new UserContext(this._botProject);
     userContext.updateTelegramVariableBasedOnMessage(context);
@@ -74,32 +112,21 @@ export class MyTelegramBot {
     this._state.set(getUserContextKey(context), userContext);
   }
 
-  private calcNextStep(
-    userContext: UserContext,
-    currentBlock: FlowDesignerUIBlockDescription,
-    currentElement: UIElement
-  ) {
+  private calcNextStep(userContext: UserContext, currentBlock: FlowDesignerUIBlockDescription, currentElement: UIElement) {
     let nextBlock: FlowDesignerUIBlockDescription | null = null;
     let nextElement: UIElement | null = null;
 
-    if (
-      currentBlock.elements[currentBlock.elements.length - 1] === currentElement
-    ) {
+    if (currentBlock.elements[currentBlock.elements.length - 1] === currentElement) {
       const link = this._utils.getLinkFromBlock(currentBlock);
       if (!isNil(link)) {
-        nextBlock =
-          this._botProject.blocks.find((b) => b.id === link.input.blockId) ??
-          null;
+        nextBlock = this._botProject.blocks.find((b) => b.id === link.input.blockId) ?? null;
         if (!isNil(nextBlock) && nextBlock.elements.length >= 1) {
           nextElement = nextBlock.elements[0];
         }
       }
     } else {
       nextBlock = currentBlock;
-      nextElement =
-        currentBlock.elements[
-          currentBlock.elements.indexOf(currentElement) + 1
-        ];
+      nextElement = currentBlock.elements[currentBlock.elements.indexOf(currentElement) + 1];
     }
 
     if (isNil(nextBlock) || isNil(nextElement)) {
@@ -112,40 +139,26 @@ export class MyTelegramBot {
     }
   }
 
-  private async handleCallbackQuery(
-    context: NarrowedContext<Context<Update>, Update.MessageUpdate<Message>>
-  ) {
+  private async handleCallbackQuery(context: NarrowedContext<Context<Update>, Update.MessageUpdate<Message>>) {
     const userContext = this._state.get(getUserContextKey(context));
     if (isNil(userContext)) {
       throw new Error("InvalidOperationError: userContext is null");
     }
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const buttonId = (context.callbackQuery as any).data;
+    const callbackData = (context.callbackQuery as any).data;
 
-    let link = this._botProject.links.find(
-      (l) => (l.output as ButtonPortDescription).buttonId === buttonId
-    );
+    const buttonsSourceStrategy = MessageButtonsManager.getButtonsSourceStrategy(callbackData);
+    let link;
+
+    if (buttonsSourceStrategy === ButtonsSourceStrategy.FromVariable) {
+      link = MessageButtonsManager.handleCallbackQueryFromVariable(callbackData, this._botProject, userContext, this._utils);
+    } else if (buttonsSourceStrategy === ButtonsSourceStrategy.Manual) {
+      link = MessageButtonsManager.handleCallbackQueryManual(callbackData, this._botProject);
+    }
 
     if (isNil(link)) {
-      const inputButtonsElement = (
-        this._botProject.blocks
-          .map((e) => e.elements)
-          .flat(1)
-          .filter(
-            (e) => e.type === ElementType.INPUT_BUTTONS
-          ) as InputButtonsUIElement[]
-      ).find((e) => e.buttons.some((b) => b.id === buttonId));
-
-      link = this._botProject.links.find(
-        (l) =>
-          (l.output as ButtonPortDescription).buttonId ===
-          `default-button-${inputButtonsElement?.id ?? ""}`
-      );
-
-      if (isNil(link)) {
-        await context.answerCbQuery("Link is empty!");
-        return;
-      }
+      await context.answerCbQuery("Link is empty!");
+      return;
     }
 
     const block = this._utils.getBlockById(link.input.blockId);
@@ -155,9 +168,7 @@ export class MyTelegramBot {
     void context.answerCbQuery();
   }
 
-  private async handleMessage(
-    context: NarrowedContext<Context<Update>, Update.MessageUpdate<Message>>
-  ) {
+  private async handleMessage(context: NarrowedContext<Context<Update>, Update.MessageUpdate<Message>>) {
     const userContext = this._state.get(getUserContextKey(context));
     if (isNil(userContext)) {
       throw new Error("InvalidOperationError: userContext is null");
@@ -168,10 +179,7 @@ export class MyTelegramBot {
     }
 
     const block = this._utils.getBlockById(nextStep.blockId);
-    const element = this._utils.getElementById(
-      block.elements,
-      nextStep.elementId
-    );
+    const element = this._utils.getElementById(block.elements, nextStep.elementId);
 
     await this.handleElement(userContext, context, block, element);
   }
@@ -191,35 +199,21 @@ export class MyTelegramBot {
           throw new Error("InvalidOperationError: telegramContent is null");
         }
 
-        const answerText = this._utils.getParsedText(
-          contentTextElement.telegramContent,
-          userContext
-        );
-        const messageButtons = this.getButtonsForMessage(
-          userContext,
-          block,
-          element
-        );
+        const answerText = this._utils.getParsedText(contentTextElement.telegramContent, userContext);
+        const messageButtons = MessageButtonsManager.getButtonsForMessage(userContext, block, element, this._utils);
 
         const sendPlainMessage = async (serviceMessage?: string) => {
-          await context.sendMessage(
-            answerText +
-              (!isNil(serviceMessage) ? "<br/>" + serviceMessage : ""),
-            {
-              parse_mode: "HTML",
-              reply_markup: !isNil(messageButtons)
-                ? {
-                    inline_keyboard: messageButtons,
-                  }
-                : undefined,
-            }
-          );
+          await context.sendMessage(answerText + (!isNil(serviceMessage) ? "<br/>" + serviceMessage : ""), {
+            parse_mode: "HTML",
+            reply_markup: !isNil(messageButtons)
+              ? {
+                  inline_keyboard: messageButtons,
+                }
+              : undefined,
+          });
         };
 
-        if (
-          !isNil(contentTextElement.attachments) &&
-          contentTextElement.attachments.length > 0
-        ) {
+        if (!isNil(contentTextElement.attachments) && contentTextElement.attachments.length > 0) {
           if (contentTextElement.attachments.length === 1) {
             const attachment = contentTextElement.attachments[0];
             const request = {
@@ -248,11 +242,7 @@ export class MyTelegramBot {
             }
           } else {
             let request: MediaGroup = [];
-            if (
-              contentTextElement.attachments.every(
-                (a) => a.typeContent === ContentType.Image
-              )
-            ) {
+            if (contentTextElement.attachments.every((a) => a.typeContent === ContentType.Image)) {
               const images = [] as (InputMediaPhoto | InputMediaVideo)[];
               for (const item of contentTextElement.attachments) {
                 const isFirstPhoto = contentTextElement.attachments[0] === item;
@@ -268,10 +258,7 @@ export class MyTelegramBot {
             } else {
               const documents = [] as InputMediaDocument[];
               for (const item of contentTextElement.attachments) {
-                const isLastDocument =
-                  contentTextElement.attachments[
-                    contentTextElement.attachments.length - 1
-                  ] === item;
+                const isLastDocument = contentTextElement.attachments[contentTextElement.attachments.length - 1] === item;
 
                 documents.push({
                   media: {
@@ -299,30 +286,19 @@ export class MyTelegramBot {
         if (isNil(inputTextElement.variableId)) {
           throw new Error("InvalidOperationError: input without variable");
         }
-        const inputVariable = this._utils.getVariableById(
-          inputTextElement.variableId
-        );
+        const inputVariable = this._utils.getVariableById(inputTextElement.variableId);
 
-        const typedValueFromText = this._utils.getTypedValueFromText(
-          (context.message as Message.TextMessage).text,
-          inputVariable.type
-        );
-        
+        const typedValueFromText = this._utils.getTypedValueFromText((context.message as Message.TextMessage).text, inputVariable.type);
+
         userContext.updateVariable(inputVariable.name, typedValueFromText);
         break;
       }
       case ElementType.LOGIC_CHANGE_VARIABLE: {
-        this.handleChangeVariableElement(
-          element as ChangeVariableUIElement,
-          userContext
-        );
+        this.handleChangeVariableElement(element as ChangeVariableUIElement, userContext);
         break;
       }
       case ElementType.LOGIC_CONDITION: {
-        shouldCalcNextStep = this.handleLogicConditionElement(
-          element as ConditionUIElement,
-          userContext
-        );
+        shouldCalcNextStep = this.handleLogicConditionElement(element as ConditionUIElement, userContext);
         break;
       }
     }
@@ -334,20 +310,11 @@ export class MyTelegramBot {
     void this.checkNextElement(userContext, context);
   }
 
-  private handleLogicConditionElement(
-    element: ConditionUIElement,
-    userContext: UserContext
-  ): boolean {
-    const conditionIsTrue = ConditionChecker.check(
-      element,
-      this._utils,
-      userContext
-    );
+  private handleLogicConditionElement(element: ConditionUIElement, userContext: UserContext): boolean {
+    const conditionIsTrue = ConditionChecker.check(element, this._utils, userContext);
 
     if (conditionIsTrue) {
-      const link = this._botProject.links.find(
-        (l) => (l.output as ButtonPortDescription).buttonId === element.id
-      );
+      const link = this._botProject.links.find((l) => (l.output as ButtonPortDescription).buttonId === element.id);
       if (isNil(link)) {
         return true;
       }
@@ -365,16 +332,18 @@ export class MyTelegramBot {
     return true;
   }
 
-  private handleChangeVariableElement(
-    element: ChangeVariableUIElement,
-    userContext: UserContext
-  ) {
+  private handleChangeVariableElement(element: ChangeVariableUIElement, userContext: UserContext) {
     if (!element.selectedVariableId) {
       throw new Error("InvalidOperationError: variable is null");
     }
 
     const variable = this._utils.getVariableById(element.selectedVariableId);
-    let newValue: number | string | null | boolean = null;
+    if (element.restoreInitialValue) {
+      userContext.updateVariable(variable.name, JSON.parse(variable.value as string));
+      return;
+    }
+
+    let newValue: number | string | null | boolean | object | unknown[] = null;
 
     switch (variable.type) {
       case VariableType.NUMBER: {
@@ -382,14 +351,9 @@ export class MyTelegramBot {
           break;
         }
 
-        const expression = (
-          element.workflowDescription as ChangeNumberStringVariableWorkflow
-        ).expression;
+        const expression = (element.workflowDescription as ChangeNumberStringVariableWorkflow).expression;
 
-        newValue = this._utils.getNumberValueFromExpression(
-          expression,
-          userContext
-        );
+        newValue = this._utils.getNumberValueFromExpression(expression, userContext);
 
         break;
       }
@@ -398,14 +362,9 @@ export class MyTelegramBot {
           break;
         }
 
-        const expression = (
-          element.workflowDescription as ChangeNumberStringVariableWorkflow
-        ).expression;
+        const expression = (element.workflowDescription as ChangeNumberStringVariableWorkflow).expression;
 
-        newValue = this._utils.getStringValueFromExpression(
-          expression,
-          userContext
-        );
+        newValue = this._utils.getStringValueFromExpression(expression, userContext);
 
         break;
       }
@@ -414,62 +373,42 @@ export class MyTelegramBot {
           break;
         }
 
-        const workflowDescription =
-          element.workflowDescription as ChangeBooleanVariableWorkflow;
+        const workflowDescription = element.workflowDescription as ChangeBooleanVariableWorkflow;
 
-        newValue = this._utils.getBooleanValue(
-          workflowDescription.strategy,
-          variable,
-          userContext
-        );
+        newValue = this._utils.getBooleanValue(workflowDescription.strategy, variable, userContext);
+        break;
+      }
+      case VariableType.ARRAY: {
+        if (isNil(element.workflowDescription)) {
+          break;
+        }
+
+        const workflowDescription = element.workflowDescription as ChangeArrayVariableWorkflow;
+
+        newValue = ChangeArrayVariableHelper.getArrayValue(workflowDescription, variable, userContext, this._utils);
+
+        break;
+      }
+
+      case VariableType.OBJECT: {
+        if (isNil(element.workflowDescription)) {
+          break;
+        }
+
+        const workflowDescription = element.workflowDescription as ChangeObjectVariableWorkflow;
+
+        newValue = ChangeObjectVariableHelper.getObjectValue(workflowDescription, userContext, this._utils) as object;
+        break;
+      }
+
+      default: {
+        throw new Error("NotImplementedError. Unknown variable type.");
       }
     }
 
     if (!isNil(newValue)) {
       userContext.updateVariable(variable.name, newValue);
     }
-  }
-
-  private getButtonsForMessage(
-    userContext: UserContext,
-    block: FlowDesignerUIBlockDescription,
-    element: UIElement
-  ): InlineKeyboardButton.CallbackButton[][] | null {
-    const result: InlineKeyboardButton.CallbackButton[][] = [];
-
-    if (block.elements[block.elements.length - 1] == element) {
-      return null;
-    }
-
-    const nextElement =
-      block.elements[block.elements.findIndex((e) => e.id === element.id) + 1];
-
-    if (nextElement.type === ElementType.INPUT_BUTTONS) {
-      const buttonsElement = nextElement as InputButtonsUIElement;
-      for (const button of buttonsElement.buttons) {
-        const buttonContent = this._utils.getParsedText(
-          button.content,
-          userContext
-        );
-
-        result.push([{ callback_data: button.id, text: buttonContent }]);
-      }
-
-      const nextBlockButtons = this.getButtonsForMessage(
-        userContext,
-        block,
-        nextElement
-      );
-      if (nextBlockButtons !== null) {
-        result.push(...nextBlockButtons);
-      }
-    }
-
-    if (result.length === 0) {
-      return null;
-    }
-
-    return result;
   }
 
   private async checkNextElement(
@@ -483,9 +422,7 @@ export class MyTelegramBot {
       return;
     }
 
-    const block = this._botProject.blocks.find(
-      (b) => b.id === nextStep?.blockId
-    );
+    const block = this._botProject.blocks.find((b) => b.id === nextStep?.blockId);
 
     if (isNil(block)) {
       return;
