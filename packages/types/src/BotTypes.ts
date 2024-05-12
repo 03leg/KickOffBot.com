@@ -3,19 +3,13 @@ import { TransformDescription } from "./TransformDescription";
 
 export enum ElementType {
   CONTENT_TEXT = "content-text",
-  CONTENT_IMAGE = "content-image",
-  CONTENT_AUDIO = "content-audio",
-  CONTENT_VIDEO = "content-video",
 
   INPUT_TEXT = "input-text",
   INPUT_BUTTONS = "input-buttons",
-  INPUT_NUMBER = "input-number",
-  INPUT_EMAIL = "input-email",
-  INPUT_DATE = "input-date",
-  INPUT_PHONE = "input-phone",
 
   LOGIC_CHANGE_VARIABLE = "logic-change-variable",
   LOGIC_CONDITION = "logic-condition",
+  LOGIC_EDIT_MESSAGE = "logic-edit-message",
 }
 
 export interface UIElement {
@@ -77,6 +71,16 @@ export interface PropertyConditionItem {
 export interface ConditionUIElement extends UIElement {
   items: ConditionItem[];
   logicalOperator: LogicalOperator;
+}
+
+export enum EditMessageOperation {
+  DELETE = "DELETE",
+  EDIT = "EDIT",
+}
+
+export interface EditMessageUIElement extends UIElement {
+  messageElementId?: string;
+  editedMessage?: MessageContentDescription;
 }
 
 export interface ChangeVariableUIElement extends UIElement {
@@ -157,7 +161,7 @@ export interface AddValueToArrayDescription {
   variableSourceDescription?: AddValueToArrayVariableSourceDescription;
 }
 
-export type RemoveItemsFromArrayDescription  = AddValueToArrayFilterDescription;
+export type RemoveItemsFromArrayDescription = AddValueToArrayFilterDescription;
 
 export interface ChangeArrayVariableWorkflow {
   operation: ChangeArrayOperation;
@@ -174,7 +178,7 @@ export interface ChangeNumberStringVariableWorkflow {
   expression: string;
 }
 
-export interface ContentTextUIElement extends UIElement {
+export interface MessageContentDescription {
   json?: string;
   htmlContent?: string;
   telegramContent?: string;
@@ -182,6 +186,8 @@ export interface ContentTextUIElement extends UIElement {
   showButtons: boolean;
   buttonsDescription: MessageButtonsDescription;
 }
+
+export interface ContentTextUIElement extends UIElement, MessageContentDescription {}
 
 export interface InputTextUIElement extends UIElement {
   label: string;
@@ -194,8 +200,8 @@ export interface ButtonElement {
 }
 
 export enum ButtonsSourceStrategy {
-  Manual ='manual',
-  FromVariable = 'fromVariable',
+  Manual = "manual",
+  FromVariable = "fromVariable",
 }
 
 export interface VariableButtonsSourceStrategyDescription {
@@ -225,7 +231,7 @@ export interface CommandDescription {
 
 export interface CommandsUIElement extends UIElement {
   commands: CommandDescription[];
-  id: 'botCommands';
+  id: "botCommands";
 }
 
 export enum BlockType {

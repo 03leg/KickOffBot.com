@@ -3,8 +3,10 @@ import {
   ButtonPortDescription,
   ButtonsSourceStrategy,
   ContentTextUIElement,
+  EditMessageUIElement,
   ElementType,
   MessageButtonsDescription,
+  MessageContentDescription,
 } from "@kickoffbot.com/types";
 import { UserContext } from "./UserContext";
 import { InlineKeyboardButton } from "telegraf/typings/core/types/typegram";
@@ -16,20 +18,21 @@ import { throwIfNil } from "./guard";
 export class MessageButtonsManager {
   public static getButtonsForMessage(
     userContext: UserContext,
-    element: ContentTextUIElement,
+    elementId: string,
+    messageContentDescription: MessageContentDescription,
     utils: MyBotUtils
   ): InlineKeyboardButton.CallbackButton[][] | null {
-    if(!element.showButtons){
+    if(!messageContentDescription.showButtons){
       return null;
     }
 
-    const messageButtonsDescription = element.buttonsDescription;
+    const messageButtonsDescription = messageContentDescription.buttonsDescription;
     let result: InlineKeyboardButton.CallbackButton[][] = [];
 
     if (messageButtonsDescription.strategy === ButtonsSourceStrategy.Manual) {
       result = this.getManualButtons(messageButtonsDescription, utils, userContext);
     } else if (messageButtonsDescription.strategy === ButtonsSourceStrategy.FromVariable) {
-      result = this.getButtonsFromVariable(element.id, messageButtonsDescription, utils, userContext);
+      result = this.getButtonsFromVariable(elementId, messageButtonsDescription, utils, userContext);
     }
 
     if (result.length === 0) {
@@ -96,15 +99,26 @@ export class MessageButtonsManager {
     let link = botProject.links.find((l) => (l.output as ButtonPortDescription).buttonId === buttonId);
 
     if (isNil(link)) {
-      const messageButtonsDescription = (
+      let elementId = (
         botProject.blocks
           .map((e) => e.elements)
           .flat(1)
           .filter((e) => e.type === ElementType.CONTENT_TEXT) as ContentTextUIElement[]
-      ).find((e) => (e.buttonsDescription.buttons ?? []).some((b) => b.id === buttonId));
+      ).find((e) => (e.buttonsDescription.buttons ?? []).some((b) => b.id === buttonId))?.id;
+
+
+      if (isNil(elementId)) {
+        elementId = (
+          botProject.blocks
+            .map((e) => e.elements)
+            .flat(1)
+            .filter((e) => e.type === ElementType.LOGIC_EDIT_MESSAGE) as EditMessageUIElement[]
+        ).find((e) => (e.editedMessage?.buttonsDescription.buttons ?? []).some((b) => b.id === buttonId))?.id;
+      }
+
 
       link = botProject.links.find(
-        (l) => (l.output as ButtonPortDescription).buttonId === `default-button-${messageButtonsDescription?.id ?? ""}`
+        (l) => (l.output as ButtonPortDescription).buttonId === `default-button-${elementId}`
       );
 
       if (isNil(link)) {

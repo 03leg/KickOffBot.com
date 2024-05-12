@@ -2,7 +2,7 @@ import { Box, Checkbox, FormControlLabel, LinearProgress } from '@mui/material'
 import { EditorState, convertFromRaw } from 'draft-js';
 import { isNil } from 'lodash';
 import React, { useCallback, useEffect, useState } from 'react'
-import { ButtonsSourceStrategy, ElementType, type ContentTextUIElement } from '@kickoffbot.com/types';
+import { MessageContentDescription } from '@kickoffbot.com/types';
 import { TextEditor } from '../TextEditor';
 import { AttachEditor } from '~/components/PostCreator/components/AttachEditor';
 import { ClientFileDescription } from '~/types/ContentEditor';
@@ -15,7 +15,7 @@ import { IMAGE_EXTENSIONS } from '~/components/PostCreator/components/AttachEdit
 import { ButtonsEditor } from '../../ButtonsInput/Editor';
 
 interface Props {
-    element: ContentTextUIElement;
+    element: MessageContentDescription;
 }
 
 export const TextContentEditor = ({ element }: Props) => {

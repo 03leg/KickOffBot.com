@@ -1,4 +1,4 @@
-import { type ContentTextUIElement, ElementType, type InputTextUIElement, type FlowDesignerUIBlockDescription, type UIElement, type InputButtonsUIElement, type FlowDesignerLink, type ButtonPortDescription, type BotVariable, BlockType, TransformDescription, ChangeVariableUIElement, ConditionUIElement, LogicalOperator, ButtonsSourceStrategy, CommandsUIElement } from "@kickoffbot.com/types";
+import { type ContentTextUIElement, ElementType, type InputTextUIElement, type FlowDesignerUIBlockDescription, type UIElement, type InputButtonsUIElement, type FlowDesignerLink, type ButtonPortDescription, type BotVariable, BlockType, TransformDescription, ChangeVariableUIElement, ConditionUIElement, LogicalOperator, ButtonsSourceStrategy, CommandsUIElement, EditMessageUIElement, EditMessageOperation } from "@kickoffbot.com/types";
 import MessageIcon from '@mui/icons-material/Message';
 import TextFieldsIcon from '@mui/icons-material/TextFields';
 import { isNil } from "lodash";
@@ -11,6 +11,8 @@ import { APP_ELEMENT_ROLE } from "./constants";
 import { PositionDescription } from "@kickoffbot.com/types";
 import EditNoteIcon from '@mui/icons-material/EditNote';
 import ForkLeftIcon from '@mui/icons-material/ForkLeft';
+import EditIcon from '@mui/icons-material/Edit';
+
 
 export function getContentElements() {
     return [
@@ -36,6 +38,7 @@ export function getLogicElements() {
     return [
         { type: ElementType.LOGIC_CHANGE_VARIABLE, title: 'Change variable', icon: <EditNoteIcon /> },
         { type: ElementType.LOGIC_CONDITION, title: 'Condition', icon: <ForkLeftIcon /> },
+        { type: ElementType.LOGIC_EDIT_MESSAGE, title: 'Edit message', icon: <EditIcon /> },
     ];
 }
 
@@ -60,7 +63,8 @@ export function getNewUIElementTemplate(id: string, data: DraggableElementData):
         case ElementType.CONTENT_TEXT: {
             const result: ContentTextUIElement = { 
                 id, 
-                type: ElementType.CONTENT_TEXT, attachments: [],
+                type: ElementType.CONTENT_TEXT, 
+                attachments: [],
                 showButtons: false,
                 buttonsDescription: { strategy: ButtonsSourceStrategy.Manual, buttons: [] }
              };
@@ -102,6 +106,13 @@ export function getNewUIElementTemplate(id: string, data: DraggableElementData):
 
                 return result;
             }
+        case ElementType.LOGIC_EDIT_MESSAGE: {
+            const result: EditMessageUIElement = {
+                id,
+                type: ElementType.LOGIC_EDIT_MESSAGE,
+            };
+            return result;
+        }
         default: {
             throw Error('NotImplementedError');
         }

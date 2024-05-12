@@ -2,13 +2,14 @@ import { Box, Divider } from '@mui/material';
 import { isNil } from 'lodash';
 import React, { useMemo } from 'react'
 import { makeStyles } from 'tss-react/mui';
-import { ElementType, type ContentTextUIElement, type UIElement } from '@kickoffbot.com/types';
+import { ElementType, MessageContentDescription } from '@kickoffbot.com/types';
 import { AttachmentsViewer } from '~/components/PostCreator/components/AttachmentsViewer/AttachmentsViewer';
 import { AttachmentViewer } from '../../AttachmentViewer';
 import { ButtonsInput } from '../ButtonsInput/ButtonsInput';
 
 interface Props {
-    element: UIElement;
+    element: MessageContentDescription;
+    elementId: string;
 }
 
 export const useStyles = makeStyles()(() => ({
@@ -29,8 +30,8 @@ export const useStyles = makeStyles()(() => ({
 }));
 
 
-export const TextContent = ({ element }: Props) => {
-    const contentTextElement = element as ContentTextUIElement;
+export const TextContent = ({ element, elementId }: Props) => {
+    const contentTextElement = element;
     const { classes } = useStyles();
 
     const textContent = useMemo(() => {
@@ -58,7 +59,7 @@ export const TextContent = ({ element }: Props) => {
                 <>
                     <Divider sx={{ marginTop: 2 }}/>
                     <Box sx={{ marginTop: 2 }}>
-                        <ButtonsInput element={{ ...contentTextElement.buttonsDescription, id: contentTextElement.id, type: ElementType.INPUT_BUTTONS }} />
+                        <ButtonsInput element={{ ...contentTextElement.buttonsDescription, id: elementId, type: ElementType.INPUT_BUTTONS }} />
                     </Box>
                 </>
             }

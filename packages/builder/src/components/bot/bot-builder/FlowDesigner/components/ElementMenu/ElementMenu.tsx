@@ -9,9 +9,10 @@ import { useConfirm } from 'material-ui-confirm';
 import { TextContentEditor } from '../elements/TextContent/Editor';
 import { ButtonsEditor } from '../elements/ButtonsInput/Editor';
 import { TextInputEditor } from '../elements/TextInput/Editor';
-import { ChangeVariableUIElement, ConditionUIElement, ContentTextUIElement, ElementType, InputButtonsUIElement, InputTextUIElement, OutputPortDescription, UIElement } from '@kickoffbot.com/types';
+import { ChangeVariableUIElement, ConditionUIElement, ContentTextUIElement, EditMessageUIElement, ElementType, InputButtonsUIElement, InputTextUIElement, OutputPortDescription, UIElement } from '@kickoffbot.com/types';
 import { ChangeVariableEditor } from '../elements/ChangeVariable/Editor';
 import { ConditionEditor } from '../elements/Condition/Editor';
+import { EditMessageEditor } from '../elements/EditMessage/Editor';
 
 
 
@@ -98,6 +99,12 @@ export const ElementMenu = ({ element }: Props) => {
                     return { content: (<ConditionEditor element={newElement} />), title: 'Configure condition', newElement };
 
                 }
+            case ElementType.LOGIC_EDIT_MESSAGE: {
+                const initialElement = elementArg as EditMessageUIElement;
+                const newElement: EditMessageUIElement = JSON.parse(JSON.stringify(initialElement));
+
+                return { content: (<EditMessageEditor element={newElement} />), title: 'Edit message', newElement };
+            }
             default: {
                 throw new Error('NotImplementedError');
             }

@@ -2,7 +2,7 @@ import { Box } from '@mui/material'
 import React, { useCallback, useContext, useMemo } from 'react'
 import { TextContent } from '../elements/TextContent';
 import { Colors } from '~/themes/Colors';
-import { ElementType, type UIElement } from '@kickoffbot.com/types';
+import { ContentTextUIElement, ElementType, type UIElement } from '@kickoffbot.com/types';
 import { getIconByType } from '../../../utils';
 import { CSS } from '@dnd-kit/utilities';
 import { useSortable } from '@dnd-kit/sortable';
@@ -13,6 +13,7 @@ import { FlowDesignerContext } from '../../context';
 import { ElementMenu } from '../ElementMenu';
 import { ChangeVariable } from '../elements/ChangeVariable';
 import { Condition } from '../elements/Condition';
+import { EditMessage } from '../elements/EditMessage';
 
 interface Props {
     element: UIElement;
@@ -25,7 +26,7 @@ export const ElementView = ({ element, scale }: Props) => {
 
         switch (element.type) {
             case ElementType.CONTENT_TEXT: {
-                result = (<TextContent element={element} />);
+                result = (<TextContent element={element as ContentTextUIElement} elementId={element.id} />);
                 break;
             }
             case ElementType.INPUT_TEXT: {
@@ -42,6 +43,10 @@ export const ElementView = ({ element, scale }: Props) => {
             }
             case ElementType.LOGIC_CONDITION:{
                 result = <Condition  element={element}/>
+                break;
+            }
+            case ElementType.LOGIC_EDIT_MESSAGE: {
+                result= <EditMessage element={element} />
                 break;
             }
             default: {

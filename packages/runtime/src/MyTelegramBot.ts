@@ -1,12 +1,4 @@
-import {
-  Update,
-  Message,
-  InlineKeyboardButton,
-  InputMediaPhoto,
-  InputMediaVideo,
-  InputMediaDocument,
-  InputFile,
-} from "telegraf/typings/core/types/typegram";
+import { Update, Message, InputMediaPhoto, InputMediaVideo, InputMediaDocument, InputFile } from "telegraf/typings/core/types/typegram";
 import { Context, NarrowedContext, Telegraf } from "telegraf";
 import { UserContext } from "./UserContext";
 import { isNil } from "lodash";
@@ -25,9 +17,9 @@ import {
   ConditionUIElement,
   ContentTextUIElement,
   ContentType,
+  EditMessageUIElement,
   ElementType,
   FlowDesignerUIBlockDescription,
-  InputButtonsUIElement,
   InputTextUIElement,
   UIElement,
   VariableType,
@@ -37,12 +29,14 @@ import { ConditionChecker } from "./ConditionChecker";
 import { ChangeArrayVariableHelper } from "./ChangeArrayVariableHelper";
 import { ChangeObjectVariableHelper } from "./ChangeObjectVariableHelper";
 import { MessageButtonsManager } from "./MessageButtonsManager";
+import { MessagesStore } from "./MessagesStore";
 
 export class MyTelegramBot {
   private _bot: Telegraf;
   private _botProject: BotProject;
   private _state = new Map<number, UserContext>();
   private _utils = new MyBotUtils();
+  private _messageStore = new MessagesStore();
 
   constructor(token: string, botProject: BotProject) {
     this._bot = new Telegraf(token);
@@ -90,7 +84,7 @@ export class MyTelegramBot {
 
     const commandId = command.id;
 
-    const commandLink = this._utils.getLinkForButton('/start', commandId);
+    const commandLink = this._utils.getLinkForButton("/start", commandId);
     const block = this._utils.getBlockById(commandLink.input.blockId);
 
     await this.handleElement(userContext, context, block, block.elements[0]);
@@ -200,10 +194,15 @@ export class MyTelegramBot {
         }
 
         const answerText = this._utils.getParsedText(contentTextElement.telegramContent, userContext);
-        const messageButtons = MessageButtonsManager.getButtonsForMessage(userContext, contentTextElement, this._utils);
+        const messageButtons = MessageButtonsManager.getButtonsForMessage(
+          userContext,
+          contentTextElement.id,
+          contentTextElement,
+          this._utils
+        );
 
         const sendPlainMessage = async (serviceMessage?: string) => {
-          await context.sendMessage(answerText + (!isNil(serviceMessage) ? "<br/>" + serviceMessage : ""), {
+          const sendResult = await context.sendMessage(answerText + (!isNil(serviceMessage) ? "<br/>" + serviceMessage : ""), {
             parse_mode: "HTML",
             reply_markup: !isNil(messageButtons)
               ? {
@@ -211,6 +210,8 @@ export class MyTelegramBot {
                 }
               : undefined,
           });
+
+          this._messageStore.saveMessageSendResult(contentTextElement.id, sendResult);
         };
 
         if (!isNil(contentTextElement.attachments) && contentTextElement.attachments.length > 0) {
@@ -299,6 +300,10 @@ export class MyTelegramBot {
       }
       case ElementType.LOGIC_CONDITION: {
         shouldCalcNextStep = this.handleLogicConditionElement(element as ConditionUIElement, userContext);
+        break;
+      }
+      case ElementType.LOGIC_EDIT_MESSAGE: {
+        await this.handleLogicEditMessageElement(element as EditMessageUIElement, userContext);
         break;
       }
     }
@@ -440,10 +445,31 @@ export class MyTelegramBot {
     switch (nextElement.type) {
       case ElementType.LOGIC_CONDITION:
       case ElementType.LOGIC_CHANGE_VARIABLE:
+      case ElementType.LOGIC_EDIT_MESSAGE:
       case ElementType.CONTENT_TEXT: {
         await this.handleElement(userContext, context, block, nextElement);
         break;
       }
     }
+  }
+
+  private async handleLogicEditMessageElement(element: EditMessageUIElement, userContext: UserContext) {
+    const messageDescription = element.editedMessage;
+    if (isNil(messageDescription) || isNil(messageDescription.telegramContent) || isNil(element.messageElementId)) {
+      return;
+    }
+
+    const answerText = this._utils.getParsedText(messageDescription.telegramContent, userContext);
+    const messageButtons = MessageButtonsManager.getButtonsForMessage(userContext, element.id, messageDescription, this._utils);
+    const { chat, message_id } = this._messageStore.getSendMessageData(element.messageElementId);
+
+    await this._bot.telegram.editMessageText(chat.id, message_id, undefined, answerText, {
+      parse_mode: "HTML",
+      reply_markup: !isNil(messageButtons)
+        ? {
+            inline_keyboard: messageButtons,
+          }
+        : undefined,
+    });
   }
 }

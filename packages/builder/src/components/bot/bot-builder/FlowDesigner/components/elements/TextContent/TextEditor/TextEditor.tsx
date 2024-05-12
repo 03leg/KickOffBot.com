@@ -8,7 +8,7 @@ import { stateToHTML } from "draft-js-export-html";
 import { VariableType, type BotVariable } from '@kickoffbot.com/types';
 import { VariableSelectorDialog } from '../../../VariableSelectorDialog';
 import { getTextVariableReference } from '~/components/bot/bot-builder/utils';
-import EmojiPicker from 'emoji-picker-react';
+// import EmojiPicker from 'emoji-picker-react';
 // import InsertEmoticonIcon from '@mui/icons-material/InsertEmoticon';
 
 interface TextEditorProps {
