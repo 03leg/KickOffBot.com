@@ -1,5 +1,4 @@
 import { Message } from "telegraf/typings/core/types/typegram";
-import { throwIfNil } from "./guard";
 
 export class MessagesStore {
   private store = new Map<string, Message.TextMessage>();
@@ -7,10 +6,9 @@ export class MessagesStore {
     this.store.set(elementId, sendResult);
   }
 
-  public getSendMessageData(id: string) {
-    const sendMessageResult = this.store.get(id);
-    throwIfNil(sendMessageResult);
+  public getSentMessageData(id: string) {
+    const sentMessageResult = this.store.get(id);
 
-    return sendMessageResult;
+    return sentMessageResult;
   }
 }

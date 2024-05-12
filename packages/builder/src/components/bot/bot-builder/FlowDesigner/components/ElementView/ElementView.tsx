@@ -14,6 +14,7 @@ import { ElementMenu } from '../ElementMenu';
 import { ChangeVariable } from '../elements/ChangeVariable';
 import { Condition } from '../elements/Condition';
 import { EditMessage } from '../elements/EditMessage';
+import { RemoveMessage } from '../elements/RemoveMessage';
 
 interface Props {
     element: UIElement;
@@ -47,6 +48,10 @@ export const ElementView = ({ element, scale }: Props) => {
             }
             case ElementType.LOGIC_EDIT_MESSAGE: {
                 result= <EditMessage element={element} />
+                break;
+            }
+            case ElementType.LOGIC_REMOVE_MESSAGE: {
+                result= <RemoveMessage element={element} />
                 break;
             }
             default: {

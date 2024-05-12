@@ -9,10 +9,11 @@ import { useConfirm } from 'material-ui-confirm';
 import { TextContentEditor } from '../elements/TextContent/Editor';
 import { ButtonsEditor } from '../elements/ButtonsInput/Editor';
 import { TextInputEditor } from '../elements/TextInput/Editor';
-import { ChangeVariableUIElement, ConditionUIElement, ContentTextUIElement, EditMessageUIElement, ElementType, InputButtonsUIElement, InputTextUIElement, OutputPortDescription, UIElement } from '@kickoffbot.com/types';
+import { ChangeVariableUIElement, ConditionUIElement, ContentTextUIElement, EditMessageUIElement, ElementType, InputButtonsUIElement, InputTextUIElement, OutputPortDescription, RemoveMessageUIElement, UIElement } from '@kickoffbot.com/types';
 import { ChangeVariableEditor } from '../elements/ChangeVariable/Editor';
 import { ConditionEditor } from '../elements/Condition/Editor';
 import { EditMessageEditor } from '../elements/EditMessage/Editor';
+import { RemoveMessageEditor } from '../elements/RemoveMessage/Editor/RemoveMessageEditor';
 
 
 
@@ -104,6 +105,12 @@ export const ElementMenu = ({ element }: Props) => {
                 const newElement: EditMessageUIElement = JSON.parse(JSON.stringify(initialElement));
 
                 return { content: (<EditMessageEditor element={newElement} />), title: 'Edit message', newElement };
+            }
+            case ElementType.LOGIC_REMOVE_MESSAGE: {
+                const initialElement = elementArg as RemoveMessageUIElement;
+                const newElement: RemoveMessageUIElement = JSON.parse(JSON.stringify(initialElement));
+
+                return { content: (<RemoveMessageEditor element={newElement} />), title: 'Remove message', newElement };
             }
             default: {
                 throw new Error('NotImplementedError');

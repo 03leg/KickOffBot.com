@@ -10,6 +10,7 @@ export enum ElementType {
   LOGIC_CHANGE_VARIABLE = "logic-change-variable",
   LOGIC_CONDITION = "logic-condition",
   LOGIC_EDIT_MESSAGE = "logic-edit-message",
+  LOGIC_REMOVE_MESSAGE = "logic-remove-message",
 }
 
 export interface UIElement {
@@ -296,4 +297,8 @@ export interface BotProject {
   blocks: FlowDesignerUIBlockDescription[];
   links: FlowDesignerLink[];
   variables: BotVariable[];
+}
+
+export interface RemoveMessageUIElement extends UIElement {
+  messageElementId?: string;
 }

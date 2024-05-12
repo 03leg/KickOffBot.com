@@ -1,4 +1,4 @@
-import { type ContentTextUIElement, ElementType, type InputTextUIElement, type FlowDesignerUIBlockDescription, type UIElement, type InputButtonsUIElement, type FlowDesignerLink, type ButtonPortDescription, type BotVariable, BlockType, TransformDescription, ChangeVariableUIElement, ConditionUIElement, LogicalOperator, ButtonsSourceStrategy, CommandsUIElement, EditMessageUIElement, EditMessageOperation } from "@kickoffbot.com/types";
+import { type ContentTextUIElement, ElementType, type InputTextUIElement, type FlowDesignerUIBlockDescription, type UIElement, type InputButtonsUIElement, type FlowDesignerLink, type ButtonPortDescription, type BotVariable, BlockType, TransformDescription, ChangeVariableUIElement, ConditionUIElement, LogicalOperator, ButtonsSourceStrategy, CommandsUIElement, EditMessageUIElement, EditMessageOperation, RemoveMessageUIElement } from "@kickoffbot.com/types";
 import MessageIcon from '@mui/icons-material/Message';
 import TextFieldsIcon from '@mui/icons-material/TextFields';
 import { isNil } from "lodash";
@@ -12,6 +12,7 @@ import { PositionDescription } from "@kickoffbot.com/types";
 import EditNoteIcon from '@mui/icons-material/EditNote';
 import ForkLeftIcon from '@mui/icons-material/ForkLeft';
 import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 
 export function getContentElements() {
@@ -39,6 +40,7 @@ export function getLogicElements() {
         { type: ElementType.LOGIC_CHANGE_VARIABLE, title: 'Change variable', icon: <EditNoteIcon /> },
         { type: ElementType.LOGIC_CONDITION, title: 'Condition', icon: <ForkLeftIcon /> },
         { type: ElementType.LOGIC_EDIT_MESSAGE, title: 'Edit message', icon: <EditIcon /> },
+        { type: ElementType.LOGIC_REMOVE_MESSAGE, title: 'Remove message', icon: <DeleteIcon /> },
     ];
 }
 
@@ -110,6 +112,13 @@ export function getNewUIElementTemplate(id: string, data: DraggableElementData):
             const result: EditMessageUIElement = {
                 id,
                 type: ElementType.LOGIC_EDIT_MESSAGE,
+            };
+            return result;
+        }
+        case ElementType.LOGIC_REMOVE_MESSAGE: {
+            const result: RemoveMessageUIElement = {
+                id,
+                type: ElementType.LOGIC_REMOVE_MESSAGE,
             };
             return result;
         }

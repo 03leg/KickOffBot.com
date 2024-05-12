@@ -9,7 +9,7 @@ interface Props {
     element: UIElement;
 }
 
-const getBlockFromMessageElementId = (messageElementId: string | undefined, blocks: FlowDesignerUIBlockDescription[]) => {
+export const getBlockFromMessageElementId = (messageElementId: string | undefined, blocks: FlowDesignerUIBlockDescription[]) => {
     if (isNil(messageElementId)) {
         return undefined;
     }

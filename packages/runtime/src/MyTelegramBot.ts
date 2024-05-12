@@ -21,6 +21,7 @@ import {
   ElementType,
   FlowDesignerUIBlockDescription,
   InputTextUIElement,
+  RemoveMessageUIElement,
   UIElement,
   VariableType,
 } from "@kickoffbot.com/types";
@@ -306,6 +307,10 @@ export class MyTelegramBot {
         await this.handleLogicEditMessageElement(element as EditMessageUIElement, userContext);
         break;
       }
+      case ElementType.LOGIC_REMOVE_MESSAGE: {
+        await this.handleLogicRemoveMessageElement(element as RemoveMessageUIElement);
+        break;
+      }
     }
 
     if (shouldCalcNextStep) {
@@ -446,6 +451,7 @@ export class MyTelegramBot {
       case ElementType.LOGIC_CONDITION:
       case ElementType.LOGIC_CHANGE_VARIABLE:
       case ElementType.LOGIC_EDIT_MESSAGE:
+      case ElementType.LOGIC_REMOVE_MESSAGE:
       case ElementType.CONTENT_TEXT: {
         await this.handleElement(userContext, context, block, nextElement);
         break;
@@ -461,9 +467,12 @@ export class MyTelegramBot {
 
     const answerText = this._utils.getParsedText(messageDescription.telegramContent, userContext);
     const messageButtons = MessageButtonsManager.getButtonsForMessage(userContext, element.id, messageDescription, this._utils);
-    const { chat, message_id } = this._messageStore.getSendMessageData(element.messageElementId);
+    const sentMessageData = this._messageStore.getSentMessageData(element.messageElementId);
+    if (isNil(sentMessageData)) {
+      return;
+    }
 
-    await this._bot.telegram.editMessageText(chat.id, message_id, undefined, answerText, {
+    await this._bot.telegram.editMessageText(sentMessageData.chat.id, sentMessageData.message_id, undefined, answerText, {
       parse_mode: "HTML",
       reply_markup: !isNil(messageButtons)
         ? {
@@ -471,5 +480,18 @@ export class MyTelegramBot {
           }
         : undefined,
     });
+  }
+
+  private async handleLogicRemoveMessageElement(element: RemoveMessageUIElement) {
+    if (isNil(element.messageElementId)) {
+      return;
+    }
+
+    const sentMessageData = this._messageStore.getSentMessageData(element.messageElementId);
+    if (isNil(sentMessageData)) {
+      return;
+    }
+
+    await this._bot.telegram.deleteMessage(sentMessageData.chat.id, sentMessageData.message_id);
   }
 }
