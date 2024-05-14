@@ -5,20 +5,21 @@ generator client {
     provider = "prisma-client-js"
 }
 
+// datasource db {
+//     provider = "mysql"
+//     // NOTE: When using mysql or sqlserver, uncomment the @db.Text annotations in model Account below
+//     // Further reading:
+//     // https://next-auth.js.org/adapters/prisma#create-the-prisma-schema
+//     // https://www.prisma.io/docs/reference/api-reference/prisma-schema-reference#string
+//     url      = env("DATABASE_URL")
+// }
+
 datasource db {
-    provider = "mysql"
-    // NOTE: When using mysql or sqlserver, uncomment the @db.Text annotations in model Account below
-    // Further reading:
-    // https://next-auth.js.org/adapters/prisma#create-the-prisma-schema
-    // https://www.prisma.io/docs/reference/api-reference/prisma-schema-reference#string
-    url      = env("DATABASE_URL")
+  provider          = "postgresql"
+  url               = env("DATABASE_URL")
+  directUrl         = env("DIRECT_URL")
 }
 
-model Example {
-    id        String   @id @default(cuid())
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
-}
 
 // Necessary for Next auth
 model Account {
@@ -55,7 +56,6 @@ model User {
     image         String?
     accounts      Account[]
     sessions      Session[]
-    telegramAccounts TelegramAccount[]
     bots BotDescription[]
 }
 
@@ -65,14 +65,6 @@ model VerificationToken {
     expires    DateTime
 
     @@unique([identifier, token])
-}
-
-model TelegramAccount {
-    id            String    @id @default(cuid())
-    userId        String
-    accountId     BigInt 
-    channelInfo   String   @db.Text
-    user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model BotDescription {
@@ -98,3 +90,4 @@ model BotContent {
 
 // npx prisma generate
 // yarn prisma db push
+// npx prisma migrate dev --name init

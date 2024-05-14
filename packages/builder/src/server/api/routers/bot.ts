@@ -1,15 +1,12 @@
-import { PrismaClient } from "@prisma/client";
 import { isNil } from "lodash";
 import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
-import { delay } from "~/server/utility/debug";
 import {
   BotContentScheme,
   BotDescriptionScheme,
   IdModelScheme,
 } from "~/types/Bot";
-import fs from 'fs';
-
-const prisma = new PrismaClient();
+import fs from "fs";
+import { prisma } from "~/server/db";
 
 export const botManagementRouter = createTRPCRouter({
   saveBot: protectedProcedure
@@ -17,7 +14,7 @@ export const botManagementRouter = createTRPCRouter({
     .mutation(async ({ ctx, input }) => {
       const userId = ctx.session?.user.id;
 
-      await prisma.botDescription.upsert({
+      await ctx.prisma.botDescription.upsert({
         create: { userId, name: input.name },
         update: { name: input.name },
         where: { id: input.id ?? "unknown", userId },
