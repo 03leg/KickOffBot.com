@@ -13,7 +13,10 @@ interface Props {
 
 export const ObjectTypeVariableEditor = ({ workflow, onWorkflowChange }: Props) => {
     const [workflowValue, setWorkFlowValue] = React.useState<ChangeObjectVariableWorkflow>(workflow ?? {} as ChangeObjectVariableWorkflow);
-    const { handleInsertVariable, inputRef, updateSelectionStart } = useInsertVariableToText(workflowValue.json ?? '', (value) => workflowValue.json = value);
+    const { handleInsertVariable, inputRef, updateSelectionStart } = useInsertVariableToText(workflowValue.json ?? '', (value) => {
+
+        setWorkFlowValue({ ...workflowValue, json: value });
+    });
 
 
     const handleValueDataSourceChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
@@ -51,14 +54,14 @@ export const ObjectTypeVariableEditor = ({ workflow, onWorkflowChange }: Props) 
                     label="JSON"
                     multiline
                     rows={8}
-                    value={workflowValue.json}
+                    value={workflowValue.json ?? ''}
                     onChange={handleJSONValueChange}
                     sx={{ width: '100%' }}
                     inputRef={inputRef}
                     onSelect={updateSelectionStart}
                 />
                 <Box sx={{ marginLeft: 1 }}>
-                    <VariableSelectorDialog onInsertVariable={handleInsertVariable} />
+                    <VariableSelectorDialog onInsertVariable={handleInsertVariable} supportPathForObject={false} />
                 </Box>
             </Box>}
 

@@ -83,7 +83,7 @@ export const ChangeVariableEditor = ({ element }: Props) => {
             <VariableSelector valueId={selectedVariableId} onVariableChange={handleVariableChange} />
 
 
-            <FormControlLabel control={<Checkbox checked={restoreInitialValue} onChange={handleRestoreInitialValueChange} />} label="Restore initial value" />
+            {selectedVariableId && <FormControlLabel control={<Checkbox checked={restoreInitialValue} onChange={handleRestoreInitialValueChange} />} label="Restore initial value" />}
 
 
             <Box className={restoreInitialValue? classes.disabled : ''}>

@@ -1,11 +1,15 @@
 import React, { useCallback, useState } from 'react';
 import { VariableType, type BotVariable } from '@kickoffbot.com/types';
-import { Box, FormControl, InputLabel, MenuItem, Select, type SelectChangeEvent, TextField, FormLabel, RadioGroup, FormControlLabel, Radio } from '@mui/material';
+import { Box, FormControl, InputLabel, MenuItem, Select, type SelectChangeEvent, TextField, FormLabel, RadioGroup, FormControlLabel, Radio, Link } from '@mui/material';
+import { Editor } from '@monaco-editor/react';
 
 interface Props {
     variable: BotVariable;
     onVariableChange: (variable: BotVariable) => void;
 }
+
+const JSON_ARRAY_OBJECT_VALUE = '[\n    {\n        \"productId\": 123,\n        \"productName\": \"Product #123\",\n        \"price\": 123\n    },\n    {\n        \"productId\": 2,\n        \"productName\": \"Product #321\",\n        \"price\": 321\n    }\n]' as const;
+const JSON_OBJECT_VALUE = '{\n    \"productId\": 1,\n    \"productName\": \"Product #123\",\n    \"price\": 123\n}' as const;
 
 export const VariableEditor = ({ variable, onVariableChange }: Props) => {
 
@@ -50,12 +54,13 @@ export const VariableEditor = ({ variable, onVariableChange }: Props) => {
                 break;
             }
             case VariableType.OBJECT: {
-                setVariableValue('{\n "productId": 1,\n "productName": "Product #123",\n "price": 123\n}')
+                setVariableValue(JSON_OBJECT_VALUE)
                 break;
             }
             case VariableType.ARRAY: {
                 setArrayItemType(VariableType.OBJECT);
-                setVariableValue('[\n{\n "productId": 1,\n "productName": "Product #123",\n "price": 123\n},\n{\n "productId": 2,\n "productName": "Product #321",\n "price": 321\n}\n]')
+                variable.arrayItemType = VariableType.OBJECT;
+                setVariableValue(JSON_ARRAY_OBJECT_VALUE)
                 break;
             }
         }
@@ -71,7 +76,7 @@ export const VariableEditor = ({ variable, onVariableChange }: Props) => {
 
         switch (variable.arrayItemType) {
             case VariableType.STRING: {
-                setVariableValue("['item1', 'item2', 'item3']")
+                setVariableValue('["item1", "item2", "item3"]')
                 break;
             }
             case VariableType.NUMBER: {
@@ -83,7 +88,7 @@ export const VariableEditor = ({ variable, onVariableChange }: Props) => {
                 break;
             }
             case VariableType.OBJECT: {
-                setVariableValue('[\n{\n "productId": 1,\n "productName": "Product #123",\n "price": 123\n},\n{\n "productId": 2,\n "productName": "Product #321",\n "price": 321\n}\n]')
+                setVariableValue(JSON_ARRAY_OBJECT_VALUE)
                 break;
             }
         }
@@ -92,6 +97,13 @@ export const VariableEditor = ({ variable, onVariableChange }: Props) => {
 
     }, [onVariableChange, setVariableValue, variable]);
 
+
+    const handleMonacoEditorChange = useCallback((value?: string) => {
+        setVariableValue(value ?? '');
+        onVariableChange(variable);
+
+        console.log(JSON.stringify(value));
+    }, [onVariableChange, setVariableValue, variable]);
 
     return (
         <Box sx={{ display: 'flex', flexDirection: 'column', padding: 1 }}>
@@ -128,8 +140,14 @@ export const VariableEditor = ({ variable, onVariableChange }: Props) => {
             </FormControl>}
 
 
+            {(type === VariableType.OBJECT.toString() || type === VariableType.ARRAY.toString()) &&
+                <Box sx={{ marginTop: 1, display: 'flex', justifyContent: 'flex-end' }}>
+                    <Link href="https://www.digitalocean.com/community/tutorials/an-introduction-to-json" target="_blank">An Introduction to JSON</Link>
+                </Box>
+            }
 
-            {(type === VariableType.STRING.toString() || type === VariableType.OBJECT.toString() || type === VariableType.ARRAY.toString()) &&
+
+            {(type === VariableType.STRING.toString()) &&
                 (<TextField
                     sx={{ marginTop: 2 }}
                     id="string-value"
@@ -140,6 +158,18 @@ export const VariableEditor = ({ variable, onVariableChange }: Props) => {
                     value={value}
                     onChange={handleValueChange}
                 />)}
+
+            {(type === VariableType.OBJECT.toString() || type === VariableType.ARRAY.toString()) &&
+                <Box sx={{ marginTop: 2 }}>
+                    <InputLabel sx={{ marginBottom: 1, fontSize: '0.75rem' }}>Initial value</InputLabel>
+
+                    <Editor height="250px"
+                        defaultLanguage="json"
+                        value={value as string}
+                        options={{ minimap: { enabled: false } }}
+                        onChange={handleMonacoEditorChange} />
+                </Box>
+            }
 
             {type === VariableType.NUMBER.toString() &&
                 (<TextField
