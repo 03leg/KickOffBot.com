@@ -34,7 +34,7 @@ export const BotDescriptionCard = ({ description, onEdit, onRemove }: Props) => 
 
     return (
         <Card sx={{
-            minWidth: 275, maxWidth: 275, height: "100%",
+            minWidth: 275, maxWidth: 275,
             display: "flex",
             flexDirection: "column",
         }}>
