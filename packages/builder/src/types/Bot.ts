@@ -19,3 +19,8 @@ export const BotContentScheme = z.object({
 export const IdModelScheme = z.object({
   id: z.string(),
 });
+
+export const TelegramTokenScheme = z.object({
+  projectId: z.string(),
+  token: z.string(),
+});

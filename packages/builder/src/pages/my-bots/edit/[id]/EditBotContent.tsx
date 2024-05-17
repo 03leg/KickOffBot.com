@@ -18,13 +18,15 @@ import AbcIcon from '@mui/icons-material/Abc';
 import AbcRounded from '@mui/icons-material/AbcRounded';
 import { VariableViewers } from '~/components/bot/bot-builder/VariablesViewer';
 import { ElementType, FlowDesignerUIBlockDescription, TransformDescription, UIElement } from '@kickoffbot.com/types';
+import RouterIcon from '@mui/icons-material/Router';
+import { RuntimeEditor } from '~/components/bot/bot-builder/RuntimeEditor';
 
 
 export const EditBotContent = () => {
     const router = useRouter()
     const flowDesignerTransformDescription = React.useRef<TransformDescription | null>(null);
     const [activeDraggableItem, setActiveDraggableItem] = useState<Active | null>();
-    const { blocks, updateBlock, addBlock, project, initProject, projectIsInitialized, setViewPortOffset, updateAllLinks, toggleVariablesViewer } = useFlowDesignerStore((state) => ({
+    const { blocks, updateBlock, addBlock, project, initProject, projectIsInitialized, setViewPortOffset, updateAllLinks, toggleVariablesViewer, toggleRuntimeEditor } = useFlowDesignerStore((state) => ({
         blocks: state.project?.blocks ?? [],
         addBlock: state.addBlock,
         updateBlock: state.updateBlock,
@@ -33,13 +35,14 @@ export const EditBotContent = () => {
         projectIsInitialized: state.projectIsInitialized,
         setViewPortOffset: state.setViewPortOffset,
         updateAllLinks: state.updateAllLinks,
-        toggleVariablesViewer: state.toggleVariablesViewer
+        toggleVariablesViewer: state.toggleVariablesViewer,
+        toggleRuntimeEditor: state.toggleRuntimeEditor
     }));
     const { mutateAsync } = api.botManagement.saveBotContent.useMutation();
     const { changeTransformDescription } = useFlowDesignerStore((state) => ({ changeTransformDescription: state.changeTransformDescription }));
 
-    const projectIdFromQuery = router.query.id ?? 'unknown id';
-    const { data } = api.botManagement.getBotContent.useQuery({ id: projectIdFromQuery as string }, { enabled: typeof projectIdFromQuery === 'string' && Boolean(router.query.id) && projectIsInitialized === false });
+    const projectIdFromQuery = router.query.id as string ?? 'unknown id';
+    const { data } = api.botManagement.getBotContent.useQuery({ id: projectIdFromQuery}, { enabled: typeof projectIdFromQuery === 'string' && Boolean(router.query.id) && projectIsInitialized === false });
 
 
     const viewPortRef = React.useRef<HTMLDivElement>(null);
@@ -309,6 +312,11 @@ export const EditBotContent = () => {
             <Box sx={{ padding: (theme) => theme.spacing(2), height: '100%', display: 'flex', flexDirection: 'column' }} onContextMenu={(e) => e.preventDefault()}>
                 <SnackbarProvider />
                 <Box sx={{ display: 'flex', paddingBottom: 1 }}>
+                    <Box>
+                        <Button variant="outlined" startIcon={<RouterIcon />} onClick={toggleRuntimeEditor}>
+                            Runtime
+                        </Button>
+                    </Box>
                     <Box sx={{ display: 'flex', justifyContent: 'flex-end', flex: 1 }}>
                         <Button variant="contained" color="success" onClick={handleSaveBot}>
                             Save
@@ -344,6 +352,7 @@ export const EditBotContent = () => {
                         </Box>
                     </DndContext>
                     <VariableViewers />
+                    <RuntimeEditor projectId={projectIdFromQuery} />
                 </Box>
             </Box>
         </ConfirmProvider>

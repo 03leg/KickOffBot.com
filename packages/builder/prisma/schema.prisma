@@ -6,20 +6,19 @@ generator client {
 }
 
 // datasource db {
-//     provider = "mysql"
-//     // NOTE: When using mysql or sqlserver, uncomment the @db.Text annotations in model Account below
-//     // Further reading:
-//     // https://next-auth.js.org/adapters/prisma#create-the-prisma-schema
-//     // https://www.prisma.io/docs/reference/api-reference/prisma-schema-reference#string
-//     url      = env("DATABASE_URL")
+//   provider          = "postgresql"
+//   url               = env("DATABASE_URL")
+//   directUrl         = env("DIRECT_URL")
 // }
 
 datasource db {
-  provider          = "postgresql"
-  url               = env("DATABASE_URL")
-  directUrl         = env("DIRECT_URL")
+    provider = "mysql"
+    // NOTE: When using mysql or sqlserver, uncomment the @db.Text annotations in model Account below
+    // Further reading:
+    // https://next-auth.js.org/adapters/prisma#create-the-prisma-schema
+    // https://www.prisma.io/docs/reference/api-reference/prisma-schema-reference#string
+    url      = env("DATABASE_URL")
 }
-
 
 // Necessary for Next auth
 model Account {
@@ -49,14 +48,14 @@ model Session {
 }
 
 model User {
-    id            String    @id @default(cuid())
+    id            String           @id @default(cuid())
     name          String?
-    email         String?   @unique
+    email         String?          @unique
     emailVerified DateTime?
     image         String?
     accounts      Account[]
     sessions      Session[]
-    bots BotDescription[]
+    bots          BotDescription[]
 }
 
 model VerificationToken {
@@ -68,24 +67,34 @@ model VerificationToken {
 }
 
 model BotDescription {
-    id            String    @id @default(cuid())
+    id            String      @id @default(cuid())
     userId        String
-    contentId        String?
-    botType Int @default(0)
-    name   String   @db.Text
-    deleted Boolean @default(false)
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
-    user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-    botContentRef     BotContent?     @relation(fields: [contentId], references: [id], onDelete: Cascade)
+    contentId     String?
+    botType       Int         @default(0)
+    name          String      @db.Text
+    deleted       Boolean     @default(false)
+    createdAt     DateTime    @default(now())
+    updatedAt     DateTime    @updatedAt
+    user          User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+    botContentRef BotContent? @relation(fields: [contentId], references: [id], onDelete: Cascade)
+    BotToken      BotToken[]
 }
 
 model BotContent {
-    id            String    @id @default(cuid())
-    version       Int
-    content       Json
-    createdAt DateTime @default(now())
-    bots BotDescription[]
+    id        String           @id @default(cuid())
+    version   Int
+    content   Json
+    createdAt DateTime         @default(now())
+    bots      BotDescription[]
+}
+
+model BotToken {
+    id             String         @id @default(cuid())
+    botId          String
+    token          String
+    createdAt      DateTime       @default(now())
+    isActive       Boolean        @default(false)
+    botDescription BotDescription @relation(fields: [botId], references: [id], onDelete: Cascade)
 }
 
 // npx prisma generate

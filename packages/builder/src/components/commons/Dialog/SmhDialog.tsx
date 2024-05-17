@@ -7,7 +7,7 @@ import DialogActions from '@mui/material/DialogActions';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 import { makeStyles } from 'tss-react/mui';
-import { Alert, Box, CircularProgress, Typography } from '@mui/material';
+import { Alert, Box, CircularProgress } from '@mui/material';
 import { isNil } from 'lodash';
 
 interface DialogProps {
@@ -17,7 +17,7 @@ interface DialogProps {
     buttons: React.ReactNode[];
     maxWidth?: Breakpoint | false;
     isLoading?: boolean;
-    error?: unknown;
+    error?: string;
 }
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
@@ -70,7 +70,7 @@ export default function SmhDialog({ open, onClose, title, children, buttons, max
 
     const errorMessage = React.useMemo(() => {
         if (!isNil(error)) {
-            const errorMsg = 'Oops! Something went wrong. Please try again later.'
+            const errorMsg = 'Oops! Something went wrong. Please try again later. ' + error;
 
             return errorMsg
         }

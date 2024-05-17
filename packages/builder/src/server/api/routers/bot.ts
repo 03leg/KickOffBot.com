@@ -4,9 +4,13 @@ import {
   BotContentScheme,
   BotDescriptionScheme,
   IdModelScheme,
+  TelegramTokenScheme,
 } from "~/types/Bot";
 import fs from "fs";
 import { prisma } from "~/server/db";
+import { TelegramToken } from "@kickoffbot.com/types";
+import { getPreviewToken } from "~/server/utility/getPreviewToken";
+import { z } from "zod";
 
 export const botManagementRouter = createTRPCRouter({
   saveBot: protectedProcedure
@@ -106,6 +110,107 @@ export const botManagementRouter = createTRPCRouter({
       await prisma.botDescription.update({
         data: { deleted: true },
         where: { userId, id: input.id },
+      });
+    }),
+  addTelegramToken: protectedProcedure
+    .input(TelegramTokenScheme)
+    .mutation(async ({ ctx, input }) => {
+      const userId = ctx.session?.user.id;
+
+      const projectDescription = await prisma.botDescription.findUnique({
+        where: { userId, id: input.projectId },
+        select: { id: true },
+      });
+
+      if (projectDescription) {
+        await prisma.botToken.create({
+          data: {
+            botId: projectDescription.id,
+            token: input.token,
+          },
+        });
+      }
+    }),
+  getTelegramTokens: protectedProcedure
+    .input(
+      z.object({
+        projectId: z.string(),
+      })
+    )
+    .query(async ({ ctx, input }) => {
+      const userId = ctx.session?.user.id;
+      const projectDescription = await prisma.botDescription.findUnique({
+        where: { userId, id: input.projectId },
+        select: { id: true },
+      });
+
+      if (projectDescription) {
+        const tokens = await prisma.botToken.findMany({
+          where: { botId: projectDescription.id },
+        });
+        return tokens.map((item) => {
+          const result: TelegramToken = {
+            id: item.id,
+            tokenPreview: getPreviewToken(item.token),
+            isActiveNow: item.isActive,
+          };
+
+          return result;
+        });
+      }
+
+      return [];
+    }),
+  deleteTelegramToken: protectedProcedure
+    .input(
+      z.object({
+        tokenId: z.string(),
+        projectId: z.string(),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      const userId = ctx.session?.user.id;
+      const projectDescription = await prisma.botDescription.findUnique({
+        where: { userId, id: input.projectId },
+        select: { id: true },
+      });
+
+      if (projectDescription) {
+        await prisma.botToken.delete({
+          where: { id: input.tokenId },
+        });
+      }
+    }),
+  startBot: protectedProcedure
+    .input(
+      z.object({
+        tokenId: z.string(),
+      })
+    )
+    .mutation(async ({ input }) => {
+      await prisma.botToken.update({
+        data: {
+          isActive: true,
+        },
+        where: {
+          id: input.tokenId,
+        },
+      });
+    }),
+  stopBot: protectedProcedure
+    .input(
+      z.object({
+        tokenId: z.string(),
+      })
+    )
+    .mutation(async ({ input }) => {
+      await prisma.botToken.update({
+        data: {
+          isActive: false,
+        },
+        where: {
+          id: input.tokenId,
+        },
       });
     }),
 });
