@@ -42,18 +42,18 @@ export const EditBotContent = () => {
     const { changeTransformDescription } = useFlowDesignerStore((state) => ({ changeTransformDescription: state.changeTransformDescription }));
 
     const projectIdFromQuery = router.query.id as string ?? 'unknown id';
-    const { data } = api.botManagement.getBotContent.useQuery({ id: projectIdFromQuery}, { enabled: typeof projectIdFromQuery === 'string' && Boolean(router.query.id) && projectIsInitialized === false });
+    const { data: projectDescription } = api.botManagement.getBotContent.useQuery({ id: projectIdFromQuery}, { enabled: typeof projectIdFromQuery === 'string' && Boolean(router.query.id) && projectIsInitialized === false });
 
 
     const viewPortRef = React.useRef<HTMLDivElement>(null);
 
     useEffect(() => {
-        if (data === undefined) {
+        if (projectDescription === undefined) {
             return;
         }
 
-        initProject(data);
-    }, [data, initProject, projectIsInitialized, router.query.id]);
+        initProject(projectDescription);
+    }, [initProject, projectDescription, projectIsInitialized, router.query.id]);
 
 
     const { setNodeRef, node } = useDroppable({

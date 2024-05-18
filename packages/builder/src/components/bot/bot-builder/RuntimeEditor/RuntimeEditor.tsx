@@ -23,7 +23,6 @@ export const RuntimeEditor = ({ projectId }: Props) => {
     const { mutateAsync: stopBot } = api.botManagement.stopBot.useMutation();
     const [errorMessage, setErrorMessage] = useState<string | undefined>(undefined);
     const { data = [], refetch } = api.botManagement.getTelegramTokens.useQuery({ projectId: projectId! }, { enabled: projectId !== undefined });
-    const [telegramTokens, setTelegramTokens] = useState<TelegramToken[]>([]);
 
     const handleClose = useCallback(() => {
         toggleRuntimeEditor();
@@ -34,11 +33,6 @@ export const RuntimeEditor = ({ projectId }: Props) => {
             void refetch();
         }
     }, [refetch, showRuntimeEditor])
-
-
-    useEffect(() => {
-        setTelegramTokens(data);
-    }, [data]);
 
     const handleAddNewBotToken = useCallback(async (newBotToken: string) => {
         setErrorMessage(undefined);
@@ -144,8 +138,8 @@ export const RuntimeEditor = ({ projectId }: Props) => {
             open={true} title={'Runtime Editor'}>
             <Box sx={{ display: 'flex', flexDirection: 'column', padding: (theme) => theme.spacing(1, 0) }}>
                 <NewBotToken onAddNewBotToken={handleAddNewBotToken} />
-                {telegramTokens.length > 0 && <TokensManager
-                    tokens={telegramTokens}
+                {data.length > 0 && <TokensManager
+                    tokens={data}
                     onDelete={handleDeleteToken}
                     onStartBot={handleStartBot}
                     onStopBot={handleStopBot}
