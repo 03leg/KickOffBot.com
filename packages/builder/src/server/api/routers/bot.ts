@@ -153,6 +153,7 @@ export const botManagementRouter = createTRPCRouter({
             id: item.id,
             tokenPreview: getPreviewToken(item.token),
             isActiveNow: item.isActive,
+            requestActiveValue: item.requestActiveValue
           };
 
           return result;
@@ -190,7 +191,7 @@ export const botManagementRouter = createTRPCRouter({
     .mutation(async ({ input }) => {
       await prisma.botToken.update({
         data: {
-          isActive: true,
+          requestActiveValue: true,
         },
         where: {
           id: input.tokenId,
@@ -206,7 +207,7 @@ export const botManagementRouter = createTRPCRouter({
     .mutation(async ({ input }) => {
       await prisma.botToken.update({
         data: {
-          isActive: false,
+          requestActiveValue: false,
         },
         where: {
           id: input.tokenId,

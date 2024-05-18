@@ -1,7 +1,7 @@
 import { TelegramToken } from '@kickoffbot.com/types';
 import { Box, Button, IconButton, List, ListItemButton, ListItemText, Tooltip, Typography } from '@mui/material'
 import { isNil } from 'lodash';
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import DeleteIcon from '@mui/icons-material/Delete';
 import PlayCircleFilledIcon from '@mui/icons-material/PlayCircleFilled';
 import StopIcon from '@mui/icons-material/Stop';
@@ -36,7 +36,6 @@ export const TokensManager = ({ tokens, onDelete, onStartBot, onStopBot }: Props
         }
 
         onStartBot(selectedToken);
-        setSelectedToken(undefined);
 
     }, [onStartBot, selectedToken]);
 
@@ -46,9 +45,15 @@ export const TokensManager = ({ tokens, onDelete, onStartBot, onStopBot }: Props
         }
 
         onStopBot(selectedToken);
-        setSelectedToken(undefined);
-
     }, [onStopBot, selectedToken]);
+
+
+    useEffect(() => {
+        if (selectedToken) {
+            setSelectedToken(tokens.find(t => t.id === selectedToken.id))
+        }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [tokens]);
 
     return (
         <Box sx={{ display: 'flex', backgroundColor: '#F3F6F9', height: '300px', padding: 1, marginTop: 2 }}>
@@ -66,24 +71,28 @@ export const TokensManager = ({ tokens, onDelete, onStartBot, onStopBot }: Props
                     <Box sx={{ flex: 1, backgroundColor: 'white', marginLeft: 1, padding: 1, flexDirection: 'column', display: 'flex', }}>
                         <Box sx={{ width: '100%' }}>
                             <Typography>Status:
-                                {selectedToken.isActiveNow && <span style={{ color: 'green' }}> Active...</span>}
-                                {!selectedToken.isActiveNow && <span style={{ color: 'gray' }}> Not active...</span>}
+                                {!isNil(selectedToken.requestActiveValue) && <span style={{ color: '#1976d2' }}> In progress... <span style={{ color: 'gray', fontSize: '10px' }}>(Operation can take some time)</span></span>}
+                                {isNil(selectedToken.requestActiveValue) &&
+                                    <>
+                                        {selectedToken.isActiveNow && <span style={{ color: 'green' }}> Active...</span>}
+                                        {!selectedToken.isActiveNow && <span style={{ color: 'gray' }}> Not active...</span>}
+                                    </>
+                                }
                             </Typography>
                         </Box>
                         <Box sx={{ marginTop: 1, display: 'flex', width: '100%' }}>
-                            <>
+                            {isNil(selectedToken.requestActiveValue) && <>
                                 {!selectedToken.isActiveNow &&
-                                    <Tooltip title="Operation can take some time (at least 30 seconds)">
-                                        <Button variant="outlined" color='success' startIcon={<PlayCircleFilledIcon />} onClick={handleStartBot}>
-                                            Start your bot
-                                        </Button></Tooltip>}
+                                    <Button variant="outlined" color='success' startIcon={<PlayCircleFilledIcon />} onClick={handleStartBot}>
+                                        Start your bot
+                                    </Button>}
                                 {selectedToken.isActiveNow &&
-                                    <Tooltip title="Operation can take some time (at least 30 seconds)">
-                                        <Button variant="outlined" startIcon={<StopIcon />} onClick={handleStopBot}>
-                                            Stop your bot
-                                        </Button>
-                                    </Tooltip>}
+                                    <Button variant="outlined" startIcon={<StopIcon />} onClick={handleStopBot}>
+                                        Stop your bot
+                                    </Button>
+                                }
                             </>
+                            }
                         </Box>
 
                         <Box sx={{ marginTop: 1, display: 'flex', justifyContent: 'flex-end', width: '100%' }}>

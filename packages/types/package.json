@@ -2,17 +2,16 @@
   "name": "@kickoffbot.com/types",
   "version": "1.0.0",
   "description": "",
-  "main": "dist/index.min.js",
-  "module": "dist/index.esm.js",
-  "browser": "dist/index.umd.js",
+  "main": "dist/index.js",
+  "module": "dist/index.js",
+  "browser": "dist/index.js",
   "types": "dist/types/index.d.ts",
   "type": "module",
   "author": {
     "name": "Me"
   },
   "scripts": {
-    "build": "rollup -c",
-    "dev": "rollup -c"
+    "dev": "rimraf dist && tsc --emitDeclarationOnly --outDir dist && esbuild --outdir=dist --bundle --platform=node --format=esm ./src/index.ts"
   },
   "keywords": [],
   "devDependencies": {

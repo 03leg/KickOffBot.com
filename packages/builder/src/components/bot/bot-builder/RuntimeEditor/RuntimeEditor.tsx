@@ -109,6 +109,16 @@ export const RuntimeEditor = ({ projectId }: Props) => {
         }
     }, [projectId, refetch, startBot, stopBot]);
 
+    useEffect(() => {
+        const tokensInProgress = data.filter((token) => token.requestActiveValue);
+
+        if (tokensInProgress.length > 0) {
+            setTimeout(() => {
+                void refetch();
+            }, 20 * 1000);
+        }
+    }, [data, refetch]);
+
     const handleStartBot = useCallback((token: TelegramToken) => {
         void startStopBot(token, true);
     }, [startStopBot]);

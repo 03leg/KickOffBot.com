@@ -78,18 +78,22 @@ export class MyTelegramBot {
   }
 
   private async handleCommand(command: CommandDescription, context: NarrowedContext<Context<Update>, Update.MessageUpdate<Message>>) {
-    const userContext = this._state.get(getUserContextKey(context));
-    if (isNil(userContext)) {
-      throw new Error("InvalidOperationError: userContext is null");
+    try {
+      const userContext = this._state.get(getUserContextKey(context));
+      if (isNil(userContext)) {
+        throw new Error("InvalidOperationError: userContext is null");
+      }
+
+      const commandId = command.id;
+
+      const commandLink = this._utils.getLinkForButton("/start", commandId);
+      const block = this._utils.getBlockById(commandLink.input.blockId);
+
+      await this.handleElement(userContext, context, block, block.elements[0]);
+      this.calcNextStep(userContext, block, block.elements[0]);
+    } catch (e) {
+      console.log("handleCommand", e);
     }
-
-    const commandId = command.id;
-
-    const commandLink = this._utils.getLinkForButton("/start", commandId);
-    const block = this._utils.getBlockById(commandLink.input.blockId);
-
-    await this.handleElement(userContext, context, block, block.elements[0]);
-    this.calcNextStep(userContext, block, block.elements[0]);
   }
 
   private async handleStart(context: NarrowedContext<Context<Update>, Update.MessageUpdate<Message>>) {
@@ -183,7 +187,7 @@ export class MyTelegramBot {
     userContext: UserContext,
     context: NarrowedContext<Context<Update>, Update.MessageUpdate<Message>>,
     block: FlowDesignerUIBlockDescription,
-    element: UIElement
+    element: UIElement,
   ) {
     let shouldCalcNextStep = true;
 
@@ -199,7 +203,7 @@ export class MyTelegramBot {
           userContext,
           contentTextElement.id,
           contentTextElement,
-          this._utils
+          this._utils,
         );
 
         const sendPlainMessage = async (serviceMessage?: string) => {
@@ -423,7 +427,7 @@ export class MyTelegramBot {
 
   private async checkNextElement(
     userContext: UserContext,
-    context: NarrowedContext<Context<Update>, Update.MessageUpdate<Message>>
+    context: NarrowedContext<Context<Update>, Update.MessageUpdate<Message>>,
     // block: FlowDesignerUIBlockDescription,
     // element: UIElement
   ) {
@@ -493,5 +497,9 @@ export class MyTelegramBot {
     }
 
     await this._bot.telegram.deleteMessage(sentMessageData.chat.id, sentMessageData.message_id);
+  }
+
+  public stop() {
+    this._bot.stop();
   }
 }
