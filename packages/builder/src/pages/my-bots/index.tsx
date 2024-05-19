@@ -8,12 +8,14 @@ import { BotDescriptionCard } from '~/components/bot/BotDescriptionCard';
 import { type BotDescription } from '~/types/Bot';
 import { useRouter } from 'next/router';
 import { EDIT_BOT_PATH } from '~/constants';
+import { useRedirectUnauthorizedUser } from '~/utils/useRedirectUnauthorizedUser';
 
 export default function CreatePage() {
     const { data = [], refetch } = api.botManagement.getAll.useQuery();
     const router = useRouter();
+    
     const { mutateAsync } = api.botManagement.removeBot.useMutation();
-
+    useRedirectUnauthorizedUser();
 
     const handleEdit = React.useCallback((botDescription: BotDescription) => {
         void router.push(EDIT_BOT_PATH + botDescription.id);

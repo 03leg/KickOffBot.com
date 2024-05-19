@@ -1,0 +1,17 @@
+.landing-page-container {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    height: 100%;
+}
+
+.landing-page-main-title {
+    font-size: 5em;
+    font-weight: 900;
+    line-height: 1;
+    text-align: center;
+}
+
+.landing-page-buttons-container {
+    text-align: center;
+}
