@@ -42,4 +42,6 @@ export interface FlowDesignerState {
 
   showRuntimeEditor: boolean;
   toggleRuntimeEditor: VoidFunction;
+
+  destroyProject: VoidFunction;
 }

@@ -3,7 +3,7 @@ import { Sector, getDistance, getPartLinePath, getSector } from "../OutputPort/u
 import { ButtonPortDescription, FlowDesignerLink, PositionDescription, TransformDescription } from "@kickoffbot.com/types";
 import { CoordinateDescription } from "../../types";
 
-const mapAppIdElement = new Map<string, Element>();
+// const mapAppIdElement = new Map<string, Element>();
 const step = 50 as const;
 const inputTopStep = 10 as const;
 
@@ -17,10 +17,10 @@ function getElement(id: string) {
 
 function getElementBySelector(selector: string) {
 
-    const cachedElement = mapAppIdElement.get(selector);
-    if (!isNil(cachedElement)) {
-        return cachedElement;
-    }
+    // const cachedElement = mapAppIdElement.get(selector);
+    // if (!isNil(cachedElement)) {
+    //     return cachedElement;
+    // }
 
     const element = document.querySelector(selector);
 
@@ -28,7 +28,7 @@ function getElementBySelector(selector: string) {
         throw new Error('InvalidOperationError');
     }
 
-    mapAppIdElement.set(selector, element);
+    // mapAppIdElement.set(selector, element);
 
     return element;
 }

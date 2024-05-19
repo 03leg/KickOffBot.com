@@ -9,6 +9,13 @@ import { type PositionDescription } from "@kickoffbot.com/types";
 import { canLink, getDefaultBlocks } from "./utils";
 import { FlowDesignerState } from "./types";
 
+export const DEFAULT_PROJECT_STATE = {
+  blocks: [],
+  links: [],
+  variables: [],
+  transformDescription: { scale: 1, x: 0, y: 0 },
+};
+
 export const useFlowDesignerStore = create<FlowDesignerState>()((set, get) => ({
   changeTransformDescription: (newValue) =>
     set((state) => {
@@ -26,12 +33,7 @@ export const useFlowDesignerStore = create<FlowDesignerState>()((set, get) => ({
   hideTempLink: () => set(() => ({ showTemporaryLink: false })),
   setTempLinkPath: (value: string) => set(() => ({ tempLinkPath: value })),
   projectIsInitialized: false,
-  project: {
-    blocks: [],
-    links: [],
-    variables: [],
-    transformDescription: { scale: 1, x: 0, y: 0 },
-  },
+  project: JSON.parse(JSON.stringify(DEFAULT_PROJECT_STATE)),
   initProject: (value: string | null) =>
     set(() => {
       let currentProject = {
@@ -172,5 +174,16 @@ export const useFlowDesignerStore = create<FlowDesignerState>()((set, get) => ({
     get().project.variables.find((v) => v.id == variableId) ?? null,
 
   showRuntimeEditor: false,
-  toggleRuntimeEditor: () => set((state) => ({ showRuntimeEditor: !state.showRuntimeEditor })),
+  toggleRuntimeEditor: () =>
+    set((state) => ({ showRuntimeEditor: !state.showRuntimeEditor })),
+  destroyProject: () =>
+    set(() => ({
+      project: JSON.parse(JSON.stringify(DEFAULT_PROJECT_STATE)),
+      projectIsInitialized: false,
+      showTemporaryLink: false,
+      showVariablesViewer: false,
+      viewPortOffset: { x: 0, y: 0 },
+      selectedLink: null,
+      showRuntimeEditor: false
+    })),
 }));

@@ -26,7 +26,7 @@ export const EditBotContent = () => {
     const router = useRouter()
     const flowDesignerTransformDescription = React.useRef<TransformDescription | null>(null);
     const [activeDraggableItem, setActiveDraggableItem] = useState<Active | null>();
-    const { blocks, updateBlock, addBlock, project, initProject, projectIsInitialized, setViewPortOffset, updateAllLinks, toggleVariablesViewer, toggleRuntimeEditor } = useFlowDesignerStore((state) => ({
+    const { blocks, updateBlock, addBlock, project, initProject, projectIsInitialized, setViewPortOffset, updateAllLinks, toggleVariablesViewer, toggleRuntimeEditor, destroyProject } = useFlowDesignerStore((state) => ({
         blocks: state.project?.blocks ?? [],
         addBlock: state.addBlock,
         updateBlock: state.updateBlock,
@@ -36,16 +36,23 @@ export const EditBotContent = () => {
         setViewPortOffset: state.setViewPortOffset,
         updateAllLinks: state.updateAllLinks,
         toggleVariablesViewer: state.toggleVariablesViewer,
-        toggleRuntimeEditor: state.toggleRuntimeEditor
+        toggleRuntimeEditor: state.toggleRuntimeEditor,
+        destroyProject: state.destroyProject
     }));
     const { mutateAsync } = api.botManagement.saveBotContent.useMutation();
     const { changeTransformDescription } = useFlowDesignerStore((state) => ({ changeTransformDescription: state.changeTransformDescription }));
 
-    const projectIdFromQuery = router.query.id as string ?? 'unknown id';
-    const { data: projectDescription } = api.botManagement.getBotContent.useQuery({ id: projectIdFromQuery}, { enabled: typeof projectIdFromQuery === 'string' && Boolean(router.query.id) && projectIsInitialized === false });
+    const projectIdFromQuery = router.query.id as string;
+    const { data: projectDescription } = api.botManagement.getBotContent.useQuery({ id: projectIdFromQuery }, { enabled: typeof projectIdFromQuery === 'string' && Boolean(router.query.id) && projectIsInitialized === false });
 
 
     const viewPortRef = React.useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        return () => {
+            destroyProject();
+        }
+    }, [destroyProject]);
 
     useEffect(() => {
         if (projectDescription === undefined) {
