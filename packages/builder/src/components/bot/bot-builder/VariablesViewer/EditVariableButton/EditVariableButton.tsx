@@ -38,7 +38,7 @@ export const EditVariableButton = ({ variable }: Props) => {
     }, [variables]);
 
     const handleAddVariable = useCallback(() => {
-        const newVariable: BotVariable = { id: v4(), name: getNewVariableName(), type: VariableType.STRING, value: 'default value' }
+        const newVariable: BotVariable = { id: v4(), name: getNewVariableName(), type: VariableType.STRING, value: 'default value', isPlatformVariable: false }
         setCurrentVariable(newVariable);
         setOpen(true);
     }, [getNewVariableName]);

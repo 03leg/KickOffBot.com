@@ -289,7 +289,7 @@ export interface BotVariable {
   type: VariableType;
   arrayItemType?: Omit<VariableType, VariableType.ARRAY>;
   value: unknown;
-  runtimeValue: unknown;
+  isPlatformVariable: boolean;
 }
 
 export interface BotProject {

@@ -26,17 +26,22 @@ export class UserContext {
     }
   }
 
-  public updateTelegramVariableBasedOnMessage(
-    context: NarrowedContext<Context<Update>, Update.MessageUpdate<Message>>
-  ) {
+  public updateTelegramVariableBasedOnMessage(context: NarrowedContext<Context<Update>, Update.MessageUpdate<Message>>) {
     this._variables.set("user_id", context.message.from.id);
     this._variables.set("user_first_name", context.message.from.first_name);
-    this._variables.set("user_last_name", context.message.from.last_name);
-    this._variables.set("user_name", context.message.from.username);
-    this._variables.set(
-      "user_language_code",
-      context.message.from.language_code
-    );
+
+    if (!isNil(context.message.from.last_name)) {
+      this._variables.set("user_last_name", context.message.from.last_name);
+    }
+    if (!isNil(context.message.from.username)) {
+      this._variables.set("username", context.message.from.username);
+    }
+    if (!isNil(context.message.from.language_code)) {
+      this._variables.set("user_language_code", context.message.from.language_code);
+    }
+    if (!isNil(context.message.from.is_premium)) {
+      this._variables.set("is_premium", context.message.from.is_premium);
+    }
   }
 
   public setNextStep(nextStep: NextBotStep | null) {
@@ -44,16 +49,11 @@ export class UserContext {
     this._nextStep = nextStep;
   }
 
-  public updateVariable(
-    name: string,
-    newValue: string | number | boolean | unknown[] | object
-  ) {
+  public updateVariable(name: string, newValue: string | number | boolean | unknown[] | object) {
     this._variables.set(name, newValue);
   }
 
-  public getVariableValueByName(
-    name: string
-  ): string | number | boolean | unknown[] | Record<string, unknown> {
+  public getVariableValueByName(name: string): string | number | boolean | unknown[] | Record<string, unknown> {
     const result = this._variables.get(name);
 
     if (isNil(result)) {

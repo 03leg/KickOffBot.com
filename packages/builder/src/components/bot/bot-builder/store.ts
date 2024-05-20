@@ -3,16 +3,61 @@ import {
   type FlowDesignerUIBlockDescription,
   type FlowDesignerLink,
   type BotVariable,
+  BotProject,
+  VariableType,
 } from "@kickoffbot.com/types";
 import { isNil, remove } from "lodash";
 import { type PositionDescription } from "@kickoffbot.com/types";
 import { canLink, getDefaultBlocks } from "./utils";
 import { FlowDesignerState } from "./types";
 
-export const DEFAULT_PROJECT_STATE = {
-  blocks: [],
+export const DEFAULT_PROJECT_STATE: BotProject = {
+  blocks: [...getDefaultBlocks()],
   links: [],
-  variables: [],
+  variables: [
+    {
+      id: "user_id",
+      type: VariableType.NUMBER,
+      name: "user_id",
+      value: -1,
+      isPlatformVariable: true,
+    },
+    {
+      id: "user_first_name",
+      type: VariableType.STRING,
+      name: "user_first_name",
+      value: "",
+      isPlatformVariable: true,
+    },
+    {
+      id: "user_last_name",
+      type: VariableType.STRING,
+      name: "user_last_name",
+      value: "",
+      isPlatformVariable: true,
+    },
+    {
+      id: "username",
+      type: VariableType.STRING,
+      name: "username",
+      value: "",
+      isPlatformVariable: true,
+    },
+    {
+      id: "user_language_code",
+      type: VariableType.STRING,
+      name: "user_language_code",
+      value: "",
+      isPlatformVariable: true,
+    },
+    {
+      id: "is_premium",
+      type: VariableType.BOOLEAN,
+      name: "is_premium",
+      value: false,
+      isPlatformVariable: true,
+    },
+  ],
   transformDescription: { scale: 1, x: 0, y: 0 },
 };
 
@@ -36,12 +81,7 @@ export const useFlowDesignerStore = create<FlowDesignerState>()((set, get) => ({
   project: JSON.parse(JSON.stringify(DEFAULT_PROJECT_STATE)),
   initProject: (value: string | null) =>
     set(() => {
-      let currentProject = {
-        blocks: [...getDefaultBlocks()],
-        links: [],
-        variables: [],
-        transformDescription: { scale: 1, x: 0, y: 0 },
-      };
+      let currentProject = JSON.parse(JSON.stringify(DEFAULT_PROJECT_STATE));
       if (value !== null) {
         currentProject = JSON.parse(value);
       }
@@ -184,6 +224,6 @@ export const useFlowDesignerStore = create<FlowDesignerState>()((set, get) => ({
       showVariablesViewer: false,
       viewPortOffset: { x: 0, y: 0 },
       selectedLink: null,
-      showRuntimeEditor: false
+      showRuntimeEditor: false,
     })),
 }));

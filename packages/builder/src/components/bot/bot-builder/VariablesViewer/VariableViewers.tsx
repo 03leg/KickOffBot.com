@@ -70,9 +70,9 @@ export const VariableViewers = () => {
                             <Box sx={{ display: 'flex' }}>
                                 <EditVariableButton variable={v} />
 
-                                <IconButton sx={{ marginLeft: 2 }} edge="end" aria-label="delete" onClick={() => handleRemoveVariable(v)}>
+                                {!v.isPlatformVariable && <IconButton sx={{ marginLeft: 2 }} edge="end" aria-label="delete" onClick={() => handleRemoveVariable(v)}>
                                     <DeleteIcon />
-                                </IconButton>
+                                </IconButton>}
                             </Box>
                         </ListItem>
                     ))}

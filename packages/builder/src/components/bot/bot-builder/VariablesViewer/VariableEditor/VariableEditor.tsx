@@ -107,8 +107,8 @@ export const VariableEditor = ({ variable, onVariableChange }: Props) => {
 
     return (
         <Box sx={{ display: 'flex', flexDirection: 'column', padding: 1 }}>
-            <TextField fullWidth label='Name' variant="outlined" value={name} onChange={handleNameChange} />
-            <FormControl fullWidth sx={{ marginTop: 2 }}>
+            <TextField disabled={variable.isPlatformVariable} fullWidth label='Name' variant="outlined" value={name} onChange={handleNameChange} />
+            <FormControl fullWidth sx={{ marginTop: 2 }} disabled={variable.isPlatformVariable}>
                 <InputLabel id="type-select-label">Type</InputLabel>
                 <Select
                     labelId="type-select-label"
