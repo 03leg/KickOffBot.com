@@ -161,7 +161,7 @@ export function getNewBlock(position: PositionDescription, firstElement: UIEleme
 export function getDefaultBlocks() {
     return [
         {
-            id: '/start', blockType: BlockType.COMMANDS, title: '/start', position: { x: 0, y: 0 }, elements: [{
+            id: '/start', blockType: BlockType.COMMANDS, title: '/start', position: { x: 363, y: 175 }, elements: [{
                 commands: [
                     {
                         id: '/start',

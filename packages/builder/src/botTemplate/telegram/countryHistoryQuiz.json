@@ -1,0 +1,48 @@
+{
+  "blocks": [
+    {
+      "id": "/start",
+      "blockType": 2,
+      "title": "/start",
+      "position": { "x": 290, "y": -100 },
+      "elements": [
+        {
+          "commands": [
+            {
+              "id": "/start",
+              "command": "/start",
+              "description": "Start the bot"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "5a37c162-b277-4a40-b3b6-84f1ca538485",
+      "blockType": 0,
+      "title": "Block #1",
+      "position": { "x": 320.800048828125, "y": 333 },
+      "elements": [
+        {
+          "id": "content-text-459d1173-fe53-437f-8cba-238fd4f3e831",
+          "type": "content-text",
+          "attachments": [],
+          "showButtons": false,
+          "buttonsDescription": { "strategy": "manual", "buttons": [] },
+          "json": "{\"blocks\":[{\"key\":\"colsj\",\"text\":\"Hello! I'm bot from template!\",\"type\":\"unstyled\",\"depth\":0,\"inlineStyleRanges\":[],\"entityRanges\":[],\"data\":{}}],\"entityMap\":{}}",
+          "htmlContent": "<p>Hello! I'm bot from template!</p>",
+          "telegramContent": "Hello! I'm bot from template!"
+        }
+      ]
+    }
+  ],
+  "links": [
+    {
+      "id": "0c34ea0e-65ea-4503-bf8d-87234ee0c543",
+      "input": { "blockId": "5a37c162-b277-4a40-b3b6-84f1ca538485", "type": 0 },
+      "output": { "blockId": "/start", "buttonId": "/start", "type": 2 }
+    }
+  ],
+  "variables": [],
+  "transformDescription": { "x": 190, "y": 192, "scale": 1 }
+}

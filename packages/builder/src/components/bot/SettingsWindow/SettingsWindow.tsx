@@ -1,21 +1,29 @@
-import { Box, Button, TextField } from '@mui/material'
-import React, { useCallback } from 'react'
+import { Box, Button, TextField, Typography } from '@mui/material'
+import React, { useCallback, useRef, useState } from 'react'
 import AddIcon from '@mui/icons-material/Add';
 import { isEmpty } from 'lodash';
 import { api } from '~/utils/api';
 import SmhDialog from '~/components/commons/Dialog/SmhDialog';
+import { TemplatesViewer } from './TemplatesViewer';
+import { useRouter } from 'next/router';
+import { EDIT_BOT_PATH } from '~/constants';
+import { TemplateDescription } from './types';
 
 
 interface Props {
     onUpdate?: VoidFunction;
+    buttonText?: string;
 }
 
-export const SettingsWindow = ({ onUpdate }: Props) => {
+export const SettingsWindow = ({ onUpdate, buttonText = 'Create New Bot' }: Props) => {
     const [open, setOpen] = React.useState(false);
     const [isLoading, setIsLoading] = React.useState(false);
-    const [error, setError] = React.useState<unknown>();
+    const [error, setError] = React.useState<string>();
     const [botName, setBotName] = React.useState<string>('');
     const { mutateAsync } = api.botManagement.saveBot.useMutation();
+    const [botTemplate, setBotTemplate] = useState<TemplateDescription | undefined>();
+    const router = useRouter();
+
 
     const resetState = useCallback(() => {
         setError(undefined);
@@ -36,37 +44,44 @@ export const SettingsWindow = ({ onUpdate }: Props) => {
         setIsLoading(true);
 
         try {
-            await mutateAsync({ name: botName });
+            const newBotId: string = await mutateAsync({ name: botName, template: botTemplate?.template });
+
             handleClose();
-            onUpdate?.();
+
+            void router.push(EDIT_BOT_PATH + newBotId);
         }
         catch (e) {
-            setError(e);
+            setError('Failed to create bot');
         }
         finally {
             setIsLoading(false);
         }
-    }, [botName, handleClose, mutateAsync, onUpdate]);
+    }, [botName, botTemplate, handleClose, mutateAsync, router]);
 
 
     const handleBotNameValueChange = React.useCallback((event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         setBotName(event.target.value);
-    }, [])
+    }, []);
+
+    const handleTemplateChange = useCallback((template: TemplateDescription) => {
+        setBotTemplate(template);
+        setBotName(template.title);
+    }, []);
 
     return (
         <>
-            <Button startIcon={<AddIcon />} variant="outlined" onClick={handleClickOpen}>Add New Bot</Button>
+            <Button startIcon={<AddIcon />} variant="contained" color='success' onClick={handleClickOpen}>{buttonText}</Button>
             <SmhDialog
                 isLoading={isLoading}
                 onClose={handleClose}
-                maxWidth={'sm'}
+                maxWidth={'lg'}
                 error={error}
                 buttons={[
-                    <Button key={'save'} onClick={handleSave} variant='contained' color='success' disabled={isEmpty(botName)}>Save</Button>,
+                    <Button key={'save'} onClick={handleSave} variant='contained' color='success' disabled={isEmpty(botName)}>Create new bot</Button>,
                     <Button key={'close'} onClick={handleClose}>Close</Button>
                 ]}
                 open={open} title={'Create New Bot'}>
-                <Box sx={{ display: 'flex', padding: (theme) => theme.spacing(1, 0) }}>
+                <Box sx={{ display: 'flex', flexDirection: 'column', padding: (theme) => theme.spacing(1, 0) }}>
                     <TextField
                         fullWidth
                         required
@@ -74,6 +89,8 @@ export const SettingsWindow = ({ onUpdate }: Props) => {
                         value={botName}
                         onChange={handleBotNameValueChange}
                     />
+                    <Typography sx={{ mt: 2 }} variant='h6'>Templates</Typography>
+                    <TemplatesViewer onTemplateChange={handleTemplateChange} />
                 </Box>
             </SmhDialog>
         </>

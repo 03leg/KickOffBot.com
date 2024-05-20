@@ -18,11 +18,25 @@ export const botManagementRouter = createTRPCRouter({
     .mutation(async ({ ctx, input }) => {
       const userId = ctx.session?.user.id;
 
-      await ctx.prisma.botDescription.upsert({
+      const currentBotDescription = await ctx.prisma.botDescription.upsert({
         create: { userId, name: input.name },
         update: { name: input.name },
         where: { id: input.id ?? "unknown", userId },
+        select: { id: true },
       });
+
+      if (!isNil(input.template)) {
+        const createdContent = await prisma.botContent.create({
+          data: { version: 0, content: input.template },
+          select: { id: true },
+        });
+        await prisma.botDescription.update({
+          data: { contentId: createdContent.id },
+          where: { id: currentBotDescription.id },
+        });
+      }
+
+      return currentBotDescription.id;
     }),
   saveBotContent: protectedProcedure
     .input(BotContentScheme)
@@ -153,7 +167,7 @@ export const botManagementRouter = createTRPCRouter({
             id: item.id,
             tokenPreview: getPreviewToken(item.token),
             isActiveNow: item.isActive,
-            requestActiveValue: item.requestActiveValue
+            requestActiveValue: item.requestActiveValue,
           };
 
           return result;

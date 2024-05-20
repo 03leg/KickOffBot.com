@@ -43,16 +43,15 @@ export const EditBotContent = () => {
     const { changeTransformDescription } = useFlowDesignerStore((state) => ({ changeTransformDescription: state.changeTransformDescription }));
 
     const projectIdFromQuery = router.query.id as string;
-    const { data: projectDescription } = api.botManagement.getBotContent.useQuery({ id: projectIdFromQuery }, { enabled: typeof projectIdFromQuery === 'string' && Boolean(router.query.id) && projectIsInitialized === false });
-
-
+    const { data: projectDescription, remove: removeBotResponse } = api.botManagement.getBotContent.useQuery({ id: projectIdFromQuery }, { enabled: typeof projectIdFromQuery === 'string' && Boolean(router.query.id) && projectIsInitialized === false });
     const viewPortRef = React.useRef<HTMLDivElement>(null);
 
     useEffect(() => {
         return () => {
             destroyProject();
+            removeBotResponse();
         }
-    }, [destroyProject]);
+    }, [destroyProject, removeBotResponse]);
 
     useEffect(() => {
         if (projectDescription === undefined) {
@@ -321,7 +320,7 @@ export const EditBotContent = () => {
                 <Box sx={{ display: 'flex', paddingBottom: 1 }}>
                     <Box>
                         <Button variant="outlined" startIcon={<RouterIcon />} onClick={toggleRuntimeEditor}>
-                            Runtime
+                            start your bot
                         </Button>
                     </Box>
                     <Box sx={{ display: 'flex', justifyContent: 'flex-end', flex: 1 }}>

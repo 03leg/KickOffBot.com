@@ -9,11 +9,12 @@ import { type BotDescription } from '~/types/Bot';
 import { useRouter } from 'next/router';
 import { EDIT_BOT_PATH } from '~/constants';
 import { useRedirectUnauthorizedUser } from '~/utils/useRedirectUnauthorizedUser';
+import { LoadingIndicator } from '~/components/commons/LoadingIndicator';
 
 export default function CreatePage() {
-    const { data = [], refetch } = api.botManagement.getAll.useQuery();
+    const { data: bots = [], refetch, isLoading } = api.botManagement.getAll.useQuery();
     const router = useRouter();
-    
+
     const { mutateAsync } = api.botManagement.removeBot.useMutation();
     useRedirectUnauthorizedUser();
 
@@ -30,13 +31,22 @@ export default function CreatePage() {
         <Layout>
             <Box sx={{ padding: (theme) => theme.spacing(2), height: '100%', display: 'flex', flexDirection: 'column' }}>
                 <SnackbarProvider />
-                <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                    <h1>My bots</h1>
-                    <SettingsWindow onUpdate={refetch} />
-                </Box>
-                <Stack direction="row" spacing={2} flexWrap="wrap" useFlexGap={true}>
-                    {data.map((botDescription) => (<BotDescriptionCard description={botDescription} key={botDescription.id} onEdit={handleEdit} onRemove={handleRemove} />))}
-                </Stack>
+                {isLoading && <LoadingIndicator />}
+                {!isLoading && bots.length > 0 && <>
+                    <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                        <h1>My bots</h1>
+                        <SettingsWindow onUpdate={refetch} />
+                    </Box><Stack direction="row" spacing={2} flexWrap="wrap" useFlexGap={true}>
+                        {bots.map((botDescription) => (<BotDescriptionCard description={botDescription} key={botDescription.id} onEdit={handleEdit} onRemove={handleRemove} />))}
+                    </Stack>
+                </>
+                }
+                {!isLoading && bots.length === 0 && <>
+                    <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
+                        <SettingsWindow onUpdate={refetch} buttonText='Create your first bot' />
+                    </Box>
+                </>
+                }
             </Box>
         </Layout>
     );

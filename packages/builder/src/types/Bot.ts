@@ -9,6 +9,7 @@ export interface BotDescription {
 export const BotDescriptionScheme = z.object({
   name: z.string(),
   id: z.string().optional(),
+  template: z.string().optional(),
 });
 
 export const BotContentScheme = z.object({

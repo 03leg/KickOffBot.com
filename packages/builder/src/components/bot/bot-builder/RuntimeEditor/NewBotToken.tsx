@@ -20,7 +20,7 @@ export const NewBotToken = ({ onAddNewBotToken }: Props) => {
 
     return (
         <Box sx={{ width: '100%' }}>
-            <TextField fullWidth variant="outlined" value={newBotToken} onChange={handleNewBotTokenChange} />
+            <TextField fullWidth variant="outlined" required label="Telegram bot token" value={newBotToken} onChange={handleNewBotTokenChange} />
 
             <Button sx={{ marginTop: 1 }} variant="outlined" startIcon={<AddIcon />} onClick={handleAddNewToken} disabled={!newBotToken}>
                 Add telegram bot token
