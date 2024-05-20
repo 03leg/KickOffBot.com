@@ -26,7 +26,7 @@ export const ChangeVariableEditor = ({ element }: Props) => {
         getVariableById: state.getVariableById
     }));
     const [restoreInitialValue, setRestoreInitialValue] = useState(element?.restoreInitialValue ?? false);
-    const { classes} = useStyles();
+    const { classes } = useStyles();
 
     const variableType = useMemo(() => {
         return getVariableById(selectedVariableId)?.type ?? null;
@@ -78,15 +78,19 @@ export const ChangeVariableEditor = ({ element }: Props) => {
         element.restoreInitialValue = event.target.checked;
     }, [element])
 
+    const handleCustomVariableFilter = useCallback((variable: BotVariable): boolean => {
+        return !variable.isPlatformVariable;
+    }, []);
+
     return (
         <Box sx={{ padding: 1 }}>
-            <VariableSelector valueId={selectedVariableId} onVariableChange={handleVariableChange} />
+            <VariableSelector onCustomVariableFilter={handleCustomVariableFilter} valueId={selectedVariableId} onVariableChange={handleVariableChange} />
 
 
             {selectedVariableId && <FormControlLabel control={<Checkbox checked={restoreInitialValue} onChange={handleRestoreInitialValueChange} />} label="Restore initial value" />}
 
 
-            <Box className={restoreInitialValue? classes.disabled : ''}>
+            <Box className={restoreInitialValue ? classes.disabled : ''}>
                 {(variableType !== null && (variableType === VariableType.NUMBER || variableType === VariableType.STRING) &&
                     <NumberStringTypeVariableEditor workflow={element.workflowDescription as ChangeNumberStringVariableWorkflow} onWorkflowChange={handleWorkflowChange} />
                 )}

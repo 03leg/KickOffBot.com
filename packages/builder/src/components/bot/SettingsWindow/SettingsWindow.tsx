@@ -15,11 +15,13 @@ interface Props {
     buttonText?: string;
 }
 
+const DEFAULT_BOT_NAME = 'My Bot #1';
+
 export const SettingsWindow = ({ onUpdate, buttonText = 'Create New Bot' }: Props) => {
     const [open, setOpen] = React.useState(false);
     const [isLoading, setIsLoading] = React.useState(false);
     const [error, setError] = React.useState<string>();
-    const [botName, setBotName] = React.useState<string>('');
+    const [botName, setBotName] = React.useState<string>(DEFAULT_BOT_NAME);
     const { mutateAsync } = api.botManagement.saveBot.useMutation();
     const [botTemplate, setBotTemplate] = useState<TemplateDescription | undefined>();
     const router = useRouter();
@@ -65,7 +67,7 @@ export const SettingsWindow = ({ onUpdate, buttonText = 'Create New Bot' }: Prop
 
     const handleTemplateChange = useCallback((template: TemplateDescription) => {
         setBotTemplate(template);
-        setBotName(template.title);
+        setBotName(template.template ? template.title : DEFAULT_BOT_NAME);
     }, []);
 
     return (
