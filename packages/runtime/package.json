@@ -10,9 +10,9 @@
     "name": "Me"
   },
   "scripts": {
-    "dev": "nodemon --watch src --watch test --ext ts,json --exec \"yarn build&yarn start\"",
+    "dev": "nodemon --watch src --watch test --ext ts,json --exec \"yarn build:runtime&yarn start\"",
     "start": "node --enable-source-maps ./dist/index.js",
-    "build": "rimraf dist && esbuild --outdir=dist --sourcemap --bundle --platform=node ./src/index.ts"
+    "build:runtime": "rimraf dist && esbuild --outdir=dist --sourcemap --bundle --platform=node ./src/index.ts"
   },
   "keywords": [],
   "devDependencies": {

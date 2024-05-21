@@ -20,7 +20,8 @@
     ]
   },
   "scripts": {
-    "start": "wsrun -m -e -t -a dev"
+    "dev": "wsrun -m -e -t -a dev",
+    "build": "wsrun -m -e -t -a build"
   },
   "devDependencies": {
     "@types/eslint": "^8.37.0",
