@@ -3,7 +3,7 @@ import Layout from '~/pages/Layout';
 import dynamic from 'next/dynamic'
 import { useRedirectUnauthorizedUser } from '~/utils/useRedirectUnauthorizedUser';
 
-const EditBotContent = dynamic(() => import('./EditBotContent').then(mod => mod.EditBotContent), {
+const EditBotContent = dynamic(() => import('./EditBotContent').then(mod => mod.default), {
     ssr: false,
 });
 

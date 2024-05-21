@@ -38,7 +38,7 @@ export default async function POST(
     }
 
     const { uploads } = await getFilesFromRequest(request);
-    const uploadFiles = uploads as formidable.File[];
+    const uploadFiles = uploads!;
     const storeProvider: AttachmentUploaderProvider =
       new AttachmentUploaderSupaBase();
 

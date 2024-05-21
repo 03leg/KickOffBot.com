@@ -1,5 +1,5 @@
+import { ElementType } from "@kickoffbot.com/types";
 import type React from "react";
-import { type ElementType } from "../types";
 
 export interface ToolBoxGroup {
   title: string;

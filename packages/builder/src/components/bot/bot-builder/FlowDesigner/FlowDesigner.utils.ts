@@ -1,4 +1,5 @@
-import { type TransformDescription } from "./types";
+import { TransformDescription } from "@kickoffbot.com/types";
+
 
 function getScaleMultiplier(delta: number): number {
   const speed = 1;

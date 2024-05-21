@@ -30,7 +30,7 @@ export const NumberStringTypeVariableEditor = ({ workflow, onWorkflowChange }: P
                 onSelect={updateSelectionStart}
             />
             <Box sx={{ marginLeft: 1 }}>
-                <VariableSelectorDialog onInsertVariable={handleInsertVariable} />
+                <VariableSelectorDialog onInsertVariable={handleInsertVariable} supportPathForObject={false} />
             </Box>
         </Box>
     )

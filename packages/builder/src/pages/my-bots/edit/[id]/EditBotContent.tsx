@@ -22,7 +22,7 @@ import RouterIcon from '@mui/icons-material/Router';
 import { RuntimeEditor } from '~/components/bot/bot-builder/RuntimeEditor';
 
 
-export const EditBotContent = () => {
+export default function EditBotContent() {
     const router = useRouter()
     const flowDesignerTransformDescription = React.useRef<TransformDescription | null>(null);
     const [activeDraggableItem, setActiveDraggableItem] = useState<Active | null>();

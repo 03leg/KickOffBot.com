@@ -1,8 +1,8 @@
 import { type Modifier } from "@dnd-kit/core";
 import { type Transform } from "@dnd-kit/utilities";
 import type { Active, ClientRect, Over } from "@dnd-kit/core";
-import { type TransformDescription } from "./types";
 import { isNil, transform } from "lodash";
+import { TransformDescription } from "@kickoffbot.com/types";
 
 export const flowDesignerTransformModifier = (
   transformDescription: TransformDescription | null,

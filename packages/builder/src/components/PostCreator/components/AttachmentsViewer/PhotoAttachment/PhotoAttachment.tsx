@@ -1,9 +1,9 @@
 /* eslint-disable @next/next/no-img-element */
 import { Box, IconButton } from '@mui/material'
 import React from 'react'
-import { type FileDescription } from '~/types/ContentEditor'
 import { usePhotoAttachmentStyles } from './PhotoAttachment.style';
 import DeleteIcon from '@mui/icons-material/Delete';
+import { FileDescription } from '@kickoffbot.com/types';
 
 export interface PhotoAttachmentProps {
     file: FileDescription;

@@ -1,9 +1,8 @@
 import { isNil, round } from "lodash";
 import {
-  type TransformDescription,
-  type PositionDescription,
   type CoordinateDescription,
 } from "../../types";
+import { PositionDescription, TransformDescription } from "@kickoffbot.com/types";
 
 export enum Sector {
   S1,

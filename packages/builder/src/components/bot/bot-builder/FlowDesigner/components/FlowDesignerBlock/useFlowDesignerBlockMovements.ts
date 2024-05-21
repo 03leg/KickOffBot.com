@@ -1,7 +1,7 @@
 import { useGesture } from "@use-gesture/react";
 import { useMemo, useState } from "react";
 import { round } from "lodash";
-import { type TransformDescription } from "../../types";
+import { TransformDescription } from "@kickoffbot.com/types";
 
 export function useFlowDesignerBlockMovements(
   initPosition: Omit<TransformDescription, "scale">,
@@ -43,10 +43,13 @@ export function useFlowDesignerBlockMovements(
     },
   });
 
-  const transformDescription = useMemo(() => ({
-    x: startValue.x + distance.x,
-    y: startValue.y + distance.y,
-  }), [distance.x, distance.y, startValue.x, startValue.y]);
+  const transformDescription = useMemo(
+    () => ({
+      x: startValue.x + distance.x,
+      y: startValue.y + distance.y,
+    }),
+    [distance.x, distance.y, startValue.x, startValue.y]
+  );
 
   return { bind, transformDescription };
 }

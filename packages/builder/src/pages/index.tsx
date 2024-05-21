@@ -1,8 +1,8 @@
 import * as React from 'react';
 import { useRouter } from 'next/router';
-import { useSession } from 'next-auth/react';
+import { signIn, useSession } from 'next-auth/react';
 import { useEffect, useMemo } from 'react';
-import { LandingPage } from './LandingPage';
+import { Button } from '@mui/material';
 
 export default function IndexPage() {
     const router = useRouter();
@@ -17,11 +17,20 @@ export default function IndexPage() {
         }
     }, [auth, router, status]);
 
+    const handleGetStartedClick = React.useCallback(() => {
+        void signIn();
+    }, []);
+
     if (auth || status === "loading") {
         return null;
     }
 
     return (
-        <LandingPage />
+        <div className='landing-page-container'>
+            <h1 className='landing-page-main-title'>Make your <span style={{ color: '#3390ec' }}>telegram</span> bot without coding</h1>
+            <div className='landing-page-buttons-container'>
+                <Button variant="text" size="large" color="primary" onClick={handleGetStartedClick}>Get started</Button>
+            </div>
+        </div>
     );
 }

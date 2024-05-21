@@ -2,7 +2,8 @@ import { Box } from '@mui/material'
 import dynamic from 'next/dynamic'
 import React, { useCallback, useState } from 'react'
 import { AttachEditor } from '../AttachEditor'
-import { type FileDescription, type PostDescription } from '~/types/ContentEditor';
+import { type PostDescription } from '~/types/ContentEditor';
+import { FileDescription } from '@kickoffbot.com/types';
 
 const TextEditor = dynamic(() => import('../TextEditor').then(mod => mod.TextEditor), {
     ssr: false,

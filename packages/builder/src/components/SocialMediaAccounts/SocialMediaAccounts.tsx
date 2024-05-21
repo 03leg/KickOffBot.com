@@ -27,14 +27,15 @@ export const SocialMediaAccounts = () => {
             {data.length !== 0 && (
                 <List sx={{ flex: 1 }}>
                     {data.map((socialMediaAccount) => (
-                        <ListItem key={socialMediaAccount.id} disablePadding>
-                            <ListItemButton>
-                                <Avatar sx={{ bgcolor: blue[100] }}>
-                                    <TelegramIcon />
-                                </Avatar>
-                                <ListItemText sx={{ marginLeft: (theme) => theme.spacing(2) }} primary={socialMediaAccount.title} />
-                            </ListItemButton>
-                        </ListItem>
+                        // <ListItem key={socialMediaAccount.id} disablePadding>
+                        //     <ListItemButton>
+                        //         <Avatar sx={{ bgcolor: blue[100] }}>
+                        //             <TelegramIcon />
+                        //         </Avatar>
+                        //         <ListItemText sx={{ marginLeft: (theme) => theme.spacing(2) }} primary={socialMediaAccount.title} />
+                        //     </ListItemButton>
+                        // </ListItem>
+                        null
                     ))}
                 </List>
             )}
