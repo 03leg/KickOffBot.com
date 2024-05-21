@@ -6,7 +6,6 @@ import {
   IdModelScheme,
   TelegramTokenScheme,
 } from "~/types/Bot";
-import fs from "fs";
 import { prisma } from "~/server/db";
 import { TelegramToken } from "@kickoffbot.com/types";
 import { getPreviewToken } from "~/server/utility/getPreviewToken";
@@ -75,9 +74,7 @@ export const botManagementRouter = createTRPCRouter({
         });
       }
 
-      console.log("save bot content!", input.project, input.projectId);
-
-      fs.writeFileSync("../runtime/dist/bot.json", input.project);
+      // console.log("save bot content!", input.project, input.projectId);
     }),
 
   getAll: protectedProcedure.query(({ ctx }) => {
