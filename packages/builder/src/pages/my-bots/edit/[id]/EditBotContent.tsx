@@ -20,6 +20,7 @@ import { VariableViewers } from '~/components/bot/bot-builder/VariablesViewer';
 import { ElementType, FlowDesignerUIBlockDescription, TransformDescription, UIElement } from '@kickoffbot.com/types';
 import RouterIcon from '@mui/icons-material/Router';
 import { RuntimeEditor } from '~/components/bot/bot-builder/RuntimeEditor';
+import { LoadingIndicator } from '~/components/commons/LoadingIndicator';
 
 
 export default function EditBotContent() {
@@ -39,11 +40,11 @@ export default function EditBotContent() {
         toggleRuntimeEditor: state.toggleRuntimeEditor,
         destroyProject: state.destroyProject
     }));
-    const { mutateAsync } = api.botManagement.saveBotContent.useMutation();
+    const { mutateAsync, isLoading: isLoadingSaveBotDescription } = api.botManagement.saveBotContent.useMutation();
     const { changeTransformDescription } = useFlowDesignerStore((state) => ({ changeTransformDescription: state.changeTransformDescription }));
 
     const projectIdFromQuery = router.query.id as string;
-    const { data: projectDescription, remove: removeBotResponse } = api.botManagement.getBotContent.useQuery({ id: projectIdFromQuery }, { enabled: typeof projectIdFromQuery === 'string' && Boolean(router.query.id) && projectIsInitialized === false });
+    const { data: projectDescription, remove: removeBotResponse, isLoading: isLoadingProjectBotDescription } = api.botManagement.getBotContent.useQuery({ id: projectIdFromQuery }, { enabled: typeof projectIdFromQuery === 'string' && Boolean(router.query.id) && projectIsInitialized === false });
     const viewPortRef = React.useRef<HTMLDivElement>(null);
 
     useEffect(() => {
@@ -305,17 +306,13 @@ export default function EditBotContent() {
         }
     }, [mutateAsync, project, router.query]);
 
-    // if (projectIsInitialized === false) {
-    //     return <>Loading...</>;
-    // }
-
     const handleToggleVariables = useCallback(() => {
         toggleVariablesViewer();
     }, [toggleVariablesViewer])
 
     return (
         <ConfirmProvider>
-            <Box sx={{ padding: (theme) => theme.spacing(2), height: '100%', display: 'flex', flexDirection: 'column' }} onContextMenu={(e) => e.preventDefault()}>
+            <Box sx={{ padding: (theme) => theme.spacing(2), height: '100%', display: 'flex', flexDirection: 'column', position: 'relative' }} onContextMenu={(e) => e.preventDefault()}>
                 <SnackbarProvider />
                 <Box sx={{ display: 'flex', paddingBottom: 1 }}>
                     <Box>
@@ -329,7 +326,12 @@ export default function EditBotContent() {
                         </Button>
                         <Checkbox sx={{ marginLeft: 2 }} icon={<AbcRounded />} checkedIcon={<AbcIcon />} onChange={handleToggleVariables} />
                     </Box>
+                    {isLoadingSaveBotDescription || isLoadingProjectBotDescription ?
+                        <Box sx={{ display: 'flex', justifyContent: 'center' }}><LoadingIndicator size={20} /></Box>
+                        : null}
                 </Box>
+
+
 
                 <Box sx={{ display: 'flex', flexDirection: 'row', flex: 1 }}>
                     <DndContext
@@ -360,6 +362,7 @@ export default function EditBotContent() {
                     <VariableViewers />
                     <RuntimeEditor projectId={projectIdFromQuery} />
                 </Box>
+
             </Box>
         </ConfirmProvider>
     )

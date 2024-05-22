@@ -5,6 +5,7 @@ import React, { useCallback, useEffect, useState } from 'react'
 import DeleteIcon from '@mui/icons-material/Delete';
 import PlayCircleFilledIcon from '@mui/icons-material/PlayCircleFilled';
 import StopIcon from '@mui/icons-material/Stop';
+import { LoadingIndicator } from '~/components/commons/LoadingIndicator';
 
 interface Props {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -52,7 +53,7 @@ export const TokensManager = ({ tokens, onDelete, onStartBot, onStopBot }: Props
         if (selectedToken) {
             setSelectedToken(tokens.find(t => t.id === selectedToken.id))
         }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [tokens]);
 
     return (
@@ -68,15 +69,26 @@ export const TokensManager = ({ tokens, onDelete, onStartBot, onStopBot }: Props
             </Box>
             {!isNil(selectedToken) &&
                 (
-                    <Box sx={{ flex: 1, backgroundColor: 'white', marginLeft: 1, padding: 1, flexDirection: 'column', display: 'flex', }}>
+                    <Box sx={{ flex: 1, backgroundColor: 'white', marginLeft: 1, padding: 1, flexDirection: 'column', display: 'flex', alignItems: 'baseline' }}>
                         <Box sx={{ width: '100%' }}>
                             <Typography>Status:
-                                {!isNil(selectedToken.requestActiveValue) && <span style={{ color: '#1976d2' }}> In progress... <span style={{ color: 'gray', fontSize: '10px' }}>(Operation can take some time)</span></span>}
+                                {!isNil(selectedToken.requestActiveValue) &&
+                                    <Box sx={{
+                                        display: 'inline-flex',
+                                        ml: 2
+                                    }}>
+                                        <LoadingIndicator size={20} />
+                                        <Box sx={{ marginLeft: 2 }}><span style={{ color: '#1976d2' }}> In progress... </span></Box>
+                                    </Box>
+                                }
                                 {isNil(selectedToken.requestActiveValue) &&
                                     <>
                                         {selectedToken.isActiveNow && <span style={{ color: 'green' }}> Active...</span>}
                                         {!selectedToken.isActiveNow && <span style={{ color: 'gray' }}> Not active...</span>}
                                     </>
+                                }
+                                {!isNil(selectedToken.requestActiveValue) &&
+                                    <Box style={{ color: 'gray', fontSize: '12px', textAlign: 'center' }}>Please wait it can take a few minutes...</Box>
                                 }
                             </Typography>
                         </Box>
