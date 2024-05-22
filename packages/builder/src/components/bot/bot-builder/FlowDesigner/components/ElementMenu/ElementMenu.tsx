@@ -124,7 +124,6 @@ export const ElementMenu = ({ element }: Props) => {
 
         confirm({ content, title })
             .then(() => {
-                console.log('newElement', newElement);
 
                 const index = block.elements.findIndex(e => e.id === newElement.id);
                 block.elements[index] = newElement;
