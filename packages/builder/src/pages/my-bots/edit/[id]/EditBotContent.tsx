@@ -317,7 +317,7 @@ export default function EditBotContent() {
                 <Box sx={{ display: 'flex', paddingBottom: 1 }}>
                     <Box>
                         <Button variant="outlined" startIcon={<RouterIcon />} onClick={toggleRuntimeEditor}>
-                            start your bot
+                            start&stop your bots
                         </Button>
                     </Box>
                     <Box sx={{ display: 'flex', justifyContent: 'flex-end', flex: 1 }}>

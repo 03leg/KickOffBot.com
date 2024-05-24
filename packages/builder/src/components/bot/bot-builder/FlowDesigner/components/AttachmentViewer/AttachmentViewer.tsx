@@ -16,7 +16,6 @@ const useStyles = makeStyles()((theme) => ({
         marginTop: 5,
     },
     img: {
-        height: "350px",
         width: "100%",
         borderRadius: theme.shape.borderRadius,
         objectFit: "contain",
