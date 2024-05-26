@@ -139,48 +139,56 @@ export class MyTelegramBot {
   }
 
   private async handleCallbackQuery(context: NarrowedContext<Context<Update>, Update.MessageUpdate<Message>>) {
-    const userContext = this._state.get(getUserContextKey(context));
-    if (isNil(userContext)) {
-      throw new Error("InvalidOperationError: userContext is null");
+    try {
+      const userContext = this._state.get(getUserContextKey(context));
+      if (isNil(userContext)) {
+        throw new Error("InvalidOperationError: userContext is null");
+      }
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const callbackData = (context.callbackQuery as any).data;
+
+      const buttonsSourceStrategy = MessageButtonsManager.getButtonsSourceStrategy(callbackData);
+      let link;
+
+      if (buttonsSourceStrategy === ButtonsSourceStrategy.FromVariable) {
+        link = MessageButtonsManager.handleCallbackQueryFromVariable(callbackData, this._botProject, userContext, this._utils);
+      } else if (buttonsSourceStrategy === ButtonsSourceStrategy.Manual) {
+        link = MessageButtonsManager.handleCallbackQueryManual(callbackData, this._botProject);
+      }
+
+      if (isNil(link)) {
+        await context.answerCbQuery("Link is empty!");
+        return;
+      }
+
+      const block = this._utils.getBlockById(link.input.blockId);
+      const element = block.elements[0];
+
+      await this.handleElement(userContext, context, block, element);
+      void context.answerCbQuery();
+    } catch (e) {
+      console.log("handleCallbackQuery", e);
     }
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const callbackData = (context.callbackQuery as any).data;
-
-    const buttonsSourceStrategy = MessageButtonsManager.getButtonsSourceStrategy(callbackData);
-    let link;
-
-    if (buttonsSourceStrategy === ButtonsSourceStrategy.FromVariable) {
-      link = MessageButtonsManager.handleCallbackQueryFromVariable(callbackData, this._botProject, userContext, this._utils);
-    } else if (buttonsSourceStrategy === ButtonsSourceStrategy.Manual) {
-      link = MessageButtonsManager.handleCallbackQueryManual(callbackData, this._botProject);
-    }
-
-    if (isNil(link)) {
-      await context.answerCbQuery("Link is empty!");
-      return;
-    }
-
-    const block = this._utils.getBlockById(link.input.blockId);
-    const element = block.elements[0];
-
-    await this.handleElement(userContext, context, block, element);
-    void context.answerCbQuery();
   }
 
   private async handleMessage(context: NarrowedContext<Context<Update>, Update.MessageUpdate<Message>>) {
-    const userContext = this._state.get(getUserContextKey(context));
-    if (isNil(userContext)) {
-      throw new Error("InvalidOperationError: userContext is null");
-    }
-    const nextStep = userContext.nextStep;
-    if (isNil(nextStep)) {
-      return;
-    }
+    try {
+      const userContext = this._state.get(getUserContextKey(context));
+      if (isNil(userContext)) {
+        throw new Error("InvalidOperationError: userContext is null");
+      }
+      const nextStep = userContext.nextStep;
+      if (isNil(nextStep)) {
+        return;
+      }
 
-    const block = this._utils.getBlockById(nextStep.blockId);
-    const element = this._utils.getElementById(block.elements, nextStep.elementId);
+      const block = this._utils.getBlockById(nextStep.blockId);
+      const element = this._utils.getElementById(block.elements, nextStep.elementId);
 
-    await this.handleElement(userContext, context, block, element);
+      await this.handleElement(userContext, context, block, element);
+    } catch (e) {
+      console.log("handleMessage", e);
+    }
   }
 
   private async handleElement(

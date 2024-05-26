@@ -4,45 +4,713 @@
       "id": "/start",
       "blockType": 2,
       "title": "/start",
-      "position": { "x": 290, "y": -100 },
+      "position": { "x": 363, "y": 175 },
+      "elements": [{ "commands": [{ "id": "/start", "command": "/start", "description": "Start the bot" }] }]
+    },
+    {
+      "id": "a5ef56a5-f4c2-4ca0-9cb8-4f2be9e9a375",
+      "blockType": 0,
+      "title": "Block #1",
+      "position": { "x": 773.4000244140625, "y": 106.60000610351562 },
       "elements": [
         {
-          "commands": [
+          "id": "logic-change-variable-a6064a3e-dd6f-431b-9093-f302fbc958b6",
+          "type": "logic-change-variable",
+          "selectedVariableId": "d5e84f92-4914-41e9-9457-b1366911b978",
+          "workflowDescription": { "expression": "0" },
+          "restoreInitialValue": true
+        },
+        {
+          "id": "logic-change-variable-3cd60879-980c-4112-8024-419db78b78d4",
+          "type": "logic-change-variable",
+          "selectedVariableId": "12309506-ce6c-4399-82c6-b2e83f4040c3",
+          "workflowDescription": { "expression": "0" },
+          "restoreInitialValue": true
+        },
+        {
+          "id": "content-text-603487ee-86ad-446a-8908-bf07cf69adf6",
+          "type": "content-text",
+          "attachments": [],
+          "showButtons": true,
+          "buttonsDescription": {
+            "strategy": "manual",
+            "buttons": [
+              { "content": "Greece 🇬🇷", "id": "a49c6a51-1adb-497c-8d71-ef6fd68310c7" },
+              { "content": "Italy 🇮🇹", "id": "2f6b0980-0b26-4d54-a12a-6ce500d2a179" },
+              { "content": "USA 🇺🇸", "id": "c7543de5-e127-4be3-9257-0c71efd25302" }
+            ]
+          },
+          "json": "{\"blocks\":[{\"key\":\"3335k\",\"text\":\"Hey there! Which country's history are you an expert in? 😊\",\"type\":\"unstyled\",\"depth\":0,\"inlineStyleRanges\":[],\"entityRanges\":[],\"data\":{}}],\"entityMap\":{}}",
+          "htmlContent": "<p>Hey there! Which country's history are you an expert in? 😊</p>",
+          "telegramContent": "Hey there! Which country's history are you an expert in? 😊"
+        }
+      ]
+    },
+    {
+      "id": "a15819c3-c67a-43fe-9927-2a02b179cc6d",
+      "blockType": 0,
+      "title": "Block #2",
+      "position": { "x": 1231.5714285714284, "y": 398.50002179827004 },
+      "elements": [
+        {
+          "id": "logic-change-variable-bb7c50a3-683a-4d12-93f0-0a61620d537c",
+          "type": "logic-change-variable",
+          "selectedVariableId": "640a99ab-c346-485f-b848-956663c8710e",
+          "workflowDescription": { "expression": "🇮🇹" }
+        },
+        {
+          "id": "logic-change-variable-31ad2231-627c-4ce8-a686-fa7c38107467",
+          "type": "logic-change-variable",
+          "selectedVariableId": "0da49433-ba21-42b2-a8c1-79d98cc5bfac",
+          "workflowDescription": {
+            "operation": "Set",
+            "setDescription": {
+              "source": "Variable",
+              "variableSourceDescription": {
+                "path": { "variableId": "e5b5927f-df00-4fcb-b3d6-6ff12548dd9a" },
+                "extraFilter": { "logicalOperator": "AND" }
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "617f5419-3809-4b5b-998b-4e50604870ef",
+      "blockType": 0,
+      "title": "Block #3",
+      "position": { "x": 1240.9999891008647, "y": 57 },
+      "elements": [
+        {
+          "id": "logic-change-variable-38023feb-c615-4e3e-81ae-a209e4f72801",
+          "type": "logic-change-variable",
+          "selectedVariableId": "640a99ab-c346-485f-b848-956663c8710e",
+          "workflowDescription": { "expression": "🇬🇷" }
+        },
+        {
+          "id": "logic-change-variable-f1c6de92-c822-41d9-904e-077a021c4cdc",
+          "type": "logic-change-variable",
+          "selectedVariableId": "0da49433-ba21-42b2-a8c1-79d98cc5bfac",
+          "workflowDescription": {
+            "operation": "Set",
+            "setDescription": {
+              "source": "Variable",
+              "variableSourceDescription": {
+                "path": { "variableId": "c7800420-93e8-405d-b4f3-a5532798d9a1" },
+                "extraFilter": { "logicalOperator": "AND" }
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "44f633ac-1fc5-44bf-b820-3596688cb104",
+      "blockType": 0,
+      "title": "Block #4",
+      "position": { "x": 1204.8571319580078, "y": 758.4286041259766 },
+      "elements": [
+        {
+          "id": "logic-change-variable-f000a28c-eda1-4cb2-96ec-a0277f279408",
+          "type": "logic-change-variable",
+          "selectedVariableId": "640a99ab-c346-485f-b848-956663c8710e",
+          "workflowDescription": { "expression": "🇺🇸" }
+        },
+        {
+          "id": "logic-change-variable-211c2d02-5eef-4fab-b738-6e6b67bfee8e",
+          "type": "logic-change-variable",
+          "selectedVariableId": "0da49433-ba21-42b2-a8c1-79d98cc5bfac",
+          "workflowDescription": {
+            "operation": "Set",
+            "setDescription": {
+              "source": "Variable",
+              "variableSourceDescription": {
+                "path": { "variableId": "ab747f9b-01ae-4ad5-82e0-5577e16867c1" },
+                "extraFilter": { "logicalOperator": "AND" }
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "67093008-1761-4de5-9edf-11ce067a7aed",
+      "blockType": 0,
+      "title": "Block #5",
+      "position": { "x": 2035.142857142857, "y": 168.6428462437221 },
+      "elements": [
+        {
+          "id": "logic-change-variable-9c958ff3-cfae-4965-bcbb-8722a56fc421",
+          "type": "logic-change-variable",
+          "selectedVariableId": "df37b0b9-a417-4022-a533-23e0c68c6592",
+          "workflowDescription": {
+            "source": 1,
+            "variableSource": {
+              "variableId": "0da49433-ba21-42b2-a8c1-79d98cc5bfac",
+              "arrayFilter": { "mode": "RANDOM_ITEM", "logicalOperator": "AND" }
+            }
+          }
+        },
+        {
+          "id": "logic-change-variable-e56ec755-2a72-49f6-8270-d5a0b144dda1",
+          "type": "logic-change-variable",
+          "selectedVariableId": "0da49433-ba21-42b2-a8c1-79d98cc5bfac",
+          "workflowDescription": {
+            "operation": "Remove",
+            "removeDescription": {
+              "conditions": [
+                {
+                  "id": "3b67d062-ea34-4bd7-a082-aef147aff381",
+                  "propertyName": "text",
+                  "operator": "EQUAL_TO",
+                  "variableIdValue": "df37b0b9-a417-4022-a533-23e0c68c6592",
+                  "pathVariableIdValue": "text"
+                }
+              ],
+              "logicalOperator": "AND"
+            }
+          }
+        },
+        {
+          "id": "logic-change-variable-a1d70195-80fa-4f11-9646-61ed7f3f64d4",
+          "type": "logic-change-variable",
+          "selectedVariableId": "2060091b-d603-4b85-8bb7-fec51d07bcd0",
+          "workflowDescription": {
+            "source": 1,
+            "variableSource": {
+              "variableId": "df37b0b9-a417-4022-a533-23e0c68c6592",
+              "path": "answers",
+              "arrayFilter": {
+                "mode": "CONDITIONS",
+                "logicalOperator": "AND",
+                "conditions": [
+                  { "id": "89c27526-a0a1-413a-916f-eac6ca0bd3c0", "propertyName": "isCorrect", "operator": "EQUAL_TO", "value": true }
+                ]
+              }
+            }
+          }
+        },
+        {
+          "id": "logic-change-variable-63983627-860c-4f91-bcc6-93d0ee127bc6",
+          "type": "logic-change-variable",
+          "selectedVariableId": "12309506-ce6c-4399-82c6-b2e83f4040c3",
+          "workflowDescription": { "expression": "<%variables.question_count%> - 1" }
+        },
+        {
+          "id": "content-text-c59ffe77-b411-4388-bd7b-814f987f8cf4",
+          "type": "content-text",
+          "attachments": [],
+          "showButtons": true,
+          "buttonsDescription": {
+            "strategy": "fromVariable",
+            "buttons": [],
+            "variableButtonsSource": {
+              "variableSource": { "variableId": "df37b0b9-a417-4022-a533-23e0c68c6592", "path": "answers" },
+              "customTextTemplate": "<%text%>",
+              "answerVariableId": "69dab50a-21d3-4473-b27c-5e596cc03707"
+            }
+          },
+          "json": "{\"blocks\":[{\"key\":\"60ieh\",\"text\":\"<%variables.current_question.text%>\",\"type\":\"unstyled\",\"depth\":0,\"inlineStyleRanges\":[],\"entityRanges\":[],\"data\":{}}],\"entityMap\":{}}",
+          "htmlContent": "<p>&lt;%variables.current_question.text%&gt;</p>",
+          "telegramContent": "&lt;%variables.current_question.text%&gt;"
+        }
+      ]
+    },
+    {
+      "id": "13b48d18-2cef-409b-8870-a960b83a8cbc",
+      "blockType": 0,
+      "title": "Block #6",
+      "position": { "x": 2437.7142857142853, "y": 578.357153756278 },
+      "elements": [
+        {
+          "id": "logic-edit-message-895f83a3-fa87-43e5-8d71-fafcc1125451",
+          "type": "logic-edit-message",
+          "messageElementId": "content-text-c59ffe77-b411-4388-bd7b-814f987f8cf4",
+          "editedMessage": {
+            "id": "content-text-c59ffe77-b411-4388-bd7b-814f987f8cf4",
+            "type": "content-text",
+            "attachments": [],
+            "showButtons": false,
+            "buttonsDescription": {
+              "strategy": "fromVariable",
+              "buttons": [],
+              "variableButtonsSource": {
+                "variableSource": { "variableId": "df37b0b9-a417-4022-a533-23e0c68c6592", "path": "answers" },
+                "customTextTemplate": "<%text%>",
+                "answerVariableId": "69dab50a-21d3-4473-b27c-5e596cc03707"
+              }
+            },
+            "json": "{\"blocks\":[{\"key\":\"60ieh\",\"text\":\"<%variables.current_question.text%>\",\"type\":\"unstyled\",\"depth\":0,\"inlineStyleRanges\":[],\"entityRanges\":[],\"data\":{}},{\"key\":\"86ma\",\"text\":\"Your answer: <%variables.current_user_answer.text%>\",\"type\":\"unstyled\",\"depth\":0,\"inlineStyleRanges\":[{\"offset\":0,\"length\":13,\"style\":\"ITALIC\"},{\"offset\":13,\"length\":38,\"style\":\"BOLD\"}],\"entityRanges\":[],\"data\":{}}],\"entityMap\":{}}",
+            "htmlContent": "<p>&lt;%variables.current_question.text%&gt;</p>\n<p><em>Your answer: </em><strong>&lt;%variables.current_user_answer.text%&gt;</strong></p>",
+            "telegramContent": "&lt;%variables.current_question.text%&gt;\n<em>Your answer: </em><b>&lt;%variables.current_user_answer.text%&gt;</b>"
+          }
+        },
+        {
+          "id": "logic-condition-7b2645e0-b54a-46c7-840e-db0b6d0e2617",
+          "type": "logic-condition",
+          "logicalOperator": "AND",
+          "items": [
             {
-              "id": "/start",
-              "command": "/start",
-              "description": "Start the bot"
+              "id": "fbb2abd6-127e-404a-8e63-d7ceee0e08b6",
+              "variableId": "69dab50a-21d3-4473-b27c-5e596cc03707",
+              "path": "isCorrect",
+              "operator": "EQUAL_TO",
+              "value": true
             }
           ]
         }
       ]
     },
     {
-      "id": "5a37c162-b277-4a40-b3b6-84f1ca538485",
+      "id": "6eb0cd75-444c-479d-8109-9f4d9621edde",
       "blockType": 0,
-      "title": "Block #1",
-      "position": { "x": 320.800048828125, "y": 333 },
+      "title": "Block #7",
+      "position": { "x": 2847.142900739397, "y": 226.78571428571425 },
       "elements": [
         {
-          "id": "content-text-459d1173-fe53-437f-8cba-238fd4f3e831",
+          "id": "logic-change-variable-40c44402-f479-4862-8826-ffbf2538ddb2",
+          "type": "logic-change-variable",
+          "selectedVariableId": "d5e84f92-4914-41e9-9457-b1366911b978",
+          "workflowDescription": { "expression": "<%variables.score%> + 1" }
+        },
+        {
+          "id": "content-text-ebbf431d-13c1-435d-8d40-f7eec8cb7336",
           "type": "content-text",
           "attachments": [],
           "showButtons": false,
           "buttonsDescription": { "strategy": "manual", "buttons": [] },
-          "json": "{\"blocks\":[{\"key\":\"colsj\",\"text\":\"Hello! I'm bot from template!\",\"type\":\"unstyled\",\"depth\":0,\"inlineStyleRanges\":[],\"entityRanges\":[],\"data\":{}}],\"entityMap\":{}}",
-          "htmlContent": "<p>Hello! I'm bot from template!</p>",
-          "telegramContent": "Hello! I'm bot from template!"
+          "json": "{\"blocks\":[{\"key\":\"fdfhq\",\"text\":\"✅Absolutely! That's the right answer! 👍\",\"type\":\"unstyled\",\"depth\":0,\"inlineStyleRanges\":[],\"entityRanges\":[],\"data\":{}}],\"entityMap\":{}}",
+          "htmlContent": "<p>✅Absolutely! That's the right answer! 👍</p>",
+          "telegramContent": "✅Absolutely! That's the right answer! 👍"
+        }
+      ]
+    },
+    {
+      "id": "5ace30d9-3c5e-47f3-ae9d-4568ef4bf153",
+      "blockType": 0,
+      "title": "Block #8",
+      "position": { "x": 2853.5714285714284, "y": 485.35717555454795 },
+      "elements": [
+        {
+          "id": "content-text-a6b97bf0-d551-4d16-a230-9625784f9ab2",
+          "type": "content-text",
+          "attachments": [],
+          "showButtons": false,
+          "buttonsDescription": { "strategy": "manual", "buttons": [] },
+          "json": "{\"blocks\":[{\"key\":\"fol1n\",\"text\":\"❌That's not the right answer! 😥\",\"type\":\"unstyled\",\"depth\":0,\"inlineStyleRanges\":[],\"entityRanges\":[],\"data\":{}},{\"key\":\"8u46\",\"text\":\"The correct answer is ✔️<%variables.first_correct_answer.text%>\",\"type\":\"unstyled\",\"depth\":0,\"inlineStyleRanges\":[{\"offset\":24,\"length\":39,\"style\":\"BOLD\"}],\"entityRanges\":[],\"data\":{}}],\"entityMap\":{}}",
+          "htmlContent": "<p>❌That's not the right answer! 😥</p>\n<p>The correct answer is ✔️<strong>&lt;%variables.first_correct_answer.text%&gt;</strong></p>",
+          "telegramContent": "❌That's not the right answer! 😥\nThe correct answer is ✔️<b>&lt;%variables.first_correct_answer.text%&gt;</b>"
+        }
+      ]
+    },
+    {
+      "id": "405da88c-945f-448c-94ce-3f0aee06f991",
+      "blockType": 0,
+      "title": "Block #9",
+      "position": { "x": 3493.2143511090953, "y": 120.00011989048545 },
+      "elements": [
+        {
+          "id": "logic-condition-f9e64332-1cb4-4537-9449-0bb2f35606fd",
+          "type": "logic-condition",
+          "logicalOperator": "AND",
+          "items": [
+            {
+              "id": "cbd895a0-397f-47de-8887-1e0a5f7c2ed2",
+              "variableId": "12309506-ce6c-4399-82c6-b2e83f4040c3",
+              "value": 0,
+              "operator": "EQUAL_TO"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "4e4216d6-55e5-4846-a248-9d65f5e32d84",
+      "blockType": 0,
+      "title": "Block #10",
+      "position": { "x": 3954.1645415100866, "y": 136.9114078570016 },
+      "elements": [
+        {
+          "id": "logic-condition-7d288746-e4f2-44ac-b6fd-8621e5a93be2",
+          "type": "logic-condition",
+          "logicalOperator": "AND",
+          "items": [
+            {
+              "id": "db08019f-e425-4dca-9568-3f467b9b9c86",
+              "variableId": "d5e84f92-4914-41e9-9457-b1366911b978",
+              "value": 3,
+              "operator": "GREATER_THAN"
+            }
+          ]
+        },
+        {
+          "id": "logic-condition-5f9d7a8f-fab3-4b75-905f-5572ba55aa54",
+          "type": "logic-condition",
+          "logicalOperator": "AND",
+          "items": [
+            {
+              "id": "b3225284-04cd-445e-b56e-91eb314e117f",
+              "variableId": "d5e84f92-4914-41e9-9457-b1366911b978",
+              "value": 1,
+              "operator": "GREATER_THAN"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "2cbb24cd-0776-428f-a285-e277b863bf8e",
+      "blockType": 0,
+      "title": "Block #11",
+      "position": { "x": 4445.3164402442635, "y": -136.20253937153876 },
+      "elements": [
+        {
+          "id": "content-text-bdf1dd19-5ba4-41a1-a1e0-f848b4747ef2",
+          "type": "content-text",
+          "attachments": [],
+          "showButtons": false,
+          "buttonsDescription": { "strategy": "manual", "buttons": [] },
+          "json": "{\"blocks\":[{\"key\":\"21lnv\",\"text\":\"Great job! Your knowledge of history is impresive! 🤩🤩🤩\",\"type\":\"unstyled\",\"depth\":0,\"inlineStyleRanges\":[],\"entityRanges\":[],\"data\":{}}],\"entityMap\":{}}",
+          "htmlContent": "<p>Great job! Your knowledge of history is impresive! 🤩🤩🤩</p>",
+          "telegramContent": "Great job! Your knowledge of history is impresive! 🤩🤩🤩"
+        }
+      ]
+    },
+    {
+      "id": "946212eb-c675-4c67-bc67-85a9fa0d854a",
+      "blockType": 0,
+      "title": "Block #12",
+      "position": { "x": 4446.329160279865, "y": 32.15192963805379 },
+      "elements": [
+        {
+          "id": "content-text-1302eb8e-1f7d-4a38-ab4b-619252e24596",
+          "type": "content-text",
+          "attachments": [],
+          "showButtons": false,
+          "buttonsDescription": { "strategy": "manual", "buttons": [] },
+          "json": "{\"blocks\":[{\"key\":\"e7327\",\"text\":\"You're doing great! Keep it up! 🤩\",\"type\":\"unstyled\",\"depth\":0,\"inlineStyleRanges\":[],\"entityRanges\":[],\"data\":{}}],\"entityMap\":{}}",
+          "htmlContent": "<p>You're doing great! Keep it up! 🤩</p>",
+          "telegramContent": "You're doing great! Keep it up! 🤩"
+        }
+      ]
+    },
+    {
+      "id": "dd6d3b24-3ebc-4ec1-b1c0-e476a3d03db6",
+      "blockType": 0,
+      "title": "Block #13",
+      "position": { "x": 4445.379731383504, "y": 187.0885921429984 },
+      "elements": [
+        {
+          "id": "content-text-d0bbea17-a62a-4282-890e-f4dadfae926f",
+          "type": "content-text",
+          "attachments": [],
+          "showButtons": false,
+          "buttonsDescription": { "strategy": "manual", "buttons": [] },
+          "json": "{\"blocks\":[{\"key\":\"3mu69\",\"text\":\"Ouch, looks like you could use some brushing up on your history knowledge. 🙃 Keep learning and growing! 😊\",\"type\":\"unstyled\",\"depth\":0,\"inlineStyleRanges\":[],\"entityRanges\":[],\"data\":{}}],\"entityMap\":{}}",
+          "htmlContent": "<p>Ouch, looks like you could use some brushing up on your history knowledge. 🙃 Keep learning and growing! 😊</p>",
+          "telegramContent": "Ouch, looks like you could use some brushing up on your history knowledge. 🙃 Keep learning and growing! 😊"
+        }
+      ]
+    },
+    {
+      "id": "85462453-518e-495c-a437-a423056f4bd6",
+      "blockType": 0,
+      "title": "Block #14",
+      "position": { "x": 4994.911423308939, "y": 87.94945207426821 },
+      "elements": [
+        {
+          "id": "content-text-1c87b4c4-15c9-47b1-afc2-a24c8c764564",
+          "type": "content-text",
+          "attachments": [],
+          "showButtons": false,
+          "buttonsDescription": { "strategy": "manual", "buttons": [] },
+          "json": "{\"blocks\":[{\"key\":\"bjcpv\",\"text\":\"<%variables.selected_country_flag%> Your score: <%variables.score%> / 5\",\"type\":\"unstyled\",\"depth\":0,\"inlineStyleRanges\":[{\"offset\":36,\"length\":10,\"style\":\"ITALIC\"},{\"offset\":48,\"length\":19,\"style\":\"BOLD\"}],\"entityRanges\":[],\"data\":{}}],\"entityMap\":{}}",
+          "htmlContent": "<p>&lt;%variables.selected_country_flag%&gt; <em>Your score</em>: <strong>&lt;%variables.score%&gt;</strong> / 5</p>",
+          "telegramContent": "&lt;%variables.selected_country_flag%&gt; <em>Your score</em>: <b>&lt;%variables.score%&gt;</b> / 5"
+        },
+        {
+          "id": "content-text-1f7a2e37-e284-4092-bfbb-e001f9191d0a",
+          "type": "content-text",
+          "attachments": [],
+          "showButtons": true,
+          "buttonsDescription": {
+            "strategy": "manual",
+            "buttons": [{ "content": "Yes... Let's go! 💪 ", "id": "95b7622d-1bc7-44e2-90a9-9ac6c68c01c9" }]
+          },
+          "json": "{\"blocks\":[{\"key\":\"5rgeu\",\"text\":\"Would you like to give it another shot? 🤨\",\"type\":\"unstyled\",\"depth\":0,\"inlineStyleRanges\":[],\"entityRanges\":[],\"data\":{}}],\"entityMap\":{}}",
+          "htmlContent": "<p>Would you like to give it another shot? 🤨</p>",
+          "telegramContent": "Would you like to give it another shot? 🤨"
+        }
+      ]
+    },
+    {
+      "id": "54d8ff4a-f9f6-4252-b983-4833de68c745",
+      "blockType": 0,
+      "title": "Block #15",
+      "position": { "x": 1640.534912109375, "y": 550.5116421011992 },
+      "elements": [
+        {
+          "id": "content-text-b883febe-c9ee-4e5c-bbe7-ee23aaf23af6",
+          "type": "content-text",
+          "attachments": [],
+          "showButtons": false,
+          "buttonsDescription": { "strategy": "manual", "buttons": [] },
+          "json": "{\"blocks\":[{\"key\":\"42plb\",\"text\":\"<%variables.selected_country_flag%> Alright, let's quickly test your knowledge of the country's history.\",\"type\":\"unstyled\",\"depth\":0,\"inlineStyleRanges\":[],\"entityRanges\":[],\"data\":{}}],\"entityMap\":{}}",
+          "htmlContent": "<p>&lt;%variables.selected_country_flag%&gt; Alright, let's quickly test your knowledge of the country's history.</p>",
+          "telegramContent": "&lt;%variables.selected_country_flag%&gt; Alright, let's quickly test your knowledge of the country's history."
+        },
+        {
+          "id": "logic-remove-message-1fc9d9b1-37d9-4dbd-ae22-56a8f6f840a1",
+          "type": "logic-remove-message",
+          "messageElementId": "content-text-603487ee-86ad-446a-8908-bf07cf69adf6"
+        }
+      ]
+    },
+    {
+      "id": "db316215-47f4-49cd-8c6b-3b686996621c",
+      "blockType": 0,
+      "title": "Block #16",
+      "position": { "x": 5464.697759583939, "y": 85.5349050122638 },
+      "elements": [
+        {
+          "id": "logic-remove-message-1edd4308-97be-49eb-b26f-b4c7e382bf86",
+          "type": "logic-remove-message",
+          "messageElementId": "content-text-1f7a2e37-e284-4092-bfbb-e001f9191d0a"
         }
       ]
     }
   ],
   "links": [
     {
-      "id": "0c34ea0e-65ea-4503-bf8d-87234ee0c543",
-      "input": { "blockId": "5a37c162-b277-4a40-b3b6-84f1ca538485", "type": 0 },
+      "id": "2565d5c2-19dc-4490-8d17-57029c5e8348",
+      "input": { "blockId": "a5ef56a5-f4c2-4ca0-9cb8-4f2be9e9a375", "type": 0 },
       "output": { "blockId": "/start", "buttonId": "/start", "type": 2 }
+    },
+    {
+      "id": "b605c7aa-142e-425b-a4f4-1d8e221754ab",
+      "input": { "blockId": "a15819c3-c67a-43fe-9927-2a02b179cc6d", "type": 0 },
+      "output": {
+        "blockId": "a5ef56a5-f4c2-4ca0-9cb8-4f2be9e9a375",
+        "buttonId": "2f6b0980-0b26-4d54-a12a-6ce500d2a179",
+        "elementId": "content-text-603487ee-86ad-446a-8908-bf07cf69adf6",
+        "type": 2
+      }
+    },
+    {
+      "id": "45fe27c9-3211-49ea-b16e-647b88330aba",
+      "input": { "blockId": "617f5419-3809-4b5b-998b-4e50604870ef", "type": 0 },
+      "output": {
+        "blockId": "a5ef56a5-f4c2-4ca0-9cb8-4f2be9e9a375",
+        "buttonId": "a49c6a51-1adb-497c-8d71-ef6fd68310c7",
+        "elementId": "content-text-603487ee-86ad-446a-8908-bf07cf69adf6",
+        "type": 2
+      }
+    },
+    {
+      "id": "454e569e-46a1-433b-adf0-55574511a918",
+      "input": { "blockId": "44f633ac-1fc5-44bf-b820-3596688cb104", "type": 0 },
+      "output": {
+        "blockId": "a5ef56a5-f4c2-4ca0-9cb8-4f2be9e9a375",
+        "buttonId": "c7543de5-e127-4be3-9257-0c71efd25302",
+        "elementId": "content-text-603487ee-86ad-446a-8908-bf07cf69adf6",
+        "type": 2
+      }
+    },
+    {
+      "id": "00c87a25-5b3a-423a-b56f-046964047565",
+      "input": { "blockId": "13b48d18-2cef-409b-8870-a960b83a8cbc", "type": 0 },
+      "output": {
+        "blockId": "67093008-1761-4de5-9edf-11ce067a7aed",
+        "buttonId": "default-button-content-text-c59ffe77-b411-4388-bd7b-814f987f8cf4",
+        "elementId": "content-text-c59ffe77-b411-4388-bd7b-814f987f8cf4",
+        "type": 2
+      }
+    },
+    {
+      "id": "eff0fcd4-0082-439d-aee3-0a577589db2b",
+      "input": { "blockId": "6eb0cd75-444c-479d-8109-9f4d9621edde", "type": 0 },
+      "output": {
+        "blockId": "13b48d18-2cef-409b-8870-a960b83a8cbc",
+        "buttonId": "logic-condition-7b2645e0-b54a-46c7-840e-db0b6d0e2617",
+        "elementId": "logic-condition-7b2645e0-b54a-46c7-840e-db0b6d0e2617",
+        "type": 2
+      }
+    },
+    {
+      "id": "4444ae61-9956-4037-b42b-7ea3952e7eb5",
+      "input": { "blockId": "5ace30d9-3c5e-47f3-ae9d-4568ef4bf153", "type": 0 },
+      "output": { "blockId": "13b48d18-2cef-409b-8870-a960b83a8cbc", "type": 0 }
+    },
+    {
+      "id": "4a59a031-8c7b-44c7-86ae-48d53dae85fe",
+      "input": { "blockId": "405da88c-945f-448c-94ce-3f0aee06f991", "type": 0 },
+      "output": { "blockId": "6eb0cd75-444c-479d-8109-9f4d9621edde", "type": 0 }
+    },
+    {
+      "id": "252a00e1-4165-46d6-bb37-c9207730921f",
+      "input": { "blockId": "405da88c-945f-448c-94ce-3f0aee06f991", "type": 0 },
+      "output": { "blockId": "5ace30d9-3c5e-47f3-ae9d-4568ef4bf153", "type": 0 }
+    },
+    {
+      "id": "af8690b6-2b74-47d5-a845-d9e5412fbbfc",
+      "input": { "blockId": "67093008-1761-4de5-9edf-11ce067a7aed", "type": 0 },
+      "output": { "blockId": "405da88c-945f-448c-94ce-3f0aee06f991", "type": 0 }
+    },
+    {
+      "id": "09ec4f5f-8732-4868-a2b7-adc459fbb34a",
+      "input": { "blockId": "2cbb24cd-0776-428f-a285-e277b863bf8e", "type": 0 },
+      "output": {
+        "blockId": "4e4216d6-55e5-4846-a248-9d65f5e32d84",
+        "buttonId": "logic-condition-7d288746-e4f2-44ac-b6fd-8621e5a93be2",
+        "elementId": "logic-condition-7d288746-e4f2-44ac-b6fd-8621e5a93be2",
+        "type": 2
+      }
+    },
+    {
+      "id": "45498609-09b6-4cdf-afb6-fe3edaf09ab6",
+      "input": { "blockId": "946212eb-c675-4c67-bc67-85a9fa0d854a", "type": 0 },
+      "output": {
+        "blockId": "4e4216d6-55e5-4846-a248-9d65f5e32d84",
+        "buttonId": "logic-condition-5f9d7a8f-fab3-4b75-905f-5572ba55aa54",
+        "elementId": "logic-condition-5f9d7a8f-fab3-4b75-905f-5572ba55aa54",
+        "type": 2
+      }
+    },
+    {
+      "id": "14cc8e1a-c7ed-4730-a268-fdb8138c5275",
+      "input": { "blockId": "dd6d3b24-3ebc-4ec1-b1c0-e476a3d03db6", "type": 0 },
+      "output": { "blockId": "4e4216d6-55e5-4846-a248-9d65f5e32d84", "type": 0 }
+    },
+    {
+      "id": "7d55678d-8ae5-4fc1-8f93-331c1f542887",
+      "input": { "blockId": "85462453-518e-495c-a437-a423056f4bd6", "type": 0 },
+      "output": { "blockId": "2cbb24cd-0776-428f-a285-e277b863bf8e", "type": 0 }
+    },
+    {
+      "id": "825d1c2b-8ce7-4efb-bb13-c53d08d5ed38",
+      "input": { "blockId": "85462453-518e-495c-a437-a423056f4bd6", "type": 0 },
+      "output": { "blockId": "946212eb-c675-4c67-bc67-85a9fa0d854a", "type": 0 }
+    },
+    {
+      "id": "53d5e316-cb67-4858-a4ed-3708f143b669",
+      "input": { "blockId": "85462453-518e-495c-a437-a423056f4bd6", "type": 0 },
+      "output": { "blockId": "dd6d3b24-3ebc-4ec1-b1c0-e476a3d03db6", "type": 0 }
+    },
+    {
+      "id": "77c9b28d-68e5-41e0-9af4-d65449647227",
+      "input": { "blockId": "4e4216d6-55e5-4846-a248-9d65f5e32d84", "type": 0 },
+      "output": {
+        "blockId": "405da88c-945f-448c-94ce-3f0aee06f991",
+        "buttonId": "logic-condition-f9e64332-1cb4-4537-9449-0bb2f35606fd",
+        "elementId": "logic-condition-f9e64332-1cb4-4537-9449-0bb2f35606fd",
+        "type": 2
+      }
+    },
+    {
+      "id": "7cac7137-ad0a-44e6-83f0-5b90c7447071",
+      "input": { "blockId": "67093008-1761-4de5-9edf-11ce067a7aed", "type": 0 },
+      "output": { "blockId": "54d8ff4a-f9f6-4252-b983-4833de68c745", "type": 0 }
+    },
+    {
+      "id": "23cf53ac-e3df-46b2-a133-3e6beacdef1a",
+      "input": { "blockId": "54d8ff4a-f9f6-4252-b983-4833de68c745", "type": 0 },
+      "output": { "blockId": "617f5419-3809-4b5b-998b-4e50604870ef", "type": 0 }
+    },
+    {
+      "id": "3095be68-e41d-45bc-986c-876053bf62f7",
+      "input": { "blockId": "54d8ff4a-f9f6-4252-b983-4833de68c745", "type": 0 },
+      "output": { "blockId": "a15819c3-c67a-43fe-9927-2a02b179cc6d", "type": 0 }
+    },
+    {
+      "id": "49a781b0-41fb-4dbb-885e-2d2c91753c2a",
+      "input": { "blockId": "54d8ff4a-f9f6-4252-b983-4833de68c745", "type": 0 },
+      "output": { "blockId": "44f633ac-1fc5-44bf-b820-3596688cb104", "type": 0 }
+    },
+    {
+      "id": "0c01294d-41c0-47c4-899b-a6b163876a38",
+      "input": { "blockId": "db316215-47f4-49cd-8c6b-3b686996621c", "type": 0 },
+      "output": {
+        "blockId": "85462453-518e-495c-a437-a423056f4bd6",
+        "buttonId": "95b7622d-1bc7-44e2-90a9-9ac6c68c01c9",
+        "elementId": "content-text-1f7a2e37-e284-4092-bfbb-e001f9191d0a",
+        "type": 2
+      }
+    },
+    {
+      "id": "8fe56683-69af-4ef2-913b-39ef4aebef20",
+      "input": { "blockId": "a5ef56a5-f4c2-4ca0-9cb8-4f2be9e9a375", "type": 0 },
+      "output": { "blockId": "db316215-47f4-49cd-8c6b-3b686996621c", "type": 0 }
     }
   ],
-  "variables": [],
-  "transformDescription": { "x": 190, "y": 192, "scale": 1 }
+  "variables": [
+    { "id": "user_id", "type": "number", "name": "user_id", "value": -1, "isPlatformVariable": true },
+    { "id": "user_first_name", "type": "string", "name": "user_first_name", "value": "", "isPlatformVariable": true },
+    { "id": "user_last_name", "type": "string", "name": "user_last_name", "value": "", "isPlatformVariable": true },
+    { "id": "username", "type": "string", "name": "username", "value": "", "isPlatformVariable": true },
+    { "id": "user_language_code", "type": "string", "name": "user_language_code", "value": "", "isPlatformVariable": true },
+    { "id": "is_premium", "type": "boolean", "name": "is_premium", "value": false, "isPlatformVariable": true },
+    { "id": "d5e84f92-4914-41e9-9457-b1366911b978", "name": "score", "type": "number", "value": 0, "isPlatformVariable": false },
+    { "id": "12309506-ce6c-4399-82c6-b2e83f4040c3", "name": "question_count", "type": "number", "value": "5", "isPlatformVariable": false },
+    {
+      "id": "e5b5927f-df00-4fcb-b3d6-6ff12548dd9a",
+      "name": "italy_questions",
+      "type": "array",
+      "value": "[\n  {\n    \"text\": \"What year did Italy become a unified country?\",\n    \"answers\": [\n      {\n        \"text\": \"1900\",\n        \"isCorrect\": false\n      },\n      {\n        \"text\": \"1861\",\n        \"isCorrect\": true\n      },\n      {\n        \"text\": \"1848\",\n        \"isCorrect\": false\n      }\n    ]\n  },\n  {\n    \"text\": \"Who was the first king of unified Italy?\",\n    \"answers\": [\n      {\n        \"text\": \"Giuseppe Garibaldi\",\n        \"isCorrect\": false\n      },\n      {\n        \"text\": \"Victor Emmanuel II\",\n        \"isCorrect\": true\n      },\n      {\n        \"text\": \"Benito Mussolini\",\n        \"isCorrect\": false\n      }\n    ]\n  },\n  {\n    \"text\": \"Which city served as the capital of Italy before Rome?\",\n    \"answers\": [\n      {\n        \"text\": \"Milan\",\n        \"isCorrect\": false\n      },\n      {\n        \"text\": \"Florence\",\n        \"isCorrect\": true\n      },\n      {\n        \"text\": \"Venice\",\n        \"isCorrect\": false\n      }\n    ]\n  },\n  {\n    \"text\": \"What event led to the downfall of the Roman Empire in the West?\",\n    \"answers\": [\n      {\n        \"text\": \"Political Corruption\",\n        \"isCorrect\": false\n      },\n      {\n        \"text\": \"Barbarian Invasions\",\n        \"isCorrect\": true\n      },\n      {\n        \"text\": \"Plague\",\n        \"isCorrect\": false\n      }\n    ]\n  },\n  {\n    \"text\": \"Who was the famous Italian explorer who discovered the Americas?\",\n    \"answers\": [\n      {\n        \"text\": \"Amerigo Vespucci\",\n        \"isCorrect\": false\n      },\n      {\n        \"text\": \"Christopher Columbus\",\n        \"isCorrect\": true\n      },\n      {\n        \"text\": \"Marco Polo\",\n        \"isCorrect\": false\n      }\n    ]\n  },\n  {\n    \"text\": \"Which Italian city-state was known for its maritime power and trade dominance in the Mediterranean during the Renaissance?\",\n    \"answers\": [\n      {\n        \"text\": \"Florence\",\n        \"isCorrect\": false\n      },\n      {\n        \"text\": \"Venice\",\n        \"isCorrect\": true\n      },\n      {\n        \"text\": \"Genoa\",\n        \"isCorrect\": false\n      }\n    ]\n  },\n  {\n    \"text\": \"Who was the famous artist and inventor known for works like the Mona Lisa and The Last Supper?\",\n    \"answers\": [\n      {\n        \"text\": \"Michelangelo\",\n        \"isCorrect\": false\n      },\n      {\n        \"text\": \"Leonardo da Vinci\",\n        \"isCorrect\": true\n      },\n      {\n        \"text\": \"Raphael\",\n        \"isCorrect\": false\n      }\n    ]\n  },\n  {\n    \"text\": \"Which Italian city is known for its leaning tower?\",\n    \"answers\": [\n      {\n        \"text\": \"Rome\",\n        \"isCorrect\": false\n      },\n      {\n        \"text\": \"Florence\",\n        \"isCorrect\": false\n      },\n      {\n        \"text\": \"Pisa\",\n        \"isCorrect\": true\n      }\n    ]\n  },\n  {\n    \"text\": \"Who wrote the famous political treatise 'The Prince' in the 16th century?\",\n    \"answers\": [\n      {\n        \"text\": \"Galileo Galilei\",\n        \"isCorrect\": false\n      },\n      {\n        \"text\": \"Niccolò Machiavelli\",\n        \"isCorrect\": true\n      },\n      {\n        \"text\": \"Dante Alighieri\",\n        \"isCorrect\": false\n      }\n    ]\n  },\n  {\n    \"text\": \"Which Italian city is home to the Vatican City, an independent city-state and the headquarters of the Roman Catholic Church?\",\n    \"answers\": [\n      {\n        \"text\": \"Milan\",\n        \"isCorrect\": false\n      },\n      {\n        \"text\": \"Rome\",\n        \"isCorrect\": true\n      },\n      {\n        \"text\": \"Naples\",\n        \"isCorrect\": false\n      }\n    ]\n  },\n  {\n    \"text\": \"Who was the first Roman Emperor?\",\n    \"answers\": [\n      {\n        \"text\": \"Nero\",\n        \"isCorrect\": false\n      },\n      {\n        \"text\": \"Julius Caesar\",\n        \"isCorrect\": false\n      },\n      {\n        \"text\": \"Augustus\",\n        \"isCorrect\": true\n      }\n    ]\n  },\n  {\n    \"text\": \"Which Italian city is famous for its canals and gondolas?\",\n    \"answers\": [\n      {\n        \"text\": \"Milan\",\n        \"isCorrect\": false\n      },\n      {\n        \"text\": \"Venice\",\n        \"isCorrect\": true\n      },\n      {\n        \"text\": \"Florence\",\n        \"isCorrect\": false\n      }\n    ]\n  },\n  {\n    \"text\": \"Who was the leader of the Fascist Party in Italy during World War II?\",\n    \"answers\": [\n      {\n        \"text\": \"Adolf Hitler\",\n        \"isCorrect\": false\n      },\n      {\n        \"text\": \"Benito Mussolini\",\n        \"isCorrect\": true\n      },\n      {\n        \"text\": \"Joseph Stalin\",\n        \"isCorrect\": false\n      }\n    ]\n  },\n  {\n    \"text\": \"Which ancient civilization had a significant influence on early Italy?\",\n    \"answers\": [\n      {\n        \"text\": \"Greeks\",\n        \"isCorrect\": false\n      },\n      {\n        \"text\": \"Etruscans\",\n        \"isCorrect\": true\n      },\n      {\n        \"text\": \"Carthaginians\",\n        \"isCorrect\": false\n      }\n    ]\n  },\n  {\n    \"text\": \"Who painted the ceiling of the Sistine Chapel in Vatican City?\",\n    \"answers\": [\n      {\n        \"text\": \"Leonardo Da Vinci\",\n        \"isCorrect\": false\n      },\n      {\n        \"text\": \"Raphael\",\n        \"isCorrect\": false\n      },\n      {\n        \"text\": \"Michelangelo\",\n        \"isCorrect\": true\n      }\n    ]\n  },\n  {\n    \"text\": \"What was the name of the powerful trading league formed by Italian city-states during the Middle Ages?\",\n    \"answers\": [\n      {\n        \"text\": \"Medici League\",\n        \"isCorrect\": false\n      },\n      {\n        \"text\": \"Italian League\",\n        \"isCorrect\": true\n      },\n      {\n        \"text\": \"Hanseatic League\",\n        \"isCorrect\": false\n      }\n    ]\n  },\n  {\n    \"text\": \"Which Italian scientist is known as the father of modern physics?\",\n    \"answers\": [\n      {\n        \"text\": \"Leonardo da Vinci\",\n        \"isCorrect\": false\n      },\n      {\n        \"text\": \"Nicolaus Copernicus\",\n        \"isCorrect\": false\n      },\n      {\n        \"text\": \"Galileo Galilei\",\n        \"isCorrect\": true\n      }\n    ]\n  }\n]",
+      "isPlatformVariable": false,
+      "arrayItemType": "object"
+    },
+    {
+      "id": "0da49433-ba21-42b2-a8c1-79d98cc5bfac",
+      "name": "selected_country_questions",
+      "type": "array",
+      "value": "[\n    {\n        \"text\": \"Question #1\",\n        \"answers\": [\n            {\n                \"text\": \"Answer #1\",\n                \"isCorrect\": false\n            },\n            {\n                \"text\": \"Answer #2\",\n                \"isCorrect\": true\n            }\n        ]\n    }\n]",
+      "isPlatformVariable": false,
+      "arrayItemType": "object"
+    },
+    {
+      "id": "c7800420-93e8-405d-b4f3-a5532798d9a1",
+      "name": "greece_questions",
+      "type": "array",
+      "value": "[\n    {\n        \"text\": \"What was the name of the ancient Greek city-state known for its militaristic society and emphasis on military training?\",\n        \"answers\": [\n            {\n                \"text\": \"Athens\",\n                \"isCorrect\": false\n            },\n            {\n                \"text\": \"Sparta\",\n                \"isCorrect\": true\n            }\n        ]\n    },\n    {\n        \"text\": \"Who was the famous philosopher known for his teachings on ethics and his dialogues with Socrates?\",\n        \"answers\": [\n            {\n                \"text\": \"Aristotle\",\n                \"isCorrect\": false\n            },\n            {\n                \"text\": \"Plato\",\n                \"isCorrect\": true\n            }\n        ]\n    },\n    {\n        \"text\": \"Which ancient Greek playwright wrote famous tragedies like 'Oedipus Rex' and 'Antigone'?\",\n        \"answers\": [\n            {\n                \"text\": \"Aeschylus\",\n                \"isCorrect\": true\n            },\n            {\n                \"text\": \"Euripides\",\n                \"isCorrect\": false\n            }\n        ]\n    },\n    {\n        \"text\": \"What was the name of the ancient Greek city known for its democratic government and contributions to philosophy and the arts?\",\n        \"answers\": [\n            {\n                \"text\": \"Sparta\",\n                \"isCorrect\": false\n            },\n            {\n                \"text\": \"Athens\",\n                \"isCorrect\": true\n            }\n        ]\n    },\n    {\n        \"text\": \"Who was the king of Macedonia who conquered much of the known world, including Greece, Persia, and Egypt?\",\n        \"answers\": [\n            {\n                \"text\": \"Alexander the Great\",\n                \"isCorrect\": true\n            },\n            {\n                \"text\": \"Philip II\",\n                \"isCorrect\": false\n            }\n        ]\n    },\n    {\n        \"text\": \"Which ancient Greek mathematician is known as the 'Father of Geometry'?\",\n        \"answers\": [\n            {\n                \"text\": \"Euclid\",\n                \"isCorrect\": true\n            },\n            {\n                \"text\": \"Pythagoras\",\n                \"isCorrect\": false\n            }\n        ]\n    },\n    {\n        \"text\": \"What was the name of the famous battle where the outnumbered Greek forces defeated the Persian army?\",\n        \"answers\": [\n            {\n                \"text\": \"Battle of Marathon\",\n                \"isCorrect\": true\n            },\n            {\n                \"text\": \"Battle of Thermopylae\",\n                \"isCorrect\": false\n            }\n        ]\n    },\n    {\n        \"text\": \"Who was the legendary king of Ithaca and the hero of Homer's epic poem, 'The Odyssey'?\",\n        \"answers\": [\n            {\n                \"text\": \"Achilles\",\n                \"isCorrect\": false\n            },\n            {\n                \"text\": \"Odysseus\",\n                \"isCorrect\": true\n            }\n        ]\n    },\n    {\n        \"text\": \"Which ancient Greek city-state was known for its military prowess and for developing the concept of citizenship?\",\n        \"answers\": [\n            {\n                \"text\": \"Sparta\",\n                \"isCorrect\": true\n            },\n            {\n                \"text\": \"Athens\",\n                \"isCorrect\": false\n            }\n        ]\n    },\n    {\n        \"text\": \"Who was the goddess of wisdom, warfare, and crafts in ancient Greek religion?\",\n        \"answers\": [\n            {\n                \"text\": \"Hera\",\n                \"isCorrect\": false\n            },\n            {\n                \"text\": \"Athena\",\n                \"isCorrect\": true\n            }\n        ]\n    },\n    {\n        \"text\": \"What was the name of the ancient Greek poet often referred to as the 'Father of Western Literature'?\",\n        \"answers\": [\n            {\n                \"text\": \"Homer\",\n                \"isCorrect\": true\n            },\n            {\n                \"text\": \"Virgil\",\n                \"isCorrect\": false\n            }\n        ]\n    },\n    {\n        \"text\": \"Which ancient Greek philosopher is known for his method of questioning to elicit truths from his students?\",\n        \"answers\": [\n            {\n                \"text\": \"Plato\",\n                \"isCorrect\": false\n            },\n            {\n                \"text\": \"Socrates\",\n                \"isCorrect\": true\n            }\n        ]\n    },\n    {\n        \"text\": \"What was the name of the ancient Greek city-state that was known for its focus on education and the arts?\",\n        \"answers\": [\n            {\n                \"text\": \"Athens\",\n                \"isCorrect\": true\n            },\n            {\n                \"text\": \"Sparta\",\n                \"isCorrect\": false\n            }\n        ]\n    },\n    {\n        \"text\": \"Who was the goddess of love and beauty in ancient Greek mythology?\",\n        \"answers\": [\n            {\n                \"text\": \"Hera\",\n                \"isCorrect\": false\n            },\n            {\n                \"text\": \"Aphrodite\",\n                \"isCorrect\": true\n            }\n        ]\n    },\n    {\n        \"text\": \"Which ancient Greek mathematician discovered the principle of buoyancy, now known as Archimedes' principle?\",\n        \"answers\": [\n            {\n                \"text\": \"Archimedes\",\n                \"isCorrect\": true\n            },\n            {\n                \"text\": \"Pythagoras\",\n                \"isCorrect\": false\n            }\n        ]\n    },\n    {\n        \"text\": \"What was the name of the famous temple dedicated to the goddess Athena located on the Acropolis of Athens?\",\n        \"answers\": [\n            {\n                \"text\": \"Parthenon\",\n                \"isCorrect\": true\n            },\n            {\n                \"text\": \"Pantheon\",\n                \"isCorrect\": false\n            }\n        ]\n    },\n    {\n        \"text\": \"Who was the king of Persia who invaded Greece, leading to the Greco-Persian Wars?\",\n        \"answers\": [\n            {\n                \"text\": \"Cyrus the Great\",\n                \"isCorrect\": false\n            },\n            {\n                \"text\": \"Xerxes I\",\n                \"isCorrect\": true\n            }\n        ]\n    },\n    {\n        \"text\": \"Which ancient Greek physician is known as the 'Father of Medicine'?\",\n        \"answers\": [\n            {\n                \"text\": \"Hippocrates\",\n                \"isCorrect\": true\n            },\n            {\n                \"text\": \"Galen\",\n                \"isCorrect\": false\n            }\n        ]\n    },\n    {\n        \"text\": \"What was the name of the ancient Greek festival held in honor of the god Zeus, featuring athletic competitions?\",\n        \"answers\": [\n            {\n                \"text\": \"Olympia\",\n                \"isCorrect\": true\n            },\n            {\n                \"text\": \"Delphi\",\n                \"isCorrect\": false\n            }\n        ]\n    },\n    {\n        \"text\": \"Who was the famous Greek mathematician who formulated the theorem that bears his name?\",\n        \"answers\": [\n            {\n                \"text\": \"Euclid\",\n                \"isCorrect\": false\n            },\n            {\n                \"text\": \"Pythagoras\",\n                \"isCorrect\": true\n            }\n        ]\n    }\n]",
+      "isPlatformVariable": false,
+      "arrayItemType": "object"
+    },
+    {
+      "id": "ab747f9b-01ae-4ad5-82e0-5577e16867c1",
+      "name": "usa_questions",
+      "type": "array",
+      "value": "[\n    {\n        \"text\": \"Which document outlined the principles of self-governance and individual liberty, serving as the foundation of the United States?\",\n        \"answers\": [\n            {\n                \"text\": \"The Bill of Rights\",\n                \"isCorrect\": false\n            },\n            {\n                \"text\": \"The Constitution\",\n                \"isCorrect\": true\n            },\n            {\n                \"text\": \"The Declaration of Independence\",\n                \"isCorrect\": false\n            }\n        ]\n    },\n    {\n        \"text\": \"Who was the first President of the United States?\",\n        \"answers\": [\n            {\n                \"text\": \"Thomas Jefferson\",\n                \"isCorrect\": false\n            },\n            {\n                \"text\": \"George Washington\",\n                \"isCorrect\": true\n            },\n            {\n                \"text\": \"Abraham Lincoln\",\n                \"isCorrect\": false\n            }\n        ]\n    },\n    {\n        \"text\": \"What year did the United States declare independence from Great Britain?\",\n        \"answers\": [\n            {\n                \"text\": \"1776\",\n                \"isCorrect\": true\n            },\n            {\n                \"text\": \"1789\",\n                \"isCorrect\": false\n            },\n            {\n                \"text\": \"1812\",\n                \"isCorrect\": false\n            }\n        ]\n    },\n    {\n        \"text\": \"Which American Founding Father is known for writing the majority of the Declaration of Independence?\",\n        \"answers\": [\n            {\n                \"text\": \"George Washington\",\n                \"isCorrect\": false\n            },\n            {\n                \"text\": \"Thomas Jefferson\",\n                \"isCorrect\": true\n            },\n            {\n                \"text\": \"John Adams\",\n                \"isCorrect\": false\n            }\n        ]\n    },\n    {\n        \"text\": \"What was the name of the first permanent English settlement in North America, established in 1607?\",\n        \"answers\": [\n            {\n                \"text\": \"Plymouth\",\n                \"isCorrect\": false\n            },\n            {\n                \"text\": \"Jamestown\",\n                \"isCorrect\": true\n            },\n            {\n                \"text\": \"Roanoke\",\n                \"isCorrect\": false\n            }\n        ]\n    },\n    {\n        \"text\": \"Who was the President of the Confederate States of America during the American Civil War?\",\n        \"answers\": [\n            {\n                \"text\": \"Robert E. Lee\",\n                \"isCorrect\": false\n            },\n            {\n                \"text\": \"Jefferson Davis\",\n                \"isCorrect\": true\n            },\n            {\n                \"text\": \"Ulysses S. Grant\",\n                \"isCorrect\": false\n            }\n        ]\n    },\n    {\n        \"text\": \"Which territory did the United States purchase from France in 1803, doubling the size of the country?\",\n        \"answers\": [\n            {\n                \"text\": \"Alaska\",\n                \"isCorrect\": false\n            },\n            {\n                \"text\": \"Hawaii\",\n                \"isCorrect\": false\n            },\n            {\n                \"text\": \"Louisiana\",\n                \"isCorrect\": true\n            }\n        ]\n    },\n    {\n        \"text\": \"Who was the leader of the American Civil Rights Movement and delivered the famous 'I Have a Dream' speech?\",\n        \"answers\": [\n            {\n                \"text\": \"Malcolm X\",\n                \"isCorrect\": false\n            },\n            {\n                \"text\": \"Martin Luther King Jr.\",\n                \"isCorrect\": true\n            },\n            {\n                \"text\": \"Rosa Parks\",\n                \"isCorrect\": false\n            }\n        ]\n    },\n    {\n        \"text\": \"Which war resulted in the acquisition of territories such as California, New Mexico, and Arizona for the United States?\",\n        \"answers\": [\n            {\n                \"text\": \"War of 1812\",\n                \"isCorrect\": false\n            },\n            {\n                \"text\": \"Mexican-American War\",\n                \"isCorrect\": true\n            },\n            {\n                \"text\": \"Spanish-American War\",\n                \"isCorrect\": false\n            }\n        ]\n    },\n    {\n        \"text\": \"Who was the President of the United States during the Great Depression and World War II?\",\n        \"answers\": [\n            {\n                \"text\": \"Franklin D. Roosevelt\",\n                \"isCorrect\": true\n            },\n            {\n                \"text\": \"Herbert Hoover\",\n                \"isCorrect\": false\n            },\n            {\n                \"text\": \"Harry S. Truman\",\n                \"isCorrect\": false\n            }\n        ]\n    },\n    {\n        \"text\": \"Which amendment to the United States Constitution abolished slavery?\",\n        \"answers\": [\n            {\n                \"text\": \"13th Amendment\",\n                \"isCorrect\": true\n            },\n            {\n                \"text\": \"14th Amendment\",\n                \"isCorrect\": false\n            },\n            {\n                \"text\": \"15th Amendment\",\n                \"isCorrect\": false\n            }\n        ]\n    },\n    {\n        \"text\": \"What was the name of the movement in the 19th and 20th centuries that advocated for women's suffrage?\",\n        \"answers\": [\n            {\n                \"text\": \"Temperance Movement\",\n                \"isCorrect\": false\n            },\n            {\n                \"text\": \"Prohibition Movement\",\n                \"isCorrect\": false\n            },\n            {\n                \"text\": \"Women's Suffrage Movement\",\n                \"isCorrect\": true\n            }\n        ]\n    },\n    {\n        \"text\": \"Which event led to the United States' entry into World War II?\",\n        \"answers\": [\n            {\n                \"text\": \"Attack on Pearl Harbor\",\n                \"isCorrect\": true\n            },\n            {\n                \"text\": \"D-Day Invasion\",\n                \"isCorrect\": false\n            },\n            {\n                \"text\": \"Atomic Bombings of Hiroshima and Nagasaki\",\n                \"isCorrect\": false\n            }\n        ]\n    },\n    {\n        \"text\": \"What was the name of the first successful English colony in North America, founded in 1607?\",\n        \"answers\": [\n            {\n                \"text\": \"Roanoke\",\n                \"isCorrect\": false\n            },\n            {\n                \"text\": \"Jamestown\",\n                \"isCorrect\": true\n            },\n            {\n                \"text\": \"Plymouth\",\n                \"isCorrect\": false\n            }\n        ]\n    },\n    {\n        \"text\": \"Who was the main author of the Federalist Papers, advocating for the ratification of the United States Constitution?\",\n        \"answers\": [\n            {\n                \"text\": \"George Washington\",\n                \"isCorrect\": false\n            },\n            {\n                \"text\": \"Alexander Hamilton\",\n                \"isCorrect\": true\n            },\n            {\n                \"text\": \"Thomas Jefferson\",\n                \"isCorrect\": false\n            }\n        ]\n    },\n    {\n        \"text\": \"Which amendment to the United States Constitution guarantees freedom of speech, religion, and the press?\",\n        \"answers\": [\n            {\n                \"text\": \"1st Amendment\",\n                \"isCorrect\": true\n            },\n            {\n                \"text\": \"2nd Amendment\",\n                \"isCorrect\": false\n            },\n            {\n                \"text\": \"4th Amendment\",\n                \"isCorrect\": false\n            }\n        ]\n    },\n    {\n        \"text\": \"Who assassinated President Abraham Lincoln in 1865?\",\n        \"answers\": [\n            {\n                \"text\": \"John Wilkes Booth\",\n                \"isCorrect\": true\n            },\n            {\n                \"text\": \"Lee Harvey Oswald\",\n                \"isCorrect\": false\n            },\n            {\n                \"text\": \"John Hinckley Jr.\",\n                \"isCorrect\": false\n            }\n        ]\n    },\n    {\n        \"text\": \"Which city served as the first capital of the United States?\",\n        \"answers\": [\n            {\n                \"text\": \"New York City\",\n                \"isCorrect\": false\n            },\n            {\n                \"text\": \"Philadelphia\",\n                \"isCorrect\": true\n            },\n            {\n                \"text\": \"Boston\",\n                \"isCorrect\": false\n            }\n        ]\n    },\n    {\n        \"text\": \"Who was the first woman to fly solo across the Atlantic Ocean?\",\n        \"answers\": [\n            {\n                \"text\": \"Amelia Earhart\",\n                \"isCorrect\": true\n            },\n            {\n                \"text\": \"Bessie Coleman\",\n                \"isCorrect\": false\n            },\n            {\n                \"text\": \"Harriet Quimby\",\n                \"isCorrect\": false\n            }\n        ]\n    }\n]\n",
+      "isPlatformVariable": false,
+      "arrayItemType": "object"
+    },
+    {
+      "id": "df37b0b9-a417-4022-a533-23e0c68c6592",
+      "name": "current_question",
+      "type": "object",
+      "value": "{\n    \"text\": \"Question #1\",\n    \"answers\": [\n        {\n            \"text\": \"Answer #1\",\n            \"isCorrect\": false\n        },\n        {\n            \"text\": \"Answer #2\",\n            \"isCorrect\": true\n        },\n        {\n            \"text\": \"Answer #3\",\n            \"isCorrect\": false\n        }\n    ]\n}",
+      "isPlatformVariable": false
+    },
+    {
+      "id": "2060091b-d603-4b85-8bb7-fec51d07bcd0",
+      "name": "first_correct_answer",
+      "type": "object",
+      "value": "{\n    \"text\": \"Answer #2\",\n    \"isCorrect\": true\n}",
+      "isPlatformVariable": false
+    },
+    {
+      "id": "69dab50a-21d3-4473-b27c-5e596cc03707",
+      "name": "current_user_answer",
+      "type": "object",
+      "value": "{\n    \"text\": \"Answer #2\",\n    \"isCorrect\": true\n}",
+      "isPlatformVariable": false
+    },
+    {
+      "id": "640a99ab-c346-485f-b848-956663c8710e",
+      "name": "selected_country_flag",
+      "type": "string",
+      "value": "",
+      "isPlatformVariable": false
+    }
+  ],
+  "transformDescription": { "x": 56, "y": 33, "scale": 0.76 }
 }

@@ -47,8 +47,15 @@ export class ActiveBotsWatcher {
   }
 
   private async checkWorkflowVersion(activeBots: BotToken[]) {
+    const tgTokens = new Set<string>();
     for (const changedBot of activeBots) {
+
+      if(tgTokens.has(changedBot.token)) {
+        continue;
+      }
+
       await this.startBot(changedBot);
+      tgTokens.add(changedBot.token);
     }
   }
 

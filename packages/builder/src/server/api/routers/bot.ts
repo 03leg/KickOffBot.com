@@ -10,6 +10,7 @@ import { prisma } from "~/server/db";
 import { TelegramToken } from "@kickoffbot.com/types";
 import { getPreviewToken } from "~/server/utility/getPreviewToken";
 import { z } from "zod";
+// import fs from "fs";
 
 export const botManagementRouter = createTRPCRouter({
   saveBot: protectedProcedure
@@ -74,7 +75,7 @@ export const botManagementRouter = createTRPCRouter({
         });
       }
 
-      // console.log("save bot content!", input.project, input.projectId);
+      // fs.writeFileSync("../runtime/dist/bot.json", input.project);
     }),
 
   getAll: protectedProcedure.query(({ ctx }) => {
@@ -121,6 +122,10 @@ export const botManagementRouter = createTRPCRouter({
       await prisma.botDescription.update({
         data: { deleted: true },
         where: { userId, id: input.id },
+      });
+
+      await prisma.botToken.deleteMany({
+        where: { botId: input.id ?? '' },
       });
     }),
   addTelegramToken: protectedProcedure
