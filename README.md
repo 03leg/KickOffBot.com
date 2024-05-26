@@ -1,7 +1,6 @@
-👋 Hello! Welcome to this mono repository! 🎉
+**👋 Hello!**
 
-Here, you'll find a visual editor that allows you to design your own bot, along with an interpreter that executes the bot you've designed.  
-Currently, we're taking small bites out of the elephant 🐘, and we only support Telegram. However, we're not planning to stop there; we're aiming to add the ability to create bots for Messenger, Instagram, Web, and WhatsApp.
+Here, you'll find a code of visual editor ([kickoffbot.com](https://www.kickoffbot.com)) that allows you to create your own telegram bot without coding, along with an interpreter that executes the bot you've designed.
 
 ## Features
 
@@ -13,3 +12,7 @@ Currently, we're taking small bites out of the elephant 🐘, and we only suppor
 ## Designed bots
 
 🚀📚 Engage in a fun and educational journey through history with 🤖 [Country_History_Quiz_KickoffBot](https://t.me/Country_History_Quiz_KickoffBot)! Test your knowledge of Italian, Greek and USA history with interactive quizzes. Receive instant feedback on your answers and learn fascinating facts along the way. 🤖[Country_History_Quiz_KickoffBot](https://t.me/Country_History_Quiz_KickoffBot) allows you to challenge yourself, track your progress, and even compete with friends.
+
+## Plans
+
+Currently, we're taking small bites out of the elephant 🐘, and we only support Telegram. However, we're not planning to stop there; we're aiming to add the ability to create bots for Messenger, Instagram, Web, and WhatsApp.
