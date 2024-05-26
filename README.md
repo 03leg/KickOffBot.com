@@ -12,3 +12,7 @@ Here, you'll find a code of visual editor ([kickoffbot.com](https://www.kickoffb
 ## Designed bots
 
 🚀📚 Engage in a fun and educational journey through history with 🤖 [Country_History_Quiz_KickoffBot](https://t.me/Country_History_Quiz_KickoffBot)! Test your knowledge of Italian, Greek and USA history with interactive quizzes. Receive instant feedback on your answers and learn fascinating facts along the way. 🤖[Country_History_Quiz_KickoffBot](https://t.me/Country_History_Quiz_KickoffBot) allows you to challenge yourself, track your progress, and even compete with friends.
+
+[country_history_quiz_bot_designer_demo.webm](https://github.com/03leg/KickOffBot.com/assets/91701505/4ab0eee5-f9cf-44ac-a369-b43f289f3d28)
+
+[country_history_quiz_bot_demo.webm](https://github.com/03leg/KickOffBot.com/assets/91701505/131b8c08-0328-4315-a4a9-3aad57b89cc0)
