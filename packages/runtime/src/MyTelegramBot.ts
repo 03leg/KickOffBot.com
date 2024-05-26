@@ -484,14 +484,18 @@ export class MyTelegramBot {
       return;
     }
 
-    await this._bot.telegram.editMessageText(sentMessageData.chat.id, sentMessageData.message_id, undefined, answerText, {
-      parse_mode: "HTML",
-      reply_markup: !isNil(messageButtons)
-        ? {
-            inline_keyboard: messageButtons,
-          }
-        : undefined,
-    });
+    try {
+      await this._bot.telegram.editMessageText(sentMessageData.chat.id, sentMessageData.message_id, undefined, answerText, {
+        parse_mode: "HTML",
+        reply_markup: !isNil(messageButtons)
+          ? {
+              inline_keyboard: messageButtons,
+            }
+          : undefined,
+      });
+    } catch (e) {
+      console.log("editMessageText", e);
+    }
   }
 
   private async handleLogicRemoveMessageElement(element: RemoveMessageUIElement) {
@@ -504,7 +508,11 @@ export class MyTelegramBot {
       return;
     }
 
-    await this._bot.telegram.deleteMessage(sentMessageData.chat.id, sentMessageData.message_id);
+    try {
+      await this._bot.telegram.deleteMessage(sentMessageData.chat.id, sentMessageData.message_id);
+    } catch (e) {
+      console.log("deleteMessage", e);
+    }
   }
 
   public stop() {
