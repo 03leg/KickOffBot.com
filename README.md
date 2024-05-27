@@ -27,7 +27,7 @@ You can freely access KickOffBot.com under these conditions:
 
 - You're an individual.
 - You represent a non-profit or not-for-profit organization.
-- You're assessing Product1's suitability and haven't started using it commercially.
+- You're assessing KickOffBot.com's suitability and haven't started using it commercially.
   
 However, it's prohibited to replicate or alter KickOffBot.com's code with the intention of commercializing your own version through selling, renting, licensing, relicensing, or sublicensing.
 
