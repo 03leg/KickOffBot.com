@@ -1,6 +1,6 @@
-**👋 Hello!**
+<p align="center">Hey there!👋</p>
 
-Here, you'll find a code of visual editor ([kickoffbot.com](https://www.kickoffbot.com)) that allows you to create your own telegram bot without coding, along with an interpreter that executes the bot you've designed.
+<p align="center">✨Imagine having the power to effortlessly craft your own customized bots for Telegram, without any coding hassle. With <a href='https://www.kickoffbot.com'>kickoffbot.com</a>, that's exactly what you get.😎</p>
 
 ## Demo
 
