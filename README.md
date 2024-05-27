@@ -21,3 +21,20 @@ https://github.com/03leg/KickOffBot.com/assets/91701505/74ec73bb-ac18-403d-959c-
 
 https://github.com/03leg/KickOffBot.com/assets/91701505/5fe73223-aa08-49ff-b172-a82ca7e867bf
 
+## License
+
+You can freely access KickOffBot.com under these conditions:
+
+- You're an individual.
+- You represent a non-profit or not-for-profit organization.
+- You're assessing Product1's suitability and haven't started using it commercially.
+  
+However, it's prohibited to replicate or alter KickOffBot.com's code with the intention of commercializing your own version through selling, renting, licensing, relicensing, or sublicensing.
+
+## Warranty notice
+
+The software is provided "as is", without warranty of any kind, express or implied, including but not limited to the warranties of merchantability, fitness for a particular purpose, and non-infringement. In no event shall the author or copyright holders be liable for any claim, damages or other liability, whether in an action of contract, tort or otherwise, arising from, out of or in connection with the software or the use or other dealings in the software.
+
+## Support 
+
+We offer support through GitHub Issues to the best of our ability.
