@@ -19,7 +19,8 @@ https://github.com/03leg/KickOffBot.com/assets/91701505/74ec73bb-ac18-403d-959c-
 
 [country_history_quiz_bot_designer_demo.webm](https://github.com/03leg/KickOffBot.com/assets/91701505/4ab0eee5-f9cf-44ac-a369-b43f289f3d28)
 
-https://github.com/03leg/KickOffBot.com/assets/91701505/5fe73223-aa08-49ff-b172-a82ca7e867bf
+[country_history_quiz_bot_demo.webm](https://github.com/03leg/KickOffBot.com/assets/91701505/15209671-c995-4767-8e84-4cbac9b8bb56)
+
 
 ## License
 
