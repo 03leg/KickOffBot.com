@@ -15,8 +15,8 @@ const availableTemplates: TemplateDescription[] = [
     {
         title: 'Country History Quiz',
         description: 'Test your knowledge of world history with our interactive quiz bot',
-        telegramLink: 'https://t.me/',
-        youtubeLink: 'https://youtube.com/',
+        telegramLink: 'https://t.me/Country_History_Quiz_KickoffBot',
+        youtubeLink: 'https://github.com/03leg/KickOffBot.com?tab=readme-ov-file#sample-1-history-quiz-bot',
         template: JSON.stringify(countryHistory)
     },
 ] as const;
