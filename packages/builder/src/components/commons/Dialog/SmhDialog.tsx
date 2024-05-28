@@ -83,7 +83,7 @@ export default function SmhDialog({ open, onClose, title, children, buttons, max
             maxWidth={maxWidth}
             fullWidth
             onClose={onClose}
-            open={open}
+            open={open}           
         >
             <BootstrapDialogTitle onClose={onClose}>
                 {title}

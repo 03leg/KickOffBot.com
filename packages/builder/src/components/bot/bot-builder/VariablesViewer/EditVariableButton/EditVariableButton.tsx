@@ -49,7 +49,10 @@ export const EditVariableButton = ({ variable }: Props) => {
         setOpen(true);
     }, [variable]);
 
-    const handleClose = useCallback(() => {
+    const handleClose = useCallback((_?: unknown, reason?: string) => {
+        if (reason && reason === "backdropClick") 
+            return;
+
         setOpen(false);
     }, []);
 

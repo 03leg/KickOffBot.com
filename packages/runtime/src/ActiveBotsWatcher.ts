@@ -12,6 +12,7 @@ interface MapValue {
 export class ActiveBotsWatcher {
   private _runtimeMap = new Map<string, MapValue>();
   private _intervalHandler: NodeJS.Timeout | null = null;
+  // private _dbCheckCount = 0;
 
   public async watch() {
     if (this._intervalHandler) {
@@ -22,6 +23,7 @@ export class ActiveBotsWatcher {
 
     this._intervalHandler = setInterval(async () => {
       await this.checkActualBotsState();
+      // console.log((this._dbCheckCount++)+'. DB is checked...')
     }, 20 * 1000);
   }
 

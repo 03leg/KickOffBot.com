@@ -8,7 +8,7 @@ import {
   ValuePathDescription,
 } from "@kickoffbot.com/types";
 import { UserContext } from "./UserContext";
-import { isNil } from "lodash";
+import { isNil, isPlainObject } from "lodash";
 import { throwIfNil } from "./guard";
 import { MyBotUtils } from "./MyBotUtils";
 import { ConditionChecker } from "./ConditionChecker";
@@ -78,7 +78,7 @@ export class ChangeArrayVariableHelper {
     userContext: UserContext,
     utils: MyBotUtils,
     values: unknown[],
-    filter?: AddValueToArrayFilterDescription
+    filter?: AddValueToArrayFilterDescription,
   ): unknown[] {
     if (isNil(filter)) {
       return values;
@@ -94,7 +94,7 @@ export class ChangeArrayVariableHelper {
     utils: MyBotUtils,
     values: unknown[],
     conditions?: PropertyConditionItem[],
-    logicalOperator?: LogicalOperator
+    logicalOperator?: LogicalOperator,
   ): unknown[] {
     if (isNil(conditions) || conditions.length === 0 || values.length === 0) {
       return values;
@@ -140,13 +140,13 @@ export class ChangeArrayVariableHelper {
 
     switch (typeof currentValue) {
       case "string": {
-        return ConditionChecker.checkStringItem(currentValue , conditionValue as string, condition.operator);
+        return ConditionChecker.checkStringItem(currentValue, conditionValue as string, condition.operator);
       }
       case "number": {
-        return ConditionChecker.checkNumberItem(currentValue , conditionValue as number, condition.operator);
+        return ConditionChecker.checkNumberItem(currentValue, conditionValue as number, condition.operator);
       }
       case "boolean": {
-        return ConditionChecker.checkBooleanItem(currentValue , conditionValue as boolean, condition.operator);
+        return ConditionChecker.checkBooleanItem(currentValue, conditionValue as boolean, condition.operator);
       }
       default: {
         throw new Error("NotImplementedError for type: " + typeof value);
@@ -179,6 +179,10 @@ export class ChangeArrayVariableHelper {
     const values = this.getVariableValue(source, userContext, utils) as unknown[];
 
     if (!Array.isArray(values)) {
+      if (isPlainObject(values)) {
+        return [values];
+      }
+
       throw new Error("InvalidOperationError: values is not array");
     }
 
@@ -204,8 +208,8 @@ export class ChangeArrayVariableHelper {
       value = variableValue as unknown[];
     }
 
-    if(isNil(value)){
-      throw new Error('Variable value is null');
+    if (isNil(value)) {
+      throw new Error("Variable value is null");
     }
 
     return value;
