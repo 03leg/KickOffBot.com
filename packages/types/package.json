@@ -11,7 +11,8 @@
     "name": "Me"
   },
   "scripts": {
-    "build": "rimraf dist && tsc --emitDeclarationOnly --outDir dist && esbuild --outdir=dist --bundle --platform=node --format=esm ./src/index.ts"
+    "build": "rimraf dist && tsc --emitDeclarationOnly --outDir dist && esbuild --outdir=dist --bundle --platform=node --format=esm ./src/index.ts",
+    "dev": "nodemon --watch src --watch test --ext ts,json --exec \"yarn build\""
   },
   "keywords": [],
   "devDependencies": {

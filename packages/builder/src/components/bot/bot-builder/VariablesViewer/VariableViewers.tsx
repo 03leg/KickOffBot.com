@@ -1,7 +1,6 @@
 import { Box, IconButton, List, ListItem, ListItemIcon, ListItemText, Typography } from '@mui/material'
 import React, { useCallback } from 'react'
 import { useFlowDesignerStore } from '../store';
-import { Colors } from '~/themes/Colors';
 import AbcIcon from '@mui/icons-material/Abc';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { EditVariableButton } from './EditVariableButton';
@@ -11,8 +10,7 @@ import { useConfirm } from 'material-ui-confirm';
 
 
 export const VariableViewers = () => {
-    const { showVariablesViewer, variables, removeVariable } = useFlowDesignerStore((state) => ({
-        showVariablesViewer: state.showVariablesViewer,
+    const { variables, removeVariable } = useFlowDesignerStore((state) => ({
         variables: state.project.variables,
         removeVariable: state.removeVariable
     }));
@@ -26,27 +24,16 @@ export const VariableViewers = () => {
             }).catch();
     }, [confirm, removeVariable]);
 
-    if (!showVariablesViewer) {
-        return null;
-    }
-
-
 
     return (
         <Box sx={{
-            width: '300px', height: 'fit-content', minWidth: 300,
-            backgroundColor: Colors.WHITE,
-            boxShadow: '0px 1px 6px hsla(245, 50%, 17%, 0.1)',
-            marginLeft: ({ spacing }) => spacing(2),
             display: 'flex',
             flexDirection: 'column',
 
         }}>
-            <Typography variant="h6" component="div" sx={{ margin: 1 }}>
-                Variables
-                <EditVariableButton />
-            </Typography>
             {variables.length === 0 && <Typography textAlign='center' sx={{ padding: 1 }}>Bot does not have variables.</Typography>}
+
+
 
             {variables.length > 0 &&
                 <List dense={true} sx={{ maxHeight: '400px', overflow: 'auto' }}>
@@ -79,6 +66,8 @@ export const VariableViewers = () => {
 
                 </List>
             }
+
+            <EditVariableButton />
 
         </Box>
     )

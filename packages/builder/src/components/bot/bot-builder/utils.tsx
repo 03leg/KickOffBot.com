@@ -264,3 +264,7 @@ export const getTextPropertyReference = (propertyName: string): string => {
     return `<%${propertyName}%>`;
 }
 
+export const getTemplateReference = (templateName: string): string => {
+    return `<%templates.${templateName}%>`;
+}
+

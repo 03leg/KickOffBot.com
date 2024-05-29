@@ -1,4 +1,4 @@
-import { Box, IconButton } from '@mui/material';
+import { Box, IconButton, Menu, MenuItem } from '@mui/material';
 import React, { useCallback } from 'react'
 import { Editor, EditorState, Modifier, RichUtils, convertToRaw } from 'draft-js';
 import 'draft-js/dist/Draft.css';
@@ -7,17 +7,30 @@ import { FormatBold, FormatItalic } from '@mui/icons-material';
 import { stateToHTML } from "draft-js-export-html";
 import { VariableType, type BotVariable } from '@kickoffbot.com/types';
 import { VariableSelectorDialog } from '../../../VariableSelectorDialog';
-import { getTextVariableReference } from '~/components/bot/bot-builder/utils';
+import { getTemplateReference, getTextPropertyReference, getTextVariableReference } from '~/components/bot/bot-builder/utils';
+import ControlPointIcon from '@mui/icons-material/ControlPoint';
+import { isNil } from 'lodash';
+import { StringItemsMenu } from './StringItemsMenu';
+import { useFlowDesignerStore } from '~/components/bot/bot-builder/store';
+import AssignmentIcon from '@mui/icons-material/Assignment';
+
 // import EmojiPicker from 'emoji-picker-react';
 // import InsertEmoticonIcon from '@mui/icons-material/InsertEmoticon';
 
 interface TextEditorProps {
     initialState?: EditorState | undefined;
     onContentChange: (jsonState: string, htmlContent: string, telegramContent: string) => void;
+    contextObjectProperties?: string[];
 }
 
-export const TextEditor = ({ onContentChange, initialState }: TextEditorProps) => {
+export const TextEditor = ({ onContentChange, initialState, contextObjectProperties }: TextEditorProps) => {
     const [editorState, setEditorState] = React.useState<EditorState>(initialState ?? EditorState.createEmpty());
+
+    const { templates } = useFlowDesignerStore((state) => ({
+        templates: state.project.templates ?? []
+    }));
+
+
     // const [showEmojiPicker, setShowEmojiPicker] = React.useState<boolean>(false);
 
     const generatePublicContentChange = useCallback((newState: EditorState) => {
@@ -31,7 +44,7 @@ export const TextEditor = ({ onContentChange, initialState }: TextEditorProps) =
             inlineStyles: {
                 BOLD: { element: 'b' },
             }
-        }).replaceAll('<p>', '').replaceAll('</p>', '');
+        }).replaceAll('<p>', '').replaceAll('</p>', '').replaceAll('<br>', '');
 
         onContentChange(jsonContent, htmlContent, telegramContent);
     }, [onContentChange]);
@@ -79,9 +92,22 @@ export const TextEditor = ({ onContentChange, initialState }: TextEditorProps) =
     //     setShowEmojiPicker(true);
     // }, []);
 
+
+    const handleInsertContextPropertyInText = React.useCallback((property: string) => {
+        const newState = insertText(getTextPropertyReference(property), editorState);
+        setEditorState(newState);
+        generatePublicContentChange(newState);
+    }, [editorState, generatePublicContentChange, insertText]);
+
+    const handleInsertTemplateInText = React.useCallback((property: string) => {
+        const newState = insertText(getTemplateReference(property), editorState);
+        setEditorState(newState);
+        generatePublicContentChange(newState);
+    }, [editorState, generatePublicContentChange, insertText]);
+
     return (
         <>
-            <Box sx={{ border: `1px solid ${Colors.BORDER}`, padding: ({ spacing }) => (spacing(1)), display: 'flex', flexDirection: 'column',  position: 'relative'}}>
+            <Box sx={{ border: `1px solid ${Colors.BORDER}`, padding: ({ spacing }) => (spacing(1)), display: 'flex', flexDirection: 'column', position: 'relative' }}>
                 <Editor editorState={editorState} onChange={handleContentChange} placeholder="Enter some text..." />
 
                 <Box sx={{ display: 'flex', marginTop: ({ spacing }) => (spacing(2)), justifyContent: 'flex-end' }}>
@@ -95,8 +121,11 @@ export const TextEditor = ({ onContentChange, initialState }: TextEditorProps) =
                         <InsertEmoticonIcon />
                     </IconButton> */}
                     <VariableSelectorDialog onInsertVariable={handleInsertVariable} supportPathForObject={true} availableVariableTypes={[VariableType.STRING, VariableType.NUMBER, VariableType.BOOLEAN, VariableType.OBJECT]} />
-                    
+                    {!isNil(contextObjectProperties) && <StringItemsMenu values={contextObjectProperties} onInsertItem={handleInsertContextPropertyInText} buttonIcon={<ControlPointIcon />} />}
+                    {templates.length > 0 && <StringItemsMenu values={templates.map(t => t.name)} onInsertItem={handleInsertTemplateInText} buttonIcon={<AssignmentIcon />} />}
                 </Box>
+
+
 
             </Box>
             {/* {showEmojiPicker && <div style={{ position: 'absolute', right: 0, top: 0, zIndex: 999999 }}><EmojiPicker /></div>} */}

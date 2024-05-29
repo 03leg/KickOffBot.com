@@ -22,8 +22,16 @@ export class UserContext {
 
   private initVariables(botVariables: BotVariable[]) {
     for (const botVariable of botVariables) {
-      const value = botVariable.value as string;
-      this._variables.set(botVariable.name, value === "" ? "" : JSON.parse(value));
+      const valueString = botVariable.value as string;
+      let value: unknown;
+
+      try {
+        value = JSON.parse(valueString);
+      } catch {
+        value = valueString;
+      }
+
+      this._variables.set(botVariable.name, value);
     }
   }
 

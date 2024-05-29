@@ -1,5 +1,6 @@
 import {
   BotProject,
+  BotTemplate,
   BotVariable,
   FlowDesignerLink,
   FlowDesignerUIBlockDescription,
@@ -32,8 +33,8 @@ export interface FlowDesignerState {
   removeBlock: (block: FlowDesignerUIBlockDescription) => void;
   updateAllLinks: () => void;
 
-  showVariablesViewer: boolean;
-  toggleVariablesViewer: VoidFunction;
+  showProjectItemsViewer: boolean;
+  toggleProjectItemsViewer: VoidFunction;
 
   addVariable: (newVariable: BotVariable) => void;
   updateVariable: (variable: BotVariable) => void;
@@ -44,4 +45,9 @@ export interface FlowDesignerState {
   toggleRuntimeEditor: VoidFunction;
 
   destroyProject: VoidFunction;
+
+  removeTemplate: (template: BotTemplate) => void;
+  addTemplate: (template: BotTemplate) => void;
+  updateTemplate: (template: BotTemplate) => void;
+
 }

@@ -179,10 +179,13 @@ export interface ChangeNumberStringVariableWorkflow {
   expression: string;
 }
 
-export interface MessageContentDescription {
+export interface MessageDescription{
   json?: string;
   htmlContent?: string;
   telegramContent?: string;
+}
+
+export interface MessageContentDescription extends MessageDescription {
   attachments: FileDescription[];
   showButtons: boolean;
   buttonsDescription: MessageButtonsDescription;
@@ -297,8 +300,15 @@ export interface BotProject {
   blocks: FlowDesignerUIBlockDescription[];
   links: FlowDesignerLink[];
   variables: BotVariable[];
+  templates: BotTemplate[];
 }
 
 export interface RemoveMessageUIElement extends UIElement {
   messageElementId?: string;
+}
+
+export interface BotTemplate extends MessageDescription {
+  id: string;
+  name: string;
+  contextVariableId?: BotVariable["id"];
 }

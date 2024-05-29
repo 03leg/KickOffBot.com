@@ -117,15 +117,20 @@ export const ConditionItemComponent = ({ item, showLogicalOperatorSelector, next
 
     const availablePropsForPathValue = useMemo(() => {
         const result = [];
-        const defaultValue = (isNil(selectedVariable) || isEmpty(selectedVariable.value)) ? null : JSON.parse(selectedVariable.value as string);
-        const dataObject = defaultValue as Record<string, unknown>;
+        try {
+            const defaultValue = (isNil(selectedVariable) || isEmpty(selectedVariable.value)) ? null : JSON.parse(selectedVariable.value as string);
+            const dataObject = defaultValue as Record<string, unknown>;
 
-        if (typeof dataObject === 'object' && !isNil(dataObject)) {
-            for (const propName of Object.keys(dataObject)) {
-                if (!isNil(dataObject[propName]) && (typeof dataObject[propName] === 'string' || typeof dataObject[propName] === 'number' || typeof dataObject[propName] === 'boolean')) {
-                    result.push(propName);
+            if (typeof dataObject === 'object' && !isNil(dataObject)) {
+                for (const propName of Object.keys(dataObject)) {
+                    if (!isNil(dataObject[propName]) && (typeof dataObject[propName] === 'string' || typeof dataObject[propName] === 'number' || typeof dataObject[propName] === 'boolean')) {
+                        result.push(propName);
+                    }
                 }
             }
+        }
+        catch (e) {
+            console.error(e);
         }
         return result;
     }, [selectedVariable]);

@@ -10,7 +10,7 @@ interface Props {
 
 export const useStyles = makeStyles()(() => ({
     variable: {
-        backgroundColor: '#FF5722',
+        backgroundColor: '#9c27b0',
         borderRadius: '5px',
         color: 'white',
         paddingLeft: '5px',
@@ -30,7 +30,7 @@ export const TextInput = ({ element }: Props) => {
 
     return (
         <Box sx={{ display: 'flex' }}>
-            <div>{contentTextElement.label}</div>
+            {!contentTextElement.variableId && <div>{contentTextElement.label}</div>}
             {contentTextElement.variableId && <span className={classes.variable}>{getVariableById(contentTextElement.variableId)?.name ?? 'Not found...'}</span>}
         </Box>
     )

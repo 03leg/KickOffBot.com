@@ -16,11 +16,11 @@ import { showError, showSuccessMessage } from '~/utils/ClientStatusMessage';
 import { ConfirmProvider } from 'material-ui-confirm';
 import AbcIcon from '@mui/icons-material/Abc';
 import AbcRounded from '@mui/icons-material/AbcRounded';
-import { VariableViewers } from '~/components/bot/bot-builder/VariablesViewer';
 import { ElementType, FlowDesignerUIBlockDescription, TransformDescription, UIElement } from '@kickoffbot.com/types';
 import RouterIcon from '@mui/icons-material/Router';
 import { RuntimeEditor } from '~/components/bot/bot-builder/RuntimeEditor';
 import { LoadingIndicator } from '~/components/commons/LoadingIndicator';
+import { ProjectViewer } from '~/components/bot/bot-builder/ProjectViewer';
 
 
 export default function EditBotContent() {
@@ -36,7 +36,7 @@ export default function EditBotContent() {
         projectIsInitialized: state.projectIsInitialized,
         setViewPortOffset: state.setViewPortOffset,
         updateAllLinks: state.updateAllLinks,
-        toggleVariablesViewer: state.toggleVariablesViewer,
+        toggleVariablesViewer: state.toggleProjectItemsViewer,
         toggleRuntimeEditor: state.toggleRuntimeEditor,
         destroyProject: state.destroyProject
     }));
@@ -359,7 +359,7 @@ export default function EditBotContent() {
                             }
                         </Box>
                     </DndContext>
-                    <VariableViewers />
+                    <ProjectViewer />
                     <RuntimeEditor projectId={projectIdFromQuery} />
                 </Box>
 

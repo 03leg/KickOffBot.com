@@ -1,4 +1,4 @@
-import { isNil } from "lodash";
+import { isNil, isPlainObject } from "lodash";
 
 import { UserContext } from "./UserContext";
 import {
@@ -53,7 +53,7 @@ export class MyBotUtils {
 
   public getLinkForButton(outputBlockId: string, buttonId: string): FlowDesignerLink {
     const currentLink = this._botProject.links.find(
-      (l) => l.output.blockId === outputBlockId && (l.output as ButtonPortDescription).buttonId === buttonId
+      (l) => l.output.blockId === outputBlockId && (l.output as ButtonPortDescription).buttonId === buttonId,
     );
 
     if (isNil(currentLink)) {
@@ -83,7 +83,7 @@ export class MyBotUtils {
     return currentVariable;
   }
 
-  private getValue(text: string, userContext: UserContext): string {
+  private getVariableValue(text: string, userContext: UserContext): string {
     const arr = text.split(".");
     if (arr.length >= 2) {
       const variableName = arr[0];
@@ -101,16 +101,67 @@ export class MyBotUtils {
     return userContext.getVariableValueByName(text) as string;
   }
 
-  getParsedText(text: string, userContext: UserContext): string {
-    const matches1 = text.matchAll(/&lt;%variables.(.*?)%&gt;/g);
-    for (const m of matches1) {
-      const value = this.getValue(m[1], userContext);
+  private getTextForContextObject(contextObject: unknown, template: string, index: number): string {
+    const getParsedTemplate = (textArgument: string, matches1: IterableIterator<RegExpExecArray>) => {
+      for (const m of matches1) {
+        const property = m[1];
+        let content = "";
+
+        if (property === "index") {
+          content = (index + 1).toString();
+        } else if (isPlainObject(contextObject)) {
+          content = (contextObject as Record<string, string>)[property] ?? "";
+        }
+
+        textArgument = textArgument.replace(m[0], content);
+      }
+
+      return textArgument;
+    };
+
+    let result = getParsedTemplate(template, template.matchAll(/<%(.*?)%>/g));
+    result = getParsedTemplate(result, result.matchAll(/&lt;%(.*?)%&gt;/g));
+
+    return result;
+  }
+
+  private getTemplateValue(templateName: string, userContext: UserContext): string {
+    const defaultResult = "";
+
+    const template = (this._botProject.templates ?? []).find((t) => t.name === templateName);
+
+    if (isNil(template)) {
+      return defaultResult;
+    }
+
+    const variableName = this._botProject.variables.find((v) => v.id === template.contextVariableId)?.name;
+
+    if (isNil(variableName)) {
+      return defaultResult;
+    }
+
+    const variableValue = userContext.getVariableValueByName(variableName) as unknown[];
+    let result = "";
+
+    for (let index = 0; index < variableValue.length; index++) {
+      const item = variableValue[index];
+      const itemText = this.getTextForContextObject(item, template.telegramContent ?? "", index);
+      result += itemText;
+    }
+
+    return result;
+  }
+
+  private parseVariables(text: string, userContext: UserContext) {
+    const variableMatches1 = text.matchAll(/&lt;%variables.(.*?)%&gt;/g);
+    for (const m of variableMatches1) {
+      const value = this.getVariableValue(m[1], userContext);
       text = text.replace(m[0], value);
     }
 
-    const matches2 = text.matchAll(/<%variables.(.*?)%>/g);
-    for (const m of matches2) {
-      const value = this.getValue(m[1], userContext);
+    const variableMatches2 = text.matchAll(/<%variables.(.*?)%>/g);
+    for (const m of variableMatches2) {
+      const value = this.getVariableValue(m[1], userContext);
 
       text = text.replace(m[0], value);
     }
@@ -118,13 +169,38 @@ export class MyBotUtils {
     return text;
   }
 
+  private parseTemplates(text: string, userContext: UserContext) {
+    const templateMatches1 = text.matchAll(/&lt;%templates.(.*?)%&gt;/g);
+    for (const m of templateMatches1) {
+      const value = this.getTemplateValue(m[1], userContext);
+      text = text.replace(m[0], value);
+    }
+
+    const templateMatches2 = text.matchAll(/<%templates.(.*?)%>/g);
+    for (const m of templateMatches2) {
+      const value = this.getTemplateValue(m[1], userContext);
+
+      text = text.replace(m[0], value);
+    }
+
+    return text;
+  }
+
+  getParsedText(text: string, userContext: UserContext): string {
+    let result = this.parseTemplates(text, userContext);
+
+    result = this.parseVariables(result, userContext);
+
+    return result;
+  }
+
   getParsedPropertyTemplate(template: string, value: Record<string, string>, userContext: UserContext): string {
-    let text = this.getParsedText(template, userContext);
+    let text = this.parseVariables(template, userContext);
 
     const matches1 = text.matchAll(/<%(.*?)%>/g);
 
     for (const m of matches1) {
-      const content = value[m[1]] ?? "unknown";
+      const content = value[m[1]] ?? "";
       text = text.replace(m[0], content);
     }
 

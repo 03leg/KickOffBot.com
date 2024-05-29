@@ -207,6 +207,7 @@ export class MyTelegramBot {
         }
 
         const answerText = this._utils.getParsedText(contentTextElement.telegramContent, userContext);
+        
         const messageButtons = MessageButtonsManager.getButtonsForMessage(
           userContext,
           contentTextElement.id,

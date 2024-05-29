@@ -5,6 +5,7 @@ import {
   type BotVariable,
   BotProject,
   VariableType,
+  BotTemplate,
 } from "@kickoffbot.com/types";
 import { isNil, remove } from "lodash";
 import { type PositionDescription } from "@kickoffbot.com/types";
@@ -59,6 +60,7 @@ export const DEFAULT_PROJECT_STATE: BotProject = {
     },
   ],
   transformDescription: { scale: 1, x: 0, y: 0 },
+  templates: [],
 };
 
 export const useFlowDesignerStore = create<FlowDesignerState>()((set, get) => ({
@@ -71,7 +73,7 @@ export const useFlowDesignerStore = create<FlowDesignerState>()((set, get) => ({
       project.transformDescription = newValue;
       return { project };
     }),
-  showVariablesViewer: false,
+  showProjectItemsViewer: false,
   showTemporaryLink: false,
   tempLinkPath: null,
   showTempLink: () => set(() => ({ showTemporaryLink: true })),
@@ -177,9 +179,9 @@ export const useFlowDesignerStore = create<FlowDesignerState>()((set, get) => ({
       return { project };
     }),
 
-  toggleVariablesViewer: () =>
+  toggleProjectItemsViewer: () =>
     set((state) => {
-      return { showVariablesViewer: !state.showVariablesViewer };
+      return { showProjectItemsViewer: !state.showProjectItemsViewer };
     }),
 
   addVariable: (newVariable: BotVariable) =>
@@ -221,9 +223,37 @@ export const useFlowDesignerStore = create<FlowDesignerState>()((set, get) => ({
       project: JSON.parse(JSON.stringify(DEFAULT_PROJECT_STATE)),
       projectIsInitialized: false,
       showTemporaryLink: false,
-      showVariablesViewer: false,
+      showProjectItemsViewer: false,
       viewPortOffset: { x: 0, y: 0 },
       selectedLink: null,
       showRuntimeEditor: false,
     })),
+  removeTemplate: (template: BotTemplate) =>
+    set((state) => {
+      const project = state.project;
+      const index = project.templates.findIndex((v) => v.id === template.id);
+
+      project.templates.splice(index, 1);
+      project.templates = [...project.templates];
+
+      return { project };
+    }),
+  addTemplate: (newTemplate: BotTemplate) =>
+    set((state) => {
+      const project = state.project;
+
+      project.templates = [...(project.templates ?? []), newTemplate];
+
+      return { project };
+    }),
+  updateTemplate: (template: BotTemplate) =>
+    set((state) => {
+      const project = state.project;
+      const index = project.templates.findIndex((v) => v.id === template.id);
+
+      project.templates.splice(index, 1, template);
+      project.templates = [...project.templates];
+
+      return { project };
+    }),
 }));

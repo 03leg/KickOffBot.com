@@ -37,10 +37,14 @@ export const EditVariableButton = ({ variable }: Props) => {
         return name;
     }, [variables]);
 
-    const handleAddVariable = useCallback(() => {
+    const handleAddVariable = useCallback((event: React.MouseEvent<HTMLElement>) => {
+
+
         const newVariable: BotVariable = { id: v4(), name: getNewVariableName(), type: VariableType.STRING, value: 'default value', isPlatformVariable: false }
         setCurrentVariable(newVariable);
         setOpen(true);
+
+        event.stopPropagation();
     }, [getNewVariableName]);
 
     const handleEditVariable = useCallback(() => {
@@ -50,7 +54,7 @@ export const EditVariableButton = ({ variable }: Props) => {
     }, [variable]);
 
     const handleClose = useCallback((_?: unknown, reason?: string) => {
-        if (reason && reason === "backdropClick") 
+        if (reason && reason === "backdropClick")
             return;
 
         setOpen(false);
@@ -106,9 +110,9 @@ export const EditVariableButton = ({ variable }: Props) => {
     return (
         <>
             {isNil(variable) ? (
-                <IconButton sx={{ marginLeft: 2 }} size='small' aria-label="add" onClick={handleAddVariable}>
-                    <AddIcon />
-                </IconButton>
+                <Button sx={{ margin: 1 }} variant="contained" size='small' aria-label="add" onClick={handleAddVariable} endIcon={<AddIcon />}>
+                    Add new
+                </Button>
             ) :
                 (
                     <IconButton edge="end" aria-label="edit" onClick={handleEditVariable}>

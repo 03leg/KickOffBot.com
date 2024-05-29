@@ -155,10 +155,10 @@ export class ConditionChecker {
         return currentValue.endsWith(conditionValue);
       }
       case ConditionOperator.MATCHES_REGEX: {
-        return currentValue.match(new RegExp(conditionValue)) != null; // (/^([a-z0-9]{4,})$/)
+        return currentValue.match(new RegExp(conditionValue)) != null; // new RegExp("^[(]{0,1}[0-9]{3}[)]{0,1}[-\s\.]{0,1}[0-9]{3}[-\s\.]{0,1}[0-9]{4}$").test("123-456-7890")
       }
       case ConditionOperator.DOES_NOT_MATCHES_REGEX: {
-        return currentValue.match(new RegExp(conditionValue)) == null; // (/^([a-z0-9]{4,})$/)
+        return currentValue.match(new RegExp(conditionValue)) == null;
       }
       default: {
         throw new Error("NotImplementedError");
