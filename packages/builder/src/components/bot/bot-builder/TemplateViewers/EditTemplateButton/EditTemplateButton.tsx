@@ -40,7 +40,7 @@ export const EditTemplateButton = ({ template }: Props) => {
     const handleAddTemplate = useCallback((event: React.MouseEvent<HTMLElement>) => {
 
 
-        const newTemplate: BotTemplate = { id: v4(), name: getNewTemplateName(),  }
+        const newTemplate: BotTemplate = { id: v4(), name: getNewTemplateName(), showContentWhenArrayIsEmpty: false  }
         setCurrentTemplate(newTemplate);
         setOpen(true);
 

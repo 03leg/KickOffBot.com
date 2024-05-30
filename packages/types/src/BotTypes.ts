@@ -311,4 +311,9 @@ export interface BotTemplate extends MessageDescription {
   id: string;
   name: string;
   contextVariableId?: BotVariable["id"];
+  showContentWhenArrayIsEmpty: boolean;
+
+  emptyArrayJson?: string;
+  emptyArrayHtmlContent?: string;
+  emptyArrayTelegramContent?: string;
 }

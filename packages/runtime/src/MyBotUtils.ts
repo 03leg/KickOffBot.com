@@ -140,16 +140,20 @@ export class MyBotUtils {
       return defaultResult;
     }
 
-    const variableValue = userContext.getVariableValueByName(variableName) as unknown[];
+    const arrayItems = userContext.getVariableValueByName(variableName) as unknown[];
     let result = "";
 
-    for (let index = 0; index < variableValue.length; index++) {
-      const item = variableValue[index];
+    for (let index = 0; index < arrayItems.length; index++) {
+      const item = arrayItems[index];
       const itemText = this.getTextForContextObject(item, template.telegramContent ?? "", index);
-      result += itemText;
+      result += this.getParsedText(itemText, userContext);
     }
 
-    return result;
+    if (arrayItems.length === 0 && template.showContentWhenArrayIsEmpty) {
+      result = this.getParsedText(template.emptyArrayTelegramContent ?? defaultResult, userContext);
+    }
+
+    return result; 
   }
 
   private parseVariables(text: string, userContext: UserContext) {

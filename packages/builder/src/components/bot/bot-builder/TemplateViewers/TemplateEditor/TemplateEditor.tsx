@@ -1,5 +1,5 @@
 import { BotTemplate, BotVariable, VariableType } from '@kickoffbot.com/types';
-import { Box, InputLabel, TextField } from '@mui/material';
+import { Box, Checkbox, FormControlLabel, InputLabel, TextField } from '@mui/material';
 import React, { useCallback, useMemo, useState } from 'react';
 import { VariableSelector } from '../../FlowDesigner/components/VariableSelector';
 import { TextEditor } from '../../FlowDesigner/components/elements/TextContent/TextEditor';
@@ -18,8 +18,10 @@ export const TemplateEditor = ({ template, onTemplateChange }: Props) => {
     const { getVariableById } = useFlowDesignerStore((state) => ({
         getVariableById: state.getVariableById
     }));
+    const [showContentWhenArrayIsEmpty, setShowContentWhenArrayIsEmpty] = useState<boolean>(template.showContentWhenArrayIsEmpty ?? false);
 
-    const a = isNil(template.json) ? void 0 : EditorState.createWithContent(convertFromRaw(JSON.parse(template.json)));
+    const itemContent = isNil(template.json) ? void 0 : EditorState.createWithContent(convertFromRaw(JSON.parse(template.json)));
+    const emptyArrayContent = isNil(template.emptyArrayJson) ? void 0 : EditorState.createWithContent(convertFromRaw(JSON.parse(template.emptyArrayJson)));
 
     const handleNameChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
         setName(event.target.value);
@@ -31,7 +33,15 @@ export const TemplateEditor = ({ template, onTemplateChange }: Props) => {
         template.json = jsonState;
         template.htmlContent = htmlContent;
         template.telegramContent = telegramContent;
-    }, [template]);
+        onTemplateChange(template); //?
+    }, [onTemplateChange, template]);
+
+    const handleEmptyArrayContentChange = useCallback((jsonState: string, htmlContent: string, telegramContent: string) => {
+        template.emptyArrayJson = jsonState;
+        template.emptyArrayHtmlContent = htmlContent;
+        template.emptyArrayTelegramContent = telegramContent;
+        onTemplateChange(template); //?
+    }, [onTemplateChange, template]);
 
     const handleVariableChange = useCallback((newVariable: BotVariable) => {
         template.contextVariableId = newVariable.id;
@@ -60,6 +70,12 @@ export const TemplateEditor = ({ template, onTemplateChange }: Props) => {
 
     }, [contextVariableId, getVariableById]);
 
+    const handleShowContentChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
+        setShowContentWhenArrayIsEmpty(event.target.checked);
+        template.showContentWhenArrayIsEmpty = event.target.checked;
+        onTemplateChange(template);
+    }, [onTemplateChange, template]);
+
     return (
         <Box sx={{ display: 'flex', flexDirection: 'column', padding: 1 }}>
             <TextField fullWidth label='Name' variant="outlined" value={name} onChange={handleNameChange} />
@@ -70,7 +86,9 @@ export const TemplateEditor = ({ template, onTemplateChange }: Props) => {
             {!isNil(contextVariableId) &&
                 <>
                     <InputLabel sx={{ marginBottom: 1, fontSize: '0.75rem' }}>Content for each array item</InputLabel>
-                    <TextEditor onContentChange={handleContentChange} initialState={a} contextObjectProperties={contextObjectProperties} />
+                    <TextEditor showInsertTemplateButton={false} onContentChange={handleContentChange} initialState={itemContent} contextObjectProperties={contextObjectProperties} />
+                    <FormControlLabel sx={{ marginTop: 2 }} control={<Checkbox checked={showContentWhenArrayIsEmpty} onChange={handleShowContentChange} />} label="Show content when array is empty" />
+                    {showContentWhenArrayIsEmpty && <TextEditor showInsertTemplateButton={false} onContentChange={handleEmptyArrayContentChange} initialState={emptyArrayContent} />}
                 </>
             }
         </Box>

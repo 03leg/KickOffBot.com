@@ -21,9 +21,10 @@ interface TextEditorProps {
     initialState?: EditorState | undefined;
     onContentChange: (jsonState: string, htmlContent: string, telegramContent: string) => void;
     contextObjectProperties?: string[];
+    showInsertTemplateButton?: boolean;
 }
 
-export const TextEditor = ({ onContentChange, initialState, contextObjectProperties }: TextEditorProps) => {
+export const TextEditor = ({ onContentChange, initialState, contextObjectProperties, showInsertTemplateButton = true }: TextEditorProps) => {
     const [editorState, setEditorState] = React.useState<EditorState>(initialState ?? EditorState.createEmpty());
 
     const { templates } = useFlowDesignerStore((state) => ({
@@ -122,7 +123,7 @@ export const TextEditor = ({ onContentChange, initialState, contextObjectPropert
                     </IconButton> */}
                     <VariableSelectorDialog onInsertVariable={handleInsertVariable} supportPathForObject={true} availableVariableTypes={[VariableType.STRING, VariableType.NUMBER, VariableType.BOOLEAN, VariableType.OBJECT]} />
                     {!isNil(contextObjectProperties) && <StringItemsMenu values={contextObjectProperties} onInsertItem={handleInsertContextPropertyInText} buttonIcon={<ControlPointIcon />} />}
-                    {templates.length > 0 && <StringItemsMenu values={templates.map(t => t.name)} onInsertItem={handleInsertTemplateInText} buttonIcon={<AssignmentIcon />} />}
+                    {showInsertTemplateButton && templates.length > 0 && <StringItemsMenu values={templates.map(t => t.name)} onInsertItem={handleInsertTemplateInText} buttonIcon={<AssignmentIcon />} />}
                 </Box>
 
 
