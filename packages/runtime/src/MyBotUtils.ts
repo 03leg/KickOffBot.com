@@ -96,8 +96,6 @@ export class MyBotUtils {
       const variableValue = userContext.getVariableValueByName(variableName);
       const variableMetaData = this._botProject.variables.find((v) => v.name === variableName);
 
-      console.log("variableValue", variableValue);
-
       if (isPlainObject(variableValue) && path in (variableValue as Record<string, unknown>)) {
         return (variableValue as Record<string, string>)[path];
       } else if (variableValue instanceof Array) {
