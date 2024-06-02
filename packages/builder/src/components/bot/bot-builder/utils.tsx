@@ -1,4 +1,4 @@
-import { type ContentTextUIElement, ElementType, type InputTextUIElement, type FlowDesignerUIBlockDescription, type UIElement, type InputButtonsUIElement, type FlowDesignerLink, type ButtonPortDescription, type BotVariable, BlockType, TransformDescription, ChangeVariableUIElement, ConditionUIElement, LogicalOperator, ButtonsSourceStrategy, CommandsUIElement, EditMessageUIElement, EditMessageOperation, RemoveMessageUIElement } from "@kickoffbot.com/types";
+import { type ContentTextUIElement, ElementType, type InputTextUIElement, type FlowDesignerUIBlockDescription, type UIElement, type InputButtonsUIElement, type FlowDesignerLink, type ButtonPortDescription, type BotVariable, BlockType, TransformDescription, ChangeVariableUIElement, ConditionUIElement, LogicalOperator, ButtonsSourceStrategy, CommandsUIElement, EditMessageUIElement, EditMessageOperation, RemoveMessageUIElement, VariableConverter } from "@kickoffbot.com/types";
 import MessageIcon from '@mui/icons-material/Message';
 import TextFieldsIcon from '@mui/icons-material/TextFields';
 import { isNil } from "lodash";
@@ -63,13 +63,13 @@ export function needToChangeId(id: string): boolean {
 export function getNewUIElementTemplate(id: string, data: DraggableElementData): UIElement {
     switch (data.type) {
         case ElementType.CONTENT_TEXT: {
-            const result: ContentTextUIElement = { 
-                id, 
-                type: ElementType.CONTENT_TEXT, 
+            const result: ContentTextUIElement = {
+                id,
+                type: ElementType.CONTENT_TEXT,
                 attachments: [],
                 showButtons: false,
                 buttonsDescription: { strategy: ButtonsSourceStrategy.Manual, buttons: [] }
-             };
+            };
             return result;
         }
         case ElementType.INPUT_TEXT: {
@@ -252,12 +252,12 @@ export const canLink = (newLink: FlowDesignerLink, links: FlowDesignerLink[]) =>
 
 };
 
-export const getTextVariableReference = (variable: BotVariable, path?: string): string => {
+export const getTextVariableReference = (variable: BotVariable, path?: string, converter?: VariableConverter): string => {
     if (isNil(path)) {
-        return `<%variables.${variable.name}%>`;
+        return `<%variables.${variable.name}` + (converter ? `|${converter}` : '') + '%>';
     }
 
-    return `<%variables.${variable.name}.${path}%>`
+    return `<%variables.${variable.name}.${path}` + (converter ? `|${converter}` : '') + '%>'
 }
 
 export const getTextPropertyReference = (propertyName: string): string => {

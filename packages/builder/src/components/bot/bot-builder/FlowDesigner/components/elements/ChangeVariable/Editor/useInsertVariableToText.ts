@@ -1,4 +1,4 @@
-import { BotVariable } from "@kickoffbot.com/types";
+import { BotVariable, VariableConverter } from "@kickoffbot.com/types";
 import { isNil } from "lodash";
 import React, { useCallback } from "react";
 import { getTextVariableReference } from "~/components/bot/bot-builder/utils";
@@ -14,7 +14,7 @@ export function useInsertVariableToText(value: string, onChangeValue: (value: st
   };
 
   const handleInsertVariable = useCallback(
-    (variable: BotVariable) => {
+    (variable: BotVariable, path?: string, converter?: VariableConverter) => {
       let position = selectionStart;
       const content = value ?? "";
 
@@ -24,7 +24,7 @@ export function useInsertVariableToText(value: string, onChangeValue: (value: st
       
       const output = [
         content.slice(0, position),
-        getTextVariableReference(variable),
+        getTextVariableReference(variable, path, converter),
         content.slice(position),
       ].join("");
 

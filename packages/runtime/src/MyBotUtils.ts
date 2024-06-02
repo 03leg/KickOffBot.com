@@ -10,9 +10,11 @@ import {
   FlowDesignerUIBlockDescription,
   PortType,
   UIElement,
+  VariableConverter,
   VariableType,
 } from "@kickoffbot.com/types";
 import { Parser } from "expr-eval";
+import { throwIfNil } from "./guard";
 
 export class MyBotUtils {
   private _botProject: BotProject;
@@ -84,21 +86,72 @@ export class MyBotUtils {
   }
 
   private getVariableValue(text: string, userContext: UserContext): string {
-    const arr = text.split(".");
-    if (arr.length >= 2) {
-      const variableName = arr[0];
-      const path = arr[1];
+    const parsedArray = text.split("|");
+    const converter: VariableConverter | undefined = parsedArray[1] as VariableConverter | undefined;
+    const variablePathArray = parsedArray[0].split(".");
+    const variableName = variablePathArray[0];
+    const path = variablePathArray[1];
 
+    if (path || converter) {
       const variableValue = userContext.getVariableValueByName(variableName);
+      const variableMetaData = this._botProject.variables.find((v) => v.name === variableName);
 
-      if (typeof variableValue === "object" && path in variableValue) {
+      console.log("variableValue", variableValue);
+
+      if (isPlainObject(variableValue) && path in (variableValue as Record<string, unknown>)) {
         return (variableValue as Record<string, string>)[path];
+      } else if (variableValue instanceof Array) {
+        throwIfNil(converter);
+        throwIfNil(variableValue);
+
+        if (variableMetaData?.arrayItemType === VariableType.OBJECT) {
+          if (VariableConverter.COUNT === converter) {
+            return variableValue.length.toString();
+          }
+          
+          throwIfNil(path);
+          const valueForArrayOfObjects = MyBotUtils.getValueForArrayOfNumbers(
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            variableValue.map((v: any) => v[path] as number),
+            converter,
+          );
+
+          return valueForArrayOfObjects.toString();
+        } else if (variableMetaData?.arrayItemType === VariableType.NUMBER) {
+          const valueForArrayOfNumbers = MyBotUtils.getValueForArrayOfNumbers(variableValue as number[], converter);
+          return valueForArrayOfNumbers.toString();
+        }
+
+        return text;
       } else {
         throw new Error("InvalidOperationError: variable value does not contain the path");
       }
     }
 
     return userContext.getVariableValueByName(text) as string;
+  }
+
+  private static getValueForArrayOfNumbers(arrayOfNumbers: number[], converter: VariableConverter): number {
+    switch (converter) {
+      case VariableConverter.SUM: {
+        return arrayOfNumbers.reduce((partialSum: number, a: number) => partialSum + a, 0);
+      }
+      case VariableConverter.AVG: {
+        return arrayOfNumbers.reduce((partialSum: number, a: number) => partialSum + a, 0) / arrayOfNumbers.length;
+      }
+      case VariableConverter.MAX: {
+        return Math.max(...arrayOfNumbers);
+      }
+      case VariableConverter.MIN: {
+        return Math.min(...arrayOfNumbers);
+      }
+      case VariableConverter.COUNT: {
+        return arrayOfNumbers.length;
+      }
+      default: {
+        throw new Error("InvalidOperationError: converter is not supported");
+      }
+    }
   }
 
   private getTextForContextObject(contextObject: unknown, template: string, index: number): string {
@@ -153,7 +206,7 @@ export class MyBotUtils {
       result = this.getParsedText(template.emptyArrayTelegramContent ?? defaultResult, userContext);
     }
 
-    return result; 
+    return result;
   }
 
   private parseVariables(text: string, userContext: UserContext) {
@@ -219,7 +272,9 @@ export class MyBotUtils {
       if (typeof result === "number") {
         return result;
       }
-    } catch {}
+    } catch (e) {
+      console.log("getNumberValueFromExpression", e);
+    }
 
     return null;
   }
@@ -231,7 +286,9 @@ export class MyBotUtils {
       if (typeof result === "string") {
         return result;
       }
-    } catch {}
+    } catch (e) {
+      console.log("getStringValueFromExpression", e);
+    }
 
     return null;
   }
@@ -255,7 +312,9 @@ export class MyBotUtils {
           break;
         }
       }
-    } catch {}
+    } catch (e) {
+      console.log("getBooleanValue", e);
+    }
 
     return null;
   }

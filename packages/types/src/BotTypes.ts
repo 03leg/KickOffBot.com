@@ -317,3 +317,11 @@ export interface BotTemplate extends MessageDescription {
   emptyArrayHtmlContent?: string;
   emptyArrayTelegramContent?: string;
 }
+
+export enum VariableConverter {
+  SUM = "sum",
+  MIN = "min",
+  MAX = "max",
+  AVG = "avg",
+  COUNT = "count",
+};
