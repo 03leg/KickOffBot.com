@@ -22,6 +22,8 @@ import {
   FlowDesignerUIBlockDescription,
   InputTextUIElement,
   RemoveMessageUIElement,
+  SendTelegramMessageIntegrationUIElement,
+  TelegramConnectionDescription,
   UIElement,
   VariableType,
 } from "@kickoffbot.com/types";
@@ -207,7 +209,7 @@ export class MyTelegramBot {
         }
 
         const answerText = this._utils.getParsedText(contentTextElement.telegramContent, userContext);
-        
+
         const messageButtons = MessageButtonsManager.getButtonsForMessage(
           userContext,
           contentTextElement.id,
@@ -323,6 +325,13 @@ export class MyTelegramBot {
       case ElementType.LOGIC_REMOVE_MESSAGE: {
         await this.handleLogicRemoveMessageElement(element as RemoveMessageUIElement);
         break;
+      }
+      case ElementType.INTEGRATION_SEND_TELEGRAM_MESSAGE: {
+        await this.handleSendTelegramMessageElement(element as SendTelegramMessageIntegrationUIElement, userContext);
+        break;
+      }
+      default: {
+        throw new Error(`Unsupported element type: ${element.type}`);
       }
     }
 
@@ -465,6 +474,7 @@ export class MyTelegramBot {
       case ElementType.LOGIC_CHANGE_VARIABLE:
       case ElementType.LOGIC_EDIT_MESSAGE:
       case ElementType.LOGIC_REMOVE_MESSAGE:
+      case ElementType.INTEGRATION_SEND_TELEGRAM_MESSAGE:
       case ElementType.CONTENT_TEXT: {
         await this.handleElement(userContext, context, block, nextElement);
         break;
@@ -518,5 +528,25 @@ export class MyTelegramBot {
 
   public stop() {
     this._bot.stop();
+  }
+
+  private async handleSendTelegramMessageElement(element: SendTelegramMessageIntegrationUIElement, userContext: UserContext) {
+    if (isNil(element.connectionId)) {
+      return;
+    }
+
+    const connection = this._botProject.connections.find((c) => c.id === element.connectionId) as TelegramConnectionDescription;
+    if (isNil(connection) || !connection.botToken || !connection.targetChatId) {
+      return;
+    }
+    try {
+      const bot = new Telegraf(connection.botToken);
+
+      await bot.telegram.sendMessage(connection.targetChatId, this._utils.getParsedText(element.telegramContent ?? "", userContext), {
+        parse_mode: "HTML",
+      });
+    } catch (e) {
+      console.log("handleSendTelegramMessageElement", e);
+    }
   }
 }

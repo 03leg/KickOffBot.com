@@ -2,7 +2,7 @@ import { Box } from '@mui/material'
 import React, { useCallback, useContext, useMemo } from 'react'
 import { TextContent } from '../elements/TextContent';
 import { Colors } from '~/themes/Colors';
-import { ContentTextUIElement, ElementType, type UIElement } from '@kickoffbot.com/types';
+import { ContentTextUIElement, ElementType, SendTelegramMessageIntegrationUIElement, type UIElement } from '@kickoffbot.com/types';
 import { getIconByType } from '../../../utils';
 import { CSS } from '@dnd-kit/utilities';
 import { useSortable } from '@dnd-kit/sortable';
@@ -15,6 +15,7 @@ import { ChangeVariable } from '../elements/ChangeVariable';
 import { Condition } from '../elements/Condition';
 import { EditMessage } from '../elements/EditMessage';
 import { RemoveMessage } from '../elements/RemoveMessage';
+import { IntegrationSendTelegramMessage } from '../elements/IntegrationSendTelegramMessage';
 
 interface Props {
     element: UIElement;
@@ -42,16 +43,20 @@ export const ElementView = ({ element, scale }: Props) => {
                 result = (<ChangeVariable element={element} />)
                 break;
             }
-            case ElementType.LOGIC_CONDITION:{
-                result = <Condition  element={element}/>
+            case ElementType.LOGIC_CONDITION: {
+                result = <Condition element={element} />
                 break;
             }
             case ElementType.LOGIC_EDIT_MESSAGE: {
-                result= <EditMessage element={element} />
+                result = <EditMessage element={element} />
                 break;
             }
             case ElementType.LOGIC_REMOVE_MESSAGE: {
-                result= <RemoveMessage element={element} />
+                result = <RemoveMessage element={element} />
+                break;
+            }
+            case ElementType.INTEGRATION_SEND_TELEGRAM_MESSAGE: {
+                result = <IntegrationSendTelegramMessage element={element as SendTelegramMessageIntegrationUIElement} />
                 break;
             }
             default: {

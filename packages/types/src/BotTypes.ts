@@ -11,6 +11,8 @@ export enum ElementType {
   LOGIC_CONDITION = "logic-condition",
   LOGIC_EDIT_MESSAGE = "logic-edit-message",
   LOGIC_REMOVE_MESSAGE = "logic-remove-message",
+
+  INTEGRATION_SEND_TELEGRAM_MESSAGE = "integration-send-telegram-message",
 }
 
 export interface UIElement {
@@ -179,7 +181,7 @@ export interface ChangeNumberStringVariableWorkflow {
   expression: string;
 }
 
-export interface MessageDescription{
+export interface MessageDescription {
   json?: string;
   htmlContent?: string;
   telegramContent?: string;
@@ -301,6 +303,7 @@ export interface BotProject {
   links: FlowDesignerLink[];
   variables: BotVariable[];
   templates: BotTemplate[];
+  connections: ConnectionDescription[];
 }
 
 export interface RemoveMessageUIElement extends UIElement {
@@ -324,4 +327,23 @@ export enum VariableConverter {
   MAX = "max",
   AVG = "avg",
   COUNT = "count",
-};
+}
+
+export interface SendTelegramMessageIntegrationUIElement extends UIElement, MessageDescription {
+  connectionId?: TelegramConnectionDescription["id"];
+}
+
+export enum ConnectionType {
+  Telegram,
+}
+
+export interface ConnectionDescription {
+  type: ConnectionType;
+  id: string;
+  name: string;
+}
+
+export interface TelegramConnectionDescription extends ConnectionDescription {
+  botToken: string;
+  targetChatId: string;
+}

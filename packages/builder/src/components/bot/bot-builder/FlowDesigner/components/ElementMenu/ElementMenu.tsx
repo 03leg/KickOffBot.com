@@ -9,11 +9,12 @@ import { useConfirm } from 'material-ui-confirm';
 import { TextContentEditor } from '../elements/TextContent/Editor';
 import { ButtonsEditor } from '../elements/ButtonsInput/Editor';
 import { TextInputEditor } from '../elements/TextInput/Editor';
-import { ChangeVariableUIElement, ConditionUIElement, ContentTextUIElement, EditMessageUIElement, ElementType, InputButtonsUIElement, InputTextUIElement, OutputPortDescription, RemoveMessageUIElement, UIElement } from '@kickoffbot.com/types';
+import { ChangeVariableUIElement, ConditionUIElement, ContentTextUIElement, EditMessageUIElement, ElementType, InputButtonsUIElement, InputTextUIElement, OutputPortDescription, RemoveMessageUIElement, SendTelegramMessageIntegrationUIElement, UIElement } from '@kickoffbot.com/types';
 import { ChangeVariableEditor } from '../elements/ChangeVariable/Editor';
 import { ConditionEditor } from '../elements/Condition/Editor';
 import { EditMessageEditor } from '../elements/EditMessage/Editor';
 import { RemoveMessageEditor } from '../elements/RemoveMessage/Editor/RemoveMessageEditor';
+import { IntegrationSendTelegramMessageEditor } from '../elements/IntegrationSendTelegramMessage/Editor';
 
 
 
@@ -111,6 +112,12 @@ export const ElementMenu = ({ element }: Props) => {
                 const newElement: RemoveMessageUIElement = JSON.parse(JSON.stringify(initialElement));
 
                 return { content: (<RemoveMessageEditor element={newElement} />), title: 'Remove message', newElement };
+            }
+            case ElementType.INTEGRATION_SEND_TELEGRAM_MESSAGE: {
+                const initialElement = elementArg as SendTelegramMessageIntegrationUIElement;
+                const newElement: SendTelegramMessageIntegrationUIElement = JSON.parse(JSON.stringify(initialElement));
+
+                return { content: (<IntegrationSendTelegramMessageEditor element={newElement} />), title: 'Send message to telegram channel or group', newElement };
             }
             default: {
                 throw new Error('NotImplementedError');

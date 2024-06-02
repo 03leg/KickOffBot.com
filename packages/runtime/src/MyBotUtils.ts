@@ -132,10 +132,12 @@ export class MyBotUtils {
   private static getValueForArrayOfNumbers(arrayOfNumbers: number[], converter: VariableConverter): number {
     switch (converter) {
       case VariableConverter.SUM: {
-        return arrayOfNumbers.reduce((partialSum: number, a: number) => partialSum + a, 0);
+        const v = arrayOfNumbers.reduce((partialSum: number, a: number) => partialSum + a, 0);
+        return Math.ceil(v * 100) / 100 ;
       }
       case VariableConverter.AVG: {
-        return arrayOfNumbers.reduce((partialSum: number, a: number) => partialSum + a, 0) / arrayOfNumbers.length;
+        const v =  arrayOfNumbers.reduce((partialSum: number, a: number) => partialSum + a, 0) / arrayOfNumbers.length;
+        return Math.ceil(v * 100) / 100 ;
       }
       case VariableConverter.MAX: {
         return Math.max(...arrayOfNumbers);

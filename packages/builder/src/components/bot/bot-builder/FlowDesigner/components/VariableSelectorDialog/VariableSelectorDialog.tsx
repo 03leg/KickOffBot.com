@@ -63,17 +63,22 @@ export const VariableSelectorDialog = ({ onInsertVariable, availableVariableType
 
     const availablePropsForPathValue = useMemo(() => {
         const result = [];
-        const defaultValue = (isNil(selectedVariableInsert) || isEmpty(selectedVariableInsert.value)) ? null : JSON.parse(selectedVariableInsert.value as string);
-        const dataObject = defaultValue as Record<string, unknown>;
+        try {
+            const defaultValue = (isNil(selectedVariableInsert) || isEmpty(selectedVariableInsert.value)) ? null : JSON.parse(selectedVariableInsert.value as string);
+            const dataObject = defaultValue as Record<string, unknown>;
 
-        if (typeof dataObject === 'object' && !isNil(dataObject)) {
-            for (const propName of Object.keys(dataObject)) {
-                const type = getVariableTypeBasedOnJsonType(typeof dataObject[propName]);
+            if (typeof dataObject === 'object' && !isNil(dataObject)) {
+                for (const propName of Object.keys(dataObject)) {
+                    const type = getVariableTypeBasedOnJsonType(typeof dataObject[propName]);
 
-                if (!isNil(dataObject[propName]) && !isNil(type) && ((availableVariableTypes ?? [type]).includes(type))) {
-                    result.push(propName);
+                    if (!isNil(dataObject[propName]) && !isNil(type) && ((availableVariableTypes ?? [type]).includes(type))) {
+                        result.push(propName);
+                    }
                 }
             }
+        }
+        catch (e) {
+            console.error(e);
         }
         return result;
     }, [availableVariableTypes, selectedVariableInsert]);
@@ -105,7 +110,7 @@ export const VariableSelectorDialog = ({ onInsertVariable, availableVariableType
                 open={open} title={'Insert variable'}>
                 <Box sx={{ marginBottom: 2 }}>
                     <Typography sx={{ marginBottom: 2 }}> Please select variable to insert:</Typography>
-                    <VariableSelector variableTypes={actualAvailableVariableTypes} valueId={selectedVariableInsert?.id ?? ''} onVariableChange={handleVariableChange} onCustomVariableFilter={onCustomVariableFilter}/>
+                    <VariableSelector variableTypes={actualAvailableVariableTypes} valueId={selectedVariableInsert?.id ?? ''} onVariableChange={handleVariableChange} onCustomVariableFilter={onCustomVariableFilter} />
                     {supportPathForObject && selectedVariableInsert?.type === VariableType.OBJECT &&
                         <Box sx={{ marginTop: 2 }}>
                             <PropertySelector arrayObject={{}}

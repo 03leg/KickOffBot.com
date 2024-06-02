@@ -14,7 +14,7 @@ export const ToolBoxGroupComp = ({ group }: Props) => {
                 {group.title}
             </Typography>
             <Grid container>
-                {group.items.map(item => <Grid key={item.title} item xs={6} sm={6}><ToolBoxItemComponent item={item} /></Grid>)}
+                {group.items.map(item => <Grid key={item.title} item xs={item.size ?? 6} sm={item.size ?? 6}><ToolBoxItemComponent item={item} /></Grid>)}
             </Grid>
         </Stack>
     )

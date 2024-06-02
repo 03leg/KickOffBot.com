@@ -2,6 +2,7 @@ import {
   BotProject,
   BotTemplate,
   BotVariable,
+  ConnectionDescription,
   FlowDesignerLink,
   FlowDesignerUIBlockDescription,
   PositionDescription,
@@ -50,4 +51,6 @@ export interface FlowDesignerState {
   addTemplate: (template: BotTemplate) => void;
   updateTemplate: (template: BotTemplate) => void;
 
+  saveConnection: (connection: ConnectionDescription) => void;
+  removeConnectionById: (connectionId: ConnectionDescription["id"]) => void;
 }

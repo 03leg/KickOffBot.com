@@ -10,6 +10,7 @@ import { prisma } from "~/server/db";
 import { TelegramToken } from "@kickoffbot.com/types";
 import { getPreviewToken } from "~/server/utility/getPreviewToken";
 import { z } from "zod";
+import { Telegraf } from "telegraf";
 // import fs from "fs";
 
 export const botManagementRouter = createTRPCRouter({
@@ -125,7 +126,7 @@ export const botManagementRouter = createTRPCRouter({
       });
 
       await prisma.botToken.deleteMany({
-        where: { botId: input.id ?? '' },
+        where: { botId: input.id ?? "" },
       });
     }),
   addTelegramToken: protectedProcedure
@@ -229,5 +230,24 @@ export const botManagementRouter = createTRPCRouter({
           id: input.tokenId,
         },
       });
+    }),
+
+  testTelegramConnection: protectedProcedure
+    .input(
+      z.object({
+        botToken: z.string(),
+        targetChatId: z.string(),
+      })
+    )
+    .mutation(async ({ input }) => {
+      try {
+        const bot = new Telegraf(input.botToken);
+
+        await bot.telegram.sendMessage(input.targetChatId, "Test message...");
+        return { result: true, message: "" };
+      } catch (e) {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        return { result: false, message: (e as any).message };
+      }
     }),
 });

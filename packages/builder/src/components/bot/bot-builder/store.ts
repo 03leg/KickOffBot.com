@@ -6,6 +6,7 @@ import {
   BotProject,
   VariableType,
   BotTemplate,
+  ConnectionDescription,
 } from "@kickoffbot.com/types";
 import { isNil, remove } from "lodash";
 import { type PositionDescription } from "@kickoffbot.com/types";
@@ -61,6 +62,7 @@ export const DEFAULT_PROJECT_STATE: BotProject = {
   ],
   transformDescription: { scale: 1, x: 0, y: 0 },
   templates: [],
+  connections: [],
 };
 
 export const useFlowDesignerStore = create<FlowDesignerState>()((set, get) => ({
@@ -253,6 +255,31 @@ export const useFlowDesignerStore = create<FlowDesignerState>()((set, get) => ({
 
       project.templates.splice(index, 1, template);
       project.templates = [...project.templates];
+
+      return { project };
+    }),
+  saveConnection: (connection: ConnectionDescription) =>
+    set((state) => {
+      const project = state.project;
+      const index = (project.connections ?? []).findIndex(
+        (c) => c.id === connection.id
+      );
+
+      if (index !== -1) {
+        project.connections.splice(index, 1);
+      }
+
+      project.connections = [...(project.connections ?? []), connection];
+
+      return { project };
+    }),
+  removeConnectionById: (connectionId: ConnectionDescription["id"]) =>
+    set((state) => {
+      const project = state.project;
+      const index = project.connections.findIndex((v) => v.id === connectionId);
+
+      project.connections.splice(index, 1);
+      project.connections = [...project.connections];
 
       return { project };
     }),

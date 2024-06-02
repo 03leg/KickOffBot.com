@@ -1,4 +1,4 @@
-import { type ContentTextUIElement, ElementType, type InputTextUIElement, type FlowDesignerUIBlockDescription, type UIElement, type InputButtonsUIElement, type FlowDesignerLink, type ButtonPortDescription, type BotVariable, BlockType, TransformDescription, ChangeVariableUIElement, ConditionUIElement, LogicalOperator, ButtonsSourceStrategy, CommandsUIElement, EditMessageUIElement, EditMessageOperation, RemoveMessageUIElement, VariableConverter } from "@kickoffbot.com/types";
+import { type ContentTextUIElement, ElementType, type InputTextUIElement, type FlowDesignerUIBlockDescription, type UIElement, type InputButtonsUIElement, type FlowDesignerLink, type ButtonPortDescription, type BotVariable, BlockType, TransformDescription, ChangeVariableUIElement, ConditionUIElement, LogicalOperator, ButtonsSourceStrategy, CommandsUIElement, EditMessageUIElement, EditMessageOperation, RemoveMessageUIElement, VariableConverter, SendTelegramMessageIntegrationUIElement } from "@kickoffbot.com/types";
 import MessageIcon from '@mui/icons-material/Message';
 import TextFieldsIcon from '@mui/icons-material/TextFields';
 import { isNil } from "lodash";
@@ -13,6 +13,7 @@ import EditNoteIcon from '@mui/icons-material/EditNote';
 import ForkLeftIcon from '@mui/icons-material/ForkLeft';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
+import TelegramIcon from '@mui/icons-material/Telegram';
 
 
 export function getContentElements() {
@@ -44,8 +45,14 @@ export function getLogicElements() {
     ];
 }
 
+export function getIntegrationsElements() {
+    return [
+        { type: ElementType.INTEGRATION_SEND_TELEGRAM_MESSAGE, title: 'Send message to telegram channel or group', icon: <TelegramIcon />, size: 12 },
+    ];
+}
+
 export function getIconByType(type: ElementType) {
-    const description = [...getInputElements(), ...getContentElements(), ...getLogicElements()].find(d => d.type === type);
+    const description = [...getInputElements(), ...getContentElements(), ...getLogicElements(), ...getIntegrationsElements()].find(d => d.type === type);
 
     if (isNil(description)) {
         throw new Error('Property "description" can not be null here');
@@ -119,6 +126,13 @@ export function getNewUIElementTemplate(id: string, data: DraggableElementData):
             const result: RemoveMessageUIElement = {
                 id,
                 type: ElementType.LOGIC_REMOVE_MESSAGE,
+            };
+            return result;
+        }
+        case ElementType.INTEGRATION_SEND_TELEGRAM_MESSAGE: {
+            const result: SendTelegramMessageIntegrationUIElement = {
+                id,
+                type: ElementType.INTEGRATION_SEND_TELEGRAM_MESSAGE,
             };
             return result;
         }
