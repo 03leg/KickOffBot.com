@@ -9,12 +9,13 @@ import { useConfirm } from 'material-ui-confirm';
 import { TextContentEditor } from '../elements/TextContent/Editor';
 import { ButtonsEditor } from '../elements/ButtonsInput/Editor';
 import { TextInputEditor } from '../elements/TextInput/Editor';
-import { ChangeVariableUIElement, ConditionUIElement, ContentTextUIElement, EditMessageUIElement, ElementType, InputButtonsUIElement, InputTextUIElement, OutputPortDescription, RemoveMessageUIElement, SendTelegramMessageIntegrationUIElement, UIElement } from '@kickoffbot.com/types';
+import { ChangeVariableUIElement, ConditionUIElement, ContentTextUIElement, EditMessageUIElement, ElementType, GoogleSheetsIntegrationUIElement, InputButtonsUIElement, InputTextUIElement, OutputPortDescription, RemoveMessageUIElement, SendTelegramMessageIntegrationUIElement, UIElement } from '@kickoffbot.com/types';
 import { ChangeVariableEditor } from '../elements/ChangeVariable/Editor';
 import { ConditionEditor } from '../elements/Condition/Editor';
 import { EditMessageEditor } from '../elements/EditMessage/Editor';
 import { RemoveMessageEditor } from '../elements/RemoveMessage/Editor/RemoveMessageEditor';
 import { IntegrationSendTelegramMessageEditor } from '../elements/IntegrationSendTelegramMessage/Editor';
+import { IntegrationGoogleSheetsEditor } from '../elements/IntegrationGoogleSheets/Editor/IntegrationGoogleSheetsEditor';
 
 
 
@@ -118,6 +119,12 @@ export const ElementMenu = ({ element }: Props) => {
                 const newElement: SendTelegramMessageIntegrationUIElement = JSON.parse(JSON.stringify(initialElement));
 
                 return { content: (<IntegrationSendTelegramMessageEditor element={newElement} />), title: 'Send message to telegram channel or group', newElement };
+            }
+            case ElementType.INTEGRATION_GOOGLE_SHEETS: {
+                const initialElement = elementArg as GoogleSheetsIntegrationUIElement;
+                const newElement: GoogleSheetsIntegrationUIElement = JSON.parse(JSON.stringify(initialElement));
+
+                return { content: (<IntegrationGoogleSheetsEditor element={newElement} />), title: 'Google spreadsheets', newElement };
             }
             default: {
                 throw new Error('NotImplementedError');

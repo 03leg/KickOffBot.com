@@ -283,4 +283,12 @@ export const useFlowDesignerStore = create<FlowDesignerState>()((set, get) => ({
 
       return { project };
     }),
+  addNewConnection: (connection: ConnectionDescription) =>
+    set((state) => {
+      const project = state.project;
+
+      project.connections = [...(project.connections ?? []), connection];
+
+      return { project };
+    }),
 }));

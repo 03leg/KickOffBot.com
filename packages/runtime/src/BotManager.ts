@@ -40,4 +40,12 @@ export class BotManager {
       },
     });
   }
+
+  public static async getGoogleIntegrationAccount(connectionId: string) {
+    const googleAccount = await this._prisma.googleIntegrationAccount.findUnique({
+      where: { id: connectionId },
+    });
+
+    return googleAccount;
+  }
 }

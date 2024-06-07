@@ -2,7 +2,7 @@ import { Box } from '@mui/material'
 import React, { useCallback, useContext, useMemo } from 'react'
 import { TextContent } from '../elements/TextContent';
 import { Colors } from '~/themes/Colors';
-import { ContentTextUIElement, ElementType, SendTelegramMessageIntegrationUIElement, type UIElement } from '@kickoffbot.com/types';
+import { ContentTextUIElement, ElementType, GoogleSheetsIntegrationUIElement, SendTelegramMessageIntegrationUIElement, type UIElement } from '@kickoffbot.com/types';
 import { getIconByType } from '../../../utils';
 import { CSS } from '@dnd-kit/utilities';
 import { useSortable } from '@dnd-kit/sortable';
@@ -16,6 +16,7 @@ import { Condition } from '../elements/Condition';
 import { EditMessage } from '../elements/EditMessage';
 import { RemoveMessage } from '../elements/RemoveMessage';
 import { IntegrationSendTelegramMessage } from '../elements/IntegrationSendTelegramMessage';
+import { IntegrationGoogleSheets } from '../elements/IntegrationGoogleSheets';
 
 interface Props {
     element: UIElement;
@@ -58,6 +59,10 @@ export const ElementView = ({ element, scale }: Props) => {
             case ElementType.INTEGRATION_SEND_TELEGRAM_MESSAGE: {
                 result = <IntegrationSendTelegramMessage element={element as SendTelegramMessageIntegrationUIElement} />
                 break;
+            }
+            case ElementType.INTEGRATION_GOOGLE_SHEETS: {
+                result = <IntegrationGoogleSheets element={element as GoogleSheetsIntegrationUIElement} />
+                return result;
             }
             default: {
                 throw new Error('NotImplementedError');
