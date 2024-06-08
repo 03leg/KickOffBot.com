@@ -1,14 +1,12 @@
 import React, { useCallback, useMemo, useState } from 'react'
-import { Box, FormControl, IconButton, Typography } from '@mui/material'
-import { BotVariable, ConditionItem, ConditionOperator, LogicalOperator, PropertyConditionItem, VariableType } from '@kickoffbot.com/types'
-import { useFlowDesignerStore } from '~/components/bot/bot-builder/store'
+import { Box, IconButton, Typography } from '@mui/material'
+import { ConditionOperator, LogicalOperator, PropertyConditionItem, VariableType } from '@kickoffbot.com/types'
 import { isNil } from 'lodash';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { PropertySelector } from './PropertySelector';
 import { OperatorSelector } from '../../../../Condition/Editor/OperatorSelector';
 import { ConditionValueEditor } from '../../../../Condition/Editor/ConditionValueEditor';
 import { LogicalOperatorComponent } from '../../../../Condition/Editor/LogicalOperatorComponent';
-import { boolean, number, string } from 'zod';
 
 interface Props {
   item: PropertyConditionItem;
@@ -60,24 +58,23 @@ export const PropertyConditionItemComponent = ({ arrayObject, item, showLogicalO
   }, [arrayObject, selectedPropertyName]);
 
   const setDefaultValue = useCallback((value: unknown) => {
-    switch (value) {
-      case typeof boolean: {
+    switch (typeof value) {
+      case  "boolean": {
         setConditionValue(false);
         item.value = false;
         break;
       }
-      case typeof string: {
+      case "string": {
         setConditionValue('');
         item.value = '';
         break;
       }
-      case typeof number: {
+      case "number": {
         setConditionValue(0);
         item.value = 0;
         break;
       }
     }
-    console.log('setDefaultValue', value);
   }, [item])
 
   const handlePropertyNameChange = useCallback((propName: string) => {

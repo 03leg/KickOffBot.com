@@ -366,11 +366,35 @@ export interface GoogleSheetsIntegrationUIElement extends UIElement {
 
   dataOperation?: DataSpreedSheetOperation;
 
-  dataOperationDescription?: ReadRowsToArrayDescription;
+  dataOperationDescription?: ReadRowsToArrayDescription | InsertRowsFromVariableDescription | UpdateRowsFromObjectVariableDescription;
 }
 
 interface ReadRowsToArrayDescription {
   variableId: BotVariable["id"];
+}
+
+interface InsertRowsFromVariableDescription {
+  variableId: BotVariable["id"];
+}
+
+export interface SpreadSheetRowsFilterConditionItem {
+  id: string;
+  header?: string;
+  operator?: ConditionOperator;
+  value?: string | number | boolean;
+
+  variableIdValue?: string;
+  pathVariableIdValue?: string;
+}
+
+export interface SpreadSheetRowsFilter {
+  operator: LogicalOperator;
+  conditions: SpreadSheetRowsFilterConditionItem[];
+}
+
+export interface UpdateRowsFromObjectVariableDescription {
+  variableId: BotVariable["id"];
+  filter?: SpreadSheetRowsFilter;
 }
 
 export interface SheetDescription {
@@ -381,4 +405,6 @@ export interface SheetDescription {
 
 export enum DataSpreedSheetOperation {
   READ_ROWS_TO_ARRAY = "READ_ROWS_TO_ARRAY",
+  INSERT_ROWS_FROM_VARIABLE = "INSERT_ROWS_FROM_VARIABLE",
+  UPDATE_ROWS_FROM_OBJECT_VARIABLE = "UPDATE_ROWS_FROM_OBJECT_VARIABLE",
 }

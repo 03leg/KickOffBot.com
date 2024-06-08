@@ -9,9 +9,10 @@ interface Props {
     variableTypes?: VariableType[];
     onVariableChange: (variable: BotVariable) => void;
     onCustomVariableFilter?: (variable: BotVariable) => boolean;
+    label?: string;
 }
 
-export const VariableSelector = ({ valueId, variableTypes, onVariableChange, onCustomVariableFilter }: Props) => {
+export const VariableSelector = ({ valueId, variableTypes, onVariableChange, onCustomVariableFilter, label = 'Variable' }: Props) => {
     const { variables } = useFlowDesignerStore((state) => ({
         variables: state.project.variables,
     }));
@@ -49,11 +50,11 @@ export const VariableSelector = ({ valueId, variableTypes, onVariableChange, onC
             }
             {currentVariables.length > 0 &&
                 <FormControl fullWidth>
-                    <InputLabel id="variable-selector-label">Variable</InputLabel>
+                    <InputLabel id="variable-selector-label">{label}</InputLabel>
                     <Select
                         labelId="variable-selector-label"
                         value={valueId ?? ''}
-                        label='Variable'
+                        label={label}
                         onChange={handleVariableChange}
                     >
                         {currentVariables.map(v =>

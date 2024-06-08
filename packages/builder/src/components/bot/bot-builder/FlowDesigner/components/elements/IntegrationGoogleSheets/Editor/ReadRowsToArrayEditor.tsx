@@ -36,7 +36,7 @@ export const ReadRowsToArrayEditor = ({ googleSheetHeaders, element }: Props) =>
         }
 
         return false;
-    }, []);
+    }, [googleSheetHeaders]);
 
     return (
         <Box sx={{ mt: 2 }}>

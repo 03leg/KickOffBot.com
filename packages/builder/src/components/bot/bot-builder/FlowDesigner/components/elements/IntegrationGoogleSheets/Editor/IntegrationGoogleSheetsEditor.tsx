@@ -1,5 +1,5 @@
 import { ConnectionType, DataSpreedSheetOperation, GoogleSheetsConnectionDescription, GoogleSheetsIntegrationUIElement, SelectedGoogleSpreadSheet, SheetDescription } from '@kickoffbot.com/types';
-import { Alert, Box, Button, FormControl, FormControlLabel, InputLabel, MenuItem, Radio, RadioGroup, Select, SelectChangeEvent, TextField, Typography } from '@mui/material';
+import { Box, Button, FormControl, FormControlLabel, InputLabel, MenuItem, Radio, RadioGroup, Select, SelectChangeEvent, TextField } from '@mui/material';
 import { useSession } from 'next-auth/react';
 import React, { useCallback, useEffect, useState } from 'react';
 import { ConnectionSelector } from '../../../ConnectionSelector';
@@ -9,6 +9,9 @@ import { useFlowDesignerStore } from '~/components/bot/bot-builder/store';
 import { isNil } from 'lodash';
 import { env } from '~/env.mjs';
 import { ReadRowsToArrayEditor } from './ReadRowsToArrayEditor';
+import { LoadingIndicator } from '~/components/commons/LoadingIndicator';
+import { InsertRowsFromVariableEditor } from './InsertRowsFromVariableEditor';
+import { UpdateRowsFromVariableEditor } from './UpdateRowsFromVariableEditor';
 
 interface Props {
     element: GoogleSheetsIntegrationUIElement;
@@ -17,22 +20,24 @@ interface Props {
 export const IntegrationGoogleSheetsEditor = ({ element }: Props) => {
     const { data: sessionData } = useSession();
     const [connectionId, setConnectionId] = React.useState<string | undefined>(element.connectionId);
-    const { data, refetch } = api.googleIntegration.getGoogleAccounts.useQuery();
+    const { data, refetch, isLoading: isAccountsLoading } = api.googleIntegration.getGoogleAccounts.useQuery();
     const { connections, addNewConnection } = useFlowDesignerStore((state) => ({
         connections: (state.project.connections ?? []).filter(c => c.type === ConnectionType.Google),
         addNewConnection: state.addNewConnection
     }));
-    const { mutateAsync } = api.googleIntegration.deleteGoogleAccount.useMutation();
+    const { mutateAsync, isLoading: isAccountDeleting } = api.googleIntegration.deleteGoogleAccount.useMutation();
     const [selectedSpreadSheet, setSelectedSpreadSheet] = useState<SelectedGoogleSpreadSheet | undefined>(element.selectedSpreadSheet);
     const [selectedSheet, setSelectedSheet] = useState<SheetDescription | undefined>(element.selectedSheet);
 
-    const { data: availableSheets, refetch: refetchSheets } = api.googleIntegration.getSheets.useQuery({
+    const { data: availableSheets, refetch: refetchSheets, isLoading: isSheetsLoading } = api.googleIntegration.getSheets.useQuery({
         connectionId: connectionId,
         spreadSheetId: selectedSpreadSheet?.id ?? undefined
     }, { enabled: connectionId !== undefined && selectedSpreadSheet !== undefined });
 
     // eslint-disable-next-line @typescript-eslint/no-redundant-type-constituents
     const [dataOperation, setDataOperation] = useState<DataSpreedSheetOperation | undefined>(element.dataOperation);
+
+    const isViewLoading = isAccountsLoading || isAccountDeleting || isSheetsLoading;
 
     useEffect(() => {
         if (isNil(data)) {
@@ -119,6 +124,10 @@ export const IntegrationGoogleSheetsEditor = ({ element }: Props) => {
         element.dataOperation = event.target.value as DataSpreedSheetOperation;
     }, [element])
 
+    if (isViewLoading) {
+        return <LoadingIndicator />;
+    }
+
     return (
         <Box>
             <ConnectionSelector connectionType={ConnectionType.Google}
@@ -157,13 +166,23 @@ export const IntegrationGoogleSheetsEditor = ({ element }: Props) => {
 
             {selectedSheet && <Box sx={{ mt: 2 }}>
                 <RadioGroup sx={{ flex: 1 }} value={dataOperation} onChange={handleDataOperationChange}>
-                    <FormControlLabel value={DataSpreedSheetOperation.READ_ROWS_TO_ARRAY} control={<Radio />} label="Import rows to array" />
+                    <FormControlLabel value={DataSpreedSheetOperation.READ_ROWS_TO_ARRAY} control={<Radio />} label="Import rows to variable" />
+                    <FormControlLabel value={DataSpreedSheetOperation.INSERT_ROWS_FROM_VARIABLE} control={<Radio />} label="Insert row or rows from variable" />
+                    <FormControlLabel value={DataSpreedSheetOperation.UPDATE_ROWS_FROM_OBJECT_VARIABLE} control={<Radio />} label="Update row or rows" />
                 </RadioGroup>
             </Box>
             }
 
             {dataOperation === DataSpreedSheetOperation.READ_ROWS_TO_ARRAY && selectedSheet &&
                 <ReadRowsToArrayEditor googleSheetHeaders={selectedSheet.headerValues} element={element} />
+            }
+
+            {dataOperation === DataSpreedSheetOperation.INSERT_ROWS_FROM_VARIABLE && selectedSheet &&
+                <InsertRowsFromVariableEditor googleSheetHeaders={selectedSheet.headerValues} element={element} />
+            }
+
+            {dataOperation === DataSpreedSheetOperation.UPDATE_ROWS_FROM_OBJECT_VARIABLE && selectedSheet &&
+                <UpdateRowsFromVariableEditor googleSheetHeaders={selectedSheet.headerValues} element={element} />
             }
 
         </Box>
