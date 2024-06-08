@@ -34,7 +34,7 @@ export const TextContentEditor = ({ element }: Props) => {
     useEffect(() => {
         element.attachments = uploadedFiles;
 
-        setDisableButtons(uploadedFiles.length > 0);
+        setDisableButtons(uploadedFiles.length > 1);
     }, [element, uploadedFiles]);
 
     const handleAttachmentsAdd = useCallback(async (files: FileDescription[]) => {

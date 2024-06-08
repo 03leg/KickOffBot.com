@@ -1,7 +1,7 @@
 import { Update, Message, InputMediaPhoto, InputMediaVideo, InputMediaDocument, InputFile } from "telegraf/typings/core/types/typegram";
 import { Context, NarrowedContext, Telegraf } from "telegraf";
 import { UserContext } from "./UserContext";
-import { isNil } from "lodash";
+import { isNil, isPlainObject } from "lodash";
 import { getUserContextKey } from "./utils";
 import { MyBotUtils } from "./MyBotUtils";
 import {
@@ -17,14 +17,17 @@ import {
   ConditionUIElement,
   ContentTextUIElement,
   ContentType,
+  DataSpreedSheetOperation,
   EditMessageUIElement,
   ElementType,
   FlowDesignerUIBlockDescription,
+  GoogleSheetsIntegrationUIElement,
   InputTextUIElement,
   RemoveMessageUIElement,
   SendTelegramMessageIntegrationUIElement,
   TelegramConnectionDescription,
   UIElement,
+  UpdateRowsFromObjectVariableDescription,
   VariableType,
 } from "@kickoffbot.com/types";
 import { MediaGroup } from "telegraf/typings/telegram-types";
@@ -33,6 +36,12 @@ import { ChangeArrayVariableHelper } from "./ChangeArrayVariableHelper";
 import { ChangeObjectVariableHelper } from "./ChangeObjectVariableHelper";
 import { MessageButtonsManager } from "./MessageButtonsManager";
 import { MessagesStore } from "./MessagesStore";
+import { env } from "process";
+import { OAuth2Client } from "google-auth-library";
+import { BotManager } from "./BotManager";
+import { GoogleSpreadsheet } from "google-spreadsheet";
+import { throwIfNil } from "./guard";
+import { SpreadSheetRowChecker } from "./SpreadSheetRowChecker";
 
 export class MyTelegramBot {
   private _bot: Telegraf;
@@ -40,6 +49,11 @@ export class MyTelegramBot {
   private _state = new Map<number, UserContext>();
   private _utils = new MyBotUtils();
   private _messageStore = new MessagesStore();
+  private _googleOAuthClient = new OAuth2Client(
+    env.GOOGLE_CLIENT_ID,
+    env.GOOGLE_CLIENT_SECRET,
+    `${env.NEXTAUTH_URL}/api/google-auth/callback`,
+  );
 
   constructor(token: string, botProject: BotProject) {
     this._bot = new Telegraf(token);
@@ -330,6 +344,10 @@ export class MyTelegramBot {
         await this.handleSendTelegramMessageElement(element as SendTelegramMessageIntegrationUIElement, userContext);
         break;
       }
+      case ElementType.INTEGRATION_GOOGLE_SHEETS: {
+        await this.handleGoogleSheetsElement(element as GoogleSheetsIntegrationUIElement, userContext);
+        break;
+      }
       default: {
         throw new Error(`Unsupported element type: ${element.type}`);
       }
@@ -475,6 +493,7 @@ export class MyTelegramBot {
       case ElementType.LOGIC_EDIT_MESSAGE:
       case ElementType.LOGIC_REMOVE_MESSAGE:
       case ElementType.INTEGRATION_SEND_TELEGRAM_MESSAGE:
+      case ElementType.INTEGRATION_GOOGLE_SHEETS:
       case ElementType.CONTENT_TEXT: {
         await this.handleElement(userContext, context, block, nextElement);
         break;
@@ -547,6 +566,133 @@ export class MyTelegramBot {
       });
     } catch (e) {
       console.log("handleSendTelegramMessageElement", e);
+    }
+  }
+
+  private async handleGoogleSheetsElement(element: GoogleSheetsIntegrationUIElement, userContext: UserContext) {
+    if (isNil(element.connectionId) || isNil(element.selectedSpreadSheet?.id) || isNil(element.selectedSheet?.id)) {
+      return;
+    }
+
+    const integrationAccount = await BotManager.getGoogleIntegrationAccount(element.connectionId);
+    if (isNil(integrationAccount)) {
+      return;
+    }
+
+    const { credentials } = integrationAccount;
+
+    this._googleOAuthClient.setCredentials(JSON.parse(atob(credentials)));
+
+    switch (element.dataOperation) {
+      case DataSpreedSheetOperation.READ_ROWS_TO_ARRAY: {
+        await this.readRowsToArray(element, userContext);
+        break;
+      }
+      case DataSpreedSheetOperation.INSERT_ROWS_FROM_VARIABLE: {
+        await this.insertRowsFromVariable(element, userContext);
+        break;
+      }
+      case DataSpreedSheetOperation.UPDATE_ROWS_FROM_OBJECT_VARIABLE: {
+        await this.updateRowsFromObjectVariable(element, userContext);
+        break;
+      }
+      default:
+        throw new Error("InvalidOperationError: Unknown data operation");
+    }
+  }
+
+  private async readRowsToArray(element: GoogleSheetsIntegrationUIElement, userContext: UserContext) {
+    throwIfNil(element.selectedSpreadSheet?.id);
+    throwIfNil(element.selectedSheet?.id);
+
+    const spreadSheet = new GoogleSpreadsheet(element.selectedSpreadSheet.id, this._googleOAuthClient);
+    await spreadSheet.loadInfo();
+    const sheet = spreadSheet.sheetsById[element.selectedSheet.id];
+    const rows = await sheet.getRows();
+    const variable = this._botProject.variables.find((v) => v.id === element.dataOperationDescription?.variableId);
+
+    if (isNil(variable) || (variable.type !== VariableType.ARRAY && variable.arrayItemType !== VariableType.OBJECT)) {
+      throw new Error("InvalidOperationError: variable is not array of object");
+    }
+
+    const variableValue = JSON.parse(variable.value as string);
+
+    if (!Array.isArray(variableValue) && variableValue.length > 0) {
+      return;
+    }
+
+    const arrayItemSample = variableValue[0];
+    const props = Object.keys(arrayItemSample);
+    const resultItems = [];
+
+    for (const row of rows) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const obj: any = {};
+      for (const prop of props) {
+        obj[prop] =
+          typeof row.get(prop) === "string" ? MyBotUtils.convertStringSheetCellValue(row.get(prop), arrayItemSample[prop]) : row.get(prop);
+      }
+      resultItems.push(obj);
+    }
+
+    userContext.updateVariable(variable.name, resultItems);
+  }
+
+  private async insertRowsFromVariable(element: GoogleSheetsIntegrationUIElement, userContext: UserContext) {
+    throwIfNil(element.selectedSpreadSheet?.id);
+    throwIfNil(element.selectedSheet?.id);
+
+    const spreadSheet = new GoogleSpreadsheet(element.selectedSpreadSheet.id, this._googleOAuthClient);
+    await spreadSheet.loadInfo();
+    const sheet = spreadSheet.sheetsById[element.selectedSheet.id];
+
+    const variable = this._botProject.variables.find((v) => v.id === element.dataOperationDescription?.variableId);
+
+    if (isNil(variable)) {
+      throw new Error("InvalidOperationError: variable is not array of object");
+    }
+
+    const actualVariableValue = userContext.getVariableValueByName(variable.name);
+
+    if (variable.type === VariableType.OBJECT && isPlainObject(actualVariableValue)) {
+      await sheet.addRow(actualVariableValue as Record<string, string>);
+    }
+
+    if (variable.type === VariableType.ARRAY && Array.isArray(actualVariableValue)) {
+      await sheet.addRows(actualVariableValue as Record<string, string>[]);
+    }
+  }
+
+  private async updateRowsFromObjectVariable(element: GoogleSheetsIntegrationUIElement, userContext: UserContext) {
+    throwIfNil(element.selectedSpreadSheet?.id);
+    throwIfNil(element.selectedSheet?.id);
+
+    const operationDescription = element.dataOperationDescription as UpdateRowsFromObjectVariableDescription;
+
+    const spreadSheet = new GoogleSpreadsheet(element.selectedSpreadSheet.id, this._googleOAuthClient);
+    await spreadSheet.loadInfo();
+    const sheet = spreadSheet.sheetsById[element.selectedSheet.id];
+
+    const variable = this._botProject.variables.find((v) => v.id === element.dataOperationDescription?.variableId);
+    if (isNil(variable)) {
+      return;
+    }
+
+    const actualVariableValue = userContext.getVariableValueByName(variable.name);
+
+    if (variable.type !== VariableType.OBJECT || !isPlainObject(actualVariableValue)) {
+      return;
+    }
+
+    const rows = await sheet.getRows();
+    for (const row of rows) {
+      if (!SpreadSheetRowChecker.isTargetRow(row, operationDescription.filter, userContext, this._utils)) {
+        continue;
+      }
+
+      row.assign({ ...(actualVariableValue as object) });
+
+      await row.save();
     }
   }
 }

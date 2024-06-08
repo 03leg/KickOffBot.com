@@ -6,15 +6,19 @@ import { ConnectionEditor } from './Editor/ConnectionEditor';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import FiberNewIcon from '@mui/icons-material/FiberNew';
+import { isNil } from 'lodash';
 
 
 interface Props {
     connectionType: ConnectionType;
     connectionId?: ConnectionDescription["id"];
     onConnectionIdChange: (connectionId?: ConnectionDescription["id"]) => void;
+    canCreateConnection?: boolean;
+    canEditConnection?: boolean;
+    onDeleteConnection?: (connectionId: ConnectionDescription["id"]) => void;
 }
 
-export const ConnectionSelector = ({ connectionType, connectionId, onConnectionIdChange }: Props) => {
+export const ConnectionSelector = ({ connectionType, connectionId, onConnectionIdChange, canCreateConnection = true, canEditConnection = true, onDeleteConnection }: Props) => {
     const [showNewConnectionEditor, setShowNewConnectionEditor] = useState(false);
     const [showEditConnectionEditor, setShowEditConnectionEditor] = useState(false);
     const { connections, removeConnectionById } = useFlowDesignerStore((state) => ({
@@ -32,8 +36,12 @@ export const ConnectionSelector = ({ connectionType, connectionId, onConnectionI
         //     .then(() => {
         removeConnectionById(connectionId!);
         onConnectionIdChange(undefined);
+
+        if (!isNil(connectionId)) {
+            onDeleteConnection?.(connectionId);
+        }
         // });
-    }, [connectionId, onConnectionIdChange, removeConnectionById]);
+    }, [connectionId, onConnectionIdChange, onDeleteConnection, removeConnectionById]);
 
     const handleEditConnection = useCallback(() => {
         setShowEditConnectionEditor(true);
@@ -51,7 +59,7 @@ export const ConnectionSelector = ({ connectionType, connectionId, onConnectionI
                 {connections.length === 0 &&
                     <Typography textAlign={'center'}>
                         You project doesn&lsquo;t have connections yet.<br />
-                        <Button sx={{ marginTop: 1 }} size='small' variant="contained" onClick={() => { setShowNewConnectionEditor(true) }}>Create connection</Button>
+                        {canCreateConnection && <Button sx={{ marginTop: 1 }} size='small' variant="contained" onClick={() => { setShowNewConnectionEditor(true) }}>Create connection</Button>}
                     </Typography>
                 }
                 {connections.length > 0 &&
@@ -71,12 +79,12 @@ export const ConnectionSelector = ({ connectionType, connectionId, onConnectionI
                         </FormControl>
 
                         <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                            <IconButton sx={{ ml: 1 }} size='small' aria-label="edit" disabled={!connectionId} onClick={handleEditConnection}>
+                            {canEditConnection && <IconButton sx={{ ml: 1 }} size='small' aria-label="edit" disabled={!connectionId} onClick={handleEditConnection}>
                                 <EditIcon />
-                            </IconButton>
-                            <IconButton sx={{ ml: 1 }} size='small' aria-label="new" onClick={handleNewConnection}>
+                            </IconButton>}
+                            {canCreateConnection && <IconButton sx={{ ml: 1 }} size='small' aria-label="new" onClick={handleNewConnection}>
                                 <FiberNewIcon />
-                            </IconButton>
+                            </IconButton>}
                             <IconButton sx={{ ml: 1 }} size='small' aria-label="delete" disabled={!connectionId} onClick={handleRemoveConnection}>
                                 <DeleteIcon />
                             </IconButton>

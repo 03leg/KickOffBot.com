@@ -48,14 +48,15 @@ model Session {
 }
 
 model User {
-    id            String           @id @default(cuid())
-    name          String?
-    email         String?          @unique
-    emailVerified DateTime?
-    image         String?
-    accounts      Account[]
-    sessions      Session[]
-    bots          BotDescription[]
+    id                       String                     @id @default(cuid())
+    name                     String?
+    email                    String?                    @unique
+    emailVerified            DateTime?
+    image                    String?
+    accounts                 Account[]
+    sessions                 Session[]
+    bots                     BotDescription[]
+    GoogleIntegrationAccount GoogleIntegrationAccount[]
 }
 
 model VerificationToken {
@@ -89,13 +90,23 @@ model BotContent {
 }
 
 model BotToken {
-    id             String         @id @default(cuid())
-    botId          String
-    token          String
-    createdAt      DateTime       @default(now())
-    isActive       Boolean        @default(false)
+    id                 String         @id @default(cuid())
+    botId              String
+    token              String
+    createdAt          DateTime       @default(now())
+    isActive           Boolean        @default(false)
     requestActiveValue Boolean?
-    botDescription BotDescription @relation(fields: [botId], references: [id], onDelete: Cascade)
+    botDescription     BotDescription @relation(fields: [botId], references: [id], onDelete: Cascade)
+}
+
+model GoogleIntegrationAccount {
+    id        String   @id @default(cuid())
+    userId    String
+    email     String
+    accessToken String @db.Text
+    credentials String @db.Text
+    createdAt DateTime @default(now())
+    user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 // npx prisma generate

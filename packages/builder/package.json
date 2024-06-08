@@ -54,7 +54,9 @@
     "zustand": "^4.4.4",
     "@kickoffbot.com/types": "1.0.0",
     "emoji-picker-react": "4.8.0",
-    "@monaco-editor/react": "4.6.0"
+    "@monaco-editor/react": "4.6.0",
+    "google-auth-library": "9.10.0",
+    "google-spreadsheet": "4.1.2"
   },
   "devDependencies": {
     "@types/eslint": "^8.37.0",

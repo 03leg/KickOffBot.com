@@ -37,6 +37,7 @@ export const env = createEnv({
    */
   client: {
     // NEXT_PUBLIC_CLIENTVAR: z.string().min(1),
+    NEXT_PUBLIC_GOOGLE_API_KEY: z.string(),
   },
 
   /**
@@ -54,7 +55,8 @@ export const env = createEnv({
     TELEGRAM_BOT_TOKEN: process.env.TELEGRAM_BOT_TOKEN,
     SUPABASE_SERVICE_TOKEN: process.env.SUPABASE_SERVICE_TOKEN,
     SUPABASE_URL: process.env.SUPABASE_URL,
-    SUPABASE_BUCKET_ID: process.env.SUPABASE_BUCKET_ID
+    SUPABASE_BUCKET_ID: process.env.SUPABASE_BUCKET_ID,
+    NEXT_PUBLIC_GOOGLE_API_KEY: process.env.NEXT_PUBLIC_GOOGLE_API_KEY
   },
   /**
    * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation.

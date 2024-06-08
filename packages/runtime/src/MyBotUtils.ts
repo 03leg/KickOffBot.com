@@ -106,7 +106,7 @@ export class MyBotUtils {
           if (VariableConverter.COUNT === converter) {
             return variableValue.length.toString();
           }
-          
+
           throwIfNil(path);
           const valueForArrayOfObjects = MyBotUtils.getValueForArrayOfNumbers(
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -133,11 +133,11 @@ export class MyBotUtils {
     switch (converter) {
       case VariableConverter.SUM: {
         const v = arrayOfNumbers.reduce((partialSum: number, a: number) => partialSum + a, 0);
-        return Math.ceil(v * 100) / 100 ;
+        return Math.ceil(v * 100) / 100;
       }
       case VariableConverter.AVG: {
-        const v =  arrayOfNumbers.reduce((partialSum: number, a: number) => partialSum + a, 0) / arrayOfNumbers.length;
-        return Math.ceil(v * 100) / 100 ;
+        const v = arrayOfNumbers.reduce((partialSum: number, a: number) => partialSum + a, 0) / arrayOfNumbers.length;
+        return Math.ceil(v * 100) / 100;
       }
       case VariableConverter.MAX: {
         return Math.max(...arrayOfNumbers);
@@ -338,5 +338,24 @@ export class MyBotUtils {
         throw new Error("NotImplementedError");
       }
     }
+  }
+
+  public static convertStringSheetCellValue(cellValue: string, sampleValue: unknown): unknown {
+    try {
+      switch (typeof sampleValue) {
+        case "boolean": {
+          if (cellValue.toUpperCase() === "TRUE" || cellValue.toUpperCase() === "YES" || cellValue.toUpperCase() === "1") {
+            return true;
+          }
+
+          return false;
+        }
+        case "number": {
+          return Number(cellValue.replace(",", "."));
+        }
+      }
+    } catch {}
+
+    return cellValue;
   }
 }

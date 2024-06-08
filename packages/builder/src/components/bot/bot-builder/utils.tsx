@@ -1,7 +1,7 @@
-import { type ContentTextUIElement, ElementType, type InputTextUIElement, type FlowDesignerUIBlockDescription, type UIElement, type InputButtonsUIElement, type FlowDesignerLink, type ButtonPortDescription, type BotVariable, BlockType, TransformDescription, ChangeVariableUIElement, ConditionUIElement, LogicalOperator, ButtonsSourceStrategy, CommandsUIElement, EditMessageUIElement, EditMessageOperation, RemoveMessageUIElement, VariableConverter, SendTelegramMessageIntegrationUIElement } from "@kickoffbot.com/types";
+import { type ContentTextUIElement, ElementType, type InputTextUIElement, type FlowDesignerUIBlockDescription, type UIElement, type InputButtonsUIElement, type FlowDesignerLink, type ButtonPortDescription, type BotVariable, BlockType, TransformDescription, ChangeVariableUIElement, ConditionUIElement, LogicalOperator, ButtonsSourceStrategy, CommandsUIElement, EditMessageUIElement, EditMessageOperation, RemoveMessageUIElement, VariableConverter, SendTelegramMessageIntegrationUIElement, GoogleSheetsIntegrationUIElement } from "@kickoffbot.com/types";
 import MessageIcon from '@mui/icons-material/Message';
 import TextFieldsIcon from '@mui/icons-material/TextFields';
-import { isNil } from "lodash";
+import { isNil, size } from "lodash";
 import { type DraggableElementData } from "./ToolBox/types";
 import { v4 } from "uuid";
 import { type DragEndEvent } from "@dnd-kit/core";
@@ -14,6 +14,7 @@ import ForkLeftIcon from '@mui/icons-material/ForkLeft';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import TelegramIcon from '@mui/icons-material/Telegram';
+import GoogleIcon from '@mui/icons-material/Google';
 
 
 export function getContentElements() {
@@ -48,6 +49,7 @@ export function getLogicElements() {
 export function getIntegrationsElements() {
     return [
         { type: ElementType.INTEGRATION_SEND_TELEGRAM_MESSAGE, title: 'Send message to telegram channel or group', icon: <TelegramIcon />, size: 12 },
+        { type: ElementType.INTEGRATION_GOOGLE_SHEETS, title: 'Google spreadsheets', icon: <GoogleIcon />, size: 12 },
     ];
 }
 
@@ -134,6 +136,14 @@ export function getNewUIElementTemplate(id: string, data: DraggableElementData):
                 id,
                 type: ElementType.INTEGRATION_SEND_TELEGRAM_MESSAGE,
             };
+            return result;
+        }
+        case ElementType.INTEGRATION_GOOGLE_SHEETS: {
+            const result: GoogleSheetsIntegrationUIElement = {
+                id,
+                type: ElementType.INTEGRATION_GOOGLE_SHEETS,
+            }
+
             return result;
         }
         default: {

@@ -13,6 +13,7 @@ export enum ElementType {
   LOGIC_REMOVE_MESSAGE = "logic-remove-message",
 
   INTEGRATION_SEND_TELEGRAM_MESSAGE = "integration-send-telegram-message",
+  INTEGRATION_GOOGLE_SHEETS = "integration-google-sheets",
 }
 
 export interface UIElement {
@@ -335,6 +336,7 @@ export interface SendTelegramMessageIntegrationUIElement extends UIElement, Mess
 
 export enum ConnectionType {
   Telegram,
+  Google,
 }
 
 export interface ConnectionDescription {
@@ -346,4 +348,63 @@ export interface ConnectionDescription {
 export interface TelegramConnectionDescription extends ConnectionDescription {
   botToken: string;
   targetChatId: string;
+}
+
+export interface GoogleSheetsConnectionDescription extends ConnectionDescription {
+  email: string;
+  accessToken: string;
+  credentials?: unknown;
+}
+export interface SelectedGoogleSpreadSheet {
+  name: string;
+  id: string;
+}
+export interface GoogleSheetsIntegrationUIElement extends UIElement {
+  connectionId?: GoogleSheetsConnectionDescription["id"];
+  selectedSpreadSheet?: SelectedGoogleSpreadSheet;
+  selectedSheet?: SheetDescription;
+
+  dataOperation?: DataSpreedSheetOperation;
+
+  dataOperationDescription?: ReadRowsToArrayDescription | InsertRowsFromVariableDescription | UpdateRowsFromObjectVariableDescription;
+}
+
+interface ReadRowsToArrayDescription {
+  variableId: BotVariable["id"];
+}
+
+interface InsertRowsFromVariableDescription {
+  variableId: BotVariable["id"];
+}
+
+export interface SpreadSheetRowsFilterConditionItem {
+  id: string;
+  header?: string;
+  operator?: ConditionOperator;
+  value?: string | number | boolean;
+
+  variableIdValue?: string;
+  pathVariableIdValue?: string;
+}
+
+export interface SpreadSheetRowsFilter {
+  operator: LogicalOperator;
+  conditions: SpreadSheetRowsFilterConditionItem[];
+}
+
+export interface UpdateRowsFromObjectVariableDescription {
+  variableId: BotVariable["id"];
+  filter?: SpreadSheetRowsFilter;
+}
+
+export interface SheetDescription {
+  id: number;
+  title: string;
+  headerValues: string[];
+}
+
+export enum DataSpreedSheetOperation {
+  READ_ROWS_TO_ARRAY = "READ_ROWS_TO_ARRAY",
+  INSERT_ROWS_FROM_VARIABLE = "INSERT_ROWS_FROM_VARIABLE",
+  UPDATE_ROWS_FROM_OBJECT_VARIABLE = "UPDATE_ROWS_FROM_OBJECT_VARIABLE",
 }

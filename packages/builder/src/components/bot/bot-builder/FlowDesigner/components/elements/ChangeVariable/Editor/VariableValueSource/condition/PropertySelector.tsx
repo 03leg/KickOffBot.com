@@ -3,12 +3,13 @@ import React, { useCallback } from 'react'
 
 interface Props {
     propsDataSource?: string[];
-    arrayObject: object;
+    arrayObject?: object;
     selectedPropertyName?: string;
     onPropertyNameChange: (propertyName: string) => void;
+    label?: string;
 }
 
-export const PropertySelector = ({ arrayObject, selectedPropertyName = '', onPropertyNameChange, propsDataSource = Object.keys(arrayObject) }: Props) => {
+export const PropertySelector = ({ label = 'Property', arrayObject, selectedPropertyName = '', onPropertyNameChange, propsDataSource = arrayObject ? Object.keys(arrayObject) : [] }: Props) => {
     const handlePropertyChange = useCallback((event: SelectChangeEvent<string>) => {
         onPropertyNameChange(event.target.value);
 
@@ -20,11 +21,11 @@ export const PropertySelector = ({ arrayObject, selectedPropertyName = '', onPro
 
     return (
         <FormControl fullWidth>
-            <InputLabel id="property-selector-label">Property</InputLabel>
+            <InputLabel id="property-selector-label">{label}</InputLabel>
             <Select
                 labelId="property-selector-label"
                 value={selectedPropertyName}
-                label='Property'
+                label={label}
                 onChange={handlePropertyChange}
             >
                 {propsDataSource.map(p =>

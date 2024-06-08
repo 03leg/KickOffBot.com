@@ -53,4 +53,5 @@ export interface FlowDesignerState {
 
   saveConnection: (connection: ConnectionDescription) => void;
   removeConnectionById: (connectionId: ConnectionDescription["id"]) => void;
+  setActualGoogleConnections: (value: ConnectionDescription[]) => void;
 }
