@@ -2,7 +2,6 @@ import { isNil } from "lodash";
 import type { NextApiRequest, NextApiResponse } from "next";
 import { google_spreadsheets_scopes } from "~/constants";
 import { googleOAuthClient } from "~/constants/google-auth/googleOAuthClient";
-import { googleIntegration } from "~/server/api/routers/googleIntegration";
 import { prisma } from "~/server/db";
 
 interface ResponseData {

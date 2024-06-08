@@ -19,7 +19,7 @@ export default function handler(
       state: btoa(JSON.stringify({ userId: req.query.userId })),
       ...(process.env.NODE_ENV === "production"
         ? {
-            redirect_uri: "https://www.kickoffbot.com/api/google-auth/callback",
+            redirect_uri: env.NEXTAUTH_URL+"/api/google-auth/callback",
           }
         : {}),
     });
