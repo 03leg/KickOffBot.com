@@ -28,6 +28,7 @@ export const env = createEnv({
     SUPABASE_SERVICE_TOKEN: z.string(),
     SUPABASE_URL: z.string(),
     SUPABASE_BUCKET_ID: z.string(),
+    APP_URL: z.string(),
   },
 
   /**
@@ -56,7 +57,8 @@ export const env = createEnv({
     SUPABASE_SERVICE_TOKEN: process.env.SUPABASE_SERVICE_TOKEN,
     SUPABASE_URL: process.env.SUPABASE_URL,
     SUPABASE_BUCKET_ID: process.env.SUPABASE_BUCKET_ID,
-    NEXT_PUBLIC_GOOGLE_API_KEY: process.env.NEXT_PUBLIC_GOOGLE_API_KEY
+    NEXT_PUBLIC_GOOGLE_API_KEY: process.env.NEXT_PUBLIC_GOOGLE_API_KEY,
+    APP_URL: process.env.APP_URL,
   },
   /**
    * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation.
