@@ -7,6 +7,7 @@ import {
   VariableType,
   BotTemplate,
   ConnectionDescription,
+  ConnectionType,
 } from "@kickoffbot.com/types";
 import { isNil, remove } from "lodash";
 import { type PositionDescription } from "@kickoffbot.com/types";
@@ -283,11 +284,17 @@ export const useFlowDesignerStore = create<FlowDesignerState>()((set, get) => ({
 
       return { project };
     }),
-  addNewConnection: (connection: ConnectionDescription) =>
+  setActualGoogleConnections: (
+    actualGoogleConnections: ConnectionDescription[]
+  ) =>
     set((state) => {
       const project = state.project;
 
-      project.connections = [...(project.connections ?? []), connection];
+      project.connections = [
+        ...(actualGoogleConnections.filter(
+          (c) => c.type !== ConnectionType.Google
+        ) ?? []), ...actualGoogleConnections
+      ];
 
       return { project };
     }),

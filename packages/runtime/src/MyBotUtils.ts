@@ -351,7 +351,7 @@ export class MyBotUtils {
           return false;
         }
         case "number": {
-          return Number(cellValue);
+          return Number(cellValue.replace(",", "."));
         }
       }
     } catch {}

@@ -493,6 +493,7 @@ export class MyTelegramBot {
       case ElementType.LOGIC_EDIT_MESSAGE:
       case ElementType.LOGIC_REMOVE_MESSAGE:
       case ElementType.INTEGRATION_SEND_TELEGRAM_MESSAGE:
+      case ElementType.INTEGRATION_GOOGLE_SHEETS:
       case ElementType.CONTENT_TEXT: {
         await this.handleElement(userContext, context, block, nextElement);
         break;

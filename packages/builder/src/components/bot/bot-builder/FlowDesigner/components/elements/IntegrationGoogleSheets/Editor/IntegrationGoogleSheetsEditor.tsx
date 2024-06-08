@@ -21,18 +21,18 @@ export const IntegrationGoogleSheetsEditor = ({ element }: Props) => {
     const { data: sessionData } = useSession();
     const [connectionId, setConnectionId] = React.useState<string | undefined>(element.connectionId);
     const { data, refetch, isLoading: isAccountsLoading } = api.googleIntegration.getGoogleAccounts.useQuery();
-    const { connections, addNewConnection } = useFlowDesignerStore((state) => ({
+    const { connections, setActualGoogleConnections } = useFlowDesignerStore((state) => ({
         connections: (state.project.connections ?? []).filter(c => c.type === ConnectionType.Google),
-        addNewConnection: state.addNewConnection
+        setActualGoogleConnections: state.setActualGoogleConnections
     }));
     const { mutateAsync, isLoading: isAccountDeleting } = api.googleIntegration.deleteGoogleAccount.useMutation();
     const [selectedSpreadSheet, setSelectedSpreadSheet] = useState<SelectedGoogleSpreadSheet | undefined>(element.selectedSpreadSheet);
     const [selectedSheet, setSelectedSheet] = useState<SheetDescription | undefined>(element.selectedSheet);
 
-    const { data: availableSheets, refetch: refetchSheets, isLoading: isSheetsLoading } = api.googleIntegration.getSheets.useQuery({
+    const { data: availableSheets, isLoading: isSheetsLoading } = api.googleIntegration.getSheets.useQuery({
         connectionId: connectionId,
         spreadSheetId: selectedSpreadSheet?.id ?? undefined
-    }, { enabled: connectionId !== undefined && selectedSpreadSheet !== undefined });
+    });
 
     // eslint-disable-next-line @typescript-eslint/no-redundant-type-constituents
     const [dataOperation, setDataOperation] = useState<DataSpreedSheetOperation | undefined>(element.dataOperation);
@@ -44,21 +44,21 @@ export const IntegrationGoogleSheetsEditor = ({ element }: Props) => {
             return;
         }
 
-        for (const connection of data) {
-            if (!connections.find(c => c.id === connection.id)) {
-                const googleConnection: GoogleSheetsConnectionDescription = {
-                    id: connection.id,
-                    name: connection.email,
-                    type: ConnectionType.Google,
-                    accessToken: connection.accessToken,
-                    email: connection.email
-                };
-                addNewConnection(googleConnection);
-            }
+        const googleAccounts = data.map(c => ({
+            id: c.id,
+            name: c.email,
+            type: ConnectionType.Google,
+            accessToken: c.accessToken,
+        }));
+
+        if (!googleAccounts.some(c => c.id === connectionId)) {
+            setConnectionId(undefined);
         }
 
+        setActualGoogleConnections(googleAccounts);
+
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [data]);
+    }, [data, setActualGoogleConnections]);
 
     const handleConnectionIdChange = useCallback((connectionId?: string) => {
         element.connectionId = connectionId;
@@ -164,7 +164,7 @@ export const IntegrationGoogleSheetsEditor = ({ element }: Props) => {
             }
 
 
-            {selectedSheet && <Box sx={{ mt: 2 }}>
+            {selectedSheet && connectionId && <Box sx={{ mt: 2 }}>
                 <RadioGroup sx={{ flex: 1 }} value={dataOperation} onChange={handleDataOperationChange}>
                     <FormControlLabel value={DataSpreedSheetOperation.READ_ROWS_TO_ARRAY} control={<Radio />} label="Import rows to variable" />
                     <FormControlLabel value={DataSpreedSheetOperation.INSERT_ROWS_FROM_VARIABLE} control={<Radio />} label="Insert row or rows from variable" />
@@ -173,15 +173,15 @@ export const IntegrationGoogleSheetsEditor = ({ element }: Props) => {
             </Box>
             }
 
-            {dataOperation === DataSpreedSheetOperation.READ_ROWS_TO_ARRAY && selectedSheet &&
+            {dataOperation === DataSpreedSheetOperation.READ_ROWS_TO_ARRAY && selectedSheet && connectionId &&
                 <ReadRowsToArrayEditor googleSheetHeaders={selectedSheet.headerValues} element={element} />
             }
 
-            {dataOperation === DataSpreedSheetOperation.INSERT_ROWS_FROM_VARIABLE && selectedSheet &&
+            {dataOperation === DataSpreedSheetOperation.INSERT_ROWS_FROM_VARIABLE && selectedSheet && connectionId &&
                 <InsertRowsFromVariableEditor googleSheetHeaders={selectedSheet.headerValues} element={element} />
             }
 
-            {dataOperation === DataSpreedSheetOperation.UPDATE_ROWS_FROM_OBJECT_VARIABLE && selectedSheet &&
+            {dataOperation === DataSpreedSheetOperation.UPDATE_ROWS_FROM_OBJECT_VARIABLE && selectedSheet && connectionId &&
                 <UpdateRowsFromVariableEditor googleSheetHeaders={selectedSheet.headerValues} element={element} />
             }
 

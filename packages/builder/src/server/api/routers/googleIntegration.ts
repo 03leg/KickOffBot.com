@@ -5,6 +5,7 @@ import { z } from "zod";
 import { googleOAuthClient } from "~/constants/google-auth/googleOAuthClient";
 import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
 import { prisma } from "~/server/db";
+import { updateGoogleAccountTokens } from "~/utils/updateGoogleAccountTokens";
 
 export const googleIntegration = createTRPCRouter({
   getGoogleAccounts: protectedProcedure.query(async ({ ctx, input }) => {
@@ -13,6 +14,22 @@ export const googleIntegration = createTRPCRouter({
     const googleAccounts = await prisma.googleIntegrationAccount.findMany({
       where: { userId },
     });
+
+    for (const googleAccount of googleAccounts) {
+      const updatedCredentials = await updateGoogleAccountTokens(
+        googleAccount.credentials
+      );
+
+      googleAccount.accessToken = updatedCredentials.credentials.access_token ?? '';
+
+      void prisma.googleIntegrationAccount.update({
+        where: { id: googleAccount.id },
+        data: {
+          credentials: btoa(JSON.stringify(updatedCredentials)),
+          accessToken: updatedCredentials.credentials.access_token ?? '',
+        },
+      });
+    }
 
     return googleAccounts;
   }),
@@ -26,17 +43,21 @@ export const googleIntegration = createTRPCRouter({
       });
     }),
   getSheets: protectedProcedure
-    .input(z.object({ connectionId: z.string().optional(), spreadSheetId: z.string().optional() }))
+    .input(
+      z.object({
+        connectionId: z.string().optional(),
+        spreadSheetId: z.string().optional(),
+      })
+    )
     .query(async ({ ctx, input }) => {
-
-      if(!input.connectionId || !input.spreadSheetId) return [];
+      if (!input.connectionId || !input.spreadSheetId) return [];
 
       const userId = ctx.session?.user.id;
       const connection = await prisma.googleIntegrationAccount.findUnique({
         where: { id: input.connectionId, userId },
       });
       if (!connection) {
-        throw new Error("Connection not found");
+        return [];
       }
 
       googleOAuthClient.setCredentials({
