@@ -12,6 +12,7 @@ import { ReadRowsToArrayEditor } from './ReadRowsToArrayEditor';
 import { LoadingIndicator } from '~/components/commons/LoadingIndicator';
 import { InsertRowsFromVariableEditor } from './InsertRowsFromVariableEditor';
 import { UpdateRowsFromVariableEditor } from './UpdateRowsFromVariableEditor';
+import GoogleButton from 'react-google-button'
 
 interface Props {
     element: GoogleSheetsIntegrationUIElement;
@@ -138,8 +139,11 @@ export const IntegrationGoogleSheetsEditor = ({ element }: Props) => {
                 onConnectionIdChange={handleConnectionIdChange} />
 
             <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-                <Button variant="contained" size='small' color="success" onClick={handleNewGoogleAccount}>Add new google account</Button>
-                <Button sx={{ marginLeft: 1 }} variant='contained' startIcon={<SyncIcon />} size='small' onClick={handleSyncGoogleConnections}>Refresh list connections</Button>
+                {/* <Button variant="contained" size='small' color="success" onClick={handleNewGoogleAccount}>Add new google account</Button> */}
+                <GoogleButton
+                    onClick={handleNewGoogleAccount}
+                />
+                {/* <Button sx={{ marginLeft: 1 }} variant='contained' startIcon={<SyncIcon />} size='small' onClick={handleSyncGoogleConnections}>Refresh list connections</Button> */}
             </Box>
 
             {connectionId && <Box sx={{ mt: 2, display: 'flex', alignItems: 'center' }}>
