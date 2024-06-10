@@ -1,16 +1,4 @@
-/* @tailwind base; */
-@tailwind components;
-@tailwind utilities;
 
-@layer components {
-    #__next {
-        @apply h-full;
-    }
-    html,
-    body {
-        @apply h-full;
-    }
-}
 
 body .picker {
     z-index: 1400 !important;
