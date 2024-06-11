@@ -1,4 +1,4 @@
-import { Box, IconButton, Menu, MenuItem } from '@mui/material';
+import { Box, IconButton } from '@mui/material';
 import React, { useCallback } from 'react'
 import { Editor, EditorState, Modifier, RichUtils, convertToRaw } from 'draft-js';
 import 'draft-js/dist/Draft.css';
@@ -45,7 +45,7 @@ export const TextEditor = ({ onContentChange, initialState, contextObjectPropert
             inlineStyles: {
                 BOLD: { element: 'b' },
             }
-        }).replaceAll('<p>', '').replaceAll('</p>', '').replaceAll('<br>', '');
+        }).replaceAll('<p>', '').replaceAll('</p>', '').replaceAll('<br>', '').replaceAll('&nbsp;', ' ');
 
         onContentChange(jsonContent, htmlContent, telegramContent);
     }, [onContentChange]);

@@ -164,6 +164,8 @@ export class MyBotUtils {
           content = (index + 1).toString();
         } else if (isPlainObject(contextObject)) {
           content = (contextObject as Record<string, string>)[property] ?? "";
+        } else if ((m[0] === "<%value%>" || m[0] === "&lt;%value%&gt;") && ["string", "number", "boolean"].includes(typeof contextObject)) {
+          content = contextObject as string;
         }
 
         textArgument = textArgument.replace(m[0], content);

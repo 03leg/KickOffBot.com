@@ -55,15 +55,20 @@ export const TemplateEditor = ({ template, onTemplateChange }: Props) => {
         }
         const variable = getVariableById(contextVariableId);
 
-        if (isNil(variable) || variable.type !== VariableType.ARRAY || isNil(variable.arrayItemType) || variable.arrayItemType !== VariableType.OBJECT) {
+        if (isNil(variable) || variable.type !== VariableType.ARRAY) {
             return undefined;
         }
 
         const result = ["index"];
-        const values = JSON.parse(variable.value as string);
-        const firstValue = values[0];
 
-        result.push(...Object.keys(firstValue));
+        if (variable.arrayItemType === VariableType.OBJECT) {
+            const values = JSON.parse(variable.value as string);
+            const firstValue = values[0];
+
+            result.push(...Object.keys(firstValue));
+        } else {
+            result.push("value");
+        }
 
 
         return result;

@@ -18,14 +18,14 @@ export class ChangeObjectVariableHelper {
         variableId: workflow.variableSource.variableId,
       },
       userContext,
-      utils
+      utils,
     );
-    
-    if(typeof value === 'object' && !Array.isArray(value)){
-        return value;
+
+    if (typeof value === "object" && !Array.isArray(value)) {
+      return value;
     }
 
-    const arrayFromVariable = value as unknown[];
+    const arrayFromVariable = this.getActualArrayValue(value as unknown[], workflow, userContext, utils);
 
     switch (workflow.variableSource.arrayFilter?.mode) {
       case ArrayFilterType.FIRST: {
@@ -38,21 +38,27 @@ export class ChangeObjectVariableHelper {
       case ArrayFilterType.RANDOM_ITEM: {
         return arrayFromVariable[Math.floor(Math.random() * arrayFromVariable.length)];
       }
-      case ArrayFilterType.CONDITIONS: {
-        const filterArray = ChangeArrayVariableHelper.checkConditions(
-          userContext,
-          utils,
-          arrayFromVariable,
-          workflow.variableSource.arrayFilter?.conditions,
-          workflow.variableSource.arrayFilter?.logicalOperator
-        );
-
-        return filterArray[0];
-      }
-
       default: {
         throw new Error("NotImplemented");
       }
     }
+  }
+
+  private static getActualArrayValue(value: unknown[], workflow: ChangeObjectVariableWorkflow, userContext: UserContext, utils: MyBotUtils) {
+    throwIfNil(workflow.variableSource?.variableId);
+
+    if ((workflow.variableSource.arrayFilter?.conditions?.length ?? -1) === 0) {
+      return value;
+    }
+
+    const filteredArray = ChangeArrayVariableHelper.checkConditions(
+      userContext,
+      utils,
+      value,
+      workflow.variableSource.arrayFilter?.conditions,
+      workflow.variableSource.arrayFilter?.logicalOperator,
+    );
+
+    return filteredArray;
   }
 }

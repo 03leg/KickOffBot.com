@@ -1,6 +1,6 @@
-import { LogicalOperator, PropertyConditionItem, RemoveItemsFromArrayDescription, VariableType } from '@kickoffbot.com/types';
-import { Box } from '@mui/material';
-import React, { useCallback, useEffect, useState } from 'react'
+import { LogicalOperator, PropertyConditionItem, RemoveItemFromArrayMode, RemoveItemsFromArrayDescription } from '@kickoffbot.com/types';
+import { Box, FormControlLabel, Radio, RadioGroup } from '@mui/material';
+import React, { useCallback, useEffect } from 'react'
 import { PropertyConditionsComponent } from '../VariableValueSource/PropertyConditionsComponent';
 
 interface Props {
@@ -10,11 +10,11 @@ interface Props {
 }
 
 export const RemoveItemsFromArray = ({ value, onValueChange, itemOfArray }: Props) => {
-    const [removeItemsFromArrayValue, setRemoveItemsFromArrayValue] = React.useState<RemoveItemsFromArrayDescription>(value ?? { conditions: [] } as RemoveItemsFromArrayDescription);
+    const [removeItemsFromArrayValue, setRemoveItemsFromArrayValue] = React.useState<RemoveItemsFromArrayDescription>(value ?? { conditions: [], mode: RemoveItemFromArrayMode.ALL } as RemoveItemsFromArrayDescription);
 
     useEffect(() => {
         onValueChange(removeItemsFromArrayValue);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [removeItemsFromArrayValue]);
 
 
@@ -26,8 +26,19 @@ export const RemoveItemsFromArray = ({ value, onValueChange, itemOfArray }: Prop
         setRemoveItemsFromArrayValue({ ...removeItemsFromArrayValue, logicalOperator })
     }, [removeItemsFromArrayValue]);
 
+    const handleRemoveModeChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
+        const newValue = event.target.value as RemoveItemFromArrayMode;
+        setRemoveItemsFromArrayValue({ ...removeItemsFromArrayValue, mode: newValue });
+    }, [removeItemsFromArrayValue]);
+
     return (
         <Box>
+            <RadioGroup sx={{ ml: 3.5 }} value={removeItemsFromArrayValue.mode} onChange={handleRemoveModeChange}>
+                <FormControlLabel value={RemoveItemFromArrayMode.ALL} control={<Radio />} label="All items" />
+                <FormControlLabel value={RemoveItemFromArrayMode.FIRST} control={<Radio />} label="First item" />
+                <FormControlLabel value={RemoveItemFromArrayMode.LAST} control={<Radio />} label="Last item" />
+                <FormControlLabel value={RemoveItemFromArrayMode.RANDOM} control={<Radio />} label="Random item" />
+            </RadioGroup>
             <PropertyConditionsComponent arrayObject={itemOfArray}
                 conditions={removeItemsFromArrayValue.conditions}
                 logicalOperator={removeItemsFromArrayValue.logicalOperator ?? LogicalOperator.AND}

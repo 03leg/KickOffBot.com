@@ -10,8 +10,14 @@ interface Props {
     arrayObject: unknown;
 }
 
+const defaultArrayFilter: ArrayFilter = {
+    mode: ArrayFilterType.FIRST,
+    conditions: [],
+    logicalOperator: LogicalOperator.AND
+}
+
 export const ArrayFilterComponent = ({ arrayFilter, onArrayFilterChange, arrayObject }: Props) => {
-    const [arrayFilterValue, setArrayFilterValue] = useState<ArrayFilter>(arrayFilter ?? {} as ArrayFilter);
+    const [arrayFilterValue, setArrayFilterValue] = useState<ArrayFilter>(arrayFilter ?? { ...defaultArrayFilter } as ArrayFilter);
 
     const handleValueDataSourceChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
         const newValue = event.target.value as ArrayFilterType;
@@ -30,8 +36,7 @@ export const ArrayFilterComponent = ({ arrayFilter, onArrayFilterChange, arrayOb
 
     useEffect(() => {
         if (isNil(arrayFilter)) {
-            setArrayFilterValue({} as ArrayFilter);
-            console.log('clearing array filter');
+            setArrayFilterValue({ ...defaultArrayFilter });
         }
     }, [arrayFilter])
 
@@ -41,10 +46,9 @@ export const ArrayFilterComponent = ({ arrayFilter, onArrayFilterChange, arrayOb
                 <FormControlLabel value={ArrayFilterType.FIRST} control={<Radio />} label="First item" />
                 <FormControlLabel value={ArrayFilterType.LAST} control={<Radio />} label="Last item" />
                 <FormControlLabel value={ArrayFilterType.RANDOM_ITEM} control={<Radio />} label="Random item" />
-                {Boolean(arrayObject) && <FormControlLabel value={ArrayFilterType.CONDITIONS} control={<Radio />} label="First item matching conditions" />}
             </RadioGroup>
 
-            {arrayFilterValue.mode === ArrayFilterType.CONDITIONS && Boolean(arrayObject) &&
+            {Boolean(arrayObject) &&
                 <PropertyConditionsComponent arrayObject={arrayObject} conditions={arrayFilterValue.conditions} logicalOperator={arrayFilterValue.logicalOperator}
                     onPropertyConditionsChange={handlePropertyConditionsChange}
                     onLogicalOperatorChange={(operator) => setArrayFilterValue({ ...arrayFilterValue, logicalOperator: operator })} />}
