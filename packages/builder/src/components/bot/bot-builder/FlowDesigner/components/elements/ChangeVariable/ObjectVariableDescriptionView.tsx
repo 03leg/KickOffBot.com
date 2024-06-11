@@ -4,6 +4,7 @@ import { useVariableInTextStyles } from './useContentWithVariable';
 import { makeStyles } from 'tss-react/mui';
 import { useFlowDesignerStore } from '~/components/bot/bot-builder/store';
 import { getConditionOperatorLabelByType } from '../Condition/utils';
+import { isNil } from 'lodash';
 
 interface Props {
   workflow: ChangeObjectVariableWorkflow;
@@ -59,14 +60,14 @@ export const ObjectVariableDescriptionView = ({ workflow, variable }: Props) => 
       {workflow.source === ChangeObjectVariableDataSource.VARIABLE && (sourceVariable?.type === VariableType.ARRAY || objectPropertyIsArray) &&
         <span>
           {<span>
-            {workflow.variableSource?.arrayFilter?.mode === ArrayFilterType.FIRST || workflow.variableSource?.arrayFilter?.mode === ArrayFilterType.CONDITIONS ? 'first ' : null}
+            {workflow.variableSource?.arrayFilter?.mode === ArrayFilterType.FIRST ? 'first ' : null}
             {workflow.variableSource?.arrayFilter?.mode === ArrayFilterType.LAST ? 'last ' : null}
             {workflow.variableSource?.arrayFilter?.mode === ArrayFilterType.RANDOM_ITEM ? 'random ' : null}
             element from{' '}
           </span>}
           <span className={classes.variable}>{sourceVariable?.name}</span>
           {workflow.variableSource?.path && <span> (property <span className={classes.propertyName}>{workflow.variableSource?.path}</span>) </span>}
-          {workflow.variableSource?.arrayFilter?.mode === ArrayFilterType.CONDITIONS ? <>
+          {!isNil(workflow.variableSource?.arrayFilter) && (workflow.variableSource?.arrayFilter?.conditions?.length ?? 0) > 0 ? <>
             <span> where </span>
             {workflow.variableSource?.arrayFilter?.conditions?.map((condition, index) => {
               return (

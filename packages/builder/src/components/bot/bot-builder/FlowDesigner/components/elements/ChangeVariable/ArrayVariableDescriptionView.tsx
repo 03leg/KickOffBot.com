@@ -1,4 +1,4 @@
-import { ArrayFilterType, BotVariable, ChangeArrayOperation, ChangeArrayVariableWorkflow, ChangeObjectVariableDataSource, ChangeObjectVariableWorkflow, VariableType } from '@kickoffbot.com/types';
+import { BotVariable, ChangeArrayOperation, ChangeArrayVariableWorkflow, RemoveItemFromArrayMode } from '@kickoffbot.com/types';
 import React, { useMemo } from 'react'
 import { useVariableInTextStyles } from './useContentWithVariable';
 import { makeStyles } from 'tss-react/mui';
@@ -110,7 +110,12 @@ export const ArrayVariableDescriptionView = ({ workflow, variable }: Props) => {
     return (
         <div>
             {workflow.operation === ChangeArrayOperation.Remove && <span>
-                Remove items from <span className={classes.variable}>{variable?.name}</span>
+                Remove
+                {workflow.removeDescription?.mode === undefined || workflow.removeDescription?.mode === RemoveItemFromArrayMode.ALL && ' all items '}
+                {workflow.removeDescription?.mode === RemoveItemFromArrayMode.FIRST && ' first item '}
+                {workflow.removeDescription?.mode === RemoveItemFromArrayMode.LAST && ' last item '}
+                {workflow.removeDescription?.mode === RemoveItemFromArrayMode.RANDOM && ' random item '}
+                from <span className={classes.variable}>{variable?.name}</span>
             </span>}
             {workflow.operation === ChangeArrayOperation.Add && <span>
                 Add items to <span className={classes.variable}>{variable?.name}</span>

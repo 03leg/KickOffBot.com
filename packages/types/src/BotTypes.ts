@@ -112,7 +112,6 @@ export enum ArrayFilterType {
   FIRST = "FIRST",
   LAST = "LAST",
   RANDOM_ITEM = "RANDOM_ITEM",
-  CONDITIONS = "CONDITIONS",
 }
 
 export interface ArrayFilter {
@@ -165,7 +164,16 @@ export interface AddValueToArrayDescription {
   variableSourceDescription?: AddValueToArrayVariableSourceDescription;
 }
 
-export type RemoveItemsFromArrayDescription = AddValueToArrayFilterDescription;
+export enum RemoveItemFromArrayMode {
+  FIRST = "FIRST",
+  LAST = "LAST",
+  RANDOM = "RANDOM",
+  ALL = "ALL",
+}
+
+export interface RemoveItemsFromArrayDescription extends AddValueToArrayFilterDescription {
+  mode: RemoveItemFromArrayMode;
+}
 
 export interface ChangeArrayVariableWorkflow {
   operation: ChangeArrayOperation;

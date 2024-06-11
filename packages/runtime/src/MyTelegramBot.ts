@@ -49,11 +49,7 @@ export class MyTelegramBot {
   private _state = new Map<number, UserContext>();
   private _utils = new MyBotUtils();
   private _messageStore = new MessagesStore();
-  private _googleOAuthClient = new OAuth2Client(
-    env.GOOGLE_CLIENT_ID,
-    env.GOOGLE_CLIENT_SECRET,
-    `${env.APP_URL}/api/google-auth/callback`,
-  );
+  private _googleOAuthClient = new OAuth2Client(env.GOOGLE_CLIENT_ID, env.GOOGLE_CLIENT_SECRET, `${env.APP_URL}/api/google-auth/callback`);
 
   constructor(token: string, botProject: BotProject) {
     this._bot = new Telegraf(token);
@@ -546,7 +542,11 @@ export class MyTelegramBot {
   }
 
   public stop() {
-    this._bot.stop();
+    try {
+      this._bot.stop();
+    } catch (e) {
+      console.error(e);
+    }
   }
 
   private async handleSendTelegramMessageElement(element: SendTelegramMessageIntegrationUIElement, userContext: UserContext) {

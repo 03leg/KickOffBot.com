@@ -5,6 +5,7 @@ import {
   ChangeArrayVariableWorkflow,
   LogicalOperator,
   PropertyConditionItem,
+  RemoveItemFromArrayMode,
   ValuePathDescription,
 } from "@kickoffbot.com/types";
 import { UserContext } from "./UserContext";
@@ -45,7 +46,7 @@ export class ChangeArrayVariableHelper {
       case ChangeArrayOperation.Remove: {
         throwIfNil(workflow.removeDescription);
 
-        if (isNil(workflow.removeDescription?.conditions) || (workflow.removeDescription?.conditions?.length ?? 0) === 0) {
+        if (sourceVariableValue.length === 0) {
           return [];
         }
 
@@ -54,7 +55,7 @@ export class ChangeArrayVariableHelper {
         for (const value of sourceVariableValue) {
           const checks: boolean[] = [];
 
-          for (const condition of workflow.removeDescription.conditions) {
+          for (const condition of workflow.removeDescription?.conditions ?? []) {
             checks.push(this.checkValue(userContext, utils, condition, value));
           }
 
@@ -65,7 +66,33 @@ export class ChangeArrayVariableHelper {
           }
         }
 
-        return sourceVariableValue.filter((item) => !removedItems.includes(item));
+        switch (workflow.removeDescription.mode) {
+          case RemoveItemFromArrayMode.FIRST: {
+            return sourceVariableValue.filter((item) => item !== (removedItems[0] ?? sourceVariableValue[0]));
+          }
+          case RemoveItemFromArrayMode.LAST: {
+            return sourceVariableValue.filter(
+              (item) => item !== (removedItems[removedItems.length - 1] ?? sourceVariableValue[sourceVariableValue.length - 1]),
+            );
+          }
+          case RemoveItemFromArrayMode.RANDOM: {
+            const randomElement =
+              removedItems.length > 0
+                ? removedItems[Math.floor(Math.random() * removedItems.length)]
+                : sourceVariableValue[Math.floor(Math.random() * sourceVariableValue.length)];
+            return sourceVariableValue.filter((item) => item !== randomElement);
+          }
+          case undefined:
+          case RemoveItemFromArrayMode.ALL: {
+            if (removedItems.length > 0) {
+              return sourceVariableValue.filter((item) => !removedItems.includes(item));
+            }
+
+            return [];
+          }
+        }
+
+        throw new Error("NotImplementedError. Not supported operation.");
       }
 
       default: {
