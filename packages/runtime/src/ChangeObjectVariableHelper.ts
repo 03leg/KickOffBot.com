@@ -39,7 +39,7 @@ export class ChangeObjectVariableHelper {
         return arrayFromVariable[Math.floor(Math.random() * arrayFromVariable.length)];
       }
       default: {
-        throw new Error("NotImplemented");
+        return arrayFromVariable[0];
       }
     }
   }
