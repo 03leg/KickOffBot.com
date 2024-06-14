@@ -46,14 +46,7 @@ export const NumberStringTypeVariableEditor = ({ workflow, onWorkflowChange }: P
         }
 
         if (variable.type === VariableType.ARRAY) {
-            if (variable.arrayItemType === VariableType.NUMBER) {
-                return true;
-            }
-
-            if (variable.arrayItemType === VariableType.OBJECT) {
-                const firstArrayItem = JSON.parse(variable.value as string)[0];
-                return Object.keys(firstArrayItem).some((key) => typeof firstArrayItem[key] === 'number');
-            }
+            return true;
         }
 
         return false;

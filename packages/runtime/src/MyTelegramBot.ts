@@ -1,7 +1,7 @@
 import { Update, Message, InputMediaPhoto, InputMediaVideo, InputMediaDocument, InputFile } from "telegraf/typings/core/types/typegram";
 import { Context, NarrowedContext, Telegraf } from "telegraf";
 import { UserContext } from "./UserContext";
-import { isNil, isPlainObject } from "lodash";
+import { isEmpty, isNil, isPlainObject } from "lodash";
 import { getUserContextKey } from "./utils";
 import { MyBotUtils } from "./MyBotUtils";
 import {
@@ -22,6 +22,7 @@ import {
   ElementType,
   FlowDesignerUIBlockDescription,
   GoogleSheetsIntegrationUIElement,
+  HTTPRequestIntegrationUIElement,
   InputTextUIElement,
   RemoveMessageUIElement,
   SendTelegramMessageIntegrationUIElement,
@@ -42,6 +43,7 @@ import { BotManager } from "./BotManager";
 import { GoogleSpreadsheet } from "google-spreadsheet";
 import { throwIfNil } from "./guard";
 import { SpreadSheetRowChecker } from "./SpreadSheetRowChecker";
+import { SendReceiveHttpRequest } from "./SendReceiveHttpRequest";
 
 export class MyTelegramBot {
   private _bot: Telegraf;
@@ -228,7 +230,18 @@ export class MyTelegramBot {
         );
 
         const sendPlainMessage = async (serviceMessage?: string) => {
-          const sendResult = await context.sendMessage(answerText + (!isNil(serviceMessage) ? "<br/>" + serviceMessage : ""), {
+          let messageText = answerText;
+          if (isEmpty(answerText)) {
+            console.log("Empty message text...");
+            return;
+          }
+
+          if (answerText.length > 4096) {
+            console.log("Message text is too long...");
+            messageText = answerText.substring(0, 4096);
+          }
+
+          const sendResult = await context.sendMessage(messageText + (!isNil(serviceMessage) ? "<br/>" + serviceMessage : ""), {
             parse_mode: "HTML",
             reply_markup: !isNil(messageButtons)
               ? {
@@ -342,6 +355,10 @@ export class MyTelegramBot {
       }
       case ElementType.INTEGRATION_GOOGLE_SHEETS: {
         await this.handleGoogleSheetsElement(element as GoogleSheetsIntegrationUIElement, userContext);
+        break;
+      }
+      case ElementType.INTEGRATION_HTTP_REQUEST: {
+        await this.handleHttpRequestElement(element as HTTPRequestIntegrationUIElement, userContext);
         break;
       }
       default: {
@@ -490,6 +507,7 @@ export class MyTelegramBot {
       case ElementType.LOGIC_REMOVE_MESSAGE:
       case ElementType.INTEGRATION_SEND_TELEGRAM_MESSAGE:
       case ElementType.INTEGRATION_GOOGLE_SHEETS:
+      case ElementType.INTEGRATION_HTTP_REQUEST:
       case ElementType.CONTENT_TEXT: {
         await this.handleElement(userContext, context, block, nextElement);
         break;
@@ -693,6 +711,32 @@ export class MyTelegramBot {
       row.assign({ ...(actualVariableValue as object) });
 
       await row.save();
+    }
+  }
+
+  private async handleHttpRequestElement(element: HTTPRequestIntegrationUIElement, userContext: UserContext) {
+    const parseText = (text: string) => {
+      return this._utils.getParsedText(text, userContext);
+    };
+
+    const instance = new SendReceiveHttpRequest(element, {
+      parse: parseText,
+    });
+
+    try {
+      await instance.send();
+
+      if (!isNil(element.responseDataVariableId) && element.saveResponseData) {
+        let responseData = instance.lastResponseData;
+        try {
+          responseData = JSON.parse(responseData);
+        } catch (err) {}
+
+        const variable = this._utils.getVariableById(element.responseDataVariableId);
+        userContext.updateVariable(variable.name, responseData);
+      }
+    } catch (err) {
+      console.log("handleHttpRequestElement", err);
     }
   }
 }

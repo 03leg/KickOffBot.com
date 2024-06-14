@@ -101,8 +101,6 @@ export const VariableEditor = ({ variable, onVariableChange }: Props) => {
     const handleMonacoEditorChange = useCallback((value?: string) => {
         setVariableValue(value ?? '');
         onVariableChange(variable);
-
-        console.log(JSON.stringify(value));
     }, [onVariableChange, setVariableValue, variable]);
 
     return (

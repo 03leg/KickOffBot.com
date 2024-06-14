@@ -3,13 +3,14 @@ import {
   BotVariable,
   ChangeArrayOperation,
   ChangeArrayVariableWorkflow,
+  ConditionOperator,
   LogicalOperator,
   PropertyConditionItem,
   RemoveItemFromArrayMode,
   ValuePathDescription,
 } from "@kickoffbot.com/types";
 import { UserContext } from "./UserContext";
-import { isNil, isPlainObject } from "lodash";
+import { isEmpty, isNil, isPlainObject } from "lodash";
 import { throwIfNil } from "./guard";
 import { MyBotUtils } from "./MyBotUtils";
 import { ConditionChecker } from "./ConditionChecker";
@@ -163,6 +164,27 @@ export class ChangeArrayVariableHelper {
 
     if (!isNil(condition.propertyName) && typeof value === "object" && !Array.isArray(value) && !isNil(value)) {
       currentValue = (value as Record<string, unknown>)[condition.propertyName];
+    }
+
+    if (isNil(currentValue)) {
+      const isConditionValueEqualNull = () => {
+        if (isEmpty(conditionValue)) {
+          return true;
+        }
+
+        return false;
+      };
+
+      switch (condition.operator) {
+        case ConditionOperator.EQUAL_TO: {
+          return isConditionValueEqualNull();
+        }
+        case ConditionOperator.NOT_EQUAL_TO: {
+          return !isConditionValueEqualNull();
+        }
+      }
+
+      return false;
     }
 
     switch (typeof currentValue) {

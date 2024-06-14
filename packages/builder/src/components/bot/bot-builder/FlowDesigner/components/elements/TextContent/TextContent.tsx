@@ -68,7 +68,7 @@ export const TextContent = ({ element, elementId }: Props) => {
 
     return (
         <Box className={classes.root}>
-            <div dangerouslySetInnerHTML={{ __html: textContent ?? 'Text...' }}></div>
+            <div dangerouslySetInnerHTML={{ __html: textContent ?? 'Message...' }}></div>
             {contentTextElement.attachments?.length > 1 && <AttachmentsViewer files={contentTextElement.attachments} />}
             {contentTextElement.attachments?.length === 1 && <AttachmentViewer file={contentTextElement.attachments[0]} />}
             {contentTextElement.showButtons &&
