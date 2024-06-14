@@ -14,6 +14,7 @@ export enum ElementType {
 
   INTEGRATION_SEND_TELEGRAM_MESSAGE = "integration-send-telegram-message",
   INTEGRATION_GOOGLE_SHEETS = "integration-google-sheets",
+  INTEGRATION_HTTP_REQUEST = "integration-http-request",
 }
 
 export interface UIElement {
@@ -415,4 +416,25 @@ export enum DataSpreedSheetOperation {
   READ_ROWS_TO_ARRAY = "READ_ROWS_TO_ARRAY",
   INSERT_ROWS_FROM_VARIABLE = "INSERT_ROWS_FROM_VARIABLE",
   UPDATE_ROWS_FROM_OBJECT_VARIABLE = "UPDATE_ROWS_FROM_OBJECT_VARIABLE",
+}
+
+export enum HTTPMethod {
+  GET = "GET",
+  POST = "POST",
+  PUT = "PUT",
+  PATCH = "PATCH",
+  DELETE = "DELETE",
+}
+export interface HttpHeader {
+  header: string;
+  value: string;
+}
+export interface HTTPRequestIntegrationUIElement extends UIElement {
+  httpMethod: HTTPMethod;
+  url: string;
+  customHeaders: HttpHeader[];
+  useRequestBody: boolean;
+  requestBody: string;
+  saveResponseData: boolean;
+  responseDataVariableId?: BotVariable["id"];
 }

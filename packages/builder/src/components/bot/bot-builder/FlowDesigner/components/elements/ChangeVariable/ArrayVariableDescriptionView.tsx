@@ -4,6 +4,7 @@ import { useVariableInTextStyles } from './useContentWithVariable';
 import { makeStyles } from 'tss-react/mui';
 import { useFlowDesignerStore } from '~/components/bot/bot-builder/store';
 import { getConditionOperatorLabelByType } from '../Condition/utils';
+import { isEmpty, isNil } from 'lodash';
 
 interface Props {
     workflow: ChangeArrayVariableWorkflow;
@@ -132,7 +133,7 @@ export const ArrayVariableDescriptionView = ({ workflow, variable }: Props) => {
                         <span key={condition.id}>
                             {condition.propertyName ? <><span>value of property </span><span className={classes.propertyName}>{condition.propertyName}</span></> : 'value'}
                             {condition.operator && <span> {getConditionOperatorLabelByType(condition.operator).toLowerCase()} </span>}
-                            {condition.value && !condition.variableIdValue && <span className={componentClasses.value}>{condition.value.toString()}</span>}
+                            {!condition.variableIdValue && <span className={componentClasses.value}>{!isNil(condition.value) && !isEmpty(condition.value) ? condition.value.toString() : 'empty'}</span>}
                             {condition.variableIdValue &&
                                 <>
                                     {!condition.pathVariableIdValue && <span> value from </span>}

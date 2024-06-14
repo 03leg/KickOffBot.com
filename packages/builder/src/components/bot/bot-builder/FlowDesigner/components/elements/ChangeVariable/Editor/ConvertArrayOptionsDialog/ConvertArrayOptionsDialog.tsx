@@ -65,10 +65,12 @@ export const ConvertArrayOptionsDialog = ({ variable, onClose }: Props) => {
                 <Typography>Choose the operation you want to perform to convert the array into a single number.</Typography>
                 <RadioGroup sx={{ flex: 1 }} value={converter} onChange={handleConverterChange}>
                     <FormControlLabel value={VariableConverter.COUNT} control={<Radio />} label="Count Items" />
-                    <FormControlLabel value={VariableConverter.SUM} control={<Radio />} label="Calculate Sum" />
-                    <FormControlLabel value={VariableConverter.AVG} control={<Radio />} label="Calculate Average" />
-                    <FormControlLabel value={VariableConverter.MAX} control={<Radio />} label="Find Maximum Value" />
-                    <FormControlLabel value={VariableConverter.MIN} control={<Radio />} label="Find Minimum Value" />
+                    {availableProperties.length > 0 && <>
+                        <FormControlLabel value={VariableConverter.SUM} control={<Radio />} label="Calculate Sum" />
+                        <FormControlLabel value={VariableConverter.AVG} control={<Radio />} label="Calculate Average" />
+                        <FormControlLabel value={VariableConverter.MAX} control={<Radio />} label="Find Maximum Value" />
+                        <FormControlLabel value={VariableConverter.MIN} control={<Radio />} label="Find Minimum Value" />
+                    </>}
                 </RadioGroup>
 
                 {availableProperties.length > 0 && converter !== VariableConverter.COUNT && <Box sx={{ marginTop: 2 }}>

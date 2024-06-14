@@ -2,7 +2,7 @@ import { Box } from '@mui/material'
 import React, { useCallback, useContext, useMemo } from 'react'
 import { TextContent } from '../elements/TextContent';
 import { Colors } from '~/themes/Colors';
-import { ContentTextUIElement, ElementType, GoogleSheetsIntegrationUIElement, SendTelegramMessageIntegrationUIElement, type UIElement } from '@kickoffbot.com/types';
+import { ContentTextUIElement, ElementType, GoogleSheetsIntegrationUIElement, HTTPRequestIntegrationUIElement, SendTelegramMessageIntegrationUIElement, type UIElement } from '@kickoffbot.com/types';
 import { getIconByType } from '../../../utils';
 import { CSS } from '@dnd-kit/utilities';
 import { useSortable } from '@dnd-kit/sortable';
@@ -17,6 +17,7 @@ import { EditMessage } from '../elements/EditMessage';
 import { RemoveMessage } from '../elements/RemoveMessage';
 import { IntegrationSendTelegramMessage } from '../elements/IntegrationSendTelegramMessage';
 import { IntegrationGoogleSheets } from '../elements/IntegrationGoogleSheets';
+import { IntegrationHttpRequest } from '../elements/IntegrationHttpRequest';
 
 interface Props {
     element: UIElement;
@@ -62,6 +63,10 @@ export const ElementView = ({ element, scale }: Props) => {
             }
             case ElementType.INTEGRATION_GOOGLE_SHEETS: {
                 result = <IntegrationGoogleSheets element={element as GoogleSheetsIntegrationUIElement} />
+                return result;
+            }
+            case ElementType.INTEGRATION_HTTP_REQUEST: {
+                result = <IntegrationHttpRequest element={element as HTTPRequestIntegrationUIElement} />
                 return result;
             }
             default: {

@@ -1,7 +1,7 @@
-import { type ContentTextUIElement, ElementType, type InputTextUIElement, type FlowDesignerUIBlockDescription, type UIElement, type InputButtonsUIElement, type FlowDesignerLink, type ButtonPortDescription, type BotVariable, BlockType, TransformDescription, ChangeVariableUIElement, ConditionUIElement, LogicalOperator, ButtonsSourceStrategy, CommandsUIElement, EditMessageUIElement, EditMessageOperation, RemoveMessageUIElement, VariableConverter, SendTelegramMessageIntegrationUIElement, GoogleSheetsIntegrationUIElement } from "@kickoffbot.com/types";
+import { type ContentTextUIElement, ElementType, type InputTextUIElement, type FlowDesignerUIBlockDescription, type UIElement, type InputButtonsUIElement, type FlowDesignerLink, type ButtonPortDescription, type BotVariable, BlockType, TransformDescription, ChangeVariableUIElement, ConditionUIElement, LogicalOperator, ButtonsSourceStrategy, CommandsUIElement, EditMessageUIElement, RemoveMessageUIElement, VariableConverter, SendTelegramMessageIntegrationUIElement, GoogleSheetsIntegrationUIElement, HTTPRequestIntegrationUIElement, HTTPMethod } from "@kickoffbot.com/types";
 import MessageIcon from '@mui/icons-material/Message';
 import TextFieldsIcon from '@mui/icons-material/TextFields';
-import { isNil, size } from "lodash";
+import { isNil } from "lodash";
 import { type DraggableElementData } from "./ToolBox/types";
 import { v4 } from "uuid";
 import { type DragEndEvent } from "@dnd-kit/core";
@@ -15,11 +15,12 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import TelegramIcon from '@mui/icons-material/Telegram';
 import GoogleIcon from '@mui/icons-material/Google';
+import HttpIcon from '@mui/icons-material/Http';
 
 
 export function getContentElements() {
     return [
-        { type: ElementType.CONTENT_TEXT, title: 'Text', icon: <MessageIcon /> },
+        { type: ElementType.CONTENT_TEXT, title: 'Message', icon: <MessageIcon /> },
         // { type: ElementType.CONTENT_IMAGE, title: 'Image', icon: <ImageIcon /> },
         // { type: ElementType.CONTENT_AUDIO, title: 'Audio', icon: <AudiotrackIcon /> },
         // { type: ElementType.CONTENT_VIDEO, title: 'Video', icon: <VideocamIcon /> },
@@ -50,6 +51,7 @@ export function getIntegrationsElements() {
     return [
         { type: ElementType.INTEGRATION_SEND_TELEGRAM_MESSAGE, title: 'Send message to telegram channel or group', icon: <TelegramIcon />, size: 12 },
         { type: ElementType.INTEGRATION_GOOGLE_SHEETS, title: 'Google spreadsheets', icon: <GoogleIcon />, size: 12 },
+        { type: ElementType.INTEGRATION_HTTP_REQUEST, title: 'Send&Receive HTTP request', icon: <HttpIcon />, size: 12 },
     ];
 }
 
@@ -144,6 +146,19 @@ export function getNewUIElementTemplate(id: string, data: DraggableElementData):
                 type: ElementType.INTEGRATION_GOOGLE_SHEETS,
             }
 
+            return result;
+        }
+        case ElementType.INTEGRATION_HTTP_REQUEST: {
+            const result: HTTPRequestIntegrationUIElement = {
+                id,
+                type: ElementType.INTEGRATION_HTTP_REQUEST,
+                httpMethod: HTTPMethod.GET,
+                url: '',
+                customHeaders: [],
+                requestBody: '',
+                useRequestBody: false,
+                saveResponseData: false
+            }
             return result;
         }
         default: {

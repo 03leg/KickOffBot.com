@@ -36,7 +36,7 @@
     "@types/formidable": "^3.4.0",
     "@types/lodash": "^4.14.196",
     "@use-gesture/react": "^10.3.0",
-    "axios": "^1.4.0",
+    "axios": "^1.7.2",
     "draft-js": "^0.11.7",
     "draft-js-export-html": "^1.4.1",
     "emoji-picker-react": "4.8.0",

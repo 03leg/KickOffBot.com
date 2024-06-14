@@ -9,13 +9,14 @@ import { useConfirm } from 'material-ui-confirm';
 import { TextContentEditor } from '../elements/TextContent/Editor';
 import { ButtonsEditor } from '../elements/ButtonsInput/Editor';
 import { TextInputEditor } from '../elements/TextInput/Editor';
-import { ChangeVariableUIElement, ConditionUIElement, ContentTextUIElement, EditMessageUIElement, ElementType, GoogleSheetsIntegrationUIElement, InputButtonsUIElement, InputTextUIElement, OutputPortDescription, RemoveMessageUIElement, SendTelegramMessageIntegrationUIElement, UIElement } from '@kickoffbot.com/types';
+import { ChangeVariableUIElement, ConditionUIElement, ContentTextUIElement, EditMessageUIElement, ElementType, GoogleSheetsIntegrationUIElement, HTTPRequestIntegrationUIElement, InputButtonsUIElement, InputTextUIElement, OutputPortDescription, RemoveMessageUIElement, SendTelegramMessageIntegrationUIElement, UIElement } from '@kickoffbot.com/types';
 import { ChangeVariableEditor } from '../elements/ChangeVariable/Editor';
 import { ConditionEditor } from '../elements/Condition/Editor';
 import { EditMessageEditor } from '../elements/EditMessage/Editor';
 import { RemoveMessageEditor } from '../elements/RemoveMessage/Editor/RemoveMessageEditor';
 import { IntegrationSendTelegramMessageEditor } from '../elements/IntegrationSendTelegramMessage/Editor';
 import { IntegrationGoogleSheetsEditor } from '../elements/IntegrationGoogleSheets/Editor/IntegrationGoogleSheetsEditor';
+import { IntegrationHttpRequestEditor } from '../elements/IntegrationHttpRequest';
 
 
 
@@ -125,6 +126,12 @@ export const ElementMenu = ({ element }: Props) => {
                 const newElement: GoogleSheetsIntegrationUIElement = JSON.parse(JSON.stringify(initialElement));
 
                 return { content: (<IntegrationGoogleSheetsEditor element={newElement} />), title: 'Google spreadsheets', newElement };
+            }
+            case ElementType.INTEGRATION_HTTP_REQUEST: {
+                const initialElement = elementArg as HTTPRequestIntegrationUIElement;
+                const newElement: HTTPRequestIntegrationUIElement = JSON.parse(JSON.stringify(initialElement));
+
+                return { content: (<IntegrationHttpRequestEditor element={newElement} />), title: 'HTTP Request', newElement };
             }
             default: {
                 throw new Error('NotImplementedError');
