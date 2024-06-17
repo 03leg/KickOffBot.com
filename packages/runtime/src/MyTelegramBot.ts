@@ -69,6 +69,16 @@ export class MyTelegramBot {
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const commands: CommandDescription[] = (this._botProject.blocks.find((b) => b.id === "/start")?.elements[0] as any).commands ?? [];
+
+    console.log("commands", commands);
+
+    void this._bot.telegram.setMyCommands([
+      ...commands
+        .filter((c) => c.id !== "/start")
+        .filter((c) => c.command.startsWith("/"))
+        .map((c) => ({ command: c.command, description: isEmpty(c.description) ? c.command : c.description })),
+    ]);
+
     for (const command of commands) {
       const realCommand = command.command.slice(1);
       this._bot.command(realCommand, this.handleCommand.bind(this, command));

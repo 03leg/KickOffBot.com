@@ -22,7 +22,7 @@ export const RuntimeEditor = ({ projectId }: Props) => {
     const { mutateAsync: startBot } = api.botManagement.startBot.useMutation();
     const { mutateAsync: stopBot } = api.botManagement.stopBot.useMutation();
     const [errorMessage, setErrorMessage] = useState<string | undefined>(undefined);
-    const { data = [], refetch } = api.botManagement.getTelegramTokens.useQuery({ projectId: projectId! }, { enabled: projectId !== undefined });
+    const { data = [], refetch } = api.botManagement.getTelegramTokens.useQuery({ projectId: projectId! }, { enabled: projectId !== undefined && showRuntimeEditor });
 
     const handleClose = useCallback(() => {
         toggleRuntimeEditor();

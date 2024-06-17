@@ -12,7 +12,7 @@ interface Props {
     onCommandsChange: (commands: CommandDescription[]) => void
 }
 
-function getUniqueCommandName(commands: CommandDescription[], prefix = '/new-command-') {
+function getUniqueCommandName(commands: CommandDescription[], prefix = '/new_command_') {
     let index = 1;
 
     do {
@@ -27,6 +27,8 @@ function getUniqueCommandName(commands: CommandDescription[], prefix = '/new-com
 export const CommandsListEditor = ({ commands, onCommandsChange }: Props) => {
     const [selectedCommand, setSelectedCommand] = useState<CommandDescription>();
     const [commandContent, setCommandContent] = useState<string>();
+    const [commandDescription, setCommandDescription] = useState<string>();
+
     const { links } = useFlowDesignerStore((state) => ({
         links: state.project.links,
     }));
@@ -59,6 +61,18 @@ export const CommandsListEditor = ({ commands, onCommandsChange }: Props) => {
         setCommandContent(newValue);
         selectedCommand.command = newValue;
     }, [commands, selectedCommand]);
+
+
+    const handleCommandDescriptionChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
+        if (isNil(selectedCommand)) {
+            throw new Error('InvalidOperationError');
+        }
+
+        const newValue = event.target.value;
+
+        setCommandDescription(newValue);
+        selectedCommand.description = newValue;
+    }, [selectedCommand]);
 
     const canDeleteButton = useMemo(() => {
         if (selectedCommand?.command === '/start') {
@@ -99,7 +113,8 @@ export const CommandsListEditor = ({ commands, onCommandsChange }: Props) => {
             {!isNil(selectedCommand) &&
                 (
                     <Box sx={{ flex: 1, backgroundColor: 'white', marginLeft: 1, padding: 1, flexDirection: 'column', display: 'flex', alignItems: 'flex-end' }}>
-                        <TextField fullWidth variant="outlined" value={commandContent} onChange={handleCommandTextChange} disabled={selectedCommand.command === '/start'} />
+                        <TextField fullWidth label="Command" variant="outlined" value={commandContent} onChange={handleCommandTextChange} disabled={selectedCommand.command === '/start'} />
+                        {selectedCommand.command !== '/start' && <TextField fullWidth label="Description" sx={{ mt: 2 }} variant="outlined" value={commandDescription} onChange={handleCommandDescriptionChange} />}
 
                         <Box sx={{ marginTop: 1, display: 'flex' }}>
                             <IconButton
