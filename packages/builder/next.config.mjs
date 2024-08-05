@@ -20,8 +20,8 @@ const config = {
   // eslint-disable-next-line @typescript-eslint/require-await
   rewrites: async () => [
     {
-      source: "/content",
-      destination: "/content/index.html",
+      source: "/docs",
+      destination: "/docs/index.html",
     },
   ],
 };
