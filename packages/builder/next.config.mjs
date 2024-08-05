@@ -17,6 +17,13 @@ const config = {
     locales: ["en"],
     defaultLocale: "en",
   },
+  // eslint-disable-next-line @typescript-eslint/require-await
+  rewrites: async () => [
+    {
+      source: "/content",
+      destination: "/content/index.html",
+    },
+  ],
 };
 
 export default config;
