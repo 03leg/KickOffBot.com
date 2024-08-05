@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "build": "next build && cd docs && yarn build",
+    "build": "next build && cd docs && yarn install && yarn build",
     "dev": "next dev",
     "postinstall": "prisma generate",
     "lint": "next lint",
