@@ -1,9 +1,11 @@
-import React, { useEffect, useLayoutEffect } from 'react'
+import React, { useLayoutEffect } from 'react'
 import { Hero } from './Hero'
 import { Header } from './Header'
 import { Features } from './Features'
 import { Footer } from './Footer'
 import { LoadingIndicator } from '../commons/LoadingIndicator'
+import { GoogleAnalytics } from '@next/third-parties/google'
+import { env } from '~/env.mjs'
 // import "tailwindcss/tailwind.css";
 
 export const LandingPage = () => {
@@ -40,6 +42,7 @@ export const LandingPage = () => {
       <Hero />
       <Features />
       <Footer />
+      <GoogleAnalytics gaId={env.NEXT_PUBLIC_GOOGLE_ANALYTICS_ID} />
     </>
   )
 }
