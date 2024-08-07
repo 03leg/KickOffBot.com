@@ -412,7 +412,11 @@ export class MyTelegramBot {
 
     const variable = this._utils.getVariableById(element.selectedVariableId);
     if (element.restoreInitialValue) {
-      userContext.updateVariable(variable.name, JSON.parse(variable.value as string));
+      try {
+        userContext.updateVariable(variable.name, JSON.parse(variable.value as string));
+      } catch {
+        userContext.updateVariable(variable.name, variable.value as string);
+      }
       return;
     }
 
