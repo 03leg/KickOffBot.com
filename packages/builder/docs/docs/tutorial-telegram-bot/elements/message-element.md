@@ -1,7 +1,7 @@
 ---
 sidebar_position: 0
 ---
-# Message
+# Message element
 
 The `Message` element is the most important element; it helps send text, images, documents, and inline buttons to the bot user. To use it, simply drag and drop it from the toolbox onto the designer area.
 

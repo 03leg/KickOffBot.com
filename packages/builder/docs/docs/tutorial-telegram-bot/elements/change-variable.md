@@ -1,7 +1,7 @@
 ---
 sidebar_position: 2
 ---
-# Change variable
+# Change variable element
 
 This element lets you change variable values during user interaction with your bot. On this page, we’ll look at how to change different types of variables.
 
