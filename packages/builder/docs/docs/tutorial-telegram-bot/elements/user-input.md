@@ -1,7 +1,7 @@
 ---
 sidebar_position: 1
 ---
-# User Input
+# User Input element
 
 This element lets you receive messages that users send to the bot. Let's see how this element works with a simple bot example. The bot asks the user for their age and then uses the [Message](./message-element.md) element to show the user their age.
 
