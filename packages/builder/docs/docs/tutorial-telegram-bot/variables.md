@@ -3,8 +3,6 @@ sidebar_position: 0
 ---
 # Variables
 
-## Overview
-
 Variables on KickoffBot are used to store information while users interact with your bot. You can change these variables using elements, display them in messages, and share them with other services. This concept of variables allows you to create a bot of any complexity.
 
 ## Variable types
