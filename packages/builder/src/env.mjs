@@ -39,6 +39,7 @@ export const env = createEnv({
   client: {
     // NEXT_PUBLIC_CLIENTVAR: z.string().min(1),
     NEXT_PUBLIC_GOOGLE_API_KEY: z.string(),
+    NEXT_PUBLIC_GOOGLE_ANALYTICS_ID: z.string(),
   },
 
   /**
@@ -59,6 +60,7 @@ export const env = createEnv({
     SUPABASE_BUCKET_ID: process.env.SUPABASE_BUCKET_ID,
     NEXT_PUBLIC_GOOGLE_API_KEY: process.env.NEXT_PUBLIC_GOOGLE_API_KEY,
     APP_URL: process.env.APP_URL,
+    NEXT_PUBLIC_GOOGLE_ANALYTICS_ID: process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS_ID,
   },
   /**
    * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation.
