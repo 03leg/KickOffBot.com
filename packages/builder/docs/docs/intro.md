@@ -1,9 +1,10 @@
 ---
 sidebar_position: 1
 slug: /
+title: Get started
 ---
 
-# Create your first Telegram bot
+# Create your first telegram bot
 
 Let's start by creating your first telegram bot on the KickoffBot platform. After you log in, you will see a list of your bots. In your case, this list is empty because you haven’t created any bots yet. Simply click the 'Create Your First Bot' button to get started.
 
