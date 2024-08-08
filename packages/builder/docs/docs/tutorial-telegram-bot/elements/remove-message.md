@@ -1,7 +1,7 @@
 ---
 sidebar_position: 5
 ---
-# Delete message element
+# Remove message element
 
 This element allows you to erase a message that the bot has previously sent.
 

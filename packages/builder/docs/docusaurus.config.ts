@@ -3,9 +3,10 @@ import type { Config } from "@docusaurus/types";
 import type * as Preset from "@docusaurus/preset-classic";
 
 const config: Config = {
-  title: "KickoffBot",
-  tagline: "Dinosaurs are cool",
-  favicon: "img/favicon.ico",
+  title: "KickoffBot.com",
+  tagline: "Build your bot with KickoffBot",
+  // favicon: "img/favicon.ico",
+  
 
   // Set the production url of your site here
   url: "https://www.kickoffbot.com",
@@ -15,8 +16,8 @@ const config: Config = {
 
   // GitHub pages deployment config.
   // If you aren't using GitHub pages, you don't need these.
-  organizationName: "facebook", // Usually your GitHub org/user name.
-  projectName: "kickoffbot", // Usually your repo name.
+  organizationName: "kickoffbot.com", // Usually your GitHub org/user name.
+  projectName: "kickoffbot.com", // Usually your repo name.
 
   onBrokenLinks: "throw",
   onBrokenMarkdownLinks: "warn",
@@ -69,13 +70,15 @@ const config: Config = {
 
   themeConfig: {
     // Replace with your project's social card
-    image: "img/docusaurus-social-card.jpg",
+    // image: "img/docusaurus-social-card.jpg",
     navbar: {
-      title: "KickoffBot",
-      logo: {
-        alt: "KickOffBot Logo",
-        src: "img/logo.svg",
-      },
+      title: "KickoffBot.com",
+    
+
+      // logo: {
+      //   alt: "KickOffBot Logo",
+      //   src: "img/logo.svg",
+      // },
       items: [
         {
           type: "docSidebar",
