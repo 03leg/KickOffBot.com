@@ -1,12 +1,13 @@
 import React from 'react'
 import Layout from '../Layout'
 import { Box, Link, Typography } from '@mui/material'
+import UnknownUserLayout from '../UnknownUserLayout'
 
 export default function PrivacyPolicy() {
     return (
-        <Layout>
-            <Box sx={{ padding: (theme) => theme.spacing(2), maxWidth: '800px', margin: '0 auto' }}>
-                <Typography variant="h4" gutterBottom>
+        <UnknownUserLayout>
+            <Box sx={{ margin: '0 auto' }}>
+                <Typography variant="h5" textAlign={'center'} gutterBottom>
                     Privacy Policy for KickOffBot
                 </Typography>
                 <Typography variant="body1" paragraph>
@@ -171,6 +172,6 @@ export default function PrivacyPolicy() {
                     contact us immediately and we will do our best efforts to promptly remove such information from our records.
                 </Typography>
             </Box>
-        </Layout>
+        </UnknownUserLayout>
     )
 }

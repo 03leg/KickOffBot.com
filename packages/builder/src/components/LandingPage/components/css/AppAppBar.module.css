@@ -1,0 +1,8 @@
+.gradientText {
+    background: linear-gradient(to right, #3b82f6, #14b8a6); /* Equivalent to from-blue-500 to-teal-400 */
+    -webkit-background-clip: text; /* For Chrome, Safari, and Opera */
+    -moz-background-clip: text; /* For Firefox */
+    background-clip: text; /* For other modern browsers */
+    color: transparent; /* Hide the text color, showing only the gradient */
+    font-weight: bold; /* Optional: to match Tailwind's font-semibold */
+}

@@ -1,12 +1,12 @@
 import React from 'react';
-import Layout from '../Layout'
 import { Box, Link, Typography } from '@mui/material'
+import UnknownUserLayout from '../UnknownUserLayout';
 
 export default function TermsOfService() {
     return (
-        <Layout>
-            <Box sx={{ padding: (theme) => theme.spacing(2), maxWidth: '800px', margin: '0 auto' }}>
-                <Typography variant="h5">Website Terms and Conditions of Use</Typography>
+        <UnknownUserLayout>
+            <Box sx={{  margin: '0 auto' }}>
+                <Typography variant="h5" textAlign={'center'}>Website Terms and Conditions of Use</Typography>
                 <ol>
                     <br/>
                     <li>
@@ -144,6 +144,6 @@ export default function TermsOfService() {
                     </li>
                 </ol>
             </Box>
-        </Layout>
+        </UnknownUserLayout>
     )
 }

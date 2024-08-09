@@ -1,48 +1,34 @@
-import React, { useLayoutEffect } from 'react'
-import { Hero } from './Hero'
-import { Header } from './Header'
-import { Features } from './Features'
-import { Footer } from './Footer'
-import { LoadingIndicator } from '../commons/LoadingIndicator'
-import { GoogleAnalytics } from '@next/third-parties/google'
-import { env } from '~/env.mjs'
-// import "tailwindcss/tailwind.css";
+import * as React from 'react';
+import Box from '@mui/material/Box';
+import Divider from '@mui/material/Divider';
+import AppAppBar from './components/AppAppBar';
+import { Hero } from './components/Hero';
+import Footer from './components/Footer';
+import Head from 'next/head';
 
-export const LandingPage = () => {
-  const [loadedTailwind, setLoadedTailwind] = React.useState(false);
-
-  useLayoutEffect(() => {
-    const script = document.createElement('script');
-    const scriptId = 'tailwind-script';
-    if (!document.getElementById(scriptId)) {
-      const head = document.getElementsByTagName('head')[0];
-
-      const script = document.createElement('script');
-      script.id = scriptId;
-      script.src = "https://cdn.tailwindcss.com";
-      script.onload = () => {
-        setLoadedTailwind(true);
-      }
-
-      head?.appendChild(script);
-    }
-    return () => {
-      script.remove();
-    }
-  }, []);
-
-  if (loadedTailwind === false) {
-    return <LoadingIndicator />;
-  }
-
+export function LandingPage() {
 
   return (
     <>
-      <Header />
+      <Head>
+        <title>Create telegram bot</title>
+      </Head>
+      <AppAppBar />
       <Hero />
-      <Features />
-      <Footer />
-      <GoogleAnalytics gaId={env.NEXT_PUBLIC_GOOGLE_ANALYTICS_ID} />
+      <Box sx={{ bgcolor: 'background.default' }}>
+        {/* <LogoCollection />
+        <Features />
+        <Divider />
+        <Testimonials />
+        <Divider />
+        <Highlights />
+        <Divider />
+        <Pricing />
+        <Divider />
+        <FAQ /> */}
+        <Divider />
+        <Footer />
+      </Box>
     </>
-  )
+  );
 }
