@@ -51,7 +51,6 @@ export const Hero = () => {
                                             component={'a'} href="/docs"
                                             className={styles.link}
                                             style={{ textTransform: 'none' }}
-                                            onClick={() => { void signIn(); }}
                                         >
                                             Learn more <span aria-hidden="true">→</span>
                                         </Button>
