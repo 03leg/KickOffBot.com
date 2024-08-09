@@ -5,6 +5,8 @@ import AppAppBar from './components/AppAppBar';
 import { Hero } from './components/Hero';
 import Footer from './components/Footer';
 import Head from 'next/head';
+import { GoogleAnalytics } from '@next/third-parties/google';
+import { env } from '~/env.mjs';
 
 export function LandingPage() {
 
@@ -29,6 +31,7 @@ export function LandingPage() {
         <Divider />
         <Footer />
       </Box>
+      <GoogleAnalytics gaId={env.NEXT_PUBLIC_GOOGLE_ANALYTICS_ID} />
     </>
   );
 }
