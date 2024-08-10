@@ -1,11 +1,11 @@
-import { Box, Button, DialogActions, SvgIcon, Typography } from '@mui/material'
+import { Box, Button, DialogActions, Typography } from '@mui/material'
 import React, { useCallback } from 'react'
 import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import { TelegramIcon } from '~/themes/icons/TelegramIcon';
 import { SocialMediaAccount } from '~/types/SocialMediaAccount';
-import SocialAccountConnectorDialog from '../SocialAccountConnectorDialog/SocialAccountConnectorDialog';
+// import SocialAccountConnectorDialog from '../SocialAccountConnectorDialog/SocialAccountConnectorDialog';
 
 interface AddSocialMediaAccountProps {
     onAddNewAccount: () => void;
@@ -60,7 +60,7 @@ export const AddSocialMediaAccount = ({ onAddNewAccount }: AddSocialMediaAccount
                     <Button onClick={handleClose}>Close</Button>
                 </DialogActions>
             </Dialog>
-            <SocialAccountConnectorDialog onClose={handleAccountConnectorClose} open={openSocialAccountConnector} socialMedia={newAccountType} />
+            {/* <SocialAccountConnectorDialog onClose={handleAccountConnectorClose} open={openSocialAccountConnector} socialMedia={newAccountType} /> */}
         </>
 
     )
