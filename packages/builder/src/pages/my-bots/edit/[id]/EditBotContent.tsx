@@ -21,6 +21,7 @@ import RouterIcon from '@mui/icons-material/Router';
 import { RuntimeEditor } from '~/components/bot/bot-builder/RuntimeEditor';
 import { LoadingIndicator } from '~/components/commons/LoadingIndicator';
 import { ProjectViewer } from '~/components/bot/bot-builder/ProjectViewer';
+import { AppDialogProvider } from '~/components/bot/bot-builder/Dialog/AppDialogProvider';
 
 
 export default function EditBotContent() {
@@ -311,59 +312,61 @@ export default function EditBotContent() {
     }, [toggleVariablesViewer])
 
     return (
-        <ConfirmProvider>
-            <Box sx={{ padding: (theme) => theme.spacing(2), height: '100%', display: 'flex', flexDirection: 'column', position: 'relative' }} onContextMenu={(e) => e.preventDefault()}>
-                <SnackbarProvider />
-                <Box sx={{ display: 'flex', paddingBottom: 1 }}>
-                    <Box>
-                        <Button variant="outlined" startIcon={<RouterIcon />} onClick={toggleRuntimeEditor}>
-                            start&stop your bots
-                        </Button>
-                    </Box>
-                    <Box sx={{ display: 'flex', justifyContent: 'flex-end', flex: 1 }}>
-                        <Button variant="contained" color="success" onClick={handleSaveBot}>
-                            Save
-                        </Button>
-                        <Checkbox sx={{ marginLeft: 2 }} icon={<AbcRounded />} checkedIcon={<AbcIcon />} onChange={handleToggleVariables} />
-                    </Box>
-                    {isLoadingSaveBotDescription || isLoadingProjectBotDescription ?
-                        <Box sx={{ display: 'flex', justifyContent: 'center' }}><LoadingIndicator size={20} /></Box>
-                        : null}
-                </Box>
-
-
-
-                <Box sx={{ display: 'flex', flexDirection: 'row', flex: 1 }}>
-                    <DndContext
-                        onDragOver={handleDragOver}
-                        onDragStart={handleDragStart}
-                        sensors={sensors}
-                        onDragEnd={handleDragEnd}
-                        measuring={{
-                            droppable: {
-                                strategy: MeasuringStrategy.Always,
-                            },
-                        }}
-                        collisionDetection={pointerWithin}
-                        modifiers={[flowDesignerTransformModifier(flowDesignerTransformDescription.current, node)]}
-                    >
-                        <Box sx={{ flex: 1 }} ref={viewPortRef}>
-                            {projectIsInitialized &&
-                                (
-                                    <FlowDesigner
-                                        blocks={blocks}
-                                        onTransformDescriptionChange={handleTransformDescriptionChange}
-                                        activeElement={activeElement}
-                                        setNodeRef={setNodeRef} />
-                                )
-                            }
+        <AppDialogProvider>
+            <ConfirmProvider>
+                <Box sx={{ padding: (theme) => theme.spacing(2), height: '100%', display: 'flex', flexDirection: 'column', position: 'relative' }} onContextMenu={(e) => e.preventDefault()}>
+                    <SnackbarProvider />
+                    <Box sx={{ display: 'flex', paddingBottom: 1 }}>
+                        <Box>
+                            <Button variant="outlined" startIcon={<RouterIcon />} onClick={toggleRuntimeEditor}>
+                                start&stop your bots
+                            </Button>
                         </Box>
-                    </DndContext>
-                    <ProjectViewer />
-                    <RuntimeEditor projectId={projectIdFromQuery} />
-                </Box>
+                        <Box sx={{ display: 'flex', justifyContent: 'flex-end', flex: 1 }}>
+                            <Button variant="contained" color="success" onClick={handleSaveBot}>
+                                Save
+                            </Button>
+                            <Checkbox sx={{ marginLeft: 2 }} icon={<AbcRounded />} checkedIcon={<AbcIcon />} onChange={handleToggleVariables} />
+                        </Box>
+                        {isLoadingSaveBotDescription || isLoadingProjectBotDescription ?
+                            <Box sx={{ display: 'flex', justifyContent: 'center' }}><LoadingIndicator size={20} /></Box>
+                            : null}
+                    </Box>
 
-            </Box>
-        </ConfirmProvider>
+
+
+                    <Box sx={{ display: 'flex', flexDirection: 'row', flex: 1 }}>
+                        <DndContext
+                            onDragOver={handleDragOver}
+                            onDragStart={handleDragStart}
+                            sensors={sensors}
+                            onDragEnd={handleDragEnd}
+                            measuring={{
+                                droppable: {
+                                    strategy: MeasuringStrategy.Always,
+                                },
+                            }}
+                            collisionDetection={pointerWithin}
+                            modifiers={[flowDesignerTransformModifier(flowDesignerTransformDescription.current, node)]}
+                        >
+                            <Box sx={{ flex: 1 }} ref={viewPortRef}>
+                                {projectIsInitialized &&
+                                    (
+                                        <FlowDesigner
+                                            blocks={blocks}
+                                            onTransformDescriptionChange={handleTransformDescriptionChange}
+                                            activeElement={activeElement}
+                                            setNodeRef={setNodeRef} />
+                                    )
+                                }
+                            </Box>
+                        </DndContext>
+                        <ProjectViewer />
+                        <RuntimeEditor projectId={projectIdFromQuery} />
+                    </Box>
+
+                </Box>
+            </ConfirmProvider>
+        </AppDialogProvider>
     )
 }

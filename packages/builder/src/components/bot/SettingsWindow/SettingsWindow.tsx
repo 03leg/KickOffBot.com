@@ -3,7 +3,7 @@ import React, { useCallback, useRef, useState } from 'react'
 import AddIcon from '@mui/icons-material/Add';
 import { isEmpty } from 'lodash';
 import { api } from '~/utils/api';
-import SmhDialog from '~/components/commons/Dialog/SmhDialog';
+import AppDialog from '~/components/commons/Dialog/AppDialog';
 import { TemplatesViewer } from './TemplatesViewer';
 import { useRouter } from 'next/router';
 import { EDIT_BOT_PATH } from '~/constants';
@@ -73,7 +73,7 @@ export const SettingsWindow = ({ onUpdate, buttonText = 'Create New Bot' }: Prop
     return (
         <>
             <Button startIcon={<AddIcon />} variant="contained" color='success' onClick={handleClickOpen}>{buttonText}</Button>
-            <SmhDialog
+            <AppDialog
                 isLoading={isLoading}
                 onClose={handleClose}
                 maxWidth={'lg'}
@@ -94,7 +94,7 @@ export const SettingsWindow = ({ onUpdate, buttonText = 'Create New Bot' }: Prop
                     <Typography sx={{ mt: 2 }} variant='h6'>Templates</Typography>
                     <TemplatesViewer onTemplateChange={handleTemplateChange} />
                 </Box>
-            </SmhDialog>
+            </AppDialog>
         </>
 
     )

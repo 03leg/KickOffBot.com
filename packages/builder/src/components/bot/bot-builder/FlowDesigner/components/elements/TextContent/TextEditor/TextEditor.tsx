@@ -13,9 +13,7 @@ import { isNil } from 'lodash';
 import { StringItemsMenu } from './StringItemsMenu';
 import { useFlowDesignerStore } from '~/components/bot/bot-builder/store';
 import AssignmentIcon from '@mui/icons-material/Assignment';
-
-// import EmojiPicker from 'emoji-picker-react';
-// import InsertEmoticonIcon from '@mui/icons-material/InsertEmoticon';
+import { EmojiButton } from '../../EmojiButton/EmojiButton';
 
 interface TextEditorProps {
     initialState?: EditorState | undefined;
@@ -30,9 +28,6 @@ export const TextEditor = ({ onContentChange, initialState, contextObjectPropert
     const { templates } = useFlowDesignerStore((state) => ({
         templates: state.project.templates ?? []
     }));
-
-
-    // const [showEmojiPicker, setShowEmojiPicker] = React.useState<boolean>(false);
 
     const generatePublicContentChange = useCallback((newState: EditorState) => {
         const content = newState.getCurrentContent();
@@ -89,10 +84,11 @@ export const TextEditor = ({ onContentChange, initialState, contextObjectPropert
         generatePublicContentChange(newState);
     }, [editorState, generatePublicContentChange, insertText]);
 
-    // const handleShowEmojiPicker = useCallback(() => {
-    //     setShowEmojiPicker(true);
-    // }, []);
-
+    const handleInsertEmoji = useCallback((emoji: string) => {
+        const newState = insertText(emoji, editorState);
+        setEditorState(newState);
+        generatePublicContentChange(newState);
+    }, [editorState, generatePublicContentChange, insertText]);
 
     const handleInsertContextPropertyInText = React.useCallback((property: string) => {
         const newState = insertText(getTextPropertyReference(property), editorState);
@@ -118,9 +114,9 @@ export const TextEditor = ({ onContentChange, initialState, contextObjectPropert
                     <IconButton aria-label="italic" onClick={handleItalicClick}>
                         <FormatItalic />
                     </IconButton>
-                    {/* <IconButton aria-label="italic" onClick={handleShowEmojiPicker}>
-                        <InsertEmoticonIcon />
-                    </IconButton> */}
+
+                    <EmojiButton onInsertEmoji={handleInsertEmoji} />
+
                     <VariableSelectorDialog onInsertVariable={handleInsertVariable} supportPathForObject={true} availableVariableTypes={[VariableType.STRING, VariableType.NUMBER, VariableType.BOOLEAN, VariableType.OBJECT]} />
                     {!isNil(contextObjectProperties) && <StringItemsMenu values={contextObjectProperties} onInsertItem={handleInsertContextPropertyInText} buttonIcon={<ControlPointIcon />} />}
                     {showInsertTemplateButton && templates.length > 0 && <StringItemsMenu values={templates.map(t => t.name)} onInsertItem={handleInsertTemplateInText} buttonIcon={<AssignmentIcon />} />}
@@ -129,7 +125,7 @@ export const TextEditor = ({ onContentChange, initialState, contextObjectPropert
 
 
             </Box>
-            {/* {showEmojiPicker && <div style={{ position: 'absolute', right: 0, top: 0, zIndex: 999999 }}><EmojiPicker /></div>} */}
+
         </>
     )
 }

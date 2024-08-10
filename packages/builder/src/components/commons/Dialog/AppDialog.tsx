@@ -13,7 +13,7 @@ import { isNil } from 'lodash';
 interface DialogProps {
     title: string;
     open: boolean;
-    onClose: () => void;
+    onClose: (event?: unknown, reason?: string) => void;
     buttons: React.ReactNode[];
     maxWidth?: Breakpoint | false;
     isLoading?: boolean;
@@ -65,7 +65,7 @@ const useStyles = makeStyles()({
     }
 });
 
-export default function SmhDialog({ open, onClose, title, children, buttons, maxWidth, isLoading, error }: React.PropsWithChildren<DialogProps>) {
+export default function AppDialog({ open, onClose, title, children, buttons, maxWidth, isLoading, error }: React.PropsWithChildren<DialogProps>) {
     const { classes } = useStyles();
 
     const errorMessage = React.useMemo(() => {
@@ -82,6 +82,7 @@ export default function SmhDialog({ open, onClose, title, children, buttons, max
         <BootstrapDialog
             maxWidth={maxWidth}
             fullWidth
+            
             onClose={onClose}
             open={open}           
         >

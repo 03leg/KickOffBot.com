@@ -1,7 +1,7 @@
 import { ConnectionDescription, ConnectionType, TelegramConnectionDescription } from '@kickoffbot.com/types';
 import { Box, Button, TextField } from '@mui/material'
 import React, { useCallback, useMemo, useState } from 'react'
-import SmhDialog from '~/components/commons/Dialog/SmhDialog';
+import AppDialog from '~/components/commons/Dialog/AppDialog';
 import { TelegramConnectionEditor } from './TelegramConnectionEditor';
 import { v4 } from 'uuid';
 import { useFlowDesignerStore } from '~/components/bot/bot-builder/store';
@@ -88,7 +88,7 @@ export const ConnectionEditor = ({ show, onClose, connectionType, connectionId }
 
 
     return (
-        <SmhDialog
+        <AppDialog
             onClose={handleClose}
             maxWidth={'sm'}
             buttons={[
@@ -109,6 +109,6 @@ export const ConnectionEditor = ({ show, onClose, connectionType, connectionId }
                         }} />
                 }
             </Box>
-        </SmhDialog>
+        </AppDialog>
     )
 }

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import SmhDialog from '../commons/Dialog/SmhDialog';
+import AppDialog from '../commons/Dialog/AppDialog';
 import { Box, Button, FormControlLabel, Link, Switch, TextField } from '@mui/material';
 import { api } from '~/utils/api';
 import { LoadingIndicator } from '../commons/LoadingIndicator';
@@ -45,7 +45,7 @@ export default function SocialAccountConnectorDialog({ open, onClose }: SocialAc
     }
 
     return (
-        <SmhDialog
+        <AppDialog
             onClose={onClose}
             buttons={[
                 <Button key={'Add'} autoFocus onClick={() => void handleConnectNewAccount()} variant='contained' color='success'>
@@ -67,6 +67,6 @@ export default function SocialAccountConnectorDialog({ open, onClose }: SocialAc
                 />
                 <FormControlLabel control={<Switch value={addBotFlag} onChange={handleAddBotFlag} />} label={<>I confirm that I have added <Link>@SMMotherBot</Link> as an admin</>} />
             </Box>
-        </SmhDialog>
+        </AppDialog>
     );
 }

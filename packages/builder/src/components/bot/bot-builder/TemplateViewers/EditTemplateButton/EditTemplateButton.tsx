@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from 'react'
-import SmhDialog from '~/components/commons/Dialog/SmhDialog'
+import AppDialog from '~/components/commons/Dialog/AppDialog'
 import AddIcon from '@mui/icons-material/Add';
 import { Button, IconButton } from '@mui/material';
 import { BotTemplate } from '@kickoffbot.com/types';
@@ -104,7 +104,7 @@ export const EditTemplateButton = ({ template }: Props) => {
                     </IconButton>
                 )
             }
-            <SmhDialog
+            <AppDialog
                 onClose={handleClose}
                 maxWidth={'sm'}
                 buttons={[
@@ -116,7 +116,7 @@ export const EditTemplateButton = ({ template }: Props) => {
                     template={currentTemplate!}
                     onTemplateChange={handleTemplateChange}
                 />
-            </SmhDialog >
+            </AppDialog >
         </>
     )
 }

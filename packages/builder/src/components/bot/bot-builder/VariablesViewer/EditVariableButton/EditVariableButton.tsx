@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from 'react'
-import SmhDialog from '~/components/commons/Dialog/SmhDialog'
+import AppDialog from '~/components/commons/Dialog/AppDialog'
 import AddIcon from '@mui/icons-material/Add';
 import { Button, IconButton } from '@mui/material';
 import { type BotVariable, VariableType } from '@kickoffbot.com/types';
@@ -120,7 +120,7 @@ export const EditVariableButton = ({ variable }: Props) => {
                     </IconButton>
                 )
             }
-            <SmhDialog
+            <AppDialog
                 onClose={handleClose}
                 maxWidth={'sm'}
                 buttons={[
@@ -132,7 +132,7 @@ export const EditVariableButton = ({ variable }: Props) => {
                     variable={currentVariable!}
                     onVariableChange={handleVariableChange}
                 />
-            </SmhDialog >
+            </AppDialog >
         </>
     )
 }

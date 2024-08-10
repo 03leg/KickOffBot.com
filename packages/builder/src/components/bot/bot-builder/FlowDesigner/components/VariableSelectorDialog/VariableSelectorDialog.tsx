@@ -1,7 +1,7 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import AbcIcon from '@mui/icons-material/Abc';
 import { Box, Button, IconButton, Typography } from '@mui/material';
-import SmhDialog from '~/components/commons/Dialog/SmhDialog';
+import AppDialog from '~/components/commons/Dialog/AppDialog';
 import { VariableSelector } from '../VariableSelector';
 import { VariableType, type BotVariable } from '@kickoffbot.com/types';
 import { isEmpty, isNil } from 'lodash';
@@ -100,7 +100,7 @@ export const VariableSelectorDialog = ({ onInsertVariable, availableVariableType
             <IconButton aria-label="edit-variable" onClick={handleOpenDialog}>
                 <AbcIcon />
             </IconButton>
-            <SmhDialog
+            <AppDialog
                 onClose={handleClose}
                 maxWidth={'sm'}
                 buttons={[
@@ -120,7 +120,7 @@ export const VariableSelectorDialog = ({ onInsertVariable, availableVariableType
                             />
                         </Box>}
                 </Box>
-            </SmhDialog >
+            </AppDialog >
         </>
     )
 }

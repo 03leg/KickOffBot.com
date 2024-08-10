@@ -8,6 +8,7 @@ import { v4 } from 'uuid';
 import { useFlowDesignerStore } from '~/components/bot/bot-builder/store';
 import { VariableSelectorDialog } from '../../../VariableSelectorDialog';
 import { getTextVariableReference } from '~/components/bot/bot-builder/utils';
+import { EmojiButton } from '../../EmojiButton/EmojiButton';
 
 interface Props {
     element: InputButtonsUIElement | MessageButtonsDescription;
@@ -71,18 +72,26 @@ export const ManualStrategyButtonsEditor = ({ element }: Props) => {
         return true;
     }, [element.buttons, links, selectedButton?.id]);
 
-
-    const handleInsertVariable = useCallback((variable: BotVariable) => {
+    const insertInButtonText = useCallback((text: string) => {
         if (isNil(selectedButton)) {
             throw new Error('InvalidOperationError');
         }
         const position = selectionStart ?? buttonContent?.length ?? 0;
         const content = buttonContent ?? '';
-        const output = [content.slice(0, position), getTextVariableReference(variable), content.slice(position)].join('');
+        const output = [content.slice(0, position), text, content.slice(position)].join('');
 
         setButtonContent(output);
         selectedButton.content = output;
     }, [buttonContent, selectedButton, selectionStart]);
+
+
+    const handleInsertVariable = useCallback((variable: BotVariable) => {
+        insertInButtonText(getTextVariableReference(variable));
+    }, [insertInButtonText]);
+
+    const handleInsertEmoji = useCallback((emoji: string) => {
+        insertInButtonText(emoji);
+    }, [insertInButtonText]);
 
 
     return (
@@ -113,6 +122,8 @@ export const ManualStrategyButtonsEditor = ({ element }: Props) => {
                                 onClick={handleDeleteButton} >
                                 <DeleteIcon />
                             </IconButton>
+                            <EmojiButton onInsertEmoji={handleInsertEmoji} />
+
                             <VariableSelectorDialog onInsertVariable={handleInsertVariable} supportPathForObject={false} />
                         </Box>
 

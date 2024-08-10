@@ -1,1 +1,1 @@
-export * from "./SmhDialog";
+export * from "./AppDialog";

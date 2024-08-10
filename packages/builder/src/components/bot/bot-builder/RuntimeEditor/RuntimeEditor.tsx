@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import { useFlowDesignerStore } from '../store';
-import SmhDialog from '~/components/commons/Dialog/SmhDialog';
+import AppDialog from '~/components/commons/Dialog/AppDialog';
 import { Box, Button } from '@mui/material';
 import { NewBotToken } from './NewBotToken';
 import { api } from '~/utils/api';
@@ -127,7 +127,7 @@ export const RuntimeEditor = ({ projectId }: Props) => {
     }
 
     return (
-        <SmhDialog
+        <AppDialog
             onClose={handleClose}
             maxWidth={'sm'}
             isLoading={isLoading}
@@ -146,6 +146,6 @@ export const RuntimeEditor = ({ projectId }: Props) => {
 
                 />}
             </Box>
-        </SmhDialog>
+        </AppDialog>
     )
 }
