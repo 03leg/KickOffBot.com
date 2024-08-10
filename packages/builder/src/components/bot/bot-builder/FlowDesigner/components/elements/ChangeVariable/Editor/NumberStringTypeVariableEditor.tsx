@@ -41,16 +41,11 @@ export const NumberStringTypeVariableEditor = ({ workflow, onWorkflowChange }: P
     }, [handleInsertVariable, selectedVariable])
 
     const handleCustomVariableFilter = useCallback((variable: BotVariable) => {
-        if (variable.type === VariableType.NUMBER) {
-            return true;
-        }
-
-        if (variable.type === VariableType.ARRAY) {
+        if ([VariableType.NUMBER, VariableType.ARRAY, VariableType.STRING].includes(variable.type)) {
             return true;
         }
 
         return false;
-
     }, [])
 
     return (
@@ -66,7 +61,7 @@ export const NumberStringTypeVariableEditor = ({ workflow, onWorkflowChange }: P
                 onSelect={updateSelectionStart}
             />
             <Box sx={{ marginLeft: 1 }}>
-                <VariableSelectorDialog onInsertVariable={handleSelectVariable} onCustomVariableFilter={handleCustomVariableFilter} supportPathForObject={true} availableVariableTypes={[VariableType.NUMBER, VariableType.ARRAY]} />
+                <VariableSelectorDialog onInsertVariable={handleSelectVariable} onCustomVariableFilter={handleCustomVariableFilter} supportPathForObject={true} />
                 {showConvertArrayOptionsDialog && selectedVariable && <ConvertArrayOptionsDialog variable={selectedVariable} onClose={handleConvertArrayOptionsDialogClose} />}
             </Box>
         </Box>
