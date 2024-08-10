@@ -1,4 +1,4 @@
-import { Box, IconButton } from '@mui/material'
+import { Box, Button, IconButton } from '@mui/material'
 import React, { useCallback, useMemo } from 'react'
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
@@ -17,6 +17,7 @@ import { RemoveMessageEditor } from '../elements/RemoveMessage/Editor/RemoveMess
 import { IntegrationSendTelegramMessageEditor } from '../elements/IntegrationSendTelegramMessage/Editor';
 import { IntegrationGoogleSheetsEditor } from '../elements/IntegrationGoogleSheets/Editor/IntegrationGoogleSheetsEditor';
 import { IntegrationHttpRequestEditor } from '../elements/IntegrationHttpRequest';
+import { useAppDialog } from '../../../Dialog/useAppDialog';
 
 
 
@@ -26,6 +27,7 @@ interface Props {
 
 export const ElementMenu = ({ element }: Props) => {
     const confirm = useConfirm();
+    const { openDialog, closeDialog } = useAppDialog();
     const { updateBlock, blocks, links, removeLinks } = useFlowDesignerStore((state) => ({
         blocks: state.project.blocks,
         updateBlock: state.updateBlock,
@@ -140,38 +142,52 @@ export const ElementMenu = ({ element }: Props) => {
 
     }, [element.type]);
 
+    const handleEditorClose = useCallback(() => {
+        closeDialog();
+    }, [closeDialog]);
+
+    const handleEditorSave = useCallback((newElement: UIElement) => {
+
+        const index = block.elements.findIndex(e => e.id === newElement.id);
+        block.elements[index] = newElement;
+        updateBlock(block);
+    }, [block, updateBlock]);
+
     const handleEditElement = useCallback(() => {
         const { content, title, newElement } = getEditor(element);
 
-        confirm({ content, title })
-            .then(() => {
+        openDialog({
+            content, 
+            title,
+            buttons: [
+                <Button key={'save'} onClick={() => handleEditorSave(newElement)} variant='contained' color='success'>Save</Button>,
+                <Button key={'close'} onClick={handleEditorClose}>Close</Button>
+            ]
+        });
 
-                const index = block.elements.findIndex(e => e.id === newElement.id);
-                block.elements[index] = newElement;
-                updateBlock(block);
-            })
-            .catch(() => {
-                /* ... */
-            });
-    }, [block, confirm, element, getEditor, updateBlock]);
+    }, [element, getEditor, handleEditorClose, handleEditorSave, openDialog]);
+
+
 
     return (
-        <Box sx={{
-            display: 'flex',
-            backgroundColor: Colors.WHITE,
-            borderRadius: 1,
-            border: `1px solid ${Colors.BORDER}`, padding: 0.5,
-            marginLeft: block.elements.length === 1 ? '23px' : undefined
-        }}>
-            <IconButton size='small' aria-label="edit" onClick={handleEditElement}>
-                <EditIcon />
-            </IconButton>
-            {block.elements.length > 1 && (
-                <IconButton size='small' aria-label="delete" onClick={handleRemoveElement}>
-                    <DeleteIcon />
+        <>
+            <Box sx={{
+                display: 'flex',
+                backgroundColor: Colors.WHITE,
+                borderRadius: 1,
+                border: `1px solid ${Colors.BORDER}`, padding: 0.5,
+                marginLeft: block.elements.length === 1 ? '23px' : undefined
+            }}>
+                <IconButton size='small' aria-label="edit" onClick={handleEditElement}>
+                    <EditIcon />
                 </IconButton>
-            )
-            }
-        </Box>
+                {block.elements.length > 1 && (
+                    <IconButton size='small' aria-label="delete" onClick={handleRemoveElement}>
+                        <DeleteIcon />
+                    </IconButton>
+                )
+                }
+            </Box>
+        </>
     )
 }

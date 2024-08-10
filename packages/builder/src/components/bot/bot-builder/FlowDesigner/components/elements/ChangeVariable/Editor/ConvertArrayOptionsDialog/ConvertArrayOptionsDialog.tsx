@@ -1,7 +1,7 @@
 import { BotVariable, VariableConverter } from '@kickoffbot.com/types'
 import { Box, Button, FormControlLabel, Radio, RadioGroup, Typography } from '@mui/material';
 import React, { useCallback, useMemo } from 'react'
-import SmhDialog from '~/components/commons/Dialog/SmhDialog';
+import AppDialog from '~/components/commons/Dialog/AppDialog';
 import { PropertySelector } from '../VariableValueSource/condition/PropertySelector';
 import { isPlainObject } from 'lodash';
 
@@ -53,7 +53,7 @@ export const ConvertArrayOptionsDialog = ({ variable, onClose }: Props) => {
     }, [availableProperties.length, converter, selectedPropertyName]);
 
     return (
-        <SmhDialog
+        <AppDialog
             onClose={handleClose}
             maxWidth={'sm'}
             buttons={[
@@ -78,6 +78,6 @@ export const ConvertArrayOptionsDialog = ({ variable, onClose }: Props) => {
                     <PropertySelector propsDataSource={availableProperties} selectedPropertyName={selectedPropertyName} onPropertyNameChange={handlePropertyNameChange} arrayObject={{}} />
                 </Box>}
             </Box>
-        </SmhDialog >
+        </AppDialog >
     )
 }

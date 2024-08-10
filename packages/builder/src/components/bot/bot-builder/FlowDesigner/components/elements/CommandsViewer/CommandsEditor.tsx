@@ -1,7 +1,7 @@
 import React, { useCallback } from 'react';
 import SettingsSuggestIcon from '@mui/icons-material/SettingsSuggest';
 import { Box, Button } from '@mui/material';
-import SmhDialog from '~/components/commons/Dialog/SmhDialog';
+import AppDialog from '~/components/commons/Dialog/AppDialog';
 import { CommandDescription, CommandsUIElement } from '@kickoffbot.com/types';
 import { CommandsListEditor } from './CommandsListEditor';
 
@@ -36,7 +36,7 @@ export const CommandsEditor = ({ commandsElement, onCommandsElementChange }: Pro
     return (
         <>
             <Button startIcon={<SettingsSuggestIcon />} onClick={handleOpenEditor}></Button>
-            {open && <SmhDialog
+            {open && <AppDialog
                 onClose={handleClose}
                 maxWidth={'sm'}
                 buttons={[
@@ -47,7 +47,7 @@ export const CommandsEditor = ({ commandsElement, onCommandsElementChange }: Pro
                 <Box sx={{ display: 'flex', padding: (theme) => theme.spacing(1, 0) }}>
                     <CommandsListEditor commands={commands} onCommandsChange={setCommands} />
                 </Box>
-            </SmhDialog>
+            </AppDialog>
             }
         </>
     )
