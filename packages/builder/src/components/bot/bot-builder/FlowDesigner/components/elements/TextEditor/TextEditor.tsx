@@ -6,14 +6,14 @@ import { Colors } from '~/themes/Colors';
 import { FormatBold, FormatItalic } from '@mui/icons-material';
 import { stateToHTML } from "draft-js-export-html";
 import { VariableType, type BotVariable } from '@kickoffbot.com/types';
-import { VariableSelectorDialog } from '../../../VariableSelectorDialog';
+import { VariableSelectorDialog } from '../../VariableSelectorDialog';
 import { getTemplateReference, getTextPropertyReference, getTextVariableReference } from '~/components/bot/bot-builder/utils';
 import ControlPointIcon from '@mui/icons-material/ControlPoint';
 import { isNil } from 'lodash';
 import { StringItemsMenu } from './StringItemsMenu';
 import { useFlowDesignerStore } from '~/components/bot/bot-builder/store';
 import AssignmentIcon from '@mui/icons-material/Assignment';
-import { EmojiButton } from '../../EmojiButton/EmojiButton';
+import { EmojiButton } from '../EmojiButton/EmojiButton';
 
 interface TextEditorProps {
     initialState?: EditorState | undefined;
@@ -30,13 +30,14 @@ export const TextEditor = ({ onContentChange, initialState, contextObjectPropert
     }));
 
     const generatePublicContentChange = useCallback((newState: EditorState) => {
+        const plainText = newState.getCurrentContent().getPlainText();
         const content = newState.getCurrentContent();
 
         const rawObject = convertToRaw(content);
         const jsonContent = JSON.stringify(rawObject);
 
-        const htmlContent = stateToHTML(newState.getCurrentContent());
-        const telegramContent = stateToHTML(newState.getCurrentContent(), {
+        const htmlContent = plainText === '' ? '' : stateToHTML(newState.getCurrentContent());
+        const telegramContent = plainText === '' ? '' : stateToHTML(newState.getCurrentContent(), {
             inlineStyles: {
                 BOLD: { element: 'b' },
             }

@@ -1,4 +1,5 @@
 import {
+  BotPlatform,
   BotProject,
   BotTemplate,
   BotVariable,
@@ -18,7 +19,7 @@ export interface FlowDesignerState {
   setTempLinkPath: (value: string) => void;
   projectIsInitialized: boolean;
   project: BotProject;
-  initProject: (value: string | null) => void;
+  initProject: (platform: BotPlatform, value: string | null) => void;
 
   updateBlock: (updatedBlock: FlowDesignerUIBlockDescription) => void;
   viewPortOffset: PositionDescription;
@@ -54,4 +55,8 @@ export interface FlowDesignerState {
   saveConnection: (connection: ConnectionDescription) => void;
   removeConnectionById: (connectionId: ConnectionDescription["id"]) => void;
   setActualGoogleConnections: (value: ConnectionDescription[]) => void;
+
+  platform: BotPlatform;
+  showWebBotDemo: boolean;
+  toggleShowWebBotDemo: VoidFunction;
 }

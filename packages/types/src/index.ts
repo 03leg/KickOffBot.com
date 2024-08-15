@@ -3,3 +3,4 @@ export * from './PositionDescription';
 export * from './TransformDescription';
 
 export * from './TelegramTypes';
+export * from './WebBotTypes';

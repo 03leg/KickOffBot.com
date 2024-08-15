@@ -20,7 +20,7 @@ export const botManagementRouter = createTRPCRouter({
       const userId = ctx.session?.user.id;
 
       const currentBotDescription = await ctx.prisma.botDescription.upsert({
-        create: { userId, name: input.name },
+        create: { userId, name: input.name, botType: input.botType },
         update: { name: input.name },
         where: { id: input.id ?? "unknown", userId },
         select: { id: true },
@@ -93,14 +93,14 @@ export const botManagementRouter = createTRPCRouter({
 
       const botDescription = await ctx.prisma.botDescription.findUnique({
         where: { userId, deleted: false, id: input.id },
-        select: { contentId: true },
+        select: { contentId: true, botType: true },
       });
       if (isNil(botDescription)) {
         throw new Error("InvalidOperationError");
       }
 
       if (isNil(botDescription.contentId)) {
-        return null;
+        return { content: null, botType: botDescription.botType };
       }
 
       const botContent = await ctx.prisma.botContent.findUnique({
@@ -113,7 +113,10 @@ export const botManagementRouter = createTRPCRouter({
       }
 
       // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-      return botContent.content?.toString();
+      return {
+        content: botContent.content?.toString(),
+        botType: botDescription.botType,
+      };
     }),
   removeBot: protectedProcedure
     .input(BotDescriptionScheme)

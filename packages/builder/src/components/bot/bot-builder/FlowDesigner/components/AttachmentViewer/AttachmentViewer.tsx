@@ -9,8 +9,6 @@ interface Props {
     file?: FileDescription;
 }
 
-
-
 const useStyles = makeStyles()((theme) => ({
     root: {
         marginTop: 5,

@@ -13,7 +13,7 @@ import { APP_ELEMENT_ROLE } from '../../../constants';
 import { useFlowDesignerStore } from '../../../store';
 import { BlockMenu } from '../BlockMenu/BlockMenu';
 import { OutputPort } from '../OutputPort';
-import { CommandsViewer } from '../elements/CommandsViewer';
+import { StartCommandsBlock } from '../elements/StartCommandsBlock/StartCommandsBlock';
 
 
 interface Props {
@@ -80,7 +80,7 @@ export const FlowDesignerBlock = ({ blockDescription, rootScale }: Props) => {
                     {blockDescription.blockType === BlockType.COMMANDS &&
                         <>
                             <Box sx={{ height: '100%', display: 'flex' }}>
-                                <CommandsViewer blockDescription={blockDescription}/>
+                                <StartCommandsBlock blockDescription={blockDescription}/>
                             </Box>
                         </>
                     }

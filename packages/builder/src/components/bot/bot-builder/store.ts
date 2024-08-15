@@ -4,67 +4,15 @@ import {
   type FlowDesignerLink,
   type BotVariable,
   BotProject,
-  VariableType,
   BotTemplate,
   ConnectionDescription,
   ConnectionType,
+  BotPlatform,
 } from "@kickoffbot.com/types";
 import { isNil, remove } from "lodash";
 import { type PositionDescription } from "@kickoffbot.com/types";
-import { canLink, getDefaultBlocks } from "./utils";
+import { canLink, getDefaultProjectState } from "./utils";
 import { FlowDesignerState } from "./types";
-
-export const DEFAULT_PROJECT_STATE: BotProject = {
-  blocks: [...getDefaultBlocks()],
-  links: [],
-  variables: [
-    {
-      id: "user_id",
-      type: VariableType.NUMBER,
-      name: "user_id",
-      value: -1,
-      isPlatformVariable: true,
-    },
-    {
-      id: "user_first_name",
-      type: VariableType.STRING,
-      name: "user_first_name",
-      value: "",
-      isPlatformVariable: true,
-    },
-    {
-      id: "user_last_name",
-      type: VariableType.STRING,
-      name: "user_last_name",
-      value: "",
-      isPlatformVariable: true,
-    },
-    {
-      id: "username",
-      type: VariableType.STRING,
-      name: "username",
-      value: "",
-      isPlatformVariable: true,
-    },
-    {
-      id: "user_language_code",
-      type: VariableType.STRING,
-      name: "user_language_code",
-      value: "",
-      isPlatformVariable: true,
-    },
-    {
-      id: "is_premium",
-      type: VariableType.BOOLEAN,
-      name: "is_premium",
-      value: false,
-      isPlatformVariable: true,
-    },
-  ],
-  transformDescription: { scale: 1, x: 0, y: 0 },
-  templates: [],
-  connections: [],
-};
 
 export const useFlowDesignerStore = create<FlowDesignerState>()((set, get) => ({
   changeTransformDescription: (newValue) =>
@@ -83,15 +31,18 @@ export const useFlowDesignerStore = create<FlowDesignerState>()((set, get) => ({
   hideTempLink: () => set(() => ({ showTemporaryLink: false })),
   setTempLinkPath: (value: string) => set(() => ({ tempLinkPath: value })),
   projectIsInitialized: false,
-  project: JSON.parse(JSON.stringify(DEFAULT_PROJECT_STATE)),
-  initProject: (value: string | null) =>
+  platform: BotPlatform.WEB,
+  project: {} as BotProject,
+  initProject: (platform: BotPlatform, value: string | null) =>
     set(() => {
-      let currentProject = JSON.parse(JSON.stringify(DEFAULT_PROJECT_STATE));
+      let currentProject = JSON.parse(
+        JSON.stringify(getDefaultProjectState(platform))
+      );
       if (value !== null) {
         currentProject = JSON.parse(value);
       }
 
-      return { project: currentProject, projectIsInitialized: true };
+      return { project: currentProject, projectIsInitialized: true, platform };
     }),
   addBlock: (newBlock: FlowDesignerUIBlockDescription) =>
     set((state) => {
@@ -223,7 +174,7 @@ export const useFlowDesignerStore = create<FlowDesignerState>()((set, get) => ({
     set((state) => ({ showRuntimeEditor: !state.showRuntimeEditor })),
   destroyProject: () =>
     set(() => ({
-      project: JSON.parse(JSON.stringify(DEFAULT_PROJECT_STATE)),
+      project: {} as BotProject,
       projectIsInitialized: false,
       showTemporaryLink: false,
       showProjectItemsViewer: false,
@@ -293,9 +244,15 @@ export const useFlowDesignerStore = create<FlowDesignerState>()((set, get) => ({
       project.connections = [
         ...(actualGoogleConnections.filter(
           (c) => c.type !== ConnectionType.Google
-        ) ?? []), ...actualGoogleConnections
+        ) ?? []),
+        ...actualGoogleConnections,
       ];
 
       return { project };
+    }),
+  showWebBotDemo: false,
+  toggleShowWebBotDemo: () =>
+    set((state) => {
+      return { showWebBotDemo: !state.showWebBotDemo };
     }),
 }));
