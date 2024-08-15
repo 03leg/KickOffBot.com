@@ -1,36 +1,30 @@
 import { Box } from '@mui/material'
 import React, { useMemo } from 'react'
 import { Colors } from '~/themes/Colors'
-import { type ToolBoxGroup } from './types'
 import { ToolBoxGroupComp } from './ToolBoxGroup';
-import { getContentElements, getInputElements, getIntegrationsElements, getLogicElements } from '../utils';
 import { useDndContext } from '@dnd-kit/core';
 import { isNil } from 'lodash';
 import { APP_ELEMENT_ROLE } from '../constants';
+import { useFlowDesignerStore } from '../store';
+import { BotPlatform } from '@kickoffbot.com/types';
+import { TELEGRAM_TOOLBOX_GROUPS, WEB_TOOLBOX_GROUPS } from './toolBox.constants';
 
 export const ToolBox = () => {
-    const toolBoxGroups: ToolBoxGroup[] = useMemo(() => {
-        return [
-            {
-                title: 'Content',
-                items: getContentElements()
-            },
-            {
-                title: 'User Input',
-                items: getInputElements()
-            },
-            {
-                title: 'Logic',
-                items: getLogicElements()
-            },
-            {
-                title: 'Integrations',
-                items: getIntegrationsElements()
-            },
-        ]
-    }, []);
-
     const { active } = useDndContext();
+    const { platform } = useFlowDesignerStore((state) => ({
+        platform: state.platform
+    }));
+
+    const toolboxGroups = useMemo(() => {
+        if (platform === BotPlatform.Telegram) {
+            return TELEGRAM_TOOLBOX_GROUPS;
+        }
+        if (platform === BotPlatform.WEB) {
+            return WEB_TOOLBOX_GROUPS;
+        }
+
+        throw new Error('InvalidOperationError');
+    }, [platform])
 
     return (
         <Box
@@ -48,7 +42,7 @@ export const ToolBox = () => {
                 marginBottom: '20px',
                 opacity: isNil(active) ? 1 : 0.6,
             }}>
-            {toolBoxGroups.map(group => <ToolBoxGroupComp key={group.title} group={group} />)}
+            {toolboxGroups.map(group => <ToolBoxGroupComp key={group.title} group={group} />)}
         </Box>
     )
 }

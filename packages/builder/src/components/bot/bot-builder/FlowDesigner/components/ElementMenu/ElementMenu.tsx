@@ -9,7 +9,7 @@ import { useConfirm } from 'material-ui-confirm';
 import { TextContentEditor } from '../elements/TextContent/Editor';
 import { ButtonsEditor } from '../elements/ButtonsInput/Editor';
 import { TextInputEditor } from '../elements/TextInput/Editor';
-import { ChangeVariableUIElement, ConditionUIElement, ContentTextUIElement, EditMessageUIElement, ElementType, GoogleSheetsIntegrationUIElement, HTTPRequestIntegrationUIElement, InputButtonsUIElement, InputTextUIElement, OutputPortDescription, RemoveMessageUIElement, SendTelegramMessageIntegrationUIElement, UIElement } from '@kickoffbot.com/types';
+import { ChangeVariableUIElement, ConditionUIElement, ContentTextUIElement, EditMessageUIElement, ElementType, GoogleSheetsIntegrationUIElement, HTTPRequestIntegrationUIElement, InputButtonsUIElement, InputTextUIElement, OutputPortDescription, RemoveMessageUIElement, SendTelegramMessageIntegrationUIElement, UIElement, WebContentTextUIElement } from '@kickoffbot.com/types';
 import { ChangeVariableEditor } from '../elements/ChangeVariable/Editor';
 import { ConditionEditor } from '../elements/Condition/Editor';
 import { EditMessageEditor } from '../elements/EditMessage/Editor';
@@ -18,6 +18,7 @@ import { IntegrationSendTelegramMessageEditor } from '../elements/IntegrationSen
 import { IntegrationGoogleSheetsEditor } from '../elements/IntegrationGoogleSheets/Editor/IntegrationGoogleSheetsEditor';
 import { IntegrationHttpRequestEditor } from '../elements/IntegrationHttpRequest';
 import { useAppDialog } from '../../../Dialog/useAppDialog';
+import { WebMessageEditor } from '../elements/WEB/WebMessage';
 
 
 
@@ -135,6 +136,12 @@ export const ElementMenu = ({ element }: Props) => {
 
                 return { content: (<IntegrationHttpRequestEditor element={newElement} />), title: 'HTTP Request', newElement };
             }
+            case ElementType.WEB_CONTENT_MESSAGE: {
+                const initialElement = elementArg as WebContentTextUIElement;
+                const newElement: WebContentTextUIElement = JSON.parse(JSON.stringify(initialElement));
+
+                return { content: (<WebMessageEditor element={newElement} />), title: 'Edit message', newElement };
+            }
             default: {
                 throw new Error('NotImplementedError');
             }
@@ -157,7 +164,7 @@ export const ElementMenu = ({ element }: Props) => {
         const { content, title, newElement } = getEditor(element);
 
         openDialog({
-            content, 
+            content,
             title,
             buttons: [
                 <Button key={'save'} onClick={() => handleEditorSave(newElement)} variant='contained' color='success'>Save</Button>,

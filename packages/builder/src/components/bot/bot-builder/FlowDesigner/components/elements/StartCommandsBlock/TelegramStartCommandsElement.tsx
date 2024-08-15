@@ -1,16 +1,9 @@
 import { CommandsUIElement, FlowDesignerUIBlockDescription, PortType } from '@kickoffbot.com/types';
-import { Box, Button } from '@mui/material';
+import { Box } from '@mui/material';
 import React, { useCallback } from 'react';
 import { makeStyles } from 'tss-react/mui';
 import { OutputPort } from '../../OutputPort';
 import { CommandsEditor } from './CommandsEditor';
-
-
-interface Props {
-    // commandsElement: CommandsUIElement;
-    blockDescription: FlowDesignerUIBlockDescription;
-}
-
 
 export const useStyles = makeStyles()(() => ({
     port: {
@@ -36,8 +29,11 @@ export const useStyles = makeStyles()(() => ({
     },
 }));
 
+interface Props {
+    blockDescription: FlowDesignerUIBlockDescription;
+}
 
-export const CommandsViewer = ({ blockDescription }: Props) => {
+export const TelegramStartCommandsElement = ({ blockDescription }: Props) => {
     const { classes, cx } = useStyles();
     const [commandsElementValue, setCommandsElementValue] = React.useState<CommandsUIElement>(blockDescription.elements[0] as CommandsUIElement);
 
@@ -46,20 +42,21 @@ export const CommandsViewer = ({ blockDescription }: Props) => {
         setCommandsElementValue(commandsElement);
         blockDescription.elements = [commandsElement];
     }, [blockDescription])
- 
+
+
     return (
         <Box sx={{ display: 'flex', width: '100%', flexDirection: 'column' }}>
-            {commandsElementValue.commands?.map(b => {
+            {commandsElementValue.commands?.map(commandItem => {
                 return (
-                    <Box key={b.command} className={classes.button}>
-                        <OutputPort className={classes.port} elementId={commandsElementValue.id} buttonId={b.id} outPortType={PortType.BUTTONS_ELEMENT} />
-                        <Box sx={{ marginBottom: 1 }} className={cx(classes.command, b.command === '/start' ? classes.startCommand : '' )}>
-                            {b.command}
+                    <Box key={commandItem.command} className={classes.button}>
+                        <OutputPort className={classes.port} elementId={commandsElementValue.id} buttonId={commandItem.id} outPortType={PortType.BUTTONS_ELEMENT} />
+                        <Box sx={{ marginBottom: 1 }} className={cx(classes.command, commandItem.command === '/start' ? classes.startCommand : '')}>
+                            {commandItem.command}
                         </Box>
                     </Box>
                 )
             })}
-           <CommandsEditor commandsElement={commandsElementValue} onCommandsElementChange={handleCommandsElementChange}/>
+            <CommandsEditor commandsElement={commandsElementValue} onCommandsElementChange={handleCommandsElementChange} />
         </Box>
     )
 }

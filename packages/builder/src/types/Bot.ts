@@ -10,6 +10,7 @@ export const BotDescriptionScheme = z.object({
   name: z.string(),
   id: z.string().optional(),
   template: z.string().optional(),
+  botType: z.number().optional(),
 });
 
 export const BotContentScheme = z.object({

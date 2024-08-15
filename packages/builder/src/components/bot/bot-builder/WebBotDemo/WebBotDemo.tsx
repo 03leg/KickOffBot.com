@@ -1,0 +1,86 @@
+import React, { useLayoutEffect } from 'react'
+import * as ReactDOM from "react-dom/client";
+import { useFlowDesignerStore } from '../store';
+import { Box, Typography } from '@mui/material';
+import {
+    StyledEngineProvider,
+    createTheme,
+    ThemeProvider
+} from "@mui/material/styles";
+import createCache from "@emotion/cache";
+import { CacheProvider } from "@emotion/react";
+import { ChatViewer } from './components/ChatViewer';
+
+
+
+export const WebBotDemo = () => {
+    const { showWebBotDemo, project } = useFlowDesignerStore((state) => ({
+        showWebBotDemo: state.showWebBotDemo,
+        project: state.project,
+    }));
+
+
+
+
+    useLayoutEffect(() => {
+        if (!showWebBotDemo) return;
+
+        console.log('Paint #1');
+
+        const container = document.querySelector('#chat-box-root');
+        if (!container) {
+            throw new Error('InvalidOperationError');
+        }
+
+        const shadowContainer = container.attachShadow({ mode: 'open' });
+        const shadowRootElement = document.createElement('div');
+
+        shadowContainer.appendChild(shadowRootElement);
+
+        const cache = createCache({
+            key: "shadow-my-css",
+            prepend: true,
+            container: shadowContainer
+        });
+
+        const shadowTheme = createTheme({
+            components: {
+                MuiPopover: {
+                    defaultProps: {
+                        container: shadowRootElement
+                    }
+                },
+                MuiPopper: {
+                    defaultProps: {
+                        container: shadowRootElement
+                    }
+                },
+                MuiModal: {
+                    defaultProps: {
+                        container: shadowRootElement
+                    }
+                }
+            }
+        });
+
+        ReactDOM.createRoot(shadowRootElement).render(
+            <React.StrictMode>
+                <CacheProvider value={cache}>
+                    <ThemeProvider theme={shadowTheme}>
+                        <ChatViewer project={project}/>
+                    </ThemeProvider>
+                </CacheProvider>
+            </React.StrictMode>
+        );
+    }, [project, showWebBotDemo]);
+
+    if (!showWebBotDemo) {
+        return null;
+    }
+
+    return (
+        <Box sx={{ width: '450px', backgroundColor: 'white', height: '100%', minWidth: 450, marginLeft: ({ spacing }) => spacing(2), }}>
+            <div id='chat-box-root'></div>
+        </Box>
+    )
+}

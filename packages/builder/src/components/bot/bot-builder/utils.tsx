@@ -1,4 +1,4 @@
-import { type ContentTextUIElement, ElementType, type InputTextUIElement, type FlowDesignerUIBlockDescription, type UIElement, type InputButtonsUIElement, type FlowDesignerLink, type ButtonPortDescription, type BotVariable, BlockType, TransformDescription, ChangeVariableUIElement, ConditionUIElement, LogicalOperator, ButtonsSourceStrategy, CommandsUIElement, EditMessageUIElement, RemoveMessageUIElement, VariableConverter, SendTelegramMessageIntegrationUIElement, GoogleSheetsIntegrationUIElement, HTTPRequestIntegrationUIElement, HTTPMethod } from "@kickoffbot.com/types";
+import { type ContentTextUIElement, ElementType, type InputTextUIElement, type FlowDesignerUIBlockDescription, type UIElement, type InputButtonsUIElement, type FlowDesignerLink, type ButtonPortDescription, type BotVariable, BlockType, TransformDescription, ChangeVariableUIElement, ConditionUIElement, LogicalOperator, ButtonsSourceStrategy, CommandsUIElement, EditMessageUIElement, RemoveMessageUIElement, VariableConverter, SendTelegramMessageIntegrationUIElement, GoogleSheetsIntegrationUIElement, HTTPRequestIntegrationUIElement, HTTPMethod, VariableType, BotProject, BotPlatform, WebStartCommandsUIElement, WebContentTextUIElement } from "@kickoffbot.com/types";
 import MessageIcon from '@mui/icons-material/Message';
 import TextFieldsIcon from '@mui/icons-material/TextFields';
 import { isNil } from "lodash";
@@ -17,13 +17,90 @@ import TelegramIcon from '@mui/icons-material/Telegram';
 import GoogleIcon from '@mui/icons-material/Google';
 import HttpIcon from '@mui/icons-material/Http';
 
+export const TELEGRAM_DEFAULT_PROJECT_STATE: BotProject = {
+    blocks: [...getTelegramDefaultBlocks()],
+    links: [],
+    variables: [
+        {
+            id: "user_id",
+            type: VariableType.NUMBER,
+            name: "user_id",
+            value: -1,
+            isPlatformVariable: true,
+        },
+        {
+            id: "user_first_name",
+            type: VariableType.STRING,
+            name: "user_first_name",
+            value: "",
+            isPlatformVariable: true,
+        },
+        {
+            id: "user_last_name",
+            type: VariableType.STRING,
+            name: "user_last_name",
+            value: "",
+            isPlatformVariable: true,
+        },
+        {
+            id: "username",
+            type: VariableType.STRING,
+            name: "username",
+            value: "",
+            isPlatformVariable: true,
+        },
+        {
+            id: "user_language_code",
+            type: VariableType.STRING,
+            name: "user_language_code",
+            value: "",
+            isPlatformVariable: true,
+        },
+        {
+            id: "is_premium",
+            type: VariableType.BOOLEAN,
+            name: "is_premium",
+            value: false,
+            isPlatformVariable: true,
+        },
+    ],
+    transformDescription: { scale: 1, x: 0, y: 0 },
+    templates: [],
+    connections: [],
+};
 
-export function getContentElements() {
+const WEB_DEFAULT_PROJECT_STATE: BotProject = {
+    blocks: [...getWebDefaultBlocks()],
+    links: [],
+    variables: [
+    ],
+    transformDescription: { scale: 1, x: 0, y: 0 },
+    templates: [],
+    connections: [],
+};
+
+export function getDefaultProjectState(platform: BotPlatform) {
+    if (platform === BotPlatform.Telegram) {
+        return TELEGRAM_DEFAULT_PROJECT_STATE;
+    }
+
+    if (platform === BotPlatform.WEB) {
+        return WEB_DEFAULT_PROJECT_STATE;
+    }
+
+    throw new Error('InvalidOperationError');
+}
+
+
+export function getTelegramContentElements() {
     return [
         { type: ElementType.CONTENT_TEXT, title: 'Message', icon: <MessageIcon /> },
-        // { type: ElementType.CONTENT_IMAGE, title: 'Image', icon: <ImageIcon /> },
-        // { type: ElementType.CONTENT_AUDIO, title: 'Audio', icon: <AudiotrackIcon /> },
-        // { type: ElementType.CONTENT_VIDEO, title: 'Video', icon: <VideocamIcon /> },
+    ]
+}
+
+export function getWebContentElements() {
+    return [
+        { type: ElementType.WEB_CONTENT_MESSAGE, title: 'Message', icon: <MessageIcon /> },
     ]
 }
 
@@ -56,7 +133,7 @@ export function getIntegrationsElements() {
 }
 
 export function getIconByType(type: ElementType) {
-    const description = [...getInputElements(), ...getContentElements(), ...getLogicElements(), ...getIntegrationsElements()].find(d => d.type === type);
+    const description = [...getInputElements(), ...getTelegramContentElements(), ...getLogicElements(), ...getIntegrationsElements(), ...getWebContentElements()].find(d => d.type === type);
 
     if (isNil(description)) {
         throw new Error('Property "description" can not be null here');
@@ -66,6 +143,7 @@ export function getIconByType(type: ElementType) {
 }
 
 export function needToChangeId(id: string): boolean {
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
     const values = Object.values(ElementType) as string[];
 
     return values.includes(id);
@@ -161,6 +239,14 @@ export function getNewUIElementTemplate(id: string, data: DraggableElementData):
             }
             return result;
         }
+        case ElementType.WEB_CONTENT_MESSAGE: {
+            const result: WebContentTextUIElement = {
+                id,
+                type: ElementType.WEB_CONTENT_MESSAGE,
+                attachments: [],
+            };
+            return result;
+        }
         default: {
             throw Error('NotImplementedError');
         }
@@ -170,6 +256,7 @@ export function getNewUIElementTemplate(id: string, data: DraggableElementData):
 
 }
 
+// eslint-disable-next-line @typescript-eslint/no-redundant-type-constituents
 export function getPositionForNewBlock(event: DragEndEvent, container: HTMLElement | null, viewportTransform: TransformDescription | null): PositionDescription | null {
     throwIfNil(container);
     throwIfNil(viewportTransform);
@@ -197,10 +284,15 @@ export function getNewBlock(position: PositionDescription, firstElement: UIEleme
     return { id: v4(), blockType: BlockType.ELEMENTS, title, position: { x: position.x, y: position.y }, elements: [{ ...firstElement }] };
 }
 
-export function getDefaultBlocks() {
+export function getTelegramDefaultBlocks() {
     return [
         {
-            id: '/start', blockType: BlockType.COMMANDS, title: '/start', position: { x: 363, y: 175 }, elements: [{
+            id: '/start',
+            blockType: BlockType.COMMANDS,
+            title: '/start',
+            position: { x: 363, y: 175 },
+            elements: [{
+                type: ElementType.TELEGRAM_START_COMMANDS,
                 commands: [
                     {
                         id: '/start',
@@ -213,64 +305,26 @@ export function getDefaultBlocks() {
     ];
 }
 
-// export const generateElements = () => {
-//     const textUIElement1: ContentTextUIElement = {
-//         type: ElementType.CONTENT_TEXT,
-//         json: 'Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1',
-//         id: '11111' + v4(),
-//     };
-//     const textUIElement2: ContentTextUIElement = {
-//         type: ElementType.CONTENT_TEXT,
-//         json: 'Hey2! Hey2! Hey2! Hey2! Hey2! Hey2! Hey2! Hey2! Hey2! Hey2! Hey2! Hey2! Hey2! ' + v4(),
-//         id: '22222' + v4(),
-//     };
-//     const textUIElement3: ContentTextUIElement = {
-//         type: ElementType.CONTENT_TEXT,
-//         json: 'Privet3! Privet3! Privet3! ' + v4(),
-//         id: '33333' + v4(),
-//     };
-//     const textUIElement4: ContentTextUIElement = {
-//         type: ElementType.CONTENT_TEXT,
-//         json: 'Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1',
-//         id: '11111' + v4(),
-//     };
-//     const textUIElement5: ContentTextUIElement = {
-//         type: ElementType.CONTENT_TEXT,
-//         json: 'Hey2! Hey2! Hey2! Hey2! Hey2! Hey2! Hey2! Hey2! Hey2! Hey2! Hey2! Hey2! Hey2! ' + v4(),
-//         id: '22222' + v4(),
-//     };
-//     const textUIElement6: ContentTextUIElement = {
-//         type: ElementType.CONTENT_TEXT,
-//         json: 'Privet3!' + v4(),
-//         id: '33333' + v4(),
-//     };
-//     const textUIElement7: ContentTextUIElement = {
-//         type: ElementType.CONTENT_TEXT,
-//         json: 'Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1 Text1',
-//         id: '11111' + v4(),
-//     };
-//     const textUIElement8: ContentTextUIElement = {
-//         type: ElementType.CONTENT_TEXT,
-//         json: 'Hey2! Hey2! Hey2! Hey2! Hey2! Hey2! Hey2! Hey2! Hey2! Hey2! Hey2! Hey2! Hey2! ' + v4(),
-//         id: '22222' + v4(),
-//     };
-//     const textUIElement9: ContentTextUIElement = {
-//         type: ElementType.CONTENT_TEXT,
-//         json: 'Privet3! Privet3! Privet3! Privet3!  Privet3!  Privet3!  Privet3!  Privet3!' + v4(),
-//         id: '33333' + v4(),
-//     };
-//     return [
-//         textUIElement1,
-//         textUIElement2,
-//         textUIElement3,
-//         textUIElement4,
-//         textUIElement5,
-//         textUIElement6,
-//         textUIElement7,
-//         textUIElement8,
-//         textUIElement9,
-//     ]
-// };
+export function getWebDefaultBlocks() {
+    return [
+        {
+            id: '/start',
+            blockType: BlockType.COMMANDS,
+            title: '/start',
+            position: { x: 363, y: 175 },
+            elements: [{
+                type: ElementType.WEB_START_COMMANDS,
+                commands: [
+                    {
+                        id: 'start',
+                        title: 'Start the bot',
+                        description: "Point where your bot will start",
+                    }
+                ],
+            } as WebStartCommandsUIElement]
+        }
+    ];
+}
 
 export const canLink = (newLink: FlowDesignerLink, links: FlowDesignerLink[]) => {
     let result = true;

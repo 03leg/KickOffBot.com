@@ -2,7 +2,7 @@ import { BotTemplate, BotVariable, VariableType } from '@kickoffbot.com/types';
 import { Box, Checkbox, FormControlLabel, InputLabel, TextField } from '@mui/material';
 import React, { useCallback, useMemo, useState } from 'react';
 import { VariableSelector } from '../../FlowDesigner/components/VariableSelector';
-import { TextEditor } from '../../FlowDesigner/components/elements/TextContent/TextEditor';
+import { TextEditor } from '../../FlowDesigner/components/elements/TextEditor';
 import { isNil } from 'lodash';
 import { EditorState, convertFromRaw } from 'draft-js';
 import { useFlowDesignerStore } from '../../store';

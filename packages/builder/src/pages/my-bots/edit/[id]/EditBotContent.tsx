@@ -16,19 +16,19 @@ import { showError, showSuccessMessage } from '~/utils/ClientStatusMessage';
 import { ConfirmProvider } from 'material-ui-confirm';
 import AbcIcon from '@mui/icons-material/Abc';
 import AbcRounded from '@mui/icons-material/AbcRounded';
-import { ElementType, FlowDesignerUIBlockDescription, TransformDescription, UIElement } from '@kickoffbot.com/types';
+import { BotPlatform, ElementType, FlowDesignerUIBlockDescription, TransformDescription, UIElement } from '@kickoffbot.com/types';
 import RouterIcon from '@mui/icons-material/Router';
 import { RuntimeEditor } from '~/components/bot/bot-builder/RuntimeEditor';
 import { LoadingIndicator } from '~/components/commons/LoadingIndicator';
 import { ProjectViewer } from '~/components/bot/bot-builder/ProjectViewer';
 import { AppDialogProvider } from '~/components/bot/bot-builder/Dialog/AppDialogProvider';
-
+import { WebBotDemo } from '~/components/bot/bot-builder/WebBotDemo';
 
 export default function EditBotContent() {
     const router = useRouter()
     const flowDesignerTransformDescription = React.useRef<TransformDescription | null>(null);
     const [activeDraggableItem, setActiveDraggableItem] = useState<Active | null>();
-    const { blocks, updateBlock, addBlock, project, initProject, projectIsInitialized, setViewPortOffset, updateAllLinks, toggleVariablesViewer, toggleRuntimeEditor, destroyProject } = useFlowDesignerStore((state) => ({
+    const { platform, toggleShowWebBotDemo, blocks, updateBlock, addBlock, project, initProject, projectIsInitialized, setViewPortOffset, updateAllLinks, toggleVariablesViewer, toggleRuntimeEditor, destroyProject } = useFlowDesignerStore((state) => ({
         blocks: state.project?.blocks ?? [],
         addBlock: state.addBlock,
         updateBlock: state.updateBlock,
@@ -39,7 +39,9 @@ export default function EditBotContent() {
         updateAllLinks: state.updateAllLinks,
         toggleVariablesViewer: state.toggleProjectItemsViewer,
         toggleRuntimeEditor: state.toggleRuntimeEditor,
-        destroyProject: state.destroyProject
+        destroyProject: state.destroyProject,
+        platform: state.platform,
+        toggleShowWebBotDemo: state.toggleShowWebBotDemo
     }));
     const { mutateAsync, isLoading: isLoadingSaveBotDescription } = api.botManagement.saveBotContent.useMutation();
     const { changeTransformDescription } = useFlowDesignerStore((state) => ({ changeTransformDescription: state.changeTransformDescription }));
@@ -56,11 +58,11 @@ export default function EditBotContent() {
     }, [destroyProject, removeBotResponse]);
 
     useEffect(() => {
-        if (projectDescription === undefined) {
+        if (!projectDescription) {
             return;
         }
 
-        initProject(projectDescription);
+        initProject(projectDescription.botType, projectDescription.content ?? null);
     }, [initProject, projectDescription, projectIsInitialized, router.query.id]);
 
 
@@ -309,7 +311,11 @@ export default function EditBotContent() {
 
     const handleToggleVariables = useCallback(() => {
         toggleVariablesViewer();
-    }, [toggleVariablesViewer])
+    }, [toggleVariablesViewer]);
+
+    const handleTestBot = useCallback(() => {
+        toggleShowWebBotDemo();
+    }, []);
 
     return (
         <AppDialogProvider>
@@ -323,7 +329,8 @@ export default function EditBotContent() {
                             </Button>
                         </Box>
                         <Box sx={{ display: 'flex', justifyContent: 'flex-end', flex: 1 }}>
-                            <Button variant="contained" color="success" onClick={handleSaveBot}>
+                            {platform === BotPlatform.WEB && <Button variant='contained' color="info" onClick={handleTestBot}>Test bot</Button>}
+                            <Button sx={{ marginLeft: 2 }} variant="contained" color="success" onClick={handleSaveBot}>
                                 Save
                             </Button>
                             <Checkbox sx={{ marginLeft: 2 }} icon={<AbcRounded />} checkedIcon={<AbcIcon />} onChange={handleToggleVariables} />
@@ -363,6 +370,7 @@ export default function EditBotContent() {
                         </DndContext>
                         <ProjectViewer />
                         <RuntimeEditor projectId={projectIdFromQuery} />
+                        <WebBotDemo />
                     </Box>
 
                 </Box>

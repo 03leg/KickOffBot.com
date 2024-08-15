@@ -2,7 +2,7 @@ import { Box } from '@mui/material'
 import React, { useCallback, useContext, useMemo } from 'react'
 import { TextContent } from '../elements/TextContent';
 import { Colors } from '~/themes/Colors';
-import { ContentTextUIElement, ElementType, GoogleSheetsIntegrationUIElement, HTTPRequestIntegrationUIElement, SendTelegramMessageIntegrationUIElement, type UIElement } from '@kickoffbot.com/types';
+import { ContentTextUIElement, ElementType, GoogleSheetsIntegrationUIElement, HTTPRequestIntegrationUIElement, SendTelegramMessageIntegrationUIElement, WebContentTextUIElement, type UIElement } from '@kickoffbot.com/types';
 import { getIconByType } from '../../../utils';
 import { CSS } from '@dnd-kit/utilities';
 import { useSortable } from '@dnd-kit/sortable';
@@ -18,6 +18,7 @@ import { RemoveMessage } from '../elements/RemoveMessage';
 import { IntegrationSendTelegramMessage } from '../elements/IntegrationSendTelegramMessage';
 import { IntegrationGoogleSheets } from '../elements/IntegrationGoogleSheets';
 import { IntegrationHttpRequest } from '../elements/IntegrationHttpRequest';
+import { WebMessage } from '../elements/WEB/WebMessage';
 
 interface Props {
     element: UIElement;
@@ -67,6 +68,10 @@ export const ElementView = ({ element, scale }: Props) => {
             }
             case ElementType.INTEGRATION_HTTP_REQUEST: {
                 result = <IntegrationHttpRequest element={element as HTTPRequestIntegrationUIElement} />
+                return result;
+            }
+            case ElementType.WEB_CONTENT_MESSAGE: {
+                result = <WebMessage element={element as WebContentTextUIElement} />
                 return result;
             }
             default: {

@@ -2,7 +2,7 @@ import { ConnectionType, SendTelegramMessageIntegrationUIElement } from '@kickof
 import { Box, Typography } from '@mui/material';
 import React, { useCallback } from 'react';
 import { ConnectionSelector } from '../../../ConnectionSelector';
-import { TextEditor } from '../../TextContent/TextEditor';
+import { TextEditor } from '../../TextEditor';
 import { isNil } from 'lodash';
 import { EditorState, convertFromRaw } from 'draft-js';
 

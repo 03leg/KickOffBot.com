@@ -15,6 +15,11 @@ export enum ElementType {
   INTEGRATION_SEND_TELEGRAM_MESSAGE = "integration-send-telegram-message",
   INTEGRATION_GOOGLE_SHEETS = "integration-google-sheets",
   INTEGRATION_HTTP_REQUEST = "integration-http-request",
+
+  TELEGRAM_START_COMMANDS = "telegram-start-commands",
+
+  WEB_START_COMMANDS = "web-start-commands",
+  WEB_CONTENT_MESSAGE = "web-content-message",
 }
 
 export interface UIElement {
@@ -247,6 +252,7 @@ export interface CommandDescription {
 
 export interface CommandsUIElement extends UIElement {
   commands: CommandDescription[];
+  type: ElementType.TELEGRAM_START_COMMANDS;
   id: "botCommands";
 }
 
@@ -437,4 +443,9 @@ export interface HTTPRequestIntegrationUIElement extends UIElement {
   requestBody: string;
   saveResponseData: boolean;
   responseDataVariableId?: BotVariable["id"];
+}
+
+export enum BotPlatform {
+  Telegram = 0,
+  WEB = 1,
 }
