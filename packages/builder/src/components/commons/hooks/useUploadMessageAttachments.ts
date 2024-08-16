@@ -1,6 +1,6 @@
 import { ContentType, FileDescription } from "@kickoffbot.com/types";
 import { useCallback, useState } from "react";
-import { IMAGE_EXTENSIONS } from "~/components/PostCreator/components/AttachEditor/constants";
+import { IMAGE_EXTENSIONS, VIDEO_EXTENSIONS } from "~/components/PostCreator/components/AttachEditor/constants";
 import { uploadAttachments } from "~/components/PostCreator/utils";
 import { ClientFileDescription } from "~/types/ContentEditor";
 import { UploadAttachmentFileDescription } from "~/types/UploadAttachments";
@@ -39,7 +39,7 @@ export const useUploadMessageAttachments = (
           size: file.size,
           typeContent: IMAGE_EXTENSIONS.includes(fileExt)
             ? ContentType.Image
-            : ContentType.Other,
+            : (VIDEO_EXTENSIONS.includes(fileExt) ? ContentType.Video : ContentType.Other),
           url: file.storageUrl,
         } as FileDescription;
 

@@ -31,6 +31,7 @@ export interface UIElement {
 export enum ContentType {
   Image,
   Other,
+  Video,
 }
 
 export interface FileDescription {
