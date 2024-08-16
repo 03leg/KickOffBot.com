@@ -1,3 +1,3 @@
 export const CONFIG = {
-  maxAttachmentFileSize: 2097152,
+  maxAttachmentFileSize: 5097152,
 };

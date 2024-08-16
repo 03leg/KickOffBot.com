@@ -11,12 +11,12 @@ export const useAttachmentsViewerStyles = makeStyles()((theme) => ({
     objectFit: "contain",
     marginBottom: theme.spacing(1),
   },
-  file: {
+  attachmentItem: {
     display: "flex",
     maxWidth: "100%",
     padding: theme.spacing(0, 0, 1, 0),
   },
-  attachmentList: {
+  attachmentItems: {
     display: "flex",
     alignItems: "flex-start",
     padding: theme.spacing(0, 0, 1, 0),

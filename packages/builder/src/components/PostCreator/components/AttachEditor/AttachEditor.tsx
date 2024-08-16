@@ -4,9 +4,8 @@ import AddIcon from '@mui/icons-material/Add';
 import { isNil } from 'lodash';
 import { ClientFileDescription } from '~/types/ContentEditor';
 import { ContentType, type FileDescription } from '@kickoffbot.com/types';
-import { IMAGE_EXTENSIONS } from './constants';
+import { IMAGE_EXTENSIONS, VIDEO_EXTENSIONS } from './constants';
 import { AttachmentsViewer } from '../AttachmentsViewer/AttachmentsViewer';
-import { getSizeString } from './utility';
 
 
 interface AttachEditorProps {
@@ -29,7 +28,7 @@ export const AttachEditor = ({ onAttachmentsAdd, onAttachmentRemove, uploadedFil
         for (const file of Array.from(files)) {
             const fileExt = file.name.slice(file.name.lastIndexOf('.')).toLowerCase();
             fileDescriptions.push({
-                url: URL.createObjectURL(file), typeContent: IMAGE_EXTENSIONS.includes(fileExt) ? ContentType.Image : ContentType.Other, name: file.name,
+                url: URL.createObjectURL(file), typeContent: IMAGE_EXTENSIONS.includes(fileExt) ? ContentType.Image : (VIDEO_EXTENSIONS.includes(fileExt) ? ContentType.Video : ContentType.Other), name: file.name,
                 size: file.size, 
                 browserFile: file
             });
@@ -48,7 +47,7 @@ export const AttachEditor = ({ onAttachmentsAdd, onAttachmentRemove, uploadedFil
     return (
         <Box sx={{ marginTop: (theme) => theme.spacing(2), display: 'flex', flexDirection: 'column' }}>
             <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-                <Button color='success' variant="contained" startIcon={<AddIcon />} onClick={handleAddFilesClick}>Add files</Button>
+                <Button color='success' variant="contained" startIcon={<AddIcon />} onClick={handleAddFilesClick}>Upload from your device</Button>
                 <input
                     hidden
                     multiple
