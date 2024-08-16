@@ -1,4 +1,4 @@
-import React, { useLayoutEffect } from 'react'
+import React, { useLayoutEffect, useRef } from 'react'
 import * as ReactDOM from "react-dom/client";
 import { useFlowDesignerStore } from '../store';
 import { Box, Typography } from '@mui/material';
@@ -18,6 +18,7 @@ export const WebBotDemo = () => {
         showWebBotDemo: state.showWebBotDemo,
         project: state.project,
     }));
+    const containerRef = useRef<HTMLDivElement>(null);
 
 
 
@@ -25,7 +26,7 @@ export const WebBotDemo = () => {
     useLayoutEffect(() => {
         if (!showWebBotDemo) return;
 
-        console.log('Paint #1');
+        console.log('Paint #1', containerRef.current?.clientHeight);
 
         const container = document.querySelector('#chat-box-root');
         if (!container) {
@@ -67,7 +68,7 @@ export const WebBotDemo = () => {
             <React.StrictMode>
                 <CacheProvider value={cache}>
                     <ThemeProvider theme={shadowTheme}>
-                        <ChatViewer project={project}/>
+                        <ChatViewer height={containerRef.current?.clientHeight} project={project}/>
                     </ThemeProvider>
                 </CacheProvider>
             </React.StrictMode>
@@ -79,7 +80,7 @@ export const WebBotDemo = () => {
     }
 
     return (
-        <Box sx={{ width: '450px', backgroundColor: 'white', height: '100%', minWidth: 450, marginLeft: ({ spacing }) => spacing(2), }}>
+        <Box ref={containerRef} sx={{ width: '450px', backgroundColor: 'white', height: '100%', minWidth: 450, marginLeft: ({ spacing }) => spacing(2), }}>
             <div id='chat-box-root'></div>
         </Box>
     )

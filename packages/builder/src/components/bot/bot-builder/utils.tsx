@@ -1,4 +1,4 @@
-import { type ContentTextUIElement, ElementType, type InputTextUIElement, type FlowDesignerUIBlockDescription, type UIElement, type InputButtonsUIElement, type FlowDesignerLink, type ButtonPortDescription, type BotVariable, BlockType, TransformDescription, ChangeVariableUIElement, ConditionUIElement, LogicalOperator, ButtonsSourceStrategy, CommandsUIElement, EditMessageUIElement, RemoveMessageUIElement, VariableConverter, SendTelegramMessageIntegrationUIElement, GoogleSheetsIntegrationUIElement, HTTPRequestIntegrationUIElement, HTTPMethod, VariableType, BotProject, BotPlatform, WebStartCommandsUIElement, WebContentTextUIElement } from "@kickoffbot.com/types";
+import { type ContentTextUIElement, ElementType, type InputTextUIElement, type FlowDesignerUIBlockDescription, type UIElement, type InputButtonsUIElement, type FlowDesignerLink, type ButtonPortDescription, type BotVariable, BlockType, TransformDescription, ChangeVariableUIElement, ConditionUIElement, LogicalOperator, ButtonsSourceStrategy, CommandsUIElement, EditMessageUIElement, RemoveMessageUIElement, VariableConverter, SendTelegramMessageIntegrationUIElement, GoogleSheetsIntegrationUIElement, HTTPRequestIntegrationUIElement, HTTPMethod, VariableType, BotProject, BotPlatform, WebStartCommandsUIElement, WebContentTextUIElement, WebInputTextUIElement } from "@kickoffbot.com/types";
 import MessageIcon from '@mui/icons-material/Message';
 import TextFieldsIcon from '@mui/icons-material/TextFields';
 import { isNil } from "lodash";
@@ -107,11 +107,12 @@ export function getWebContentElements() {
 export function getInputElements() {
     return [
         { type: ElementType.INPUT_TEXT, title: 'Text', icon: <TextFieldsIcon /> },
-        // { type: ElementType.INPUT_BUTTONS, title: 'Buttons', icon: <SmartButtonIcon /> },
-        // { type: ElementType.INPUT_NUMBER, title: 'Number', icon: <NumbersIcon /> },
-        // { type: ElementType.INPUT_EMAIL, title: 'Email', icon: <AlternateEmailIcon /> },
-        // { type: ElementType.INPUT_DATE, title: 'Date', icon: <DateRangeIcon /> },
-        // { type: ElementType.INPUT_PHONE, title: 'Phone', icon: <LocalPhoneIcon /> },
+    ];
+}
+
+export function getWebInputElements() {
+    return [
+        { type: ElementType.WEB_INPUT_TEXT, title: 'Text', icon: <TextFieldsIcon /> },
     ];
 }
 
@@ -133,7 +134,8 @@ export function getIntegrationsElements() {
 }
 
 export function getIconByType(type: ElementType) {
-    const description = [...getInputElements(), ...getTelegramContentElements(), ...getLogicElements(), ...getIntegrationsElements(), ...getWebContentElements()].find(d => d.type === type);
+    const description = [...getInputElements(), ...getTelegramContentElements(), ...getLogicElements(), ...getIntegrationsElements(), 
+        ...getWebContentElements(), ...getWebInputElements()].find(d => d.type === type);
 
     if (isNil(description)) {
         throw new Error('Property "description" can not be null here');
@@ -244,6 +246,15 @@ export function getNewUIElementTemplate(id: string, data: DraggableElementData):
                 id,
                 type: ElementType.WEB_CONTENT_MESSAGE,
                 attachments: [],
+            };
+            return result;
+        }
+        case ElementType.WEB_INPUT_TEXT:{
+            const result: WebInputTextUIElement = {
+                id,
+                type: ElementType.WEB_INPUT_TEXT,
+                label: 'User input...',
+                placeholder: 'Write your answer...'
             };
             return result;
         }
@@ -361,3 +372,4 @@ export const getTemplateReference = (templateName: string): string => {
     return `<%templates.${templateName}%>`;
 }
 
+export const delay = (ms: number | undefined) => new Promise(res => setTimeout(res, ms));

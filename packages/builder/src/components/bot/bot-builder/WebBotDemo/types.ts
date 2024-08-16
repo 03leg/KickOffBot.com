@@ -1,4 +1,4 @@
-import { FileDescription } from "@kickoffbot.com/types";
+import { FileDescription, WebInputTextUIElement } from "@kickoffbot.com/types";
 
 export interface NormalMessage {
   message?: string;
@@ -12,8 +12,17 @@ export enum ChatItemType {
   SYSTEM_MESSAGE = "system-message",
 }
 
+export interface ResponseDescription {
+  data: unknown;
+}
+
+export interface RequestDescription {
+  element: WebInputTextUIElement;
+  onResponse: (response: ResponseDescription) => void;
+}
+
 export interface ChatItem {
   id: string;
   itemType: ChatItemType;
-  content: NormalMessage;
+  content: NormalMessage | RequestDescription;
 }

@@ -8,9 +8,10 @@ import { FileAttachmentItem } from './components/FileAttachmentItem';
 
 interface Props {
     attachments: FileDescription[];
+    onContentHeightChange: () => void;
 }
 
-export const AttachmentsViewer = ({ attachments }: Props) => {
+export const AttachmentsViewer = ({ attachments, onContentHeightChange }: Props) => {
     const { classes } = useAttachmentsViewerStyles();
 
     const images = useMemo(() => attachments.filter((attachment) => attachment.typeContent === ContentType.Image), [attachments]);
@@ -37,7 +38,7 @@ export const AttachmentsViewer = ({ attachments }: Props) => {
 
     return (
         <Box className={classes.root}>
-            {images.length === 1 && images[0] && <img className={classes.img} src={images[0].url} alt={images[0].name} title={images[0].name} />}
+            {images.length === 1 && images[0] && <img style={{ marginBottom: otherFiles.length === 0 && elements.length === 0 ? 0 : undefined }} onLoad={() => onContentHeightChange()} className={classes.img} src={images[0].url} alt={images[0].name} title={images[0].name} />}
             {otherFiles.length === 1 && otherFiles[0] && <Box className={classes.file}><FileAttachmentItem file={otherFiles[0]} stretch={true} /></Box>}
             {elements.length > 1 && <Box className={classes.attachmentList}>
                 {elements}
