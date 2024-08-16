@@ -2,7 +2,7 @@ import { Box } from '@mui/material'
 import React, { useCallback, useContext, useMemo } from 'react'
 import { TextContent } from '../elements/TextContent';
 import { Colors } from '~/themes/Colors';
-import { ContentTextUIElement, ElementType, GoogleSheetsIntegrationUIElement, HTTPRequestIntegrationUIElement, SendTelegramMessageIntegrationUIElement, WebContentTextUIElement, type UIElement } from '@kickoffbot.com/types';
+import { ContentTextUIElement, ElementType, GoogleSheetsIntegrationUIElement, HTTPRequestIntegrationUIElement, SendTelegramMessageIntegrationUIElement, WebContentTextUIElement, WebInputTextUIElement, type UIElement } from '@kickoffbot.com/types';
 import { getIconByType } from '../../../utils';
 import { CSS } from '@dnd-kit/utilities';
 import { useSortable } from '@dnd-kit/sortable';
@@ -19,6 +19,7 @@ import { IntegrationSendTelegramMessage } from '../elements/IntegrationSendTeleg
 import { IntegrationGoogleSheets } from '../elements/IntegrationGoogleSheets';
 import { IntegrationHttpRequest } from '../elements/IntegrationHttpRequest';
 import { WebMessage } from '../elements/WEB/WebMessage';
+import { WebTextInput } from '../elements/WEB/WebTextInput';
 
 interface Props {
     element: UIElement;
@@ -72,6 +73,10 @@ export const ElementView = ({ element, scale }: Props) => {
             }
             case ElementType.WEB_CONTENT_MESSAGE: {
                 result = <WebMessage element={element as WebContentTextUIElement} />
+                return result;
+            }
+            case ElementType.WEB_INPUT_TEXT: {
+                result = <WebTextInput element={element as WebInputTextUIElement} />
                 return result;
             }
             default: {

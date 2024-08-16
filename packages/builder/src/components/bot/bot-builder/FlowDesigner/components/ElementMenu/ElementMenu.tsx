@@ -9,7 +9,7 @@ import { useConfirm } from 'material-ui-confirm';
 import { TextContentEditor } from '../elements/TextContent/Editor';
 import { ButtonsEditor } from '../elements/ButtonsInput/Editor';
 import { TextInputEditor } from '../elements/TextInput/Editor';
-import { ChangeVariableUIElement, ConditionUIElement, ContentTextUIElement, EditMessageUIElement, ElementType, GoogleSheetsIntegrationUIElement, HTTPRequestIntegrationUIElement, InputButtonsUIElement, InputTextUIElement, OutputPortDescription, RemoveMessageUIElement, SendTelegramMessageIntegrationUIElement, UIElement, WebContentTextUIElement } from '@kickoffbot.com/types';
+import { ChangeVariableUIElement, ConditionUIElement, ContentTextUIElement, EditMessageUIElement, ElementType, GoogleSheetsIntegrationUIElement, HTTPRequestIntegrationUIElement, InputButtonsUIElement, InputTextUIElement, OutputPortDescription, RemoveMessageUIElement, SendTelegramMessageIntegrationUIElement, UIElement, WebContentTextUIElement, WebInputTextUIElement } from '@kickoffbot.com/types';
 import { ChangeVariableEditor } from '../elements/ChangeVariable/Editor';
 import { ConditionEditor } from '../elements/Condition/Editor';
 import { EditMessageEditor } from '../elements/EditMessage/Editor';
@@ -19,6 +19,7 @@ import { IntegrationGoogleSheetsEditor } from '../elements/IntegrationGoogleShee
 import { IntegrationHttpRequestEditor } from '../elements/IntegrationHttpRequest';
 import { useAppDialog } from '../../../Dialog/useAppDialog';
 import { WebMessageEditor } from '../elements/WEB/WebMessage';
+import { WebTextInputEditor } from '../elements/WEB/WebTextInput/editor';
 
 
 
@@ -141,6 +142,15 @@ export const ElementMenu = ({ element }: Props) => {
                 const newElement: WebContentTextUIElement = JSON.parse(JSON.stringify(initialElement));
 
                 return { content: (<WebMessageEditor element={newElement} />), title: 'Edit message', newElement };
+            }
+            case ElementType.WEB_INPUT_TEXT: {
+                const initialElement = elementArg as WebInputTextUIElement;
+                const newElement: WebInputTextUIElement = {
+                    ...initialElement
+                };
+
+                return { content: (<WebTextInputEditor element={newElement} />), title: 'Text Input Editor', newElement };
+
             }
             default: {
                 throw new Error('NotImplementedError');

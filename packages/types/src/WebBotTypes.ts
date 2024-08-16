@@ -15,3 +15,9 @@ export interface WebStartCommandsUIElement extends UIElement {
 export interface WebContentTextUIElement extends UIElement, MessageDescription {
   attachments: FileDescription[];
 }
+
+export interface WebInputTextUIElement extends UIElement {
+  label: string;
+  variableId?: string;
+  placeholder?: string;
+}

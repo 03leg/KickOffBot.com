@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/await-thenable */
 /* eslint-disable react-hooks/rules-of-hooks */
 import {
   BotProject,
@@ -5,71 +6,108 @@ import {
   FlowDesignerUIBlockDescription,
   UIElement,
   WebContentTextUIElement,
+  WebInputTextUIElement,
 } from "@kickoffbot.com/types";
-import { MyBotUtils } from "./ChatManager.utils";
+import { WebBotManagerUtils } from "./WebBotManager.utils";
 import { ChatStoreState } from "../store/store.types";
 import { throwIfNil } from "~/utils/guard";
 import { WebUserContext } from "./WebUserContext";
 import { isNil } from "lodash";
 
-export class ChatManager {
+export class WebBotManager {
   private _storeApi?: Partial<ChatStoreState>;
-  private _utils?: MyBotUtils;
+  private _utils?: WebBotManagerUtils;
   private _botProject?: BotProject;
+  private _userContext?: WebUserContext;
 
   public init(project: BotProject, storeApi: Partial<ChatStoreState>) {
     this._storeApi = storeApi;
     this._botProject = project;
+
     this._storeApi.clearHistory?.();
 
-    const userContext = new WebUserContext(project);
+    this._userContext = new WebUserContext(project);
 
-    this._utils = new MyBotUtils(project);
+    this._utils = new WebBotManagerUtils(project);
     const startLink = this._utils.getLinkByBlockId("/start");
     const block = this._utils.getBlockById(startLink.input.blockId);
 
     const firstElement = block.elements[0] as WebContentTextUIElement;
 
-    this.handleElement(block, firstElement, userContext);
+    void this.handleElement(block, firstElement);
   }
 
-  public handleElement(
+  public async handleElement(
     block: FlowDesignerUIBlockDescription,
-    element: UIElement,
-    userContext: WebUserContext
+    element: UIElement
   ) {
     throwIfNil(this._utils);
+    throwIfNil(this._storeApi?.sendBotRequest);
+    throwIfNil(this._storeApi?.sendBotMessage);
+    throwIfNil(this._userContext);
 
     const shouldCalcNextStep = true;
+    let shouldHandleNextElement = true;
 
     switch (element.type) {
       case ElementType.WEB_CONTENT_MESSAGE: {
         const typedElement = element as WebContentTextUIElement;
         const messageText = this._utils.getParsedText(
           typedElement.htmlContent ?? "",
-          userContext
+          this._userContext
         );
 
-        this._storeApi?.sendBotMessage?.({
+        await this._storeApi.sendBotMessage({
           message: messageText,
           attachments: typedElement.attachments,
         });
 
         break;
       }
+      case ElementType.WEB_INPUT_TEXT: {
+        const typedElement = element as WebInputTextUIElement;
+        const userContext = this._userContext;
+        const utils = this._utils;
+
+        const requestId = this._storeApi.sendBotRequest({
+          element: typedElement,
+          onResponse: (response) => {
+            throwIfNil(typedElement.variableId);
+            throwIfNil(this._storeApi?.removeChatItem);
+            throwIfNil(this._storeApi?.sendUserResponse);
+
+            const variable = utils.getVariableById(typedElement.variableId);
+            userContext.updateVariable(variable.name, response.data as string);
+
+            this._storeApi.removeChatItem(requestId);
+            this._storeApi.sendUserResponse({
+              message: response.data as string,
+            });
+
+            void this.checkNextElement();
+          },
+        });
+        shouldHandleNextElement = false;
+
+        break;
+      }
     }
 
     if (shouldCalcNextStep) {
-      this.calcNextStep(userContext, block, element);
+      this.calcNextStep(block, element);
     }
 
-    void this.checkNextElement(userContext);
+    if (shouldHandleNextElement) {
+      await this.checkNextElement();
+    }
   }
 
-  private checkNextElement(userContext: WebUserContext) {
+  private async checkNextElement() {
     throwIfNil(this._botProject);
+    throwIfNil(this._userContext);
 
-    const nextStep = userContext.nextStep;
+    const nextStep = this._userContext.nextStep;
+
     if (isNil(nextStep)) {
       return;
     }
@@ -96,20 +134,21 @@ export class ChatManager {
       case ElementType.INTEGRATION_SEND_TELEGRAM_MESSAGE:
       case ElementType.INTEGRATION_GOOGLE_SHEETS:
       case ElementType.INTEGRATION_HTTP_REQUEST:
+      case ElementType.WEB_INPUT_TEXT:
       case ElementType.WEB_CONTENT_MESSAGE: {
-        this.handleElement(block, nextElement, userContext);
+        await this.handleElement(block, nextElement);
         break;
       }
     }
   }
 
   private calcNextStep(
-    userContext: WebUserContext,
     currentBlock: FlowDesignerUIBlockDescription,
     currentElement: UIElement
   ) {
     throwIfNil(this._botProject);
     throwIfNil(this._utils);
+    throwIfNil(this._userContext);
 
     let nextBlock: FlowDesignerUIBlockDescription | null = null;
     let nextElement: UIElement | null = null;
@@ -135,9 +174,9 @@ export class ChatManager {
     }
 
     if (isNil(nextBlock) || isNil(nextElement)) {
-      userContext.setNextStep(null);
+      this._userContext.setNextStep(null);
     } else {
-      userContext.setNextStep({
+      this._userContext.setNextStep({
         blockId: nextBlock.id,
         elementId: nextElement.id,
       });

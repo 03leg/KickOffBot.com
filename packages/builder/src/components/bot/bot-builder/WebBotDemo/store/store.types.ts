@@ -1,7 +1,12 @@
-import { ChatItem, NormalMessage } from "../types";
+import { ChatItem, NormalMessage, RequestDescription } from "../types";
 
 export interface ChatStoreState {
-  messages: ChatItem[];
-  sendBotMessage: (item: NormalMessage) => void;
+  botIsTyping: boolean;
+  chatItems: ChatItem[];
+  sendBotMessage: (item: NormalMessage) => Promise<void>;
   clearHistory: VoidFunction;
+
+  sendBotRequest: (request: RequestDescription) => string;
+  removeChatItem: (id: string) => void;
+  sendUserResponse: (response: NormalMessage) => void;
 }

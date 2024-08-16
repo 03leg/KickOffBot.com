@@ -1,9 +1,9 @@
-import { BotProject, FlowDesignerLink, FlowDesignerUIBlockDescription, PortType, VariableConverter, VariableType } from "@kickoffbot.com/types";
+import { BotProject, BotVariable, FlowDesignerLink, FlowDesignerUIBlockDescription, PortType, VariableConverter, VariableType } from "@kickoffbot.com/types";
 import { isNil, isPlainObject } from "lodash";
 import { WebUserContext } from "./WebUserContext";
 import { throwIfNil } from "~/utils/guard";
 
-export class MyBotUtils {
+export class WebBotManagerUtils {
   private _botProject: BotProject;
 
   public constructor(project: BotProject) {
@@ -57,7 +57,7 @@ export class MyBotUtils {
           }
 
           throwIfNil(path);
-          const valueForArrayOfObjects = MyBotUtils.getValueForArrayOfNumbers(
+          const valueForArrayOfObjects = WebBotManagerUtils.getValueForArrayOfNumbers(
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
             variableValue.map((v: any) => v[path] as number),
             converter,
@@ -65,7 +65,7 @@ export class MyBotUtils {
 
           return valueForArrayOfObjects.toString();
         } else if (variableMetaData?.arrayItemType === VariableType.NUMBER) {
-          const valueForArrayOfNumbers = MyBotUtils.getValueForArrayOfNumbers(variableValue as number[], converter);
+          const valueForArrayOfNumbers = WebBotManagerUtils.getValueForArrayOfNumbers(variableValue as number[], converter);
           return valueForArrayOfNumbers.toString();
         }
 
@@ -223,5 +223,15 @@ export class MyBotUtils {
     }
 
     return currentLink;
+  }
+
+  public getVariableById(variableId: string): BotVariable {
+    const currentVariable = this._botProject.variables.find((v) => v.id === variableId);
+
+    if (isNil(currentVariable)) {
+      throw new Error("InvalidOperationError: variable is null");
+    }
+
+    return currentVariable;
   }
 }
