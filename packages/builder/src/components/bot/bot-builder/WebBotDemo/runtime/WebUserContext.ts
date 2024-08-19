@@ -40,7 +40,7 @@ export class WebUserContext {
     this._nextStep = nextStep;
   }
 
-  public updateVariable(name: string, newValue: string | number | boolean | unknown[] | object) {
+  public updateVariable(name: string, newValue: string | number | boolean | unknown[] | object | unknown) {
     this._variables.set(name, newValue);
   }
 

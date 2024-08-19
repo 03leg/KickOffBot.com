@@ -6,6 +6,7 @@ import {
   FlowDesignerUIBlockDescription,
   UIElement,
   WebContentTextUIElement,
+  WebInputNumberUIElement,
   WebInputTextUIElement,
 } from "@kickoffbot.com/types";
 import { WebBotManagerUtils } from "./WebBotManager.utils";
@@ -64,8 +65,9 @@ export class WebBotManager {
 
         break;
       }
+      case ElementType.WEB_INPUT_NUMBER:
       case ElementType.WEB_INPUT_TEXT: {
-        const typedElement = element as WebInputTextUIElement;
+        const typedElement = element as (WebInputTextUIElement | WebInputNumberUIElement);
         const userContext = this._userContext;
         const utils = this._utils;
 
@@ -77,7 +79,7 @@ export class WebBotManager {
             throwIfNil(this._storeApi?.sendUserResponse);
 
             const variable = utils.getVariableById(typedElement.variableId);
-            userContext.updateVariable(variable.name, response.data as string);
+            userContext.updateVariable(variable.name, response.data);
 
             this._storeApi.removeChatItem(requestId);
             this._storeApi.sendUserResponse({
@@ -135,6 +137,7 @@ export class WebBotManager {
       case ElementType.INTEGRATION_GOOGLE_SHEETS:
       case ElementType.INTEGRATION_HTTP_REQUEST:
       case ElementType.WEB_INPUT_TEXT:
+      case ElementType.WEB_INPUT_NUMBER:
       case ElementType.WEB_CONTENT_MESSAGE: {
         await this.handleElement(block, nextElement);
         break;

@@ -9,7 +9,7 @@ import { useConfirm } from 'material-ui-confirm';
 import { TextContentEditor } from '../elements/TextContent/Editor';
 import { ButtonsEditor } from '../elements/ButtonsInput/Editor';
 import { TextInputEditor } from '../elements/TextInput/Editor';
-import { ChangeVariableUIElement, ConditionUIElement, ContentTextUIElement, EditMessageUIElement, ElementType, GoogleSheetsIntegrationUIElement, HTTPRequestIntegrationUIElement, InputButtonsUIElement, InputTextUIElement, OutputPortDescription, RemoveMessageUIElement, SendTelegramMessageIntegrationUIElement, UIElement, WebContentTextUIElement, WebInputTextUIElement } from '@kickoffbot.com/types';
+import { ChangeVariableUIElement, ConditionUIElement, ContentTextUIElement, EditMessageUIElement, ElementType, GoogleSheetsIntegrationUIElement, HTTPRequestIntegrationUIElement, InputButtonsUIElement, InputTextUIElement, OutputPortDescription, RemoveMessageUIElement, SendTelegramMessageIntegrationUIElement, UIElement, WebContentTextUIElement, WebInputNumberUIElement, WebInputTextUIElement } from '@kickoffbot.com/types';
 import { ChangeVariableEditor } from '../elements/ChangeVariable/Editor';
 import { ConditionEditor } from '../elements/Condition/Editor';
 import { EditMessageEditor } from '../elements/EditMessage/Editor';
@@ -20,6 +20,7 @@ import { IntegrationHttpRequestEditor } from '../elements/IntegrationHttpRequest
 import { useAppDialog } from '../../../Dialog/useAppDialog';
 import { WebMessageEditor } from '../elements/WEB/WebMessage';
 import { WebTextInputEditor } from '../elements/WEB/WebTextInput/editor';
+import { WebNumberInputEditor } from '../elements/WEB/WebNumberInput/editor/WebNumberInputEditor';
 
 
 
@@ -150,6 +151,15 @@ export const ElementMenu = ({ element }: Props) => {
                 };
 
                 return { content: (<WebTextInputEditor element={newElement} />), title: 'Text Input Editor', newElement };
+
+            }
+            case ElementType.WEB_INPUT_NUMBER: {
+                const initialElement = elementArg as WebInputNumberUIElement;
+                const newElement: WebInputNumberUIElement = {
+                    ...initialElement
+                };
+
+                return { content: (<WebNumberInputEditor element={newElement} />), title: 'Number Input Editor', newElement };
 
             }
             default: {

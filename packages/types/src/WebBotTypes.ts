@@ -21,3 +21,12 @@ export interface WebInputTextUIElement extends UIElement {
   variableId?: string;
   placeholder?: string;
 }
+
+export interface WebInputNumberUIElement extends UIElement {
+  label: string;
+  variableId?: string;
+  placeholder?: string;
+  max?: number;
+  min?: number;
+  step?: number;
+}

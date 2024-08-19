@@ -1,4 +1,8 @@
-import { FileDescription, WebInputTextUIElement } from "@kickoffbot.com/types";
+import {
+  FileDescription,
+  WebInputNumberUIElement,
+  WebInputTextUIElement,
+} from "@kickoffbot.com/types";
 
 export interface NormalMessage {
   message?: string;
@@ -17,7 +21,7 @@ export interface ResponseDescription {
 }
 
 export interface RequestDescription {
-  element: WebInputTextUIElement;
+  element: WebInputTextUIElement | WebInputNumberUIElement;
   onResponse: (response: ResponseDescription) => void;
 }
 
