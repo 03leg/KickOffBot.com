@@ -21,6 +21,7 @@ export enum ElementType {
   WEB_START_COMMANDS = "web-start-commands",
   WEB_CONTENT_MESSAGE = "web-content-message",
   WEB_INPUT_TEXT = "web-input-text",
+  WEB_INPUT_NUMBER = "web-input-number",
 }
 
 export interface UIElement {

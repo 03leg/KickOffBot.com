@@ -4,6 +4,7 @@ import { Box } from '@mui/material';
 import { ElementType } from '@kickoffbot.com/types';
 import { TextBotRequest } from './components/TextBotRequest';
 import { useBotRequestStyles } from './BotRequest.style';
+import { NumberBoxRequest } from './components/NumberBoxRequest';
 
 interface Props {
     request: RequestDescription;
@@ -17,8 +18,10 @@ export const BotRequest = ({ request }: Props) => {
 
         switch (elementType) {
             case ElementType.WEB_INPUT_TEXT: {
-
                 return <TextBotRequest request={request} />
+            }
+            case ElementType.WEB_INPUT_NUMBER: {
+                return <NumberBoxRequest request={request} />
             }
             default: {
                 throw new Error('NotImplementedError');

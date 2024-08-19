@@ -16,8 +16,6 @@ export const AttachmentsViewer = ({ attachments, onContentHeightChange }: Props)
     const imageAndVideoItems = useMemo(() => attachments.filter((attachment) => [ContentType.Video, ContentType.Image].includes(attachment.typeContent)), [attachments]);
     const otherFiles = useMemo(() => attachments.filter((attachment) => attachment.typeContent === ContentType.Other), [attachments]);
 
-    console.log('attachments', attachments)
-
     const elements = useMemo(() => {
         const result: ReactNode[] = [];
 

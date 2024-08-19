@@ -1,4 +1,4 @@
-import { type ContentTextUIElement, ElementType, type InputTextUIElement, type FlowDesignerUIBlockDescription, type UIElement, type InputButtonsUIElement, type FlowDesignerLink, type ButtonPortDescription, type BotVariable, BlockType, TransformDescription, ChangeVariableUIElement, ConditionUIElement, LogicalOperator, ButtonsSourceStrategy, CommandsUIElement, EditMessageUIElement, RemoveMessageUIElement, VariableConverter, SendTelegramMessageIntegrationUIElement, GoogleSheetsIntegrationUIElement, HTTPRequestIntegrationUIElement, HTTPMethod, VariableType, BotProject, BotPlatform, WebStartCommandsUIElement, WebContentTextUIElement, WebInputTextUIElement } from "@kickoffbot.com/types";
+import { type ContentTextUIElement, ElementType, type InputTextUIElement, type FlowDesignerUIBlockDescription, type UIElement, type InputButtonsUIElement, type FlowDesignerLink, type ButtonPortDescription, type BotVariable, BlockType, TransformDescription, ChangeVariableUIElement, ConditionUIElement, LogicalOperator, ButtonsSourceStrategy, CommandsUIElement, EditMessageUIElement, RemoveMessageUIElement, VariableConverter, SendTelegramMessageIntegrationUIElement, GoogleSheetsIntegrationUIElement, HTTPRequestIntegrationUIElement, HTTPMethod, VariableType, BotProject, BotPlatform, WebStartCommandsUIElement, WebContentTextUIElement, WebInputTextUIElement, WebInputNumberUIElement } from "@kickoffbot.com/types";
 import MessageIcon from '@mui/icons-material/Message';
 import TextFieldsIcon from '@mui/icons-material/TextFields';
 import { isNil } from "lodash";
@@ -16,6 +16,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import TelegramIcon from '@mui/icons-material/Telegram';
 import GoogleIcon from '@mui/icons-material/Google';
 import HttpIcon from '@mui/icons-material/Http';
+import NumbersIcon from '@mui/icons-material/Numbers';
 
 export const TELEGRAM_DEFAULT_PROJECT_STATE: BotProject = {
     blocks: [...getTelegramDefaultBlocks()],
@@ -113,6 +114,7 @@ export function getInputElements() {
 export function getWebInputElements() {
     return [
         { type: ElementType.WEB_INPUT_TEXT, title: 'Text', icon: <TextFieldsIcon /> },
+        { type: ElementType.WEB_INPUT_NUMBER, title: 'Number', icon: <NumbersIcon /> },
     ];
 }
 
@@ -253,7 +255,16 @@ export function getNewUIElementTemplate(id: string, data: DraggableElementData):
             const result: WebInputTextUIElement = {
                 id,
                 type: ElementType.WEB_INPUT_TEXT,
-                label: 'User input...',
+                label: 'User input (text)...',
+                placeholder: 'Write your answer...'
+            };
+            return result;
+        }
+        case ElementType.WEB_INPUT_NUMBER:{
+            const result: WebInputNumberUIElement = {
+                id,
+                type: ElementType.WEB_INPUT_NUMBER,
+                label: 'User input (number)...',
                 placeholder: 'Write your answer...'
             };
             return result;

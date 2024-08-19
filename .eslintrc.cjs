@@ -28,7 +28,8 @@ const config = {
     "@typescript-eslint/consistent-type-imports": "off",
     "@typescript-eslint/no-unsafe-return": "off",
     "@typescript-eslint/no-empty-function": "off",
-    "@typescript-eslint/unbound-method": "off"
+    "@typescript-eslint/unbound-method": "off",
+    "@typescript-eslint/no-redundant-type-constituents": "off"
   },
 };
 
