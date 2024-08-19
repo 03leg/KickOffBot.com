@@ -3,9 +3,10 @@ import React, { type SyntheticEvent, useCallback, useRef } from 'react'
 import AddIcon from '@mui/icons-material/Add';
 import { isNil } from 'lodash';
 import { ClientFileDescription } from '~/types/ContentEditor';
-import { ContentType, type FileDescription } from '@kickoffbot.com/types';
+
 import { IMAGE_EXTENSIONS, VIDEO_EXTENSIONS } from './constants';
 import { AttachmentsViewer } from '../AttachmentsViewer/AttachmentsViewer';
+import { ContentType, FileDescription } from '@kickoffbot.com/types';
 
 
 interface AttachEditorProps {
