@@ -23,6 +23,7 @@ export enum ElementType {
   WEB_INPUT_TEXT = "web-input-text",
   WEB_INPUT_NUMBER = "web-input-number",
   WEB_INPUT_DATE_TIME = "web-input-date-time",
+  WEB_INPUT_PHONE = "web-input-phone",
 }
 
 export interface UIElement {
