@@ -2,6 +2,7 @@ import {
   FileDescription,
   WebInputDateTimeUIElement,
   WebInputNumberUIElement,
+  WebInputPhoneUIElement,
   WebInputTextUIElement,
 } from "@kickoffbot.com/types";
 import { WebUserContext } from "./runtime/WebUserContext";
@@ -26,6 +27,7 @@ export interface RequestDescription {
   element:
     | WebInputTextUIElement
     | WebInputNumberUIElement
+    | WebInputPhoneUIElement
     | WebInputDateTimeUIElement;
   onResponse: (response: ResponseDescription) => void;
   userContext: WebUserContext;

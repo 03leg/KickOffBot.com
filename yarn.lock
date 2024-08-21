@@ -2377,6 +2377,11 @@
   dependencies:
     "@types/node" "*"
 
+"@types/google-libphonenumber@7.4.30":
+  version "7.4.30"
+  resolved "https://registry.yarnpkg.com/@types/google-libphonenumber/-/google-libphonenumber-7.4.30.tgz#a47ed8f1f237bd43edbd1c8aff24400b0fd9b2fe"
+  integrity sha512-Td1X1ayRxePEm6/jPHUBs2tT6TzW1lrVB6ZX7ViPGellyzO/0xMNi+wx5nH6jEitjznq276VGIqjK5qAju0XVw==
+
 "@types/graceful-fs@^4.1.3":
   version "4.1.9"
   resolved "https://registry.yarnpkg.com/@types/graceful-fs/-/graceful-fs-4.1.9.tgz#2a06bc0f68a20ab37b3e36aa238be6abdf49e8b4"
@@ -4687,6 +4692,11 @@ google-auth-library@9.10.0:
     gtoken "^7.0.0"
     jws "^4.0.0"
 
+google-libphonenumber@3.2.38:
+  version "3.2.38"
+  resolved "https://registry.yarnpkg.com/google-libphonenumber/-/google-libphonenumber-3.2.38.tgz#5adb0c8ff807d84d4d46b9536d0116d00d85f137"
+  integrity sha512-t/K0dsVmA0gMMVLJgcMeB9g1Ar4ANVWfkY+AJGSdfyJ2Ay7Bu8ceLYpUlC6FZSilZgaF1qbkM9tZydGBEBHqAg==
+
 google-spreadsheet@4.1.2:
   version "4.1.2"
   resolved "https://registry.yarnpkg.com/google-spreadsheet/-/google-spreadsheet-4.1.2.tgz#92e30fdba7e0d78c55d50731528df7835d58bfee"
@@ -6504,6 +6514,11 @@ react-google-button@0.8.0:
   integrity sha512-0u6mbDcTUmWzgXsld8FJpbrXP+zDsNQVYPIt225aBqwgJ/CdrDiep1PZOpnyntyjsejWG0TtQr6uZB4eIaXlJQ==
   dependencies:
     prop-types "^15.8.1"
+
+react-international-phone@4.3.0:
+  version "4.3.0"
+  resolved "https://registry.yarnpkg.com/react-international-phone/-/react-international-phone-4.3.0.tgz#cb04295b13b5a55f50f36e3c0b7f6c2dc549bb6c"
+  integrity sha512-lIntIkwq2j0m3j4RsRiGJl/buHMLBd+mQ9S9RfiX3KbiUCUtbawoPCV2r8BvyeRMZI0cDtovoukBCuZ+70QzJA==
 
 react-is@^16.13.1, react-is@^16.7.0:
   version "16.13.1"

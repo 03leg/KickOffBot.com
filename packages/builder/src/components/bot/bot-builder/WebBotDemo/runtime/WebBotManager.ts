@@ -65,6 +65,7 @@ export class WebBotManager {
 
         break;
       }
+      case ElementType.WEB_INPUT_PHONE:
       case ElementType.WEB_INPUT_DATE_TIME:
       case ElementType.WEB_INPUT_NUMBER:
       case ElementType.WEB_INPUT_TEXT: {
@@ -147,6 +148,7 @@ export class WebBotManager {
       case ElementType.WEB_INPUT_TEXT:
       case ElementType.WEB_INPUT_NUMBER:
       case ElementType.WEB_INPUT_DATE_TIME:
+      case ElementType.WEB_INPUT_PHONE:
       case ElementType.WEB_CONTENT_MESSAGE: {
         await this.handleElement(block, nextElement);
         break;

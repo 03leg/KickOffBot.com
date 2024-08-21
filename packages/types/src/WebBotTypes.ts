@@ -45,6 +45,12 @@ export interface WebInputDateTimeUIElement extends UIElement {
   minutesStep?: number;
 }
 
+export interface WebInputPhoneUIElement extends UIElement {
+  value?: string;
+  variableId?: string;
+  defaultCountry?: string
+}
+
 export enum AvailableDateTimes {
   All = "All",
   PastDatesAndToday = "PastDatesAndToday",
