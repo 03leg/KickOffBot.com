@@ -26,10 +26,10 @@ export class WebBotManager {
     this._botProject = project;
 
     this._storeApi.clearHistory?.();
-
-    this._userContext = new WebUserContext(project);
-
     this._utils = new WebBotManagerUtils(project);
+
+    this._userContext = new WebUserContext(project, this._utils);
+
     const startLink = this._utils.getLinkByBlockId("/start");
     const block = this._utils.getBlockById(startLink.input.blockId);
 
@@ -65,14 +65,18 @@ export class WebBotManager {
 
         break;
       }
+      case ElementType.WEB_INPUT_DATE_TIME:
       case ElementType.WEB_INPUT_NUMBER:
       case ElementType.WEB_INPUT_TEXT: {
-        const typedElement = element as (WebInputTextUIElement | WebInputNumberUIElement);
+        const typedElement = element as
+          | WebInputTextUIElement
+          | WebInputNumberUIElement;
         const userContext = this._userContext;
         const utils = this._utils;
 
         const requestId = this._storeApi.sendBotRequest({
           element: typedElement,
+          userContext: userContext,
           onResponse: (response) => {
             throwIfNil(typedElement.variableId);
             throwIfNil(this._storeApi?.removeChatItem);
@@ -92,6 +96,10 @@ export class WebBotManager {
         shouldHandleNextElement = false;
 
         break;
+      }
+
+      default: {
+        throw new Error("NotImplementedError");
       }
     }
 
@@ -138,6 +146,7 @@ export class WebBotManager {
       case ElementType.INTEGRATION_HTTP_REQUEST:
       case ElementType.WEB_INPUT_TEXT:
       case ElementType.WEB_INPUT_NUMBER:
+      case ElementType.WEB_INPUT_DATE_TIME:
       case ElementType.WEB_CONTENT_MESSAGE: {
         await this.handleElement(block, nextElement);
         break;

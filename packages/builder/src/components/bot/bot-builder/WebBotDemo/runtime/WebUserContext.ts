@@ -2,6 +2,7 @@ import { Message, Update } from "telegraf/typings/core/types/typegram";
 import { NarrowedContext, Context } from "telegraf";
 import { isNil } from "lodash";
 import { BotProject, BotVariable } from "@kickoffbot.com/types";
+import { WebBotManagerUtils } from "./WebBotManager.utils";
 
 export interface NextBotStep {
   blockId: string;
@@ -16,7 +17,7 @@ export class WebUserContext {
     return this._nextStep;
   }
 
-  constructor(project: BotProject) {
+  constructor(project: BotProject, private _utils: WebBotManagerUtils) {
     this.initVariables(project.variables);
   }
 
@@ -40,11 +41,24 @@ export class WebUserContext {
     this._nextStep = nextStep;
   }
 
-  public updateVariable(name: string, newValue: string | number | boolean | unknown[] | object | unknown) {
+  public updateVariable(
+    name: string,
+    newValue: string | number | boolean | unknown[] | object | unknown
+  ) {
     this._variables.set(name, newValue);
   }
 
-  public getVariableValueByName(name: string): string | number | boolean | unknown[] | Record<string, unknown> {
+  public getVariableValueById(
+    variableId: string
+  ): ReturnType<typeof this.getVariableValueByName> {
+    const variable = this._utils.getVariableById(variableId);
+
+    return this.getVariableValueByName(variable.name);
+  }
+
+  public getVariableValueByName(
+    name: string
+  ): string | number | boolean | unknown[] | Record<string, unknown> {
     const result = this._variables.get(name);
 
     if (isNil(result)) {

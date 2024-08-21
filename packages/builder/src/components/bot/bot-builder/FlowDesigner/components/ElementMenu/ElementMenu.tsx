@@ -9,7 +9,7 @@ import { useConfirm } from 'material-ui-confirm';
 import { TextContentEditor } from '../elements/TextContent/Editor';
 import { ButtonsEditor } from '../elements/ButtonsInput/Editor';
 import { TextInputEditor } from '../elements/TextInput/Editor';
-import { ChangeVariableUIElement, ConditionUIElement, ContentTextUIElement, EditMessageUIElement, ElementType, GoogleSheetsIntegrationUIElement, HTTPRequestIntegrationUIElement, InputButtonsUIElement, InputTextUIElement, OutputPortDescription, RemoveMessageUIElement, SendTelegramMessageIntegrationUIElement, UIElement, WebContentTextUIElement, WebInputNumberUIElement, WebInputTextUIElement } from '@kickoffbot.com/types';
+import { ChangeVariableUIElement, ConditionUIElement, ContentTextUIElement, EditMessageUIElement, ElementType, GoogleSheetsIntegrationUIElement, HTTPRequestIntegrationUIElement, InputButtonsUIElement, InputTextUIElement, OutputPortDescription, RemoveMessageUIElement, SendTelegramMessageIntegrationUIElement, UIElement, WebContentTextUIElement, WebInputDateTimeUIElement, WebInputNumberUIElement, WebInputTextUIElement } from '@kickoffbot.com/types';
 import { ChangeVariableEditor } from '../elements/ChangeVariable/Editor';
 import { ConditionEditor } from '../elements/Condition/Editor';
 import { EditMessageEditor } from '../elements/EditMessage/Editor';
@@ -21,6 +21,7 @@ import { useAppDialog } from '../../../Dialog/useAppDialog';
 import { WebMessageEditor } from '../elements/WEB/WebMessage';
 import { WebTextInputEditor } from '../elements/WEB/WebTextInput/editor';
 import { WebNumberInputEditor } from '../elements/WEB/WebNumberInput/editor/WebNumberInputEditor';
+import { WebDateTimeInputEditor } from '../elements/WEB/WebDateTimeInput/editor';
 
 
 
@@ -161,6 +162,14 @@ export const ElementMenu = ({ element }: Props) => {
 
                 return { content: (<WebNumberInputEditor element={newElement} />), title: 'Number Input Editor', newElement };
 
+            }
+            case ElementType.WEB_INPUT_DATE_TIME:{
+                const initialElement = elementArg as WebInputDateTimeUIElement;
+                const newElement: WebInputDateTimeUIElement = {
+                    ...initialElement
+                };
+
+                return { content: (<WebDateTimeInputEditor element={newElement} />), title: 'Date Time Input Editor', newElement };
             }
             default: {
                 throw new Error('NotImplementedError');

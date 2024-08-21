@@ -1,4 +1,4 @@
-import { ElementType, FileDescription, MessageDescription, UIElement } from "./BotTypes";
+import { BotVariable, ElementType, FileDescription, MessageDescription, UIElement } from "./BotTypes";
 
 export interface WebStartCommand {
   id: string;
@@ -29,4 +29,27 @@ export interface WebInputNumberUIElement extends UIElement {
   max?: number;
   min?: number;
   step?: number;
+}
+
+export interface WebInputDateTimeUIElement extends UIElement {
+  variableId?: string;
+  dateTimeFormat?: string;
+  availableDateTimes: AvailableDateTimes;
+
+  availableDateTimesVariableId?: BotVariable["id"];
+  useTime: boolean;
+
+  useAmPm?: boolean;
+  maxTime?: string;
+  minTime?: string;
+  minutesStep?: number;
+}
+
+export enum AvailableDateTimes {
+  All = "All",
+  PastDatesAndToday = "PastDatesAndToday",
+  FutureDatesAndToday = "FutureDatesAndToday",
+  PastDates = "PastDates",
+  FutureDates = "FutureDates",
+  DatesFromVariable = "DatesFromVariable",
 }
