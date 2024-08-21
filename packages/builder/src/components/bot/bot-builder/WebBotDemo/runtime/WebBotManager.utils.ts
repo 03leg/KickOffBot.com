@@ -104,7 +104,7 @@ export class WebBotManagerUtils {
   }
 
   private getTextForContextObject(contextObject: unknown, template: string, index: number): string {
-    const getParsedTemplate = (textArgument: string, matches1: IterableIterator<RegExpExecArray>) => {
+    const getParsedTemplate = (textArgument: string, matches1: IterableIterator<RegExpExecArray|RegExpMatchArray>) => {
       for (const m of matches1) {
         const property = m[1]!;
         let content = "";

@@ -3,12 +3,14 @@ import { RequestDescription } from '../../../../types';
 import { Box, IconButton, TextField } from '@mui/material';
 import { useTextBoxRequestStyles } from './TextBotRequest.style';
 import SendIcon from '@mui/icons-material/Send';
+import { WebInputTextUIElement } from '@kickoffbot.com/types';
 
 interface Props {
     request: RequestDescription;
 }
 
 export const TextBotRequest = ({ request }: Props) => {
+    const { placeholder } = request.element as WebInputTextUIElement;
     const { classes } = useTextBoxRequestStyles();
     const [currentValue, setCurrentValue] = useState<string>('');
 
@@ -31,7 +33,7 @@ export const TextBotRequest = ({ request }: Props) => {
             <TextField
                 autoFocus /* multiline maxRows={4} */
                 onKeyDown={handleTextFieldKeyDown}
-                className={classes.textField} fullWidth variant="outlined" value={currentValue} onChange={handleValueChange} placeholder={request.element.placeholder} />
+                className={classes.textField} fullWidth variant="outlined" value={currentValue} onChange={handleValueChange} placeholder={placeholder} />
             <IconButton onClick={handleSendResponse}>
                 <SendIcon />
             </IconButton>

@@ -1,4 +1,4 @@
-import { type ContentTextUIElement, ElementType, type InputTextUIElement, type FlowDesignerUIBlockDescription, type UIElement, type InputButtonsUIElement, type FlowDesignerLink, type ButtonPortDescription, type BotVariable, BlockType, TransformDescription, ChangeVariableUIElement, ConditionUIElement, LogicalOperator, ButtonsSourceStrategy, CommandsUIElement, EditMessageUIElement, RemoveMessageUIElement, VariableConverter, SendTelegramMessageIntegrationUIElement, GoogleSheetsIntegrationUIElement, HTTPRequestIntegrationUIElement, HTTPMethod, VariableType, BotProject, BotPlatform, WebStartCommandsUIElement, WebContentTextUIElement, WebInputTextUIElement, WebInputNumberUIElement } from "@kickoffbot.com/types";
+import { type ContentTextUIElement, ElementType, type InputTextUIElement, type FlowDesignerUIBlockDescription, type UIElement, type InputButtonsUIElement, type FlowDesignerLink, type ButtonPortDescription, type BotVariable, BlockType, TransformDescription, ChangeVariableUIElement, ConditionUIElement, LogicalOperator, ButtonsSourceStrategy, CommandsUIElement, EditMessageUIElement, RemoveMessageUIElement, VariableConverter, SendTelegramMessageIntegrationUIElement, GoogleSheetsIntegrationUIElement, HTTPRequestIntegrationUIElement, HTTPMethod, VariableType, BotProject, BotPlatform, WebStartCommandsUIElement, WebContentTextUIElement, WebInputTextUIElement, WebInputNumberUIElement, WebInputDateTimeUIElement, AvailableDateTimes } from "@kickoffbot.com/types";
 import MessageIcon from '@mui/icons-material/Message';
 import TextFieldsIcon from '@mui/icons-material/TextFields';
 import { isNil } from "lodash";
@@ -17,6 +17,7 @@ import TelegramIcon from '@mui/icons-material/Telegram';
 import GoogleIcon from '@mui/icons-material/Google';
 import HttpIcon from '@mui/icons-material/Http';
 import NumbersIcon from '@mui/icons-material/Numbers';
+import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 
 export const TELEGRAM_DEFAULT_PROJECT_STATE: BotProject = {
     blocks: [...getTelegramDefaultBlocks()],
@@ -115,6 +116,7 @@ export function getWebInputElements() {
     return [
         { type: ElementType.WEB_INPUT_TEXT, title: 'Text', icon: <TextFieldsIcon /> },
         { type: ElementType.WEB_INPUT_NUMBER, title: 'Number', icon: <NumbersIcon /> },
+        { type: ElementType.WEB_INPUT_DATE_TIME, title: 'Date', icon: <CalendarMonthIcon /> },
     ];
 }
 
@@ -266,6 +268,16 @@ export function getNewUIElementTemplate(id: string, data: DraggableElementData):
                 type: ElementType.WEB_INPUT_NUMBER,
                 label: 'User input (number)...',
                 placeholder: 'Write your answer...'
+            };
+            return result;
+        }
+        case ElementType.WEB_INPUT_DATE_TIME:{
+            const result: WebInputDateTimeUIElement = {
+                id,
+                type: ElementType.WEB_INPUT_DATE_TIME,
+                availableDateTimes: AvailableDateTimes.All,
+                dateTimeFormat: 'DD/MM/YYYY',
+                useTime: false,
             };
             return result;
         }

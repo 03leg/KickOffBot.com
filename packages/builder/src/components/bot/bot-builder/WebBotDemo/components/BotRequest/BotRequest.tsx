@@ -5,6 +5,7 @@ import { ElementType } from '@kickoffbot.com/types';
 import { TextBotRequest } from './components/TextBotRequest';
 import { useBotRequestStyles } from './BotRequest.style';
 import { NumberBoxRequest } from './components/NumberBoxRequest';
+import { DateTimeBoxRequest } from './components/DateTimeBoxRequest';
 
 interface Props {
     request: RequestDescription;
@@ -22,6 +23,9 @@ export const BotRequest = ({ request }: Props) => {
             }
             case ElementType.WEB_INPUT_NUMBER: {
                 return <NumberBoxRequest request={request} />
+            }
+            case ElementType.WEB_INPUT_DATE_TIME: {
+                return <DateTimeBoxRequest request={request} />
             }
             default: {
                 throw new Error('NotImplementedError');
