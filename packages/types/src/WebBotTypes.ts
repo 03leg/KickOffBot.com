@@ -48,7 +48,12 @@ export interface WebInputDateTimeUIElement extends UIElement {
 export interface WebInputPhoneUIElement extends UIElement {
   value?: string;
   variableId?: string;
-  defaultCountry?: string
+  defaultCountry?: string;
+}
+
+export interface WebInputEmailUIElement extends UIElement {
+  variableId?: string;
+  placeholder?: string;
 }
 
 export enum AvailableDateTimes {

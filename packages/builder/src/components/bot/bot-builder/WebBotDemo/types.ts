@@ -1,6 +1,7 @@
 import {
   FileDescription,
   WebInputDateTimeUIElement,
+  WebInputEmailUIElement,
   WebInputNumberUIElement,
   WebInputPhoneUIElement,
   WebInputTextUIElement,
@@ -28,6 +29,7 @@ export interface RequestDescription {
     | WebInputTextUIElement
     | WebInputNumberUIElement
     | WebInputPhoneUIElement
+    | WebInputEmailUIElement
     | WebInputDateTimeUIElement;
   onResponse: (response: ResponseDescription) => void;
   userContext: WebUserContext;
