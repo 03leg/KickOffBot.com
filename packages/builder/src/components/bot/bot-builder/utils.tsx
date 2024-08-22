@@ -1,4 +1,4 @@
-import { type ContentTextUIElement, ElementType, type InputTextUIElement, type FlowDesignerUIBlockDescription, type UIElement, type InputButtonsUIElement, type FlowDesignerLink, type ButtonPortDescription, type BotVariable, BlockType, TransformDescription, ChangeVariableUIElement, ConditionUIElement, LogicalOperator, ButtonsSourceStrategy, CommandsUIElement, EditMessageUIElement, RemoveMessageUIElement, VariableConverter, SendTelegramMessageIntegrationUIElement, GoogleSheetsIntegrationUIElement, HTTPRequestIntegrationUIElement, HTTPMethod, VariableType, BotProject, BotPlatform, WebStartCommandsUIElement, WebContentTextUIElement, WebInputTextUIElement, WebInputNumberUIElement, WebInputDateTimeUIElement, AvailableDateTimes, WebInputPhoneUIElement, WebInputEmailUIElement } from "@kickoffbot.com/types";
+import { type ContentTextUIElement, ElementType, type InputTextUIElement, type FlowDesignerUIBlockDescription, type UIElement, type InputButtonsUIElement, type FlowDesignerLink, type ButtonPortDescription, type BotVariable, BlockType, TransformDescription, ChangeVariableUIElement, ConditionUIElement, LogicalOperator, ButtonsSourceStrategy, CommandsUIElement, EditMessageUIElement, RemoveMessageUIElement, VariableConverter, SendTelegramMessageIntegrationUIElement, GoogleSheetsIntegrationUIElement, HTTPRequestIntegrationUIElement, HTTPMethod, VariableType, BotProject, BotPlatform, WebStartCommandsUIElement, WebContentTextUIElement, WebInputTextUIElement, WebInputNumberUIElement, WebInputDateTimeUIElement, AvailableDateTimes, WebInputPhoneUIElement, WebInputEmailUIElement, WebInputButtonsUIElement } from "@kickoffbot.com/types";
 import MessageIcon from '@mui/icons-material/Message';
 import TextFieldsIcon from '@mui/icons-material/TextFields';
 import { isNil } from "lodash";
@@ -20,6 +20,7 @@ import NumbersIcon from '@mui/icons-material/Numbers';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import PhoneIcon from '@mui/icons-material/Phone';
 import AlternateEmailIcon from '@mui/icons-material/AlternateEmail';
+import SmartButtonIcon from '@mui/icons-material/SmartButton';
 
 export const TELEGRAM_DEFAULT_PROJECT_STATE: BotProject = {
     blocks: [...getTelegramDefaultBlocks()],
@@ -121,6 +122,7 @@ export function getWebInputElements() {
         { type: ElementType.WEB_INPUT_DATE_TIME, title: 'Date', icon: <CalendarMonthIcon /> },
         { type: ElementType.WEB_INPUT_PHONE, title: 'Phone', icon: <PhoneIcon /> },
         { type: ElementType.WEB_INPUT_EMAIL, title: 'E-mail', icon: <AlternateEmailIcon /> },
+        { type: ElementType.WEB_INPUT_BUTTONS, title: 'Buttons', icon: <SmartButtonIcon /> },
     ];
 }
 
@@ -142,8 +144,8 @@ export function getIntegrationsElements() {
 }
 
 export function getIconByType(type: ElementType) {
-    const description = [...getInputElements(), ...getTelegramContentElements(), ...getLogicElements(), ...getIntegrationsElements(), 
-        ...getWebContentElements(), ...getWebInputElements()].find(d => d.type === type);
+    const description = [...getInputElements(), ...getTelegramContentElements(), ...getLogicElements(), ...getIntegrationsElements(),
+    ...getWebContentElements(), ...getWebInputElements()].find(d => d.type === type);
 
     if (isNil(description)) {
         throw new Error('Property "description" can not be null here');
@@ -257,7 +259,7 @@ export function getNewUIElementTemplate(id: string, data: DraggableElementData):
             };
             return result;
         }
-        case ElementType.WEB_INPUT_TEXT:{
+        case ElementType.WEB_INPUT_TEXT: {
             const result: WebInputTextUIElement = {
                 id,
                 type: ElementType.WEB_INPUT_TEXT,
@@ -266,7 +268,7 @@ export function getNewUIElementTemplate(id: string, data: DraggableElementData):
             };
             return result;
         }
-        case ElementType.WEB_INPUT_NUMBER:{
+        case ElementType.WEB_INPUT_NUMBER: {
             const result: WebInputNumberUIElement = {
                 id,
                 type: ElementType.WEB_INPUT_NUMBER,
@@ -275,7 +277,7 @@ export function getNewUIElementTemplate(id: string, data: DraggableElementData):
             };
             return result;
         }
-        case ElementType.WEB_INPUT_DATE_TIME:{
+        case ElementType.WEB_INPUT_DATE_TIME: {
             const result: WebInputDateTimeUIElement = {
                 id,
                 type: ElementType.WEB_INPUT_DATE_TIME,
@@ -285,18 +287,27 @@ export function getNewUIElementTemplate(id: string, data: DraggableElementData):
             };
             return result;
         }
-        case ElementType.WEB_INPUT_PHONE:{
+        case ElementType.WEB_INPUT_PHONE: {
             const result: WebInputPhoneUIElement = {
                 id,
                 type: ElementType.WEB_INPUT_PHONE,
             };
             return result;
         }
-        case ElementType.WEB_INPUT_EMAIL:{
+        case ElementType.WEB_INPUT_EMAIL: {
             const result: WebInputEmailUIElement = {
                 id,
                 type: ElementType.WEB_INPUT_EMAIL,
                 placeholder: 'Write your answer...'
+            };
+            return result;
+        }
+        case ElementType.WEB_INPUT_BUTTONS: {
+            const result: WebInputButtonsUIElement = {
+                id,
+                type: ElementType.WEB_INPUT_BUTTONS,
+                strategy: ButtonsSourceStrategy.Manual,
+                buttons: []
             };
             return result;
         }

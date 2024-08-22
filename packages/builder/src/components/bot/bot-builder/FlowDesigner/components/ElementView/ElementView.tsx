@@ -2,7 +2,7 @@ import { Box } from '@mui/material'
 import React, { useCallback, useContext, useMemo } from 'react'
 import { TextContent } from '../elements/TextContent';
 import { Colors } from '~/themes/Colors';
-import { ContentTextUIElement, ElementType, GoogleSheetsIntegrationUIElement, HTTPRequestIntegrationUIElement, SendTelegramMessageIntegrationUIElement, WebContentTextUIElement, WebInputDateTimeUIElement, WebInputEmailUIElement, WebInputNumberUIElement, WebInputPhoneUIElement, WebInputTextUIElement, type UIElement } from '@kickoffbot.com/types';
+import { ContentTextUIElement, ElementType, GoogleSheetsIntegrationUIElement, HTTPRequestIntegrationUIElement, SendTelegramMessageIntegrationUIElement, WebContentTextUIElement, WebInputButtonsUIElement, WebInputDateTimeUIElement, WebInputEmailUIElement, WebInputNumberUIElement, WebInputPhoneUIElement, WebInputTextUIElement, type UIElement } from '@kickoffbot.com/types';
 import { getIconByType } from '../../../utils';
 import { CSS } from '@dnd-kit/utilities';
 import { useSortable } from '@dnd-kit/sortable';
@@ -24,6 +24,7 @@ import { WebNumberInput } from '../elements/WEB/WebNumberInput';
 import { WebDateTimeInput } from '../elements/WEB/WebDateTimeInput';
 import { WebPhoneInput } from '../elements/WEB/WebPhoneInput';
 import { WebEmailInput } from '../elements/WEB/WebEmailInput';
+import { WebButtonsInput } from '../elements/WEB/WebButtonsInput';
 
 interface Props {
     element: UIElement;
@@ -99,6 +100,11 @@ export const ElementView = ({ element, scale }: Props) => {
                 result = <WebEmailInput element={element as WebInputEmailUIElement} />
                 return result;
             }
+            case ElementType.WEB_INPUT_BUTTONS:{
+                result = <WebButtonsInput element={element as WebInputButtonsUIElement} />
+                return result;
+            }
+
             default: {
                 throw new Error('NotImplementedError');
             }

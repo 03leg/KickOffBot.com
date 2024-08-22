@@ -2,11 +2,16 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import {
   BotProject,
+  ButtonsSourceStrategy,
   ElementType,
   FlowDesignerUIBlockDescription,
   UIElement,
   WebContentTextUIElement,
+  WebInputButtonsUIElement,
+  WebInputDateTimeUIElement,
+  WebInputEmailUIElement,
   WebInputNumberUIElement,
+  WebInputPhoneUIElement,
   WebInputTextUIElement,
 } from "@kickoffbot.com/types";
 import { WebBotManagerUtils } from "./WebBotManager.utils";
@@ -14,14 +19,16 @@ import { ChatStoreState } from "../store/store.types";
 import { throwIfNil } from "~/utils/guard";
 import { WebUserContext } from "./WebUserContext";
 import { isNil } from "lodash";
+import { ResponseDescription } from "../types";
+import { WebButtonDescription, WebButtonsManager } from "./WebButtonsManager";
 
 export class WebBotManager {
-  private _storeApi?: Partial<ChatStoreState>;
-  private _utils?: WebBotManagerUtils;
-  private _botProject?: BotProject;
-  private _userContext?: WebUserContext;
+  private _storeApi: Partial<ChatStoreState>;
+  private _utils: WebBotManagerUtils;
+  private _botProject: BotProject;
+  private _userContext: WebUserContext;
 
-  public init(project: BotProject, storeApi: Partial<ChatStoreState>) {
+  constructor(project: BotProject, storeApi: Partial<ChatStoreState>) {
     this._storeApi = storeApi;
     this._botProject = project;
 
@@ -36,6 +43,79 @@ export class WebBotManager {
     const firstElement = block.elements[0] as WebContentTextUIElement;
 
     void this.handleElement(block, firstElement);
+  }
+
+  private handleButtonsResponse(
+    typedElement: WebInputButtonsUIElement,
+    requestId: string,
+    response: ResponseDescription
+  ) {
+    throwIfNil(this._storeApi?.removeChatItem);
+    throwIfNil(this._storeApi?.sendUserResponse);
+
+    this._storeApi.removeChatItem(requestId);
+    this._storeApi.sendUserResponse({
+      message: (response.data as WebButtonDescription).text,
+    });
+
+    const btn = response.data as WebButtonDescription;
+    const callbackData = btn.callback_data;
+
+    const buttonsSourceStrategy =
+      WebButtonsManager.getButtonsSourceStrategy(callbackData);
+    let link;
+
+    if (buttonsSourceStrategy === ButtonsSourceStrategy.FromVariable) {
+      link = WebButtonsManager.handleCallbackQueryFromVariable(
+        callbackData,
+        this._botProject,
+        this._userContext,
+        this._utils
+      );
+    } else if (buttonsSourceStrategy === ButtonsSourceStrategy.Manual) {
+      link = WebButtonsManager.handleCallbackQueryManual(
+        callbackData,
+        this._botProject
+      );
+    }
+
+    if (isNil(link)) {
+      
+      console.log('Link is empty');
+      return;
+    }
+
+    const block = this._utils.getBlockById(link.input.blockId);
+    const element = block.elements[0];
+
+    throwIfNil(element);
+
+    void this.handleElement(block, element);
+  }
+
+  private handleUserInputResponse(
+    typedElement:
+      | WebInputTextUIElement
+      | WebInputNumberUIElement
+      | WebInputPhoneUIElement
+      | WebInputEmailUIElement
+      | WebInputDateTimeUIElement,
+    requestId: string,
+    response: ResponseDescription
+  ) {
+    throwIfNil(typedElement.variableId);
+    throwIfNil(this._storeApi?.removeChatItem);
+    throwIfNil(this._storeApi?.sendUserResponse);
+
+    const variable = this._utils.getVariableById(typedElement.variableId);
+    this._userContext.updateVariable(variable.name, response.data);
+
+    this._storeApi.removeChatItem(requestId);
+    this._storeApi.sendUserResponse({
+      message: response.data as string,
+    });
+
+    void this.checkNextElement();
   }
 
   public async handleElement(
@@ -69,30 +149,33 @@ export class WebBotManager {
       case ElementType.WEB_INPUT_DATE_TIME:
       case ElementType.WEB_INPUT_NUMBER:
       case ElementType.WEB_INPUT_EMAIL:
+      case ElementType.WEB_INPUT_BUTTONS:
       case ElementType.WEB_INPUT_TEXT: {
         const typedElement = element as
           | WebInputTextUIElement
-          | WebInputNumberUIElement;
+          | WebInputNumberUIElement
+          | WebInputPhoneUIElement
+          | WebInputEmailUIElement
+          | WebInputButtonsUIElement
+          | WebInputDateTimeUIElement;
         const userContext = this._userContext;
         const utils = this._utils;
 
         const requestId = this._storeApi.sendBotRequest({
           element: typedElement,
           userContext: userContext,
+          utils: utils,
           onResponse: (response) => {
-            throwIfNil(typedElement.variableId);
-            throwIfNil(this._storeApi?.removeChatItem);
-            throwIfNil(this._storeApi?.sendUserResponse);
+            if (typedElement.type === ElementType.WEB_INPUT_BUTTONS) {
+              this.handleButtonsResponse(
+                typedElement as WebInputButtonsUIElement,
+                requestId,
+                response
+              );
+              return;
+            }
 
-            const variable = utils.getVariableById(typedElement.variableId);
-            userContext.updateVariable(variable.name, response.data);
-
-            this._storeApi.removeChatItem(requestId);
-            this._storeApi.sendUserResponse({
-              message: response.data as string,
-            });
-
-            void this.checkNextElement();
+            this.handleUserInputResponse(typedElement, requestId, response);
           },
         });
         shouldHandleNextElement = false;

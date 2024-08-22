@@ -26,8 +26,8 @@ export const ButtonsEditor = ({ element }: Props) => {
 
     return (<Box>
         <RadioGroup sx={{ flex: 1 }} value={buttonsSourceStrategy} onChange={handleStrategyChange}>
-            <FormControlLabel value={ButtonsSourceStrategy.Manual} control={<Radio />} label="Manual" />
-            <FormControlLabel value={ButtonsSourceStrategy.FromVariable} control={<Radio />} label="Source is variable" />
+            <FormControlLabel value={ButtonsSourceStrategy.Manual} control={<Radio />} label="Static buttons" />
+            <FormControlLabel value={ButtonsSourceStrategy.FromVariable} control={<Radio />} label="Dynamic buttons" />
         </RadioGroup>
         {buttonsSourceStrategy === ButtonsSourceStrategy.Manual && <ManualStrategyButtonsEditor element={element} />}
         {buttonsSourceStrategy === ButtonsSourceStrategy.FromVariable && <FromVariableStrategyButtonsEditor value={element.variableButtonsSource} onValueChange={handleValueChange} />}

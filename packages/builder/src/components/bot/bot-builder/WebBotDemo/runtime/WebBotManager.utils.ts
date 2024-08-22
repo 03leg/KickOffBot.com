@@ -1,4 +1,12 @@
-import { BotProject, BotVariable, FlowDesignerLink, FlowDesignerUIBlockDescription, PortType, VariableConverter, VariableType } from "@kickoffbot.com/types";
+import {
+  BotProject,
+  BotVariable,
+  FlowDesignerLink,
+  FlowDesignerUIBlockDescription,
+  PortType,
+  VariableConverter,
+  VariableType,
+} from "@kickoffbot.com/types";
 import { isNil, isPlainObject } from "lodash";
 import { WebUserContext } from "./WebUserContext";
 import { throwIfNil } from "~/utils/guard";
@@ -36,17 +44,24 @@ export class WebBotManagerUtils {
 
   private getVariableValue(text: string, userContext: WebUserContext): string {
     const parsedArray = text.split("|") as [string, string];
-    const converter: VariableConverter | undefined = parsedArray[1] as VariableConverter | undefined;
+    const converter: VariableConverter | undefined = parsedArray[1] as
+      | VariableConverter
+      | undefined;
     const variablePathArray = parsedArray[0].split(".") as [string, string];
     const variableName = variablePathArray[0];
     const path = variablePathArray[1];
 
     if (path ?? converter) {
       const variableValue = userContext.getVariableValueByName(variableName);
-      const variableMetaData = this._botProject.variables.find((v) => v.name === variableName);
+      const variableMetaData = this._botProject.variables.find(
+        (v) => v.name === variableName
+      );
 
-      if (isPlainObject(variableValue) && path in (variableValue as Record<string, unknown>)) {
-        return (variableValue as Record<string, string>)[path] ?? '';
+      if (
+        isPlainObject(variableValue) &&
+        path in (variableValue as Record<string, unknown>)
+      ) {
+        return (variableValue as Record<string, string>)[path] ?? "";
       } else if (variableValue instanceof Array) {
         throwIfNil(converter);
         throwIfNil(variableValue);
@@ -57,35 +72,52 @@ export class WebBotManagerUtils {
           }
 
           throwIfNil(path);
-          const valueForArrayOfObjects = WebBotManagerUtils.getValueForArrayOfNumbers(
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            variableValue.map((v: any) => v[path] as number),
-            converter,
-          );
+          const valueForArrayOfObjects =
+            WebBotManagerUtils.getValueForArrayOfNumbers(
+              // eslint-disable-next-line @typescript-eslint/no-explicit-any
+              variableValue.map((v: any) => v[path] as number),
+              converter
+            );
 
           return valueForArrayOfObjects.toString();
         } else if (variableMetaData?.arrayItemType === VariableType.NUMBER) {
-          const valueForArrayOfNumbers = WebBotManagerUtils.getValueForArrayOfNumbers(variableValue as number[], converter);
+          const valueForArrayOfNumbers =
+            WebBotManagerUtils.getValueForArrayOfNumbers(
+              variableValue as number[],
+              converter
+            );
           return valueForArrayOfNumbers.toString();
         }
 
         return text;
       } else {
-        throw new Error("InvalidOperationError: variable value does not contain the path");
+        throw new Error(
+          "InvalidOperationError: variable value does not contain the path"
+        );
       }
     }
 
     return userContext.getVariableValueByName(text) as string;
   }
 
-  private static getValueForArrayOfNumbers(arrayOfNumbers: number[], converter: VariableConverter): number {
+  private static getValueForArrayOfNumbers(
+    arrayOfNumbers: number[],
+    converter: VariableConverter
+  ): number {
     switch (converter) {
       case VariableConverter.SUM: {
-        const v = arrayOfNumbers.reduce((partialSum: number, a: number) => partialSum + a, 0);
+        const v = arrayOfNumbers.reduce(
+          (partialSum: number, a: number) => partialSum + a,
+          0
+        );
         return Math.ceil(v * 100) / 100;
       }
       case VariableConverter.AVG: {
-        const v = arrayOfNumbers.reduce((partialSum: number, a: number) => partialSum + a, 0) / arrayOfNumbers.length;
+        const v =
+          arrayOfNumbers.reduce(
+            (partialSum: number, a: number) => partialSum + a,
+            0
+          ) / arrayOfNumbers.length;
         return Math.ceil(v * 100) / 100;
       }
       case VariableConverter.MAX: {
@@ -103,8 +135,15 @@ export class WebBotManagerUtils {
     }
   }
 
-  private getTextForContextObject(contextObject: unknown, template: string, index: number): string {
-    const getParsedTemplate = (textArgument: string, matches1: IterableIterator<RegExpExecArray|RegExpMatchArray>) => {
+  private getTextForContextObject(
+    contextObject: unknown,
+    template: string,
+    index: number
+  ): string {
+    const getParsedTemplate = (
+      textArgument: string,
+      matches1: IterableIterator<RegExpExecArray | RegExpMatchArray>
+    ) => {
       for (const m of matches1) {
         const property = m[1]!;
         let content = "";
@@ -113,7 +152,10 @@ export class WebBotManagerUtils {
           content = (index + 1).toString();
         } else if (isPlainObject(contextObject)) {
           content = (contextObject as Record<string, string>)[property] ?? "";
-        } else if ((m[0] === "<%value%>" || m[0] === "&lt;%value%&gt;") && ["string", "number", "boolean"].includes(typeof contextObject)) {
+        } else if (
+          (m[0] === "<%value%>" || m[0] === "&lt;%value%&gt;") &&
+          ["string", "number", "boolean"].includes(typeof contextObject)
+        ) {
           content = contextObject as string;
         }
 
@@ -129,32 +171,48 @@ export class WebBotManagerUtils {
     return result;
   }
 
-  private getTemplateValue(templateName: string, userContext: WebUserContext): string {
+  private getTemplateValue(
+    templateName: string,
+    userContext: WebUserContext
+  ): string {
     const defaultResult = "";
 
-    const template = (this._botProject.templates ?? []).find((t) => t.name === templateName);
+    const template = (this._botProject.templates ?? []).find(
+      (t) => t.name === templateName
+    );
 
     if (isNil(template)) {
       return defaultResult;
     }
 
-    const variableName = this._botProject.variables.find((v) => v.id === template.contextVariableId)?.name;
+    const variableName = this._botProject.variables.find(
+      (v) => v.id === template.contextVariableId
+    )?.name;
 
     if (isNil(variableName)) {
       return defaultResult;
     }
 
-    const arrayItems = userContext.getVariableValueByName(variableName) as unknown[];
+    const arrayItems = userContext.getVariableValueByName(
+      variableName
+    ) as unknown[];
     let result = "";
 
     for (let index = 0; index < arrayItems.length; index++) {
       const item = arrayItems[index];
-      const itemText = this.getTextForContextObject(item, template.telegramContent ?? "", index);
+      const itemText = this.getTextForContextObject(
+        item,
+        template.telegramContent ?? "",
+        index
+      );
       result += this.getParsedText(itemText, userContext);
     }
 
     if (arrayItems.length === 0 && template.showContentWhenArrayIsEmpty) {
-      result = this.getParsedText(template.emptyArrayTelegramContent ?? defaultResult, userContext);
+      result = this.getParsedText(
+        template.emptyArrayTelegramContent ?? defaultResult,
+        userContext
+      );
     }
 
     return result;
@@ -202,21 +260,35 @@ export class WebBotManagerUtils {
     return result;
   }
 
-  getParsedPropertyTemplate(template: string, value: Record<string, string>, userContext: WebUserContext): string {
+  getParsedPropertyTemplate(
+    template: string,
+    value: Record<string, string>,
+    userContext: WebUserContext
+  ): string {
+    // debugger;
     let text = this.parseVariables(template, userContext);
 
     const matches1 = text.matchAll(/<%(.*?)%>/g);
 
     for (const m of matches1) {
-      const content = value[m[1]!] ?? "";
+      let content = value[m[1]!] ?? "";
+      if (m[1] === "value") {
+        // TODO: when value is item from array ["string1", "string2"], [1,2,3] etc.
+        // eslint-disable-next-line @typescript-eslint/no-base-to-string
+        content = value.toString();
+      }
       text = text.replace(m[0], content);
     }
 
     return text;
   }
 
-  public getLinkFromBlock(block: FlowDesignerUIBlockDescription): FlowDesignerLink | null {
-    const currentLink = this._botProject.links.find((l) => l.output.blockId === block.id && l.output.type === PortType.BLOCK);
+  public getLinkFromBlock(
+    block: FlowDesignerUIBlockDescription
+  ): FlowDesignerLink | null {
+    const currentLink = this._botProject.links.find(
+      (l) => l.output.blockId === block.id && l.output.type === PortType.BLOCK
+    );
 
     if (isNil(currentLink)) {
       return null;
@@ -226,7 +298,9 @@ export class WebBotManagerUtils {
   }
 
   public getVariableById(variableId: string): BotVariable {
-    const currentVariable = this._botProject.variables.find((v) => v.id === variableId);
+    const currentVariable = this._botProject.variables.find(
+      (v) => v.id === variableId
+    );
 
     if (isNil(currentVariable)) {
       throw new Error("InvalidOperationError: variable is null");

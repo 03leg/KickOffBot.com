@@ -1,4 +1,4 @@
-import { BotVariable, ElementType, FileDescription, MessageDescription, UIElement } from "./BotTypes";
+import { BotVariable, ElementType, FileDescription, InputButtonsUIElement, MessageDescription, UIElement } from "./BotTypes";
 
 export interface WebStartCommand {
   id: string;
@@ -49,6 +49,10 @@ export interface WebInputPhoneUIElement extends UIElement {
   value?: string;
   variableId?: string;
   defaultCountry?: string;
+}
+
+export interface WebInputButtonsUIElement extends InputButtonsUIElement  {
+  
 }
 
 export interface WebInputEmailUIElement extends UIElement {

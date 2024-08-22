@@ -9,7 +9,7 @@ import { useConfirm } from 'material-ui-confirm';
 import { TextContentEditor } from '../elements/TextContent/Editor';
 import { ButtonsEditor } from '../elements/ButtonsInput/Editor';
 import { TextInputEditor } from '../elements/TextInput/Editor';
-import { ChangeVariableUIElement, ConditionUIElement, ContentTextUIElement, EditMessageUIElement, ElementType, GoogleSheetsIntegrationUIElement, HTTPRequestIntegrationUIElement, InputButtonsUIElement, InputTextUIElement, OutputPortDescription, RemoveMessageUIElement, SendTelegramMessageIntegrationUIElement, UIElement, WebContentTextUIElement, WebInputDateTimeUIElement, WebInputEmailUIElement, WebInputNumberUIElement, WebInputPhoneUIElement, WebInputTextUIElement } from '@kickoffbot.com/types';
+import { ChangeVariableUIElement, ConditionUIElement, ContentTextUIElement, EditMessageUIElement, ElementType, GoogleSheetsIntegrationUIElement, HTTPRequestIntegrationUIElement, InputButtonsUIElement, InputTextUIElement, OutputPortDescription, RemoveMessageUIElement, SendTelegramMessageIntegrationUIElement, UIElement, WebContentTextUIElement, WebInputButtonsUIElement, WebInputDateTimeUIElement, WebInputEmailUIElement, WebInputNumberUIElement, WebInputPhoneUIElement, WebInputTextUIElement } from '@kickoffbot.com/types';
 import { ChangeVariableEditor } from '../elements/ChangeVariable/Editor';
 import { ConditionEditor } from '../elements/Condition/Editor';
 import { EditMessageEditor } from '../elements/EditMessage/Editor';
@@ -24,6 +24,7 @@ import { WebNumberInputEditor } from '../elements/WEB/WebNumberInput/editor/WebN
 import { WebDateTimeInputEditor } from '../elements/WEB/WebDateTimeInput/editor';
 import { WebPhoneInputEditor } from '../elements/WEB/WebPhoneInput/editor';
 import { WebEmailInputEditor } from '../elements/WEB/WebEmailInput/editor';
+import { WebButtonsInputEditor } from '../elements/WEB/WebButtonsInput/editor';
 
 
 
@@ -165,7 +166,7 @@ export const ElementMenu = ({ element }: Props) => {
                 return { content: (<WebNumberInputEditor element={newElement} />), title: 'Number Input Editor', newElement };
 
             }
-            case ElementType.WEB_INPUT_DATE_TIME:{
+            case ElementType.WEB_INPUT_DATE_TIME: {
                 const initialElement = elementArg as WebInputDateTimeUIElement;
                 const newElement: WebInputDateTimeUIElement = {
                     ...initialElement
@@ -173,7 +174,7 @@ export const ElementMenu = ({ element }: Props) => {
 
                 return { content: (<WebDateTimeInputEditor element={newElement} />), title: 'Date Time Input Editor', newElement };
             }
-            case ElementType.WEB_INPUT_PHONE:{
+            case ElementType.WEB_INPUT_PHONE: {
                 const initialElement = elementArg as WebInputPhoneUIElement;
                 const newElement: WebInputPhoneUIElement = {
                     ...initialElement
@@ -181,13 +182,21 @@ export const ElementMenu = ({ element }: Props) => {
 
                 return { content: (<WebPhoneInputEditor element={newElement} />), title: 'Phone Input Editor', newElement };
             }
-            case ElementType.WEB_INPUT_EMAIL:{
+            case ElementType.WEB_INPUT_EMAIL: {
                 const initialElement = elementArg as WebInputEmailUIElement;
                 const newElement: WebInputEmailUIElement = {
                     ...initialElement
                 };
 
                 return { content: (<WebEmailInputEditor element={newElement} />), title: 'Email Input Editor', newElement };
+            }
+            case ElementType.WEB_INPUT_BUTTONS: {
+                const initialElement = elementArg as WebInputButtonsUIElement;
+                const newElement: WebInputButtonsUIElement = {
+                    ...initialElement
+                };
+
+                return { content: (<WebButtonsInputEditor element={newElement} />), title: 'Buttons Input Editor', newElement };
             }
             default: {
                 throw new Error('NotImplementedError');

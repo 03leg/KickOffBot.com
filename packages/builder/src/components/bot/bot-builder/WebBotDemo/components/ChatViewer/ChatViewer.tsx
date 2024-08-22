@@ -25,8 +25,7 @@ export const ChatViewer = ({ project, height }: Props) => {
 
     useLayoutEffect(() => {
         if (!chatManager.current && project) {
-            chatManager.current = new WebBotManager();
-            chatManager.current.init(project, { ...storeState });
+            chatManager.current = new WebBotManager(project, { ...storeState });
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [project]);
