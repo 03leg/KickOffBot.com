@@ -25,6 +25,7 @@ export enum ElementType {
   WEB_INPUT_DATE_TIME = "web-input-date-time",
   WEB_INPUT_PHONE = "web-input-phone",
   WEB_INPUT_EMAIL = "web-input-email",
+  WEB_INPUT_BUTTONS = "web-input-buttons",
 }
 
 export interface UIElement {

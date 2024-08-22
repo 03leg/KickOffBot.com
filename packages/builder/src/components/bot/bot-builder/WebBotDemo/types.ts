@@ -1,5 +1,6 @@
 import {
   FileDescription,
+  WebInputButtonsUIElement,
   WebInputDateTimeUIElement,
   WebInputEmailUIElement,
   WebInputNumberUIElement,
@@ -7,6 +8,7 @@ import {
   WebInputTextUIElement,
 } from "@kickoffbot.com/types";
 import { WebUserContext } from "./runtime/WebUserContext";
+import { WebBotManagerUtils } from "./runtime/WebBotManager.utils";
 
 export interface NormalMessage {
   message?: string;
@@ -30,9 +32,11 @@ export interface RequestDescription {
     | WebInputNumberUIElement
     | WebInputPhoneUIElement
     | WebInputEmailUIElement
+    | WebInputButtonsUIElement
     | WebInputDateTimeUIElement;
   onResponse: (response: ResponseDescription) => void;
   userContext: WebUserContext;
+  utils: WebBotManagerUtils;
 }
 
 export interface ChatItem {
