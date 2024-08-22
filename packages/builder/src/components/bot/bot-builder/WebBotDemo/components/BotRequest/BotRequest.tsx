@@ -7,6 +7,7 @@ import { useBotRequestStyles } from './BotRequest.style';
 import { NumberBoxRequest } from './components/NumberBoxRequest';
 import { DateTimeBoxRequest } from './components/DateTimeBoxRequest';
 import { PhoneBoxRequest } from './components/PhoneBoxRequest';
+import { EmailBoxRequest } from './components/EmailBoxRequest';
 
 interface Props {
     request: RequestDescription;
@@ -30,6 +31,9 @@ export const BotRequest = ({ request }: Props) => {
             }
             case ElementType.WEB_INPUT_PHONE:{
                 return <PhoneBoxRequest request={request} />
+            }
+            case ElementType.WEB_INPUT_EMAIL: {
+                return <EmailBoxRequest request={request} />
             }
             default: {
                 throw new Error('NotImplementedError');

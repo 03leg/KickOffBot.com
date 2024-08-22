@@ -9,7 +9,7 @@ import { useConfirm } from 'material-ui-confirm';
 import { TextContentEditor } from '../elements/TextContent/Editor';
 import { ButtonsEditor } from '../elements/ButtonsInput/Editor';
 import { TextInputEditor } from '../elements/TextInput/Editor';
-import { ChangeVariableUIElement, ConditionUIElement, ContentTextUIElement, EditMessageUIElement, ElementType, GoogleSheetsIntegrationUIElement, HTTPRequestIntegrationUIElement, InputButtonsUIElement, InputTextUIElement, OutputPortDescription, RemoveMessageUIElement, SendTelegramMessageIntegrationUIElement, UIElement, WebContentTextUIElement, WebInputDateTimeUIElement, WebInputNumberUIElement, WebInputPhoneUIElement, WebInputTextUIElement } from '@kickoffbot.com/types';
+import { ChangeVariableUIElement, ConditionUIElement, ContentTextUIElement, EditMessageUIElement, ElementType, GoogleSheetsIntegrationUIElement, HTTPRequestIntegrationUIElement, InputButtonsUIElement, InputTextUIElement, OutputPortDescription, RemoveMessageUIElement, SendTelegramMessageIntegrationUIElement, UIElement, WebContentTextUIElement, WebInputDateTimeUIElement, WebInputEmailUIElement, WebInputNumberUIElement, WebInputPhoneUIElement, WebInputTextUIElement } from '@kickoffbot.com/types';
 import { ChangeVariableEditor } from '../elements/ChangeVariable/Editor';
 import { ConditionEditor } from '../elements/Condition/Editor';
 import { EditMessageEditor } from '../elements/EditMessage/Editor';
@@ -23,6 +23,7 @@ import { WebTextInputEditor } from '../elements/WEB/WebTextInput/editor';
 import { WebNumberInputEditor } from '../elements/WEB/WebNumberInput/editor/WebNumberInputEditor';
 import { WebDateTimeInputEditor } from '../elements/WEB/WebDateTimeInput/editor';
 import { WebPhoneInputEditor } from '../elements/WEB/WebPhoneInput/editor';
+import { WebEmailInputEditor } from '../elements/WEB/WebEmailInput/editor';
 
 
 
@@ -179,6 +180,14 @@ export const ElementMenu = ({ element }: Props) => {
                 };
 
                 return { content: (<WebPhoneInputEditor element={newElement} />), title: 'Phone Input Editor', newElement };
+            }
+            case ElementType.WEB_INPUT_EMAIL:{
+                const initialElement = elementArg as WebInputEmailUIElement;
+                const newElement: WebInputEmailUIElement = {
+                    ...initialElement
+                };
+
+                return { content: (<WebEmailInputEditor element={newElement} />), title: 'Email Input Editor', newElement };
             }
             default: {
                 throw new Error('NotImplementedError');
