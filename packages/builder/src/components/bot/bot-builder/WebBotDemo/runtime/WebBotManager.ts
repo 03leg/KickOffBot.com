@@ -2,10 +2,18 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import {
   BotProject,
+  ButtonPortDescription,
   ButtonsSourceStrategy,
+  ChangeArrayVariableWorkflow,
+  ChangeBooleanVariableWorkflow,
+  ChangeNumberStringVariableWorkflow,
+  ChangeObjectVariableWorkflow,
+  ChangeVariableUIElement,
+  ConditionUIElement,
   ElementType,
   FlowDesignerUIBlockDescription,
   UIElement,
+  VariableType,
   WebContentTextUIElement,
   WebInputButtonsUIElement,
   WebInputDateTimeUIElement,
@@ -21,6 +29,9 @@ import { WebUserContext } from "./WebUserContext";
 import { isNil } from "lodash";
 import { ResponseDescription } from "../types";
 import { WebButtonDescription, WebButtonsManager } from "./WebButtonsManager";
+import { ChangeArrayVariableHelper } from "./ChangeArrayVariableHelper";
+import { ChangeObjectVariableHelper } from "./ChangeObjectVariableHelper";
+import { ConditionChecker } from "./ConditionChecker";
 
 export class WebBotManager {
   private _storeApi: Partial<ChatStoreState>;
@@ -80,8 +91,7 @@ export class WebBotManager {
     }
 
     if (isNil(link)) {
-      
-      console.log('Link is empty');
+      console.log("Link is empty");
       return;
     }
 
@@ -127,7 +137,7 @@ export class WebBotManager {
     throwIfNil(this._storeApi?.sendBotMessage);
     throwIfNil(this._userContext);
 
-    const shouldCalcNextStep = true;
+    let shouldCalcNextStep = true;
     let shouldHandleNextElement = true;
 
     switch (element.type) {
@@ -182,7 +192,15 @@ export class WebBotManager {
 
         break;
       }
-
+      case ElementType.LOGIC_CHANGE_VARIABLE: {
+        this.handleChangeVariableElement(element as ChangeVariableUIElement);
+        break;
+      }
+      case ElementType.LOGIC_CONDITION: {
+        shouldCalcNextStep = this.handleLogicConditionElement(element as ConditionUIElement);
+        console.log("shouldCalcNextStep", shouldCalcNextStep);
+        break;
+      }
       default: {
         throw new Error("NotImplementedError");
       }
@@ -194,6 +212,142 @@ export class WebBotManager {
 
     if (shouldHandleNextElement) {
       await this.checkNextElement();
+    }
+  }
+
+  private handleLogicConditionElement(element: ConditionUIElement): boolean {
+    const conditionIsTrue = ConditionChecker.check(element, this._utils, this._userContext);
+
+    if (conditionIsTrue) {
+      const link = this._botProject.links.find((l) => (l.output as ButtonPortDescription).buttonId === element.id);
+      if (isNil(link)) {
+        return true;
+      }
+
+      const block = this._utils.getBlockById(link.input.blockId);
+
+      this._userContext.setNextStep({
+        blockId: block.id,
+        elementId: block.elements[0]!.id,
+      });
+
+      return false;
+    }
+
+    return true;
+  }
+
+  private handleChangeVariableElement(element: ChangeVariableUIElement) {
+    if (!element.selectedVariableId) {
+      throw new Error("InvalidOperationError: variable is null");
+    }
+
+    const userContext = this._userContext;
+
+    const variable = this._utils.getVariableById(element.selectedVariableId);
+    if (element.restoreInitialValue) {
+      try {
+        userContext.updateVariable(
+          variable.name,
+          JSON.parse(variable.value as string)
+        );
+      } catch {
+        userContext.updateVariable(variable.name, variable.value as string);
+      }
+      return;
+    }
+
+    let newValue: number | string | null | boolean | object | unknown[] = null;
+
+    switch (variable.type) {
+      case VariableType.NUMBER: {
+        if (isNil(element.workflowDescription)) {
+          break;
+        }
+
+        const expression = (
+          element.workflowDescription as ChangeNumberStringVariableWorkflow
+        ).expression;
+
+        newValue = this._utils.getNumberValueFromExpression(
+          expression,
+          userContext
+        );
+
+        break;
+      }
+      case VariableType.STRING: {
+        if (isNil(element.workflowDescription)) {
+          break;
+        }
+
+        const expression = (
+          element.workflowDescription as ChangeNumberStringVariableWorkflow
+        ).expression;
+
+        newValue = this._utils.getStringValueFromExpression(
+          expression,
+          userContext
+        );
+
+        break;
+      }
+      case VariableType.BOOLEAN: {
+        if (isNil(element.workflowDescription)) {
+          break;
+        }
+
+        const workflowDescription =
+          element.workflowDescription as ChangeBooleanVariableWorkflow;
+
+        newValue = this._utils.getBooleanValue(
+          workflowDescription.strategy,
+          variable,
+          userContext
+        );
+        break;
+      }
+      case VariableType.ARRAY: {
+        if (isNil(element.workflowDescription)) {
+          break;
+        }
+
+        const workflowDescription =
+          element.workflowDescription as ChangeArrayVariableWorkflow;
+
+        newValue = ChangeArrayVariableHelper.getArrayValue(
+          workflowDescription,
+          variable,
+          userContext,
+          this._utils
+        );
+
+        break;
+      }
+
+      case VariableType.OBJECT: {
+        if (isNil(element.workflowDescription)) {
+          break;
+        }
+
+        const workflowDescription =
+          element.workflowDescription as ChangeObjectVariableWorkflow;
+
+        newValue = ChangeObjectVariableHelper.getObjectValue(
+          workflowDescription,
+          userContext,
+          this._utils
+        ) as object;
+        break;
+      }
+
+      default: {
+        throw new Error("NotImplementedError. Unknown variable type.");
+      }
+    }
+
+    if (!isNil(newValue)) {
+      userContext.updateVariable(variable.name, newValue);
     }
   }
 
@@ -234,6 +388,7 @@ export class WebBotManager {
       case ElementType.WEB_INPUT_DATE_TIME:
       case ElementType.WEB_INPUT_PHONE:
       case ElementType.WEB_INPUT_EMAIL:
+      case ElementType.WEB_INPUT_BUTTONS:
       case ElementType.WEB_CONTENT_MESSAGE: {
         await this.handleElement(block, nextElement);
         break;

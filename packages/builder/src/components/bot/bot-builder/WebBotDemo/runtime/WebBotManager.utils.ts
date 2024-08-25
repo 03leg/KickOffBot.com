@@ -1,6 +1,7 @@
 import {
   BotProject,
   BotVariable,
+  ChangeBooleanVariableWorkflowStrategy,
   FlowDesignerLink,
   FlowDesignerUIBlockDescription,
   PortType,
@@ -10,6 +11,7 @@ import {
 import { isNil, isPlainObject } from "lodash";
 import { WebUserContext } from "./WebUserContext";
 import { throwIfNil } from "~/utils/guard";
+import { Parser } from "expr-eval";
 
 export class WebBotManagerUtils {
   private _botProject: BotProject;
@@ -308,4 +310,60 @@ export class WebBotManagerUtils {
 
     return currentVariable;
   }
+
+  getNumberValueFromExpression(expression: string, userContext: WebUserContext): number | null {
+    try {
+      const parsedExpression = this.getParsedText(expression, userContext);
+      const result = Parser.evaluate(parsedExpression);
+
+      if (typeof result === "number") {
+        return result;
+      }
+    } catch (e) {
+      console.log("getNumberValueFromExpression", e);
+    }
+
+    return null;
+  }
+
+  getStringValueFromExpression(expression: string, userContext: WebUserContext): string | null {
+    try {
+      const result = this.getParsedText(expression, userContext);
+
+      if (typeof result === "string") {
+        return result;
+      }
+    } catch (e) {
+      console.log("getStringValueFromExpression", e);
+    }
+
+    return null;
+  }
+
+  getBooleanValue(strategy: ChangeBooleanVariableWorkflowStrategy, variable: BotVariable, userContext: WebUserContext): boolean | null {
+    try {
+      switch (strategy) {
+        case ChangeBooleanVariableWorkflowStrategy.SET_FALSE: {
+          return false;
+        }
+        case ChangeBooleanVariableWorkflowStrategy.SET_TRUE: {
+          return true;
+        }
+        case ChangeBooleanVariableWorkflowStrategy.TOGGLE: {
+          const currentValue = userContext.getVariableValueByName(variable.name);
+
+          if (typeof currentValue === "boolean") {
+            return !currentValue;
+          }
+
+          break;
+        }
+      }
+    } catch (e) {
+      console.log("getBooleanValue", e);
+    }
+
+    return null;
+  }
+
 }

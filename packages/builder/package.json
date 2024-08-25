@@ -43,8 +43,10 @@
     "draft-js": "^0.11.7",
     "draft-js-export-html": "^1.4.1",
     "emoji-picker-react": "4.8.0",
+    "expr-eval": "^2.0.2",
     "formidable": "^3.5.0",
     "google-auth-library": "9.10.0",
+    "google-libphonenumber": "3.2.38",
     "google-spreadsheet": "4.1.2",
     "lodash": "^4.17.21",
     "material-ui-confirm": "^3.0.9",
@@ -55,18 +57,18 @@
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-google-button": "0.8.0",
+    "react-international-phone": "4.3.0",
     "superjson": "1.12.2",
     "telegraf": "^4.12.2",
     "tss-react": "^4.8.8",
     "usehooks-ts": "^2.9.1",
     "uuid": "^9.0.1",
     "zod": "^3.21.4",
-    "zustand": "^4.4.4",
-    "react-international-phone": "4.3.0",
-    "google-libphonenumber": "3.2.38"
+    "zustand": "^4.4.4"
   },
   "devDependencies": {
     "@types/eslint": "^8.37.0",
+    "@types/google-libphonenumber": "7.4.30",
     "@types/node": "^18.16.0",
     "@types/prettier": "^2.7.2",
     "@types/react": "^18.2.6",
@@ -82,8 +84,7 @@
     "prettier-plugin-tailwindcss": "^0.2.8",
     "prisma": "^5.0.0",
     "tailwindcss": "^3.3.0",
-    "typescript": "^5.0.4",
-    "@types/google-libphonenumber": "7.4.30"
+    "typescript": "^5.0.4"
   },
   "ct3aMetadata": {
     "initVersion": "7.16.0"
