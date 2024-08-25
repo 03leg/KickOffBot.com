@@ -126,6 +126,15 @@ export function getWebInputElements() {
     ];
 }
 
+export function getWebLogicElements() {
+    return [
+        { type: ElementType.LOGIC_CHANGE_VARIABLE, title: 'Change variable', icon: <EditNoteIcon /> },
+        { type: ElementType.LOGIC_CONDITION, title: 'Condition', icon: <ForkLeftIcon /> },
+        // { type: ElementType.LOGIC_EDIT_MESSAGE, title: 'Edit message', icon: <EditIcon /> },
+        // { type: ElementType.LOGIC_REMOVE_MESSAGE, title: 'Remove message', icon: <DeleteIcon /> },
+    ];
+}
+
 export function getLogicElements() {
     return [
         { type: ElementType.LOGIC_CHANGE_VARIABLE, title: 'Change variable', icon: <EditNoteIcon /> },
