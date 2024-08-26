@@ -8,11 +8,16 @@ import {
 } from "../types";
 import { v4 } from "uuid";
 import { delay } from "../../utils";
+import { UIElement } from "@kickoffbot.com/types";
+
 
 export const useUserChatStore = create<ChatStoreState>()((set, get) => ({
   chatItems: [],
   botIsTyping: false,
-  sendBotMessage: async (message: NormalMessage) => {
+  sendBotMessage: async (
+    elementId: UIElement["id"],
+    message: NormalMessage
+  ) => {
     set(() => ({ botIsTyping: true }));
 
     await delay(750);
@@ -24,13 +29,17 @@ export const useUserChatStore = create<ChatStoreState>()((set, get) => ({
           itemType: ChatItemType.BOT_MESSAGE,
           content: message,
           id: v4(),
+          uiElementId: elementId,
         },
       ];
+
+
 
       return { chatItems: messages, botIsTyping: false };
     });
   },
   clearHistory: () => set(() => ({ chatItems: [] })),
+  removeChatItemByUIElementId: (elementIds: UIElement["id"][]) => set((state) => ({ chatItems: state.chatItems.filter((m) => !elementIds.includes(m.uiElementId ?? '')) })),
   sendBotRequest: (request: RequestDescription) => {
     const requestId = v4();
 
@@ -53,7 +62,7 @@ export const useUserChatStore = create<ChatStoreState>()((set, get) => ({
     set((state) => ({
       chatItems: state.chatItems.filter((m) => m.id !== id),
     })),
-  sendUserResponse: (response: NormalMessage) =>
+  sendUserResponse: (elementId: UIElement["id"], response: NormalMessage) =>
     set((state) => ({
       chatItems: [
         ...state.chatItems,
@@ -61,6 +70,7 @@ export const useUserChatStore = create<ChatStoreState>()((set, get) => ({
           itemType: ChatItemType.USER_MESSAGE,
           content: response,
           id: v4(),
+          uiElementId: elementId,
         },
       ],
     })),

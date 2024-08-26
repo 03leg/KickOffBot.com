@@ -1,4 +1,4 @@
-import { type ContentTextUIElement, ElementType, type InputTextUIElement, type FlowDesignerUIBlockDescription, type UIElement, type InputButtonsUIElement, type FlowDesignerLink, type ButtonPortDescription, type BotVariable, BlockType, TransformDescription, ChangeVariableUIElement, ConditionUIElement, LogicalOperator, ButtonsSourceStrategy, CommandsUIElement, EditMessageUIElement, RemoveMessageUIElement, VariableConverter, SendTelegramMessageIntegrationUIElement, GoogleSheetsIntegrationUIElement, HTTPRequestIntegrationUIElement, HTTPMethod, VariableType, BotProject, BotPlatform, WebStartCommandsUIElement, WebContentTextUIElement, WebInputTextUIElement, WebInputNumberUIElement, WebInputDateTimeUIElement, AvailableDateTimes, WebInputPhoneUIElement, WebInputEmailUIElement, WebInputButtonsUIElement } from "@kickoffbot.com/types";
+import { type ContentTextUIElement, ElementType, type InputTextUIElement, type FlowDesignerUIBlockDescription, type UIElement, type InputButtonsUIElement, type FlowDesignerLink, type ButtonPortDescription, type BotVariable, BlockType, TransformDescription, ChangeVariableUIElement, ConditionUIElement, LogicalOperator, ButtonsSourceStrategy, CommandsUIElement, EditMessageUIElement, RemoveMessageUIElement, VariableConverter, SendTelegramMessageIntegrationUIElement, GoogleSheetsIntegrationUIElement, HTTPRequestIntegrationUIElement, HTTPMethod, VariableType, BotProject, BotPlatform, WebStartCommandsUIElement, WebContentTextUIElement, WebInputTextUIElement, WebInputNumberUIElement, WebInputDateTimeUIElement, AvailableDateTimes, WebInputPhoneUIElement, WebInputEmailUIElement, WebInputButtonsUIElement, WebLogicRemoveMessagesUIElement } from "@kickoffbot.com/types";
 import MessageIcon from '@mui/icons-material/Message';
 import TextFieldsIcon from '@mui/icons-material/TextFields';
 import { isNil } from "lodash";
@@ -130,6 +130,7 @@ export function getWebLogicElements() {
     return [
         { type: ElementType.LOGIC_CHANGE_VARIABLE, title: 'Change variable', icon: <EditNoteIcon /> },
         { type: ElementType.LOGIC_CONDITION, title: 'Condition', icon: <ForkLeftIcon /> },
+        { type: ElementType.WEB_LOGIC_REMOVE_MESSAGES, title: 'Remove messages', icon: <DeleteIcon /> },
         // { type: ElementType.LOGIC_EDIT_MESSAGE, title: 'Edit message', icon: <EditIcon /> },
         // { type: ElementType.LOGIC_REMOVE_MESSAGE, title: 'Remove message', icon: <DeleteIcon /> },
     ];
@@ -154,7 +155,7 @@ export function getIntegrationsElements() {
 
 export function getIconByType(type: ElementType) {
     const description = [...getInputElements(), ...getTelegramContentElements(), ...getLogicElements(), ...getIntegrationsElements(),
-    ...getWebContentElements(), ...getWebInputElements()].find(d => d.type === type);
+    ...getWebContentElements(), ...getWebInputElements(), ...getWebLogicElements()].find(d => d.type === type);
 
     if (isNil(description)) {
         throw new Error('Property "description" can not be null here');
@@ -318,6 +319,13 @@ export function getNewUIElementTemplate(id: string, data: DraggableElementData):
                 strategy: ButtonsSourceStrategy.Manual,
                 buttons: []
             };
+            return result;
+        }
+        case ElementType.WEB_LOGIC_REMOVE_MESSAGES:{
+            const result: WebLogicRemoveMessagesUIElement = {
+                id,
+                type: ElementType.WEB_LOGIC_REMOVE_MESSAGES
+            }
             return result;
         }
         default: {

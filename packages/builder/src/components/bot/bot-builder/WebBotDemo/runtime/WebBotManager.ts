@@ -21,6 +21,7 @@ import {
   WebInputNumberUIElement,
   WebInputPhoneUIElement,
   WebInputTextUIElement,
+  WebLogicRemoveMessagesUIElement,
 } from "@kickoffbot.com/types";
 import { WebBotManagerUtils } from "./WebBotManager.utils";
 import { ChatStoreState } from "../store/store.types";
@@ -65,7 +66,7 @@ export class WebBotManager {
     throwIfNil(this._storeApi?.sendUserResponse);
 
     this._storeApi.removeChatItem(requestId);
-    this._storeApi.sendUserResponse({
+    this._storeApi.sendUserResponse(typedElement.id, {
       message: (response.data as WebButtonDescription).text,
     });
 
@@ -121,7 +122,7 @@ export class WebBotManager {
     this._userContext.updateVariable(variable.name, response.data);
 
     this._storeApi.removeChatItem(requestId);
-    this._storeApi.sendUserResponse({
+    this._storeApi.sendUserResponse(typedElement.id, {
       message: response.data as string,
     });
 
@@ -148,7 +149,7 @@ export class WebBotManager {
           this._userContext
         );
 
-        await this._storeApi.sendBotMessage({
+        await this._storeApi.sendBotMessage(typedElement.id, {
           message: messageText,
           attachments: typedElement.attachments,
         });
@@ -197,8 +198,15 @@ export class WebBotManager {
         break;
       }
       case ElementType.LOGIC_CONDITION: {
-        shouldCalcNextStep = this.handleLogicConditionElement(element as ConditionUIElement);
-        console.log("shouldCalcNextStep", shouldCalcNextStep);
+        shouldCalcNextStep = this.handleLogicConditionElement(
+          element as ConditionUIElement
+        );
+        break;
+      }
+      case ElementType.WEB_LOGIC_REMOVE_MESSAGES: {
+        this.handleLogicRemoveMessagesElement(
+          element as WebLogicRemoveMessagesUIElement
+        );
         break;
       }
       default: {
@@ -214,12 +222,29 @@ export class WebBotManager {
       await this.checkNextElement();
     }
   }
+  handleLogicRemoveMessagesElement(element: WebLogicRemoveMessagesUIElement) {
+    throwIfNil(this._storeApi?.clearHistory);
+    throwIfNil(this._storeApi.removeChatItemByUIElementId);
+
+    if (element.removeAllMessages) {
+      this._storeApi.clearHistory();
+      return;
+    }
+
+    this._storeApi.removeChatItemByUIElementId(element.messageIds ?? []);
+  }
 
   private handleLogicConditionElement(element: ConditionUIElement): boolean {
-    const conditionIsTrue = ConditionChecker.check(element, this._utils, this._userContext);
+    const conditionIsTrue = ConditionChecker.check(
+      element,
+      this._utils,
+      this._userContext
+    );
 
     if (conditionIsTrue) {
-      const link = this._botProject.links.find((l) => (l.output as ButtonPortDescription).buttonId === element.id);
+      const link = this._botProject.links.find(
+        (l) => (l.output as ButtonPortDescription).buttonId === element.id
+      );
       if (isNil(link)) {
         return true;
       }
