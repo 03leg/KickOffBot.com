@@ -68,3 +68,8 @@ export enum AvailableDateTimes {
   FutureDates = "FutureDates",
   DatesFromVariable = "DatesFromVariable",
 }
+
+export interface WebLogicRemoveMessagesUIElement extends UIElement {
+  removeAllMessages?: boolean;
+  messageIds?: string[];
+}

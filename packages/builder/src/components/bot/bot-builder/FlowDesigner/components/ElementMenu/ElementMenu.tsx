@@ -9,7 +9,7 @@ import { useConfirm } from 'material-ui-confirm';
 import { TextContentEditor } from '../elements/TextContent/Editor';
 import { ButtonsEditor } from '../elements/ButtonsInput/Editor';
 import { TextInputEditor } from '../elements/TextInput/Editor';
-import { ChangeVariableUIElement, ConditionUIElement, ContentTextUIElement, EditMessageUIElement, ElementType, GoogleSheetsIntegrationUIElement, HTTPRequestIntegrationUIElement, InputButtonsUIElement, InputTextUIElement, OutputPortDescription, RemoveMessageUIElement, SendTelegramMessageIntegrationUIElement, UIElement, WebContentTextUIElement, WebInputButtonsUIElement, WebInputDateTimeUIElement, WebInputEmailUIElement, WebInputNumberUIElement, WebInputPhoneUIElement, WebInputTextUIElement } from '@kickoffbot.com/types';
+import { ChangeVariableUIElement, ConditionUIElement, ContentTextUIElement, EditMessageUIElement, ElementType, GoogleSheetsIntegrationUIElement, HTTPRequestIntegrationUIElement, InputButtonsUIElement, InputTextUIElement, OutputPortDescription, RemoveMessageUIElement, SendTelegramMessageIntegrationUIElement, UIElement, WebContentTextUIElement, WebInputButtonsUIElement, WebInputDateTimeUIElement, WebInputEmailUIElement, WebInputNumberUIElement, WebInputPhoneUIElement, WebInputTextUIElement, WebLogicRemoveMessagesUIElement } from '@kickoffbot.com/types';
 import { ChangeVariableEditor } from '../elements/ChangeVariable/Editor';
 import { ConditionEditor } from '../elements/Condition/Editor';
 import { EditMessageEditor } from '../elements/EditMessage/Editor';
@@ -25,6 +25,7 @@ import { WebDateTimeInputEditor } from '../elements/WEB/WebDateTimeInput/editor'
 import { WebPhoneInputEditor } from '../elements/WEB/WebPhoneInput/editor';
 import { WebEmailInputEditor } from '../elements/WEB/WebEmailInput/editor';
 import { WebButtonsInputEditor } from '../elements/WEB/WebButtonsInput/editor';
+import { WebLogicRemoveMessagesEditor } from '../elements/WEB/WebLogicRemoveMessage';
 
 
 
@@ -198,6 +199,15 @@ export const ElementMenu = ({ element }: Props) => {
 
                 return { content: (<WebButtonsInputEditor element={newElement} />), title: 'Buttons Input Editor', newElement };
             }
+            case ElementType.WEB_LOGIC_REMOVE_MESSAGES:
+                {
+                    const initialElement = elementArg as WebLogicRemoveMessagesUIElement;
+                    const newElement: WebLogicRemoveMessagesUIElement = {
+                        ...initialElement
+                    };
+
+                    return { content: (<WebLogicRemoveMessagesEditor element={newElement} />), title: 'Remove messages', newElement };
+                }
             default: {
                 throw new Error('NotImplementedError');
             }

@@ -1,5 +1,6 @@
 import {
   FileDescription,
+  UIElement,
   WebInputButtonsUIElement,
   WebInputDateTimeUIElement,
   WebInputEmailUIElement,
@@ -43,4 +44,5 @@ export interface ChatItem {
   id: string;
   itemType: ChatItemType;
   content: NormalMessage | RequestDescription;
+  uiElementId?: UIElement["id"];
 }

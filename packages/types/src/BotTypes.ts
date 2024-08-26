@@ -26,6 +26,8 @@ export enum ElementType {
   WEB_INPUT_PHONE = "web-input-phone",
   WEB_INPUT_EMAIL = "web-input-email",
   WEB_INPUT_BUTTONS = "web-input-buttons",
+
+  WEB_LOGIC_REMOVE_MESSAGES = "web-logic-remove-messages",
 }
 
 export interface UIElement {

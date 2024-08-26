@@ -2,7 +2,7 @@ import { Box } from '@mui/material'
 import React, { useCallback, useContext, useMemo } from 'react'
 import { TextContent } from '../elements/TextContent';
 import { Colors } from '~/themes/Colors';
-import { ContentTextUIElement, ElementType, GoogleSheetsIntegrationUIElement, HTTPRequestIntegrationUIElement, SendTelegramMessageIntegrationUIElement, WebContentTextUIElement, WebInputButtonsUIElement, WebInputDateTimeUIElement, WebInputEmailUIElement, WebInputNumberUIElement, WebInputPhoneUIElement, WebInputTextUIElement, type UIElement } from '@kickoffbot.com/types';
+import { ContentTextUIElement, ElementType, GoogleSheetsIntegrationUIElement, HTTPRequestIntegrationUIElement, SendTelegramMessageIntegrationUIElement, WebContentTextUIElement, WebInputButtonsUIElement, WebInputDateTimeUIElement, WebInputEmailUIElement, WebInputNumberUIElement, WebInputPhoneUIElement, WebInputTextUIElement, WebLogicRemoveMessagesUIElement, type UIElement } from '@kickoffbot.com/types';
 import { getIconByType } from '../../../utils';
 import { CSS } from '@dnd-kit/utilities';
 import { useSortable } from '@dnd-kit/sortable';
@@ -25,6 +25,7 @@ import { WebDateTimeInput } from '../elements/WEB/WebDateTimeInput';
 import { WebPhoneInput } from '../elements/WEB/WebPhoneInput';
 import { WebEmailInput } from '../elements/WEB/WebEmailInput';
 import { WebButtonsInput } from '../elements/WEB/WebButtonsInput';
+import { WebLogicRemoveMessages } from '../elements/WEB/WebLogicRemoveMessage';
 
 interface Props {
     element: UIElement;
@@ -102,6 +103,10 @@ export const ElementView = ({ element, scale }: Props) => {
             }
             case ElementType.WEB_INPUT_BUTTONS:{
                 result = <WebButtonsInput element={element as WebInputButtonsUIElement} />
+                return result;
+            }
+            case ElementType.WEB_LOGIC_REMOVE_MESSAGES:{
+                result = <WebLogicRemoveMessages element={element as WebLogicRemoveMessagesUIElement} />
                 return result;
             }
 
