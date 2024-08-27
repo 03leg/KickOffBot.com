@@ -56,7 +56,7 @@ export const UpdateRowsFromVariableEditor = ({ element, googleSheetHeaders }: Pr
                 <VariableSelector label="Variable with new values" valueId={selectedVariableId} onVariableChange={handleVariableChange} onCustomVariableFilter={handleVariableFilter} />
             </Box>
             <Typography variant='h6' sx={{ marginBottom: 2, }}>Set in rows:</Typography>
-            <RowsFilter conditions={updateRowsDescription.filter?.conditions} onFilterConditionsChange={handleFilterConditionsChange} googleSheetHeaders={googleSheetHeaders} />
+            <RowsFilter conditions={updateRowsDescription?.filter?.conditions} onFilterConditionsChange={handleFilterConditionsChange} googleSheetHeaders={googleSheetHeaders} />
 
         </Box>
     )

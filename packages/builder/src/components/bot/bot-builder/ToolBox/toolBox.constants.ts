@@ -6,6 +6,7 @@ import {
   getWebContentElements,
   getWebInputElements,
   getWebLogicElements,
+  getWebIntegrationsElements,
 } from "../utils";
 import { ToolBoxGroup } from "./types";
 
@@ -40,5 +41,9 @@ export const WEB_TOOLBOX_GROUPS: ToolBoxGroup[] = [
   {
     title: "Logic",
     items: getWebLogicElements(),
+  },
+  {
+    title: "Integrations",
+    items: getWebIntegrationsElements(),
   },
 ];

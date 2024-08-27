@@ -10,8 +10,10 @@ import {
   ChangeObjectVariableWorkflow,
   ChangeVariableUIElement,
   ConditionUIElement,
+  DataSpreedSheetOperation,
   ElementType,
   FlowDesignerUIBlockDescription,
+  GoogleSheetsIntegrationUIElement,
   UIElement,
   VariableType,
   WebContentTextUIElement,
@@ -33,6 +35,7 @@ import { WebButtonDescription, WebButtonsManager } from "./WebButtonsManager";
 import { ChangeArrayVariableHelper } from "./ChangeArrayVariableHelper";
 import { ChangeObjectVariableHelper } from "./ChangeObjectVariableHelper";
 import { ConditionChecker } from "./ConditionChecker";
+import { GoogleSpreedSheetHelper } from "./GoogleSpreedSheetHelper";
 
 export class WebBotManager {
   private _storeApi: Partial<ChatStoreState>;
@@ -209,6 +212,12 @@ export class WebBotManager {
         );
         break;
       }
+      case ElementType.INTEGRATION_GOOGLE_SHEETS: {
+        await this.handleGoogleSheetsElement(
+          element as GoogleSheetsIntegrationUIElement
+        );
+        break;
+      }
       default: {
         throw new Error("NotImplementedError");
       }
@@ -222,7 +231,39 @@ export class WebBotManager {
       await this.checkNextElement();
     }
   }
-  handleLogicRemoveMessagesElement(element: WebLogicRemoveMessagesUIElement) {
+
+  private async handleGoogleSheetsElement(
+    element: GoogleSheetsIntegrationUIElement
+  ) {
+    throwIfNil(this._storeApi.setLoadingValue);
+
+    this._storeApi.setLoadingValue(true);
+
+    const googleHelper = new GoogleSpreedSheetHelper(this._botProject);
+
+    switch (element.dataOperation) {
+      case DataSpreedSheetOperation.READ_ROWS_TO_ARRAY: {
+        await googleHelper.readRowsToArray(element, this._userContext);
+        break;
+      }
+      case DataSpreedSheetOperation.INSERT_ROWS_FROM_VARIABLE: {
+        await googleHelper.insertRowsFromVariable(element, this._userContext);
+        break;
+      }
+      case DataSpreedSheetOperation.UPDATE_ROWS_FROM_OBJECT_VARIABLE: {
+        await googleHelper.updateRowsFromObjectVariable(element, this._userContext, this._utils);
+        break;
+      }
+      default:
+        throw new Error("InvalidOperationError: Unknown data operation");
+    }
+
+    this._storeApi.setLoadingValue(false);
+  }
+
+  private handleLogicRemoveMessagesElement(
+    element: WebLogicRemoveMessagesUIElement
+  ) {
     throwIfNil(this._storeApi?.clearHistory);
     throwIfNil(this._storeApi.removeChatItemByUIElementId);
 
@@ -414,6 +455,7 @@ export class WebBotManager {
       case ElementType.WEB_INPUT_PHONE:
       case ElementType.WEB_INPUT_EMAIL:
       case ElementType.WEB_INPUT_BUTTONS:
+      case ElementType.WEB_LOGIC_REMOVE_MESSAGES:
       case ElementType.WEB_CONTENT_MESSAGE: {
         await this.handleElement(block, nextElement);
         break;

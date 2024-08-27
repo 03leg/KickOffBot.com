@@ -37,7 +37,7 @@ export const TextEditor = ({ onContentChange, initialState, contextObjectPropert
         const jsonContent = JSON.stringify(rawObject);
 
         const htmlContent = plainText === '' ? '' : stateToHTML(newState.getCurrentContent())
-            .replaceAll('<p>', '').replaceAll('</p>', '').replaceAll('<br>', '').replaceAll('&nbsp;', ' ');
+            .replaceAll('<p>', '').replaceAll('</p>', '');
         const telegramContent = plainText === '' ? '' : stateToHTML(newState.getCurrentContent(), {
             inlineStyles: {
                 BOLD: { element: 'b' },

@@ -12,4 +12,5 @@ export interface ChatStoreState {
   sendUserResponse: (elementId: UIElement["id"], response: NormalMessage) => void;
   
   removeChatItemByUIElementId: (elementId: UIElement["id"][]) => void;
+  setLoadingValue: (value: boolean) => void;
 }

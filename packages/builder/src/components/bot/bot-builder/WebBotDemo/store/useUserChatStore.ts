@@ -14,6 +14,7 @@ import { UIElement } from "@kickoffbot.com/types";
 export const useUserChatStore = create<ChatStoreState>()((set, get) => ({
   chatItems: [],
   botIsTyping: false,
+  setLoadingValue: (value: boolean) => set(() => ({ botIsTyping: value })),
   sendBotMessage: async (
     elementId: UIElement["id"],
     message: NormalMessage
