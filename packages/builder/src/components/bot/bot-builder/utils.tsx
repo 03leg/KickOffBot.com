@@ -128,9 +128,9 @@ export function getWebInputElements() {
 
 export function getWebLogicElements() {
     return [
-        { type: ElementType.LOGIC_CHANGE_VARIABLE, title: 'Change variable', icon: <EditNoteIcon /> },
+        { type: ElementType.LOGIC_CHANGE_VARIABLE, title: 'Change variable', icon: <EditNoteIcon />, size: 12 },
+        { type: ElementType.WEB_LOGIC_REMOVE_MESSAGES, title: 'Remove messages', icon: <DeleteIcon />, size: 12 },
         { type: ElementType.LOGIC_CONDITION, title: 'Condition', icon: <ForkLeftIcon /> },
-        { type: ElementType.WEB_LOGIC_REMOVE_MESSAGES, title: 'Remove messages', icon: <DeleteIcon /> },
         // { type: ElementType.LOGIC_EDIT_MESSAGE, title: 'Edit message', icon: <EditIcon /> },
         // { type: ElementType.LOGIC_REMOVE_MESSAGE, title: 'Remove message', icon: <DeleteIcon /> },
     ];
