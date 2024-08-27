@@ -11,6 +11,7 @@ import { TelegramToken } from "@kickoffbot.com/types";
 import { getPreviewToken } from "~/server/utility/getPreviewToken";
 import { z } from "zod";
 import { Telegraf } from "telegraf";
+import { getDbVersionProject } from "~/utils/getDbVersionProject";
 // import fs from "fs";
 
 export const botManagementRouter = createTRPCRouter({
@@ -43,6 +44,7 @@ export const botManagementRouter = createTRPCRouter({
     .input(BotContentScheme)
     .mutation(async ({ ctx, input }) => {
       const userId = ctx.session?.user.id;
+      const project = getDbVersionProject(input.project);
 
       const projectDescription = await prisma.botDescription.findUnique({
         where: { userId, id: input.projectId },
@@ -51,7 +53,7 @@ export const botManagementRouter = createTRPCRouter({
 
       if (isNil(projectDescription?.contentId)) {
         const createdContent = await prisma.botContent.create({
-          data: { version: 0, content: input.project },
+          data: { version: 0, content: project },
           select: { id: true },
         });
         await prisma.botDescription.update({
@@ -66,7 +68,7 @@ export const botManagementRouter = createTRPCRouter({
         const newBotContentItem = await prisma.botContent.create({
           data: {
             version: (existBotContentItem?.version ?? 0) + 1,
-            content: input.project,
+            content: project,
           },
           select: { id: true },
         });

@@ -204,7 +204,7 @@ export class WebBotManagerUtils {
       const item = arrayItems[index];
       const itemText = this.getTextForContextObject(
         item,
-        template.telegramContent ?? "",
+        template.htmlContent ?? "",
         index
       );
       result += this.getParsedText(itemText, userContext);
@@ -212,7 +212,7 @@ export class WebBotManagerUtils {
 
     if (arrayItems.length === 0 && template.showContentWhenArrayIsEmpty) {
       result = this.getParsedText(
-        template.emptyArrayTelegramContent ?? defaultResult,
+        template.emptyArrayHtmlContent ?? defaultResult,
         userContext
       );
     }
