@@ -389,4 +389,30 @@ export class WebBotRuntimeUtils {
 
     return currentElement;
   }
+
+  public static convertStringSheetCellValue(
+    cellValue: string,
+    sampleValue: unknown,
+  ): unknown {
+    try {
+      switch (typeof sampleValue) {
+        case 'boolean': {
+          if (
+            cellValue.toUpperCase() === 'TRUE' ||
+            cellValue.toUpperCase() === 'YES' ||
+            cellValue.toUpperCase() === '1'
+          ) {
+            return true;
+          }
+
+          return false;
+        }
+        case 'number': {
+          return Number(cellValue.replace(',', '.'));
+        }
+      }
+    } catch {}
+
+    return cellValue;
+  }
 }

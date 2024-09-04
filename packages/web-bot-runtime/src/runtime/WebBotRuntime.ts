@@ -36,6 +36,7 @@ import { RequestButtonsManager } from './RequestButtonsManager';
 import { ChangeArrayVariableHelper } from './ChangeArrayVariableHelper';
 import { ChangeObjectVariableHelper } from './ChangeObjectVariableHelper';
 import { ConditionChecker } from './ConditionChecker';
+import { GoogleSpreadsheetHelper } from './GoogleSpreadsheetHelper';
 
 export class WebBotRuntime {
   private _utils: WebBotRuntimeUtils;
@@ -459,36 +460,12 @@ export class WebBotRuntime {
   private async handleGoogleSheetsElement(
     element: GoogleSheetsIntegrationUIElement,
   ) {
-    // if (
-    //   isNil(element.connectionId) ||
-    //   isNil(element.selectedSpreadSheet?.id) ||
-    //   isNil(element.selectedSheet?.id)
-    // ) {
-    //   return;
-    // }
-    // const integrationAccount = await BotManager.getGoogleIntegrationAccount(
-    //   element.connectionId,
-    // );
-    // if (isNil(integrationAccount)) {
-    //   return;
-    // }
-    // const { credentials } = integrationAccount;
-    // this._googleOAuthClient.setCredentials(JSON.parse(atob(credentials)));
-    // switch (element.dataOperation) {
-    //   case DataSpreedSheetOperation.READ_ROWS_TO_ARRAY: {
-    //     await this.readRowsToArray(element, userContext);
-    //     break;
-    //   }
-    //   case DataSpreedSheetOperation.INSERT_ROWS_FROM_VARIABLE: {
-    //     await this.insertRowsFromVariable(element, userContext);
-    //     break;
-    //   }
-    //   case DataSpreedSheetOperation.UPDATE_ROWS_FROM_OBJECT_VARIABLE: {
-    //     await this.updateRowsFromObjectVariable(element, userContext);
-    //     break;
-    //   }
-    //   default:
-    //     throw new Error('InvalidOperationError: Unknown data operation');
-    // }
+    const helper = new GoogleSpreadsheetHelper(
+      this._project,
+      this._userContext,
+      this._utils,
+    );
+
+    await helper.handleElement(element);
   }
 }
