@@ -30,7 +30,7 @@ export const WebLogicRemoveMessages = ({ element }: Props) => {
       {element.removeAllMessages && <div>Delete all sent messages</div>}
       {!isNil(element.messageIds) && !element.removeAllMessages && element.messageIds.length > 0 &&
         element.messageIds.map((messageId) => <>
-          <Box sx={{ fontWeight: 'bold' }}>{getEditTitle(messageId)}</Box>
+          <Box key={messageId} sx={{ fontWeight: 'bold' }}>{getEditTitle(messageId)}</Box>
         </>
         )}
     </>

@@ -2,20 +2,22 @@ import { Box, TextField, IconButton } from '@mui/material';
 import React, { useCallback, useMemo, useState } from 'react';
 import SendIcon from '@mui/icons-material/Send';
 import { useNumberBoxRequestStyles } from './NumberBoxRequest.style';
-import { RequestDescription } from '../../../../types';
-import { WebInputNumberUIElement } from '@kickoffbot.com/types';
+import { NumberRequestElement, RequestDescriptionWebRuntime } from '@kickoffbot.com/types';
+import { throwIfNil } from '~/utils/guard';
 
 interface Props {
-    request: RequestDescription;
+    request: RequestDescriptionWebRuntime;
 }
 
 
 export const NumberBoxRequest = ({ request }: Props) => {
-    const numberElement = request.element as WebInputNumberUIElement;
+    const numberElement = request.element as NumberRequestElement;
     const { classes } = useNumberBoxRequestStyles();
     const [currentValue, setCurrentValue] = useState<number>();
 
     const handleSendResponse = useCallback(() => {
+        throwIfNil(request.onResponse);
+
         request.onResponse({ data: currentValue })
     }, [currentValue, request]);
 
@@ -26,8 +28,8 @@ export const NumberBoxRequest = ({ request }: Props) => {
         }
         const value = Number(event.target.value);
 
-        if (numberElement.max && value >= numberElement.max) return;
-        if (numberElement.min && value <= numberElement.min) return;
+        if (numberElement.max && value > numberElement.max) return;
+        if (numberElement.min && value < numberElement.min) return;
 
         setCurrentValue(value);
     }, [numberElement.max, numberElement.min]);

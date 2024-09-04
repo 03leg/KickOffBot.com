@@ -1,23 +1,25 @@
 import React, { useCallback, useState } from 'react'
-import { RequestDescription } from '../../../../types';
-import { WebInputEmailUIElement } from '@kickoffbot.com/types';
+import { EmailRequestElement, RequestDescriptionWebRuntime } from '@kickoffbot.com/types';
 import { Box, TextField, IconButton } from '@mui/material';
 import { useEmailBoxRequestStyles } from './EmailBoxRequest.style';
 import SendIcon from '@mui/icons-material/Send';
+import { throwIfNil } from '~/utils/guard';
 
 
 interface Props {
-    request: RequestDescription;
+    request: RequestDescriptionWebRuntime;
 }
 
 export const EmailBoxRequest = ({ request }: Props) => {
-    const { placeholder } = request.element as WebInputEmailUIElement;
+    const { placeholder } = request.element as EmailRequestElement;
     const { classes } = useEmailBoxRequestStyles();
     const [currentValue, setCurrentValue] = useState<string>('');
     const [emailError, setEmailError] = useState(false);
     const [showEmailError, setShowEmailError] = useState(false);
 
     const handleSendResponse = useCallback(() => {
+        throwIfNil(request.onResponse);
+
         if (emailError) {
             setShowEmailError(true);
             return;

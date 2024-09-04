@@ -1,20 +1,21 @@
 import React, { useCallback, useState } from 'react';
-import { RequestDescription } from '../../../../types';
 import { Box, IconButton, TextField } from '@mui/material';
 import { useTextBoxRequestStyles } from './TextBotRequest.style';
 import SendIcon from '@mui/icons-material/Send';
-import { WebInputTextUIElement } from '@kickoffbot.com/types';
+import { RequestDescriptionWebRuntime, TextRequestElement } from '@kickoffbot.com/types';
+import { throwIfNil } from '~/utils/guard';
 
 interface Props {
-    request: RequestDescription;
+    request: RequestDescriptionWebRuntime;
 }
 
 export const TextBotRequest = ({ request }: Props) => {
-    const { placeholder } = request.element as WebInputTextUIElement;
+    const { placeholder } = request.element as TextRequestElement;
     const { classes } = useTextBoxRequestStyles();
     const [currentValue, setCurrentValue] = useState<string>('');
 
     const handleSendResponse = useCallback(() => {
+        throwIfNil(request.onResponse);
         request.onResponse({ data: currentValue })
     }, [currentValue, request]);
 

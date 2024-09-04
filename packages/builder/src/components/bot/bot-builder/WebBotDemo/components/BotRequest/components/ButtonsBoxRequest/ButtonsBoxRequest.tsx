@@ -1,34 +1,35 @@
 import React, { useCallback, useMemo } from 'react';
-import { RequestDescription } from '../../../../types';
-import { WebInputButtonsUIElement } from '@kickoffbot.com/types';
+import { ButtonsRequestElement, RequestButtonDescription, RequestDescriptionWebRuntime } from '@kickoffbot.com/types';
 import { Box, Button } from '@mui/material';
 import { useButtonsBoxRequestStyles } from './ButtonsBoxRequest.style';
-import { WebButtonDescription, WebButtonsManager } from '../../../../runtime/WebButtonsManager';
+import { throwIfNil } from '~/utils/guard';
 
 interface Props {
-    request: RequestDescription;
+    request: RequestDescriptionWebRuntime;
 }
 
 export const ButtonsBoxRequest = ({ request }: Props) => {
-    const element = request.element as WebInputButtonsUIElement;
+    const element = request.element as ButtonsRequestElement;
     const { classes } = useButtonsBoxRequestStyles();
     const buttons = useMemo(() => {
-        const result = WebButtonsManager.getButtonsForMessage(request.userContext, element.id, element, request.utils);
+        const result = element.buttons;
         if (!result) {
             return [];
         }
 
         return result;
 
-    }, [element, request.userContext, request.utils]);
+    }, [element]);
 
-    const handleButtonClick = useCallback((button: WebButtonDescription) => {
+    const handleButtonClick = useCallback((button: RequestButtonDescription) => {
+        throwIfNil(request.onResponse);
+
         request.onResponse({ data: button })
     }, [request])
 
     return (
         <Box className={classes.root}>
-            {buttons?.map(b => <Button className={classes.button} variant="outlined" onClick={() => handleButtonClick(b)} key={b.callback_data}>{b.text}</Button>)}
+            {buttons?.map(b => <Button className={classes.button} variant="outlined" onClick={() => handleButtonClick(b)} key={b.id}>{b.content}</Button>)}
         </Box>
     )
 }

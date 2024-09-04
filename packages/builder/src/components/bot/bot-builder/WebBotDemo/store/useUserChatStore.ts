@@ -1,75 +1,44 @@
 import { create } from "zustand";
 import { ChatStoreState } from "./store.types";
-import {
-  ChatItem,
-  ChatItemType,
-  NormalMessage,
-  RequestDescription,
-} from "../types";
-import { v4 } from "uuid";
 import { delay } from "../../utils";
-import { UIElement } from "@kickoffbot.com/types";
-
+import { ChatItemTypeWebRuntime, ChatItemWebRuntime, MessageDescriptionWebRuntime, UIElement } from "@kickoffbot.com/types";
+import { v4 } from "uuid";
 
 export const useUserChatStore = create<ChatStoreState>()((set, get) => ({
   chatItems: [],
   botIsTyping: false,
   setLoadingValue: (value: boolean) => set(() => ({ botIsTyping: value })),
-  sendBotMessage: async (
-    elementId: UIElement["id"],
-    message: NormalMessage
-  ) => {
+  sendBotMessage: async (item: ChatItemWebRuntime) => {
     set(() => ({ botIsTyping: true }));
 
     await delay(750);
 
     set((state) => {
-      const messages: ChatItem[] = [
-        ...state.chatItems,
-        {
-          itemType: ChatItemType.BOT_MESSAGE,
-          content: message,
-          id: v4(),
-          uiElementId: elementId,
-        },
-      ];
-
-
+      const messages: ChatItemWebRuntime[] = [...state.chatItems, item];
 
       return { chatItems: messages, botIsTyping: false };
     });
   },
-  clearHistory: () => set(() => ({ chatItems: [] })),
-  removeChatItemByUIElementId: (elementIds: UIElement["id"][]) => set((state) => ({ chatItems: state.chatItems.filter((m) => !elementIds.includes(m.uiElementId ?? '')) })),
-  sendBotRequest: (request: RequestDescription) => {
-    const requestId = v4();
-
+  sendBotRequest: (item: ChatItemWebRuntime) => {
     set((state) => {
-      const messages: ChatItem[] = [
-        ...state.chatItems,
-        {
-          itemType: ChatItemType.BOT_REQUEST,
-          content: request,
-          id: requestId,
-        },
-      ];
+      const messages: ChatItemWebRuntime[] = [...state.chatItems, item];
 
       return { chatItems: messages };
     });
-
-    return requestId;
   },
+  clearHistory: () => set(() => ({ chatItems: [] })),
+  removeChatItemByUIElementId: (elementIds: UIElement["id"][]) => set((state) => ({ chatItems: state.chatItems.filter((m) => !elementIds.includes(m.uiElementId ?? '')) })),
   removeChatItem: (id: string) =>
     set((state) => ({
       chatItems: state.chatItems.filter((m) => m.id !== id),
     })),
-  sendUserResponse: (elementId: UIElement["id"], response: NormalMessage) =>
+  sendUserResponse: (elementId: string, userResponse: MessageDescriptionWebRuntime) =>
     set((state) => ({
       chatItems: [
         ...state.chatItems,
         {
-          itemType: ChatItemType.USER_MESSAGE,
-          content: response,
+          itemType: ChatItemTypeWebRuntime.USER_MESSAGE,
+          content: userResponse,
           id: v4(),
           uiElementId: elementId,
         },

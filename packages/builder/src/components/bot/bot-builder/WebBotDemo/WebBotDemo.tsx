@@ -1,24 +1,26 @@
 import React, { useLayoutEffect, useRef } from 'react'
 import * as ReactDOM from "react-dom/client";
 import { useFlowDesignerStore } from '../store';
-import { Box, Typography } from '@mui/material';
+import { Box } from '@mui/material';
 import {
-    StyledEngineProvider,
     createTheme,
     ThemeProvider
 } from "@mui/material/styles";
 import createCache from "@emotion/cache";
 import { CacheProvider } from "@emotion/react";
 import { ChatViewer } from './components/ChatViewer';
+import { useRouter } from 'next/router';
 
 
 
 export const WebBotDemo = () => {
+    const router = useRouter();
     const { showWebBotDemo, project } = useFlowDesignerStore((state) => ({
         showWebBotDemo: state.showWebBotDemo,
         project: state.project,
     }));
     const containerRef = useRef<HTMLDivElement>(null);
+    const projectIdFromQuery = router.query.id as string;
 
 
 
@@ -68,12 +70,12 @@ export const WebBotDemo = () => {
             <React.StrictMode>
                 <CacheProvider value={cache}>
                     <ThemeProvider theme={shadowTheme}>
-                        <ChatViewer height={containerRef.current?.clientHeight} project={project}/>
+                        <ChatViewer height={containerRef.current?.clientHeight} project={project} projectId={projectIdFromQuery}/>
                     </ThemeProvider>
                 </CacheProvider>
             </React.StrictMode>
         );
-    }, [project, showWebBotDemo]);
+    }, [project, projectIdFromQuery, showWebBotDemo]);
 
     if (!showWebBotDemo) {
         return null;

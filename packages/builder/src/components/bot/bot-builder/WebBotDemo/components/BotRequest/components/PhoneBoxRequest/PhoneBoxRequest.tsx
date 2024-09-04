@@ -1,14 +1,14 @@
 import React, { useCallback, useState } from 'react'
-import { RequestDescription } from '../../../../types';
 import { usePhoneBoxRequestStyles } from './PhoneBoxRequest.style';
 import { Box, IconButton } from '@mui/material';
 import SendIcon from '@mui/icons-material/Send';
 import { PhoneEditor } from './PhoneEditor';
 import { PhoneNumberUtil } from 'google-libphonenumber';
-import { WebInputPhoneUIElement } from '@kickoffbot.com/types';
+import { PhoneRequestElement, RequestDescriptionWebRuntime } from '@kickoffbot.com/types';
+import { throwIfNil } from '~/utils/guard';
 
 interface Props {
-    request: RequestDescription;
+    request: RequestDescriptionWebRuntime;
 }
 
 const phoneUtil = PhoneNumberUtil.getInstance();
@@ -23,11 +23,13 @@ const isPhoneValid = (phone: string) => {
 
 export const PhoneBoxRequest = ({ request }: Props) => {
     const { classes } = usePhoneBoxRequestStyles();
-    const element = request.element as WebInputPhoneUIElement; 
+    const element = request.element as PhoneRequestElement; 
     const [phoneValue, setPhoneValue] = useState<string | null>(null);
     const [error, setError] = useState<boolean>(false);
 
     const handleSendResponse = useCallback(() => {
+        throwIfNil(request.onResponse);
+
         if (!isPhoneValid(phoneValue ?? '')) {
             setError(true);
             return;

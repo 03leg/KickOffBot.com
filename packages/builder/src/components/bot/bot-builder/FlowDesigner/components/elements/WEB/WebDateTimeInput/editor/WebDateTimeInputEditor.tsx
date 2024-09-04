@@ -109,11 +109,11 @@ export const WebDateTimeInputEditor = ({ element }: Props) => {
                 <>
                     <FormControlLabel control={<Checkbox checked={useAmPm} onChange={handleAmPmChange} />} label="Use AM/PM" />
                     <Typography className={classes.editorTitle}>Max time:</Typography>
-                    <TextField fullWidth variant="outlined" value={maxTime} onChange={handleMaxTimeChange} />
+                    <TextField placeholder='e.g. 18:00, or 06:00 PM' fullWidth variant="outlined" value={maxTime} onChange={handleMaxTimeChange} />
                     <Typography className={classes.editorTitle}>Min time:</Typography>
-                    <TextField fullWidth variant="outlined" value={minTime} onChange={handleMinTimeChange} />
+                    <TextField fullWidth placeholder='e.g. 09:00, or 09:00 AM' variant="outlined" value={minTime} onChange={handleMinTimeChange} />
                     <Typography className={classes.editorTitle}>Minutes step:</Typography>
-                    <TextField fullWidth variant="outlined" type="number" value={minutesStep} onChange={handleMinutesStepChange} />
+                    <TextField fullWidth placeholder='e.g. 30, or 15' variant="outlined" type="number" value={minutesStep} onChange={handleMinutesStepChange} />
                 </>
             }
 

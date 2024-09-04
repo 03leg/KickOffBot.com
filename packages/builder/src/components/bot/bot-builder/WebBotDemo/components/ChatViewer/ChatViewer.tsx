@@ -1,31 +1,33 @@
-import { BotProject } from '@kickoffbot.com/types';
+import { BotProject, ChatItemTypeWebRuntime, MessageDescriptionWebRuntime, RequestDescriptionWebRuntime } from '@kickoffbot.com/types';
 import React, { useCallback, useEffect, useLayoutEffect, useRef } from 'react';
 import { useUserChatStore } from '../../store/useUserChatStore';
-import { WebBotManager } from '../../runtime/WebBotManager';
 import { Box } from '@mui/material';
-import { ChatItemType, NormalMessage, RequestDescription } from '../../types';
 import { BotMessage } from '../BotMessage';
 import { BotRequest } from '../BotRequest';
 import { UserMessage } from '../UserMessage';
 import { BotTyping } from '../BotTyping';
+import { WebRuntimeConnector } from '../../connector/WebRuntimeConnector';
 
 interface Props {
     project: BotProject;
     height?: number;
+    projectId: string;
 }
 
 // let chatManager: ChatManager | null = null;
 
-export const ChatViewer = ({ project, height }: Props) => {
-    const chatManager = useRef<WebBotManager | null>(null);
+export const ChatViewer = ({ project, height, projectId }: Props) => {
+    const runtimeConnector = useRef<WebRuntimeConnector | null>(null);
     const lastChildRef = useRef<HTMLDivElement>(null);
     const storeState = useUserChatStore((state) => ({
         ...state,
     }));
 
     useLayoutEffect(() => {
-        if (!chatManager.current && project) {
-            chatManager.current = new WebBotManager(project, { ...storeState });
+        if (!runtimeConnector.current && project) {
+            runtimeConnector.current = new WebRuntimeConnector(project, projectId, { ...storeState });
+
+            void runtimeConnector.current.connect();
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [project]);
@@ -42,14 +44,14 @@ export const ChatViewer = ({ project, height }: Props) => {
         <Box sx={{ height: height, overflow: 'auto', display: 'flex', flexDirection: 'column' }}>
             {storeState.chatItems.map(m => {
                 switch (m.itemType) {
-                    case ChatItemType.BOT_MESSAGE: {
-                        return <BotMessage message={m.content as NormalMessage} key={m.id} onContentHeightChange={goToBottom} />
+                    case ChatItemTypeWebRuntime.BOT_MESSAGE: {
+                        return <BotMessage message={m.content as MessageDescriptionWebRuntime} key={m.id} onContentHeightChange={goToBottom} />
                     }
-                    case ChatItemType.BOT_REQUEST: {
-                        return <BotRequest request={m.content as RequestDescription} key={m.id} />
+                    case ChatItemTypeWebRuntime.BOT_REQUEST: {
+                        return <BotRequest request={m.content as RequestDescriptionWebRuntime} key={m.id} />
                     }
-                    case ChatItemType.USER_MESSAGE: {
-                        return <UserMessage message={m.content as NormalMessage} key={m.id} />
+                    case ChatItemTypeWebRuntime.USER_MESSAGE: {
+                        return <UserMessage message={m.content as MessageDescriptionWebRuntime} key={m.id} />
                     }
                 }
             })}
