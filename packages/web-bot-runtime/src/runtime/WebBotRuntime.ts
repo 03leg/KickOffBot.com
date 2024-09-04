@@ -26,6 +26,8 @@ import {
   ButtonPortDescription,
   GoogleSheetsIntegrationUIElement,
   HTTPRequestIntegrationUIElement,
+  SendTelegramMessageIntegrationUIElement,
+  TelegramConnectionDescription,
 } from '@kickoffbot.com/types';
 import { WebBotRuntimeUtils } from './WebBotRuntimeUtils';
 import { WebUserContext } from './WebUserContext';
@@ -39,6 +41,7 @@ import { ChangeObjectVariableHelper } from './ChangeObjectVariableHelper';
 import { ConditionChecker } from './ConditionChecker';
 import { GoogleSpreadsheetHelper } from './GoogleSpreadsheetHelper';
 import { SendReceiveHttpRequest } from './SendReceiveHttpRequest';
+import { Telegraf } from 'telegraf';
 
 export class WebBotRuntime {
   private _utils: WebBotRuntimeUtils;
@@ -149,6 +152,12 @@ export class WebBotRuntime {
       case ElementType.INTEGRATION_HTTP_REQUEST: {
         await this.handleHttpRequestElement(
           element as HTTPRequestIntegrationUIElement,
+        );
+        break;
+      }
+      case ElementType.INTEGRATION_SEND_TELEGRAM_MESSAGE: {
+        await this.handleSendTelegramMessageElement(
+          element as SendTelegramMessageIntegrationUIElement,
         );
         break;
       }
@@ -504,6 +513,37 @@ export class WebBotRuntime {
       }
     } catch (err) {
       console.error('handleHttpRequestElement', err);
+    }
+  }
+
+  private async handleSendTelegramMessageElement(
+    element: SendTelegramMessageIntegrationUIElement,
+  ) {
+    if (isNil(element.connectionId)) {
+      return;
+    }
+
+    const connection = this._project.connections.find(
+      (c) => c.id === element.connectionId,
+    ) as TelegramConnectionDescription;
+    if (isNil(connection) || !connection.botToken || !connection.targetChatId) {
+      return;
+    }
+    try {
+      const bot = new Telegraf(connection.botToken);
+
+      await bot.telegram.sendMessage(
+        connection.targetChatId,
+        this._utils.getParsedText(
+          element.telegramContent ?? '',
+          this._userContext,
+        ),
+        {
+          parse_mode: 'HTML',
+        },
+      );
+    } catch (e) {
+      console.log('handleSendTelegramMessageElement', e);
     }
   }
 }
