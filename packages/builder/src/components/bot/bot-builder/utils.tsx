@@ -157,7 +157,7 @@ export function getWebIntegrationsElements() {
     return [
         // { type: ElementType.INTEGRATION_SEND_TELEGRAM_MESSAGE, title: 'Send message to telegram channel or group', icon: <TelegramIcon />, size: 12 },
         { type: ElementType.INTEGRATION_GOOGLE_SHEETS, title: 'Google spreadsheets', icon: <GoogleIcon />, size: 12 },
-        // { type: ElementType.INTEGRATION_HTTP_REQUEST, title: 'Send&Receive HTTP request', icon: <HttpIcon />, size: 12 },
+        { type: ElementType.INTEGRATION_HTTP_REQUEST, title: 'HTTP request-response', icon: <HttpIcon />, size: 12 },
     ];
 }
 
