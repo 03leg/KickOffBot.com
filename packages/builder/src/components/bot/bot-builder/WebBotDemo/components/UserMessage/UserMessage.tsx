@@ -1,10 +1,10 @@
 import React from 'react';
-import { NormalMessage } from '../../types';
 import { Box } from '@mui/material';
 import { useUserMessageStyles } from './UserMessage.style';
+import { MessageDescriptionWebRuntime } from '@kickoffbot.com/types';
 
 interface Props {
-    message: NormalMessage;
+    message: MessageDescriptionWebRuntime;
 }
 
 export const UserMessage = ({ message }: Props) => {
