@@ -26,7 +26,11 @@
     "reflect-metadata": "^0.2.0",
     "rxjs": "^7.8.1",
     "@kickoffbot.com/types": "1.0.0",
-    "lodash": "4.17.21"
+    "lodash": "4.17.21",
+    "@prisma/client": "^5.14.0",
+    "google-auth-library": "9.10.0",
+    "@nestjs/config": "3.2.3",
+    "google-spreadsheet": "4.1.2"
   },
   "devDependencies": {
     "@nestjs/cli": "^10.0.0",
