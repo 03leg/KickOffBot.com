@@ -25,6 +25,7 @@ import {
   ConditionUIElement,
   ButtonPortDescription,
   GoogleSheetsIntegrationUIElement,
+  HTTPRequestIntegrationUIElement,
 } from '@kickoffbot.com/types';
 import { WebBotRuntimeUtils } from './WebBotRuntimeUtils';
 import { WebUserContext } from './WebUserContext';
@@ -37,6 +38,7 @@ import { ChangeArrayVariableHelper } from './ChangeArrayVariableHelper';
 import { ChangeObjectVariableHelper } from './ChangeObjectVariableHelper';
 import { ConditionChecker } from './ConditionChecker';
 import { GoogleSpreadsheetHelper } from './GoogleSpreadsheetHelper';
+import { SendReceiveHttpRequest } from './SendReceiveHttpRequest';
 
 export class WebBotRuntime {
   private _utils: WebBotRuntimeUtils;
@@ -141,6 +143,12 @@ export class WebBotRuntime {
       case ElementType.INTEGRATION_GOOGLE_SHEETS: {
         await this.handleGoogleSheetsElement(
           element as GoogleSheetsIntegrationUIElement,
+        );
+        break;
+      }
+      case ElementType.INTEGRATION_HTTP_REQUEST: {
+        await this.handleHttpRequestElement(
+          element as HTTPRequestIntegrationUIElement,
         );
         break;
       }
@@ -467,5 +475,35 @@ export class WebBotRuntime {
     );
 
     await helper.handleElement(element);
+  }
+
+  private async handleHttpRequestElement(
+    element: HTTPRequestIntegrationUIElement,
+  ) {
+    const parseText = (text: string) => {
+      return this._utils.getParsedText(text, this._userContext);
+    };
+
+    const instance = new SendReceiveHttpRequest(element, {
+      parse: parseText,
+    });
+
+    try {
+      await instance.send();
+
+      if (!isNil(element.responseDataVariableId) && element.saveResponseData) {
+        let responseData = instance.lastResponseData;
+        try {
+          responseData = JSON.parse(responseData);
+        } catch (err) {}
+
+        const variable = this._utils.getVariableById(
+          element.responseDataVariableId,
+        );
+        this._userContext.updateVariable(variable.name, responseData);
+      }
+    } catch (err) {
+      console.error('handleHttpRequestElement', err);
+    }
   }
 }
