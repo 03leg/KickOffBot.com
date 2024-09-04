@@ -1,7 +1,6 @@
 import React, { useMemo } from 'react';
-import { RequestDescription } from '../../types';
 import { Box } from '@mui/material';
-import { ElementType } from '@kickoffbot.com/types';
+import { ElementType, RequestDescriptionWebRuntime } from '@kickoffbot.com/types';
 import { TextBotRequest } from './components/TextBotRequest';
 import { useBotRequestStyles } from './BotRequest.style';
 import { NumberBoxRequest } from './components/NumberBoxRequest';
@@ -11,14 +10,14 @@ import { EmailBoxRequest } from './components/EmailBoxRequest';
 import { ButtonsBoxRequest } from './components/ButtonsBoxRequest';
 
 interface Props {
-    request: RequestDescription;
+    request: RequestDescriptionWebRuntime;
 }
 
 export const BotRequest = ({ request }: Props) => {
     const { classes } = useBotRequestStyles();
 
     const requestElement = useMemo(() => {
-        const elementType = request.element.type;
+        const elementType = request.element.elementType;
 
         switch (elementType) {
             case ElementType.WEB_INPUT_TEXT: {

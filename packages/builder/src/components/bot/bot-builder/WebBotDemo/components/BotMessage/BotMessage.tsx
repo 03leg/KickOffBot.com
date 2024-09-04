@@ -1,12 +1,12 @@
 import React from 'react';
-import { NormalMessage } from '../../types';
 import { Box } from '@mui/material';
 import { useBotMessageStyles } from './BotMessage.style';
 import { BotAvatar } from '../BotAvatar';
 import { AttachmentsViewer } from '../AttachmentsViewer';
+import { MessageDescriptionWebRuntime } from '@kickoffbot.com/types';
 
 interface Props {
-    message: NormalMessage;
+    message: MessageDescriptionWebRuntime;
     onContentHeightChange: () => void;
 }
 

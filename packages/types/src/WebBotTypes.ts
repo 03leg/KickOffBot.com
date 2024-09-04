@@ -51,9 +51,7 @@ export interface WebInputPhoneUIElement extends UIElement {
   defaultCountry?: string;
 }
 
-export interface WebInputButtonsUIElement extends InputButtonsUIElement  {
-  
-}
+export interface WebInputButtonsUIElement extends InputButtonsUIElement {}
 
 export interface WebInputEmailUIElement extends UIElement {
   variableId?: string;
@@ -72,4 +70,81 @@ export enum AvailableDateTimes {
 export interface WebLogicRemoveMessagesUIElement extends UIElement {
   removeAllMessages?: boolean;
   messageIds?: string[];
+}
+
+export enum ChatItemTypeWebRuntime {
+  BOT_MESSAGE = "bot-message",
+  BOT_REQUEST = "bot-request",
+  USER_MESSAGE = "user-message",
+  SYSTEM_MESSAGE = "system-message",
+  DELETE_MESSAGES = "delete-messages",
+}
+
+export interface MessageDescriptionWebRuntime {
+  message?: string;
+  attachments?: FileDescription[];
+}
+
+export interface UserResponseDescriptionWebRuntime {
+  data: unknown;
+}
+
+export interface RequestDescriptionWebRuntime {
+  element: RequestElementBase;
+  onResponse?: (response: UserResponseDescriptionWebRuntime) => void;
+}
+
+export interface DeleteMessagesDescriptionWebRuntime {
+  deleteAllMessages?: boolean;
+  elementIds?: string[];
+}
+
+export interface ChatItemWebRuntime {
+  id: string;
+  itemType: ChatItemTypeWebRuntime;
+  content: MessageDescriptionWebRuntime | RequestDescriptionWebRuntime | DeleteMessagesDescriptionWebRuntime;
+  uiElementId: UIElement["id"];
+}
+
+export interface RequestElementBase {
+  elementType: ElementType;
+}
+
+export interface TextRequestElement extends RequestElementBase {
+  placeholder?: string;
+}
+
+export interface NumberRequestElement extends RequestElementBase {
+  placeholder?: string;
+  min?: number;
+  max?: number;
+  step?: number;
+}
+
+export interface DateTimeRequestElement extends RequestElementBase {
+  dateTimeFormat?: string;
+  availableDateTimes: AvailableDateTimes;
+  useTime: boolean;
+  useAmPm?: boolean;
+  maxTime?: string;
+  minTime?: string;
+  minutesStep?: number;
+  variableAvailableDateTimes?: string[];
+}
+
+export interface PhoneRequestElement extends RequestElementBase {
+  defaultCountry?: string;
+}
+
+export interface EmailRequestElement extends RequestElementBase {
+  placeholder?: string;
+}
+
+export interface RequestButtonDescription {
+  id: string;
+  content: string;
+}
+
+export interface ButtonsRequestElement extends RequestElementBase {
+  buttons: RequestButtonDescription[];
 }

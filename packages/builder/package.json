@@ -48,7 +48,7 @@
     "google-auth-library": "9.10.0",
     "google-libphonenumber": "3.2.38",
     "google-spreadsheet": "4.1.2",
-    "lodash": "^4.17.21",
+    "lodash": "4.17.21",
     "material-ui-confirm": "^3.0.9",
     "moment": "2.29.4",
     "next": "^14.1.1",

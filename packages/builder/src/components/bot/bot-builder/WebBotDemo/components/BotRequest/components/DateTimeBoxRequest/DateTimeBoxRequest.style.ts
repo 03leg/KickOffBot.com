@@ -4,7 +4,7 @@ export const useDateTimeBoxRequestStyles = makeStyles()(({ spacing }) => ({
   root: {
     display: "flex",
     alignItems: "center",
-    width: "90%",
+    // width: "90%",
   },
   textField: {
     flex: 1,

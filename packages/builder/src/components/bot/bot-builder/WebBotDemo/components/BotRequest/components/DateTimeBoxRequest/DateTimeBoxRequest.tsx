@@ -1,27 +1,29 @@
 import React, { useCallback, useMemo, useState } from 'react';
-import { RequestDescription } from '../../../../types';
 import { Box, IconButton } from '@mui/material';
 import SendIcon from '@mui/icons-material/Send';
 import { useDateTimeBoxRequestStyles } from './DateTimeBoxRequest.style';
-import { AvailableDateTimes, WebInputDateTimeUIElement } from '@kickoffbot.com/types';
+import { AvailableDateTimes, DateTimeRequestElement, RequestDescriptionWebRuntime } from '@kickoffbot.com/types';
 import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
 import dayjs, { Dayjs } from 'dayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DateTimePicker, DateTimeValidationError, TimeView } from '@mui/x-date-pickers';
+import { throwIfNil } from '~/utils/guard';
 
 
 interface Props {
-    request: RequestDescription;
+    request: RequestDescriptionWebRuntime;
 }
 
 export const DateTimeBoxRequest = ({ request }: Props) => {
-    const dateTimeElement = request.element as WebInputDateTimeUIElement;
+    const dateTimeElement = request.element as DateTimeRequestElement;
     const { classes } = useDateTimeBoxRequestStyles();
     const [dateValue, setDateValue] = useState<Dayjs | null>(null);
     const [error, setError] = useState<DateTimeValidationError | null>(null);
 
     const handleSendResponse = useCallback(() => {
+        throwIfNil(request.onResponse);
+        
         request.onResponse({ data: dateValue?.format(dateTimeElement.dateTimeFormat) })
     }, [dateTimeElement.dateTimeFormat, dateValue, request]);
 
@@ -61,8 +63,8 @@ export const DateTimeBoxRequest = ({ request }: Props) => {
     }, [dateTimeElement.availableDateTimes]);
 
     const handleShouldDisableDate = useCallback((date: Dayjs): boolean => {
-        if (dateTimeElement.availableDateTimes === AvailableDateTimes.DatesFromVariable && dateTimeElement.availableDateTimesVariableId) {
-            const variableValue = request.userContext.getVariableValueById(dateTimeElement.availableDateTimesVariableId) as string[];
+        if (dateTimeElement.availableDateTimes === AvailableDateTimes.DatesFromVariable && dateTimeElement.variableAvailableDateTimes) {
+            const variableValue = dateTimeElement.variableAvailableDateTimes;
             const datesFromVariable = variableValue.map(d => dayjs(d, dateTimeElement.dateTimeFormat, false).format('YYYY-MM-DD'));
             const currentDate = date.format('YYYY-MM-DD');
 
@@ -70,11 +72,11 @@ export const DateTimeBoxRequest = ({ request }: Props) => {
         }
 
         return false;
-    }, [dateTimeElement.availableDateTimesVariableId, dateTimeElement.availableDateTimes, dateTimeElement.dateTimeFormat, request.userContext]);
+    }, [dateTimeElement.availableDateTimes, dateTimeElement.variableAvailableDateTimes, dateTimeElement.dateTimeFormat]);
 
     const handleShouldDisableTime = useCallback((date: Dayjs, view: TimeView): boolean => {
-        if (dateTimeElement.availableDateTimes === AvailableDateTimes.DatesFromVariable && dateTimeElement.availableDateTimesVariableId) {
-            const variableValue = request.userContext.getVariableValueById(dateTimeElement.availableDateTimesVariableId) as string[];
+        if (dateTimeElement.availableDateTimes === AvailableDateTimes.DatesFromVariable && dateTimeElement.variableAvailableDateTimes) {
+            const variableValue = dateTimeElement.variableAvailableDateTimes;
 
             const actualFormat = view === 'hours' ? 'YYYY-MM-DD HH' : 'YYYY-MM-DD HH:mm';
 
@@ -85,7 +87,7 @@ export const DateTimeBoxRequest = ({ request }: Props) => {
         }
 
         return false;
-    }, [dateTimeElement.availableDateTimesVariableId, dateTimeElement.availableDateTimes, dateTimeElement.dateTimeFormat, request.userContext]);
+    }, [dateTimeElement.availableDateTimes, dateTimeElement.variableAvailableDateTimes, dateTimeElement.dateTimeFormat]);
 
     const getMinMaxValue = useCallback((value: string) => {
         return dayjs('01/01/1970 ' + value, ["MM/DD/YYYY HH:mm", "MM/DD/YYYY h:mm", "MM/DD/YYYY hh:mm A", "MM/DD/YYYY h:mm A", "MM/DD/YYYY HH:mm"], true);
@@ -133,7 +135,7 @@ export const DateTimeBoxRequest = ({ request }: Props) => {
                         format={dateTimeElement.dateTimeFormat}
                         value={dateValue}
                         onChange={handleDateValueChange}
-                        ampm={dateTimeElement.useAmPm}
+                        ampm={dateTimeElement.useAmPm ?? false}
                         onError={setError}
                         minDate={minDate}
                         maxDate={maxDate}

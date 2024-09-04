@@ -22,7 +22,7 @@ const config = {
     {
       source: "/docs",
       destination: "/docs/index.html",
-    },
+    }
   ],
 };
 

@@ -1,15 +1,15 @@
-import { UIElement } from "@kickoffbot.com/types";
-import { ChatItem, NormalMessage, RequestDescription } from "../types";
+import { ChatItemWebRuntime, MessageDescriptionWebRuntime, UIElement } from "@kickoffbot.com/types";
 
 export interface ChatStoreState {
   botIsTyping: boolean;
-  chatItems: ChatItem[];
-  sendBotMessage: (elementId: UIElement["id"], item: NormalMessage) => Promise<void>;
+  chatItems: ChatItemWebRuntime[];
+  sendBotMessage: (item: ChatItemWebRuntime) => Promise<void>;
+  sendBotRequest: (item: ChatItemWebRuntime) => void;
+  sendUserResponse: (id: string, userResponse: MessageDescriptionWebRuntime) => void;
   clearHistory: VoidFunction;
 
-  sendBotRequest: (request: RequestDescription) => string;
+
   removeChatItem: (id: string) => void;
-  sendUserResponse: (elementId: UIElement["id"], response: NormalMessage) => void;
   
   removeChatItemByUIElementId: (elementId: UIElement["id"][]) => void;
   setLoadingValue: (value: boolean) => void;
