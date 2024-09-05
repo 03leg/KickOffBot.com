@@ -17,13 +17,13 @@ export const WebNumberInput = ({ element }: Props) => {
     const valueRequirements = useMemo(() => {
         const result: React.ReactNode[] = [];
         if (element.max) {
-            result.push(<span>Max: {element.max} </span>)
+            result.push(<span key={element.max}>Max: {element.max} </span>)
         }
         if (element.max) {
-            result.push(<span>Min: {element.min} </span>)
+            result.push(<span key={element.min}>Min: {element.min} </span>)
         }
         if (element.step) {
-            result.push(<span>Step: {element.step} </span>)
+            result.push(<span key={element.step}>Step: {element.step} </span>)
         }
 
         return result;
