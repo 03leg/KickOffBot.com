@@ -315,7 +315,7 @@ export default function EditBotContent() {
 
     const handleTestBot = useCallback(() => {
         toggleShowWebBotDemo();
-    }, []);
+    }, [toggleShowWebBotDemo]);
 
     return (
         <AppDialogProvider>
@@ -324,9 +324,11 @@ export default function EditBotContent() {
                     <SnackbarProvider />
                     <Box sx={{ display: 'flex', paddingBottom: 1 }}>
                         <Box>
-                            <Button variant="outlined" startIcon={<RouterIcon />} onClick={toggleRuntimeEditor}>
-                                start&stop your bots
-                            </Button>
+                            {platform === BotPlatform.Telegram &&
+                                <Button variant="outlined" startIcon={<RouterIcon />} onClick={toggleRuntimeEditor}>
+                                    start&stop your bots
+                                </Button>
+                            }
                         </Box>
                         <Box sx={{ display: 'flex', justifyContent: 'flex-end', flex: 1 }}>
                             {platform === BotPlatform.WEB && <Button variant='contained' color="info" onClick={handleTestBot}>Test bot</Button>}
@@ -370,7 +372,7 @@ export default function EditBotContent() {
                         </DndContext>
                         <ProjectViewer />
                         <RuntimeEditor projectId={projectIdFromQuery} />
-                        <WebBotDemo />
+                        {platform === BotPlatform.WEB && <WebBotDemo />}
                     </Box>
 
                 </Box>
