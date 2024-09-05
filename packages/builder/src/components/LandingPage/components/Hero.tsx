@@ -30,7 +30,7 @@ export const Hero = () => {
                         <div className={styles.wrapper}>
                             <div className={styles.textCenter}>
                                 <h1 className={`${styles.heading}`} data-aos="zoom-y-out">
-                                    Create your {/* <span className={styles.gradientText}>WEB</span> or*/} <span className={styles.gradientText}>Telegram</span> bot without coding
+                                    Create your <span className={styles.gradientText}>WEB</span> or <span className={styles.gradientText}>Telegram</span> bot without coding
                                 </h1>
                                 <div className={styles.paragraph}>
                                     <p data-aos="zoom-y-out" data-aos-delay="150">

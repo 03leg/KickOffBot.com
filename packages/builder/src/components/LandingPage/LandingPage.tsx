@@ -13,7 +13,7 @@ export function LandingPage() {
   return (
     <>
       <Head>
-        <title>Create telegram bot</title>
+        <title>Bot builder platform (WEB, telegram)</title>
       </Head>
       <AppAppBar />
       <Hero />
