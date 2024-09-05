@@ -1,9 +1,12 @@
+import { BotPlatform } from "@kickoffbot.com/types";
 import { z } from "zod";
 
 export interface BotDescription {
   name: string;
   id?: string;
   updatedAt?: Date;
+  botType: BotPlatform;
+  production?: boolean;
 }
 
 export const BotDescriptionScheme = z.object({

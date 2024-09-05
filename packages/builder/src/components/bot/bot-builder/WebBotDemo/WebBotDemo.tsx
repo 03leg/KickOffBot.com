@@ -22,9 +22,6 @@ export const WebBotDemo = () => {
     const containerRef = useRef<HTMLDivElement>(null);
     const projectIdFromQuery = router.query.id as string;
 
-
-
-
     useLayoutEffect(() => {
         if (!showWebBotDemo) return;
 

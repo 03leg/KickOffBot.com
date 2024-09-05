@@ -2,6 +2,7 @@ import { isNil } from "lodash";
 import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
 import {
   BotContentScheme,
+  BotDescription,
   BotDescriptionScheme,
   IdModelScheme,
   TelegramTokenScheme,
@@ -81,12 +82,30 @@ export const botManagementRouter = createTRPCRouter({
       // fs.writeFileSync("../runtime/dist/bot.json", input.project);
     }),
 
-  getAll: protectedProcedure.query(({ ctx }) => {
+  getAll: protectedProcedure.query(async ({ ctx }) => {
     const userId = ctx.session?.user.id;
-
-    return ctx.prisma.botDescription.findMany({
+    const botDescriptions = await ctx.prisma.botDescription.findMany({
       where: { userId, deleted: false },
     });
+
+    const onlineTelegramBots = await ctx.prisma.botToken.findMany({
+      where: { isActive: true },
+      select: { botId: true },
+    });
+
+    const result: BotDescription[] = [];
+    for (const item of botDescriptions) {
+      const bot: BotDescription = {
+        id: item.id,
+        botType: item.botType,
+        name: item.name,
+        production: onlineTelegramBots.some((x) => x.botId === item.id),
+        updatedAt: item.updatedAt,
+      };
+      result.push(bot);
+    }
+
+    return botDescriptions;
   }),
   getBotContent: protectedProcedure
     .input(IdModelScheme)
