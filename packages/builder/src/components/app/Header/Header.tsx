@@ -101,7 +101,9 @@ export function Header({ open, handleDrawerToggle }: HeaderProps) {
                             open={Boolean(anchorEl)}
                             onClose={handleClose}
                         >
-                            <MenuItem onClick={handleLogout}>Logout</MenuItem>
+                            <MenuItem onClick={handleLogout}>
+                                Logout {sessionData?.user?.email ? '(' + sessionData.user.email + ')' : ''}
+                            </MenuItem>
                         </Menu>
                     </div>
                 )}
