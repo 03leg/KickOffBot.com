@@ -1,4 +1,4 @@
-import { type ContentTextUIElement, ElementType, type InputTextUIElement, type FlowDesignerUIBlockDescription, type UIElement, type InputButtonsUIElement, type FlowDesignerLink, type ButtonPortDescription, type BotVariable, BlockType, TransformDescription, ChangeVariableUIElement, ConditionUIElement, LogicalOperator, ButtonsSourceStrategy, CommandsUIElement, EditMessageUIElement, RemoveMessageUIElement, VariableConverter, SendTelegramMessageIntegrationUIElement, GoogleSheetsIntegrationUIElement, HTTPRequestIntegrationUIElement, HTTPMethod, VariableType, BotProject, BotPlatform, WebStartCommandsUIElement, WebContentTextUIElement, WebInputTextUIElement, WebInputNumberUIElement, WebInputDateTimeUIElement, AvailableDateTimes, WebInputPhoneUIElement, WebInputEmailUIElement, WebInputButtonsUIElement, WebLogicRemoveMessagesUIElement } from "@kickoffbot.com/types";
+import { type ContentTextUIElement, ElementType, type InputTextUIElement, type FlowDesignerUIBlockDescription, type UIElement, type InputButtonsUIElement, type FlowDesignerLink, type ButtonPortDescription, type BotVariable, BlockType, TransformDescription, ChangeVariableUIElement, ConditionUIElement, LogicalOperator, ButtonsSourceStrategy, CommandsUIElement, EditMessageUIElement, RemoveMessageUIElement, VariableConverter, SendTelegramMessageIntegrationUIElement, GoogleSheetsIntegrationUIElement, HTTPRequestIntegrationUIElement, HTTPMethod, VariableType, BotProject, BotPlatform, WebStartCommandsUIElement, WebContentTextUIElement, WebInputTextUIElement, WebInputNumberUIElement, WebInputDateTimeUIElement, AvailableDateTimes, WebInputPhoneUIElement, WebInputEmailUIElement, WebInputButtonsUIElement, WebLogicRemoveMessagesUIElement, WebInputCardsUIElement, WebCardsSourceStrategy } from "@kickoffbot.com/types";
 import MessageIcon from '@mui/icons-material/Message';
 import TextFieldsIcon from '@mui/icons-material/TextFields';
 import { isNil } from "lodash";
@@ -21,6 +21,7 @@ import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import PhoneIcon from '@mui/icons-material/Phone';
 import AlternateEmailIcon from '@mui/icons-material/AlternateEmail';
 import SmartButtonIcon from '@mui/icons-material/SmartButton';
+import BadgeIcon from '@mui/icons-material/Badge';
 
 export const TELEGRAM_DEFAULT_PROJECT_STATE: BotProject = {
     blocks: [...getTelegramDefaultBlocks()],
@@ -123,6 +124,7 @@ export function getWebInputElements() {
         { type: ElementType.WEB_INPUT_PHONE, title: 'Phone', icon: <PhoneIcon /> },
         { type: ElementType.WEB_INPUT_EMAIL, title: 'E-mail', icon: <AlternateEmailIcon /> },
         { type: ElementType.WEB_INPUT_BUTTONS, title: 'Buttons', icon: <SmartButtonIcon /> },
+        { type: ElementType.WEB_INPUT_CARDS, title: 'Cards', icon: <BadgeIcon /> },
     ];
 }
 
@@ -329,11 +331,23 @@ export function getNewUIElementTemplate(id: string, data: DraggableElementData):
             };
             return result;
         }
-        case ElementType.WEB_LOGIC_REMOVE_MESSAGES:{
+        case ElementType.WEB_LOGIC_REMOVE_MESSAGES: {
             const result: WebLogicRemoveMessagesUIElement = {
                 id,
                 type: ElementType.WEB_LOGIC_REMOVE_MESSAGES
             }
+            return result;
+        }
+        case ElementType.WEB_INPUT_CARDS: {
+            const result: WebInputCardsUIElement = {
+                id,
+                type: ElementType.WEB_INPUT_CARDS,
+                multipleChoice: false,
+                strategy: WebCardsSourceStrategy.Static,
+                sourceDescription: {
+                    cards: []
+                }
+            };
             return result;
         }
         default: {

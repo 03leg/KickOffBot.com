@@ -28,6 +28,7 @@ export enum ElementType {
   WEB_INPUT_BUTTONS = "web-input-buttons",
 
   WEB_LOGIC_REMOVE_MESSAGES = "web-logic-remove-messages",
+  WEB_INPUT_CARDS = "web-input-cards",
 }
 
 export interface UIElement {

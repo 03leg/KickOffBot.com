@@ -26,22 +26,22 @@ export const AppDialogProvider = ({ children }: Props) => {
         <Fragment>
             <AppDialogContext.Provider value={{ openDialog, closeDialog }}>
                 {children}
-            </AppDialogContext.Provider>
-            {dialogs.map(({ parentId, options }) => (
-                <AppDialog
-                    key={parentId}
-                    onClose={(even?: unknown, reason?: string) => {
-                        if (reason && reason === "backdropClick")
-                            return;
+                {dialogs.map(({ parentId, options }) => (
+                    <AppDialog
+                        key={parentId}
+                        onClose={(even?: unknown, reason?: string) => {
+                            if (reason && reason === "backdropClick")
+                                return;
 
-                        closeDialog(parentId);
-                    }}
-                    maxWidth={'sm'}
-                    buttons={options.buttons ?? []}
-                    open={true} title={options.title}>
-                    {options.content}
-                </AppDialog>
-            ))}
+                            closeDialog(parentId);
+                        }}
+                        maxWidth={options.dialogMaxWidth ?? 'sm'}
+                        buttons={options.buttons ?? []}
+                        open={true} title={options.title}>
+                        {options.content}
+                    </AppDialog>
+                ))}
+            </AppDialogContext.Provider>
         </Fragment>
     );
 };

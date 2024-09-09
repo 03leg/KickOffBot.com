@@ -1,11 +1,10 @@
 import { Box, IconButton } from '@mui/material';
 import React, { useCallback } from 'react'
-import { Editor, EditorState, RichUtils, convertToRaw, convertFromRaw, ContentState } from 'draft-js';
+import { Editor, EditorState, RichUtils, convertToRaw, convertFromRaw } from 'draft-js';
 import 'draft-js/dist/Draft.css';
 import { Colors } from '~/themes/Colors';
 import { FormatBold, FormatItalic } from '@mui/icons-material';
 import { stateToHTML } from "draft-js-export-html";
-import { isNil } from 'lodash';
 
 interface TextEditorProps {
     initialState?: EditorState | undefined;
@@ -47,8 +46,10 @@ export const TextEditor = ({ onContentChange, initialState }: TextEditorProps) =
     }, [generatePublicContentChange])
 
     return (
-        <Box sx={{ border: `1px solid ${Colors.BORDER}`, padding: ({ spacing }) => (spacing(1)), display: 'flex', flexDirection: 'column' }}>
-            <Editor editorState={editorState} onChange={handleContentChange} placeholder="Enter some text..." />
+        <Box sx={{ border: `1px solid ${Colors.BORDER}`, padding: ({ spacing }) => (spacing(1)), display: 'flex', height: '100%', flexDirection: 'column' }}>
+            <Box sx={{ height: 'calc(100% - 40px)', overflowY: 'auto' }}>
+                <Editor editorState={editorState} onChange={handleContentChange} placeholder="Enter some text..." />
+            </Box>
 
             <Box sx={{ display: 'flex', marginTop: ({ spacing }) => (spacing(2)), justifyContent: 'flex-end' }}>
                 <IconButton aria-label="bold" onClick={handleBoldClick}>

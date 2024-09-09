@@ -123,9 +123,6 @@ export const TextEditor = ({ onContentChange, initialState, contextObjectPropert
                     {!isNil(contextObjectProperties) && <StringItemsMenu values={contextObjectProperties} onInsertItem={handleInsertContextPropertyInText} buttonIcon={<ControlPointIcon />} />}
                     {showInsertTemplateButton && templates.length > 0 && <StringItemsMenu values={templates.map(t => t.name)} onInsertItem={handleInsertTemplateInText} buttonIcon={<AssignmentIcon />} />}
                 </Box>
-
-
-
             </Box>
 
         </>

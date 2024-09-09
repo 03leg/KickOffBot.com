@@ -2,7 +2,7 @@ import { Box } from '@mui/material'
 import React, { useCallback, useContext, useMemo } from 'react'
 import { TextContent } from '../elements/TextContent';
 import { Colors } from '~/themes/Colors';
-import { ContentTextUIElement, ElementType, GoogleSheetsIntegrationUIElement, HTTPRequestIntegrationUIElement, SendTelegramMessageIntegrationUIElement, WebContentTextUIElement, WebInputButtonsUIElement, WebInputDateTimeUIElement, WebInputEmailUIElement, WebInputNumberUIElement, WebInputPhoneUIElement, WebInputTextUIElement, WebLogicRemoveMessagesUIElement, type UIElement } from '@kickoffbot.com/types';
+import { ContentTextUIElement, ElementType, GoogleSheetsIntegrationUIElement, HTTPRequestIntegrationUIElement, SendTelegramMessageIntegrationUIElement, WebContentTextUIElement, WebInputButtonsUIElement, WebInputCardsUIElement, WebInputDateTimeUIElement, WebInputEmailUIElement, WebInputNumberUIElement, WebInputPhoneUIElement, WebInputTextUIElement, WebLogicRemoveMessagesUIElement, type UIElement } from '@kickoffbot.com/types';
 import { getIconByType } from '../../../utils';
 import { CSS } from '@dnd-kit/utilities';
 import { useSortable } from '@dnd-kit/sortable';
@@ -26,6 +26,7 @@ import { WebPhoneInput } from '../elements/WEB/WebPhoneInput';
 import { WebEmailInput } from '../elements/WEB/WebEmailInput';
 import { WebButtonsInput } from '../elements/WEB/WebButtonsInput';
 import { WebLogicRemoveMessages } from '../elements/WEB/WebLogicRemoveMessage';
+import { WebInputCards } from '../elements/WEB/WebInputCards';
 
 interface Props {
     element: UIElement;
@@ -89,24 +90,28 @@ export const ElementView = ({ element, scale }: Props) => {
                 result = <WebNumberInput element={element as WebInputNumberUIElement} />
                 return result;
             }
-            case ElementType.WEB_INPUT_DATE_TIME:{
+            case ElementType.WEB_INPUT_DATE_TIME: {
                 result = <WebDateTimeInput element={element as WebInputDateTimeUIElement} />
                 return result;
             }
-            case ElementType.WEB_INPUT_PHONE:{
+            case ElementType.WEB_INPUT_PHONE: {
                 result = <WebPhoneInput element={element as WebInputPhoneUIElement} />
                 return result;
             }
-            case ElementType.WEB_INPUT_EMAIL:{
+            case ElementType.WEB_INPUT_EMAIL: {
                 result = <WebEmailInput element={element as WebInputEmailUIElement} />
                 return result;
             }
-            case ElementType.WEB_INPUT_BUTTONS:{
+            case ElementType.WEB_INPUT_BUTTONS: {
                 result = <WebButtonsInput element={element as WebInputButtonsUIElement} />
                 return result;
             }
-            case ElementType.WEB_LOGIC_REMOVE_MESSAGES:{
+            case ElementType.WEB_LOGIC_REMOVE_MESSAGES: {
                 result = <WebLogicRemoveMessages element={element as WebLogicRemoveMessagesUIElement} />
+                return result;
+            }
+            case ElementType.WEB_INPUT_CARDS: {
+                result = <WebInputCards element={element as WebInputCardsUIElement} />
                 return result;
             }
 
