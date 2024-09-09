@@ -148,3 +148,38 @@ export interface RequestButtonDescription {
 export interface ButtonsRequestElement extends RequestElementBase {
   buttons: RequestButtonDescription[];
 }
+
+export enum WebCardsSourceStrategy {
+  Static,
+  Dynamic,
+}
+
+export interface WebCardDescriptionClassic {
+  id: string;
+  imgUrl?: string;
+  title?: string;
+  // description?: string;
+  htmlDescription?: string;
+  jsonDescription?: string;
+}
+
+export interface WebCardTemplateDescriptionClassic {
+  imgUrlObjectProperty?: string;
+  titleObjectProperty?: string;
+  descriptionObjectProperty?: string;
+}
+
+export interface StaticSourceDescription {
+  cards: WebCardDescriptionClassic[];
+}
+
+export interface DynamicSourceDescription {
+  cardsVariableId?: BotVariable["id"];
+  cardDescription?: WebCardTemplateDescriptionClassic;
+}
+
+export interface WebInputCardsUIElement extends UIElement {
+  multipleChoice: boolean;
+  strategy: WebCardsSourceStrategy;
+  sourceDescription?: StaticSourceDescription | DynamicSourceDescription;
+}

@@ -14,7 +14,7 @@ interface DialogProps {
     title: string;
     open: boolean;
     onClose: (event?: unknown, reason?: string) => void;
-    buttons: React.ReactNode[];
+    buttons: JSX.Element[];
     maxWidth?: Breakpoint | false;
     isLoading?: boolean;
     error?: string;
