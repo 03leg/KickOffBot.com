@@ -16,7 +16,7 @@ import AssignmentIcon from '@mui/icons-material/Assignment';
 import { EmojiButton } from '~/components/bot/bot-builder/FlowDesigner/components/elements/EmojiButton/EmojiButton';
 import { VariableSelectorDialog } from '~/components/bot/bot-builder/FlowDesigner/components/VariableSelectorDialog';
 import { StringItemsMenu } from '~/components/bot/bot-builder/FlowDesigner/components/elements/TextEditor/StringItemsMenu';
-import { ColorPickerButton } from './components/ColorPickerButton';
+import { ColorPickerButton, CssProperty } from './components/ColorPickerButton';
 import { FontSizeButton } from './components/FontSizeButton';
 import { handleDraftEditorPastedText, onDraftEditorCopy, onDraftEditorCut } from 'draftjs-conductor';
 import { NewLinkButton } from './components/NewLinkButton';
@@ -32,6 +32,7 @@ interface Props {
 
 export const CUSTOM_STYLE_PREFIX_COLOR = 'color_';
 export const CUSTOM_STYLE_PREFIX_FONT_SIZE = 'font_size_';
+export const CUSTOM_STYLE_PREFIX_BACKGROUND_COLOR = 'background_color_';
 
 export const WebTextEditor = ({ onContentChange, jsonState, contextObjectProperties, showInsertTemplateButton = true }: Props) => {
     const { templates } = useFlowDesignerStore((state) => ({
@@ -55,13 +56,19 @@ export const WebTextEditor = ({ onContentChange, jsonState, contextObjectPropert
 
                 const color = styles.filter((value: any) => value.startsWith(CUSTOM_STYLE_PREFIX_COLOR)).first();
                 const fontSize = styles.filter((value: any) => value.startsWith(CUSTOM_STYLE_PREFIX_FONT_SIZE)).first();
+                const backgroundColor = styles.filter((value: any) => value.startsWith(CUSTOM_STYLE_PREFIX_BACKGROUND_COLOR)).first();
 
-                if (color || fontSize) {
+                if (color || fontSize || backgroundColor) {
                     return {
                         element: 'span',
                         style: {
                             color: color?.replace(CUSTOM_STYLE_PREFIX_COLOR, '') ?? 'unset',
                             fontSize: fontSize?.replace(CUSTOM_STYLE_PREFIX_FONT_SIZE, '') ?? 'unset',
+                            backgroundColor: backgroundColor?.replace(CUSTOM_STYLE_PREFIX_BACKGROUND_COLOR, '') ?? 'unset',
+                            // if background color is set, add 2px border radius to the left and right
+                            borderRadius: backgroundColor === undefined ? 'unset' : '2px',
+                            paddingLeft: backgroundColor === undefined ? 'unset' : '2px',
+                            paddingRight: backgroundColor === undefined ? 'unset' : '2px',
                         },
                     };
                 }
@@ -147,17 +154,19 @@ export const WebTextEditor = ({ onContentChange, jsonState, contextObjectPropert
         generatePublicContentChange(newState);
     }, [editorState, generatePublicContentChange, insertText]);
 
-    const handleColorChange = useCallback((hexColor: string) => {
+    const handleColorChange = useCallback((hexColor: string, propertyType: CssProperty) => {
+        const customStyleProp = propertyType === CssProperty.Color ? CUSTOM_STYLE_PREFIX_COLOR : CUSTOM_STYLE_PREFIX_BACKGROUND_COLOR;
+
         const styles = editorState.getCurrentInlineStyle().toJS();
         let nextEditorState = styles.reduce((state: EditorState, styleKey: string) => {
-            if (styleKey.startsWith(CUSTOM_STYLE_PREFIX_COLOR)) {
+            if (styleKey.startsWith(customStyleProp)) {
                 return RichUtils.toggleInlineStyle(state, styleKey);
             }
             return state;
         }, editorState);
 
         if (hexColor != null) {
-            nextEditorState = RichUtils.toggleInlineStyle(nextEditorState, CUSTOM_STYLE_PREFIX_COLOR + hexColor);
+            nextEditorState = RichUtils.toggleInlineStyle(nextEditorState, customStyleProp + hexColor);
         }
 
         setEditorState(nextEditorState);
@@ -188,6 +197,10 @@ export const WebTextEditor = ({ onContentChange, jsonState, contextObjectPropert
         return styleNames.reduce((styles: Record<string, any>, styleName: string) => {
             if (styleName.startsWith(CUSTOM_STYLE_PREFIX_COLOR)) {
                 styles.color = styleName.split(CUSTOM_STYLE_PREFIX_COLOR)[1];
+            }
+
+            if (styleName.startsWith(CUSTOM_STYLE_PREFIX_BACKGROUND_COLOR)) {
+                styles.backgroundColor = styleName.split(CUSTOM_STYLE_PREFIX_BACKGROUND_COLOR)[1];
             }
 
             if (styleName.startsWith(CUSTOM_STYLE_PREFIX_FONT_SIZE)) {
