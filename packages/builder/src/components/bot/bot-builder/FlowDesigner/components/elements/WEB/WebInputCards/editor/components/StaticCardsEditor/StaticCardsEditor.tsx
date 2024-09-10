@@ -5,7 +5,6 @@ import { ItemsListEditor } from '~/components/commons/ItemsListEditor';
 import { CardDetailsView } from './CardDetailsView/CardDetailsView';
 import { getUniqueCardName } from './StaticCardsEditor.utils';
 import { Box } from '@mui/material';
-import { CardDemoView } from './CardDemoView';
 
 interface Props {
     element: WebInputCardsUIElement;
@@ -15,7 +14,7 @@ export const StaticCardsEditor = ({ element }: Props) => {
     const staticSourceDescription = (element?.sourceDescription as StaticSourceDescription);
     const [items, setItems] = React.useState(staticSourceDescription?.cards);
     const [selectedCard, setSelectedCard] = React.useState<WebCardDescriptionClassic | undefined>(staticSourceDescription?.cards[0]);
-    const [demoCardDescription, setDemoCardDescription] = React.useState<WebCardDescriptionClassic | undefined>(staticSourceDescription?.cards[0]);
+    // const [demoCardDescription, setDemoCardDescription] = React.useState<WebCardDescriptionClassic | undefined>(staticSourceDescription?.cards[0]);
 
 
     const handleNewCard = useCallback(() => {
@@ -28,12 +27,12 @@ export const StaticCardsEditor = ({ element }: Props) => {
 
         staticSourceDescription.cards = [...items, newCard];
         setSelectedCard(newCard);
-        setDemoCardDescription({ ...newCard })
+        // setDemoCardDescription({ ...newCard })
     }, [items, staticSourceDescription]);
 
     const handleSelectCard = useCallback((card: WebCardDescriptionClassic) => {
         setSelectedCard(card);
-        setDemoCardDescription({ ...card })
+        // setDemoCardDescription({ ...card })
     }, []);
 
 
@@ -47,13 +46,13 @@ export const StaticCardsEditor = ({ element }: Props) => {
                 onNewItem={handleNewCard}
                 onSelect={handleSelectCard}
                 selectedItem={selectedCard}
-                detailsView={<CardDetailsView item={selectedCard} onChange={() => { setDemoCardDescription({ ...selectedCard! }) }} />}
+                detailsView={<CardDetailsView item={selectedCard} onChange={() => { }} />}
             />
 
-            {demoCardDescription &&
+            {/* {demoCardDescription &&
                 <Box sx={{ height: '100%', width: '40%', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 1, backgroundColor: "#F3F6F9" }}>
                     <CardDemoView card={demoCardDescription} />
-                </Box>}
+                </Box>} */}
         </Box>
     )
 }

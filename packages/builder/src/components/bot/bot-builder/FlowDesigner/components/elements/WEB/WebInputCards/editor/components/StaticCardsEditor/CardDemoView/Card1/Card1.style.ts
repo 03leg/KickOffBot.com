@@ -6,6 +6,7 @@ export const useCard1Styles = makeStyles()(({ spacing }) => ({
     flexDirection: "column",
     height: "100%",
     maxWidth: "250px",
+    width: 'max-content',
 
     "& p": {
       margin: 0,

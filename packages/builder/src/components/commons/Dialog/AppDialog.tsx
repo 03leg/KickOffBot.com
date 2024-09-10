@@ -82,9 +82,9 @@ export default function AppDialog({ open, onClose, title, children, buttons, max
         <BootstrapDialog
             maxWidth={maxWidth}
             fullWidth
-            
+
             onClose={onClose}
-            open={open}           
+            open={open}
         >
             <BootstrapDialogTitle onClose={onClose}>
                 {title}
@@ -93,7 +93,7 @@ export default function AppDialog({ open, onClose, title, children, buttons, max
                 {errorMessage && !isLoading && <Alert sx={{ marginBottom: '1rem' }} severity="error">{errorMessage}</Alert>}
                 {children}
             </DialogContent>
-            <DialogActions>
+            {!isLoading && buttons.length > 0 && <DialogActions>
                 {!isLoading && buttons}
                 {isLoading && (
                     <Box sx={{ display: 'flex' }}>
@@ -102,7 +102,7 @@ export default function AppDialog({ open, onClose, title, children, buttons, max
                     </Box>
                 )
                 }
-            </DialogActions>
+            </DialogActions>}
         </BootstrapDialog>
     );
 }
