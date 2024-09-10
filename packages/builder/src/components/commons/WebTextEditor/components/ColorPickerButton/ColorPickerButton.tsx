@@ -43,7 +43,7 @@ export const ColorPickerButton = ({ onColorChange }: Props) => {
                     backgroundColor: 'white',
                 }}>
                         <SketchPicker color={color} onChange={handleColorChange} />
-                        <Box sx={{ display: 'flex' }}>
+                        <Box sx={{ display: 'flex', padding: 1 }}>
                             <Button sx={{ marginTop: 1, mr: 1, width: '50%' }} variant="outlined" onClick={(e) => {
                                 onColorChange(color, CssProperty.Color);
                                 closeWindow(e);
