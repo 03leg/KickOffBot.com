@@ -97,9 +97,13 @@ export const Link = ({ link }: Props) => {
     }, [link, links]);
 
     useLayoutEffect(() => {
-        const newPath = getSvgPathForLink(link, viewPortOffset, transformDescription, inputIndex, outputIndex);;
+        const newPath = getSvgPathForLink(link, viewPortOffset, transformDescription, inputIndex, outputIndex);
+        if (newPath === null) {
+            removeLink(link);
+            return;
+        }
         setD(newPath)
-    }, [links, link, transformDescription, viewPortOffset, inputBlock?.position, outputBlock?.position, inputBlock?.elements, outputBlock?.elements, inputIndex, outputIndex, inputBlock, outputBlock]);
+    }, [removeLink, links, link, transformDescription, viewPortOffset, inputBlock?.position, outputBlock?.position, inputBlock?.elements, outputBlock?.elements, inputIndex, outputIndex, inputBlock, outputBlock]);
 
     return (
         <>

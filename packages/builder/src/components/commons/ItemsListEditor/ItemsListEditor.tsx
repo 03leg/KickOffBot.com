@@ -34,6 +34,7 @@ export const ItemsListEditor = <T extends ItemBase>({ items, onNewItem, onDelete
         <Box className={classes.root}>
             <Box sx={{ width: '300px', backgroundColor: 'white', display: 'flex', flexDirection: 'column', margin: 1 }}>
                 <List dense={true} sx={{ flex: 1, height: 'calc(100% - 55px)', overflowY: 'auto' }}>
+                    {items.length === 0 && <ListItemButton disabled={true} key={'empty'}><ListItemText primary={`You don't have any ${entryName.toLowerCase()} yet...`} /></ListItemButton>}
                     {items.map(currentItem => (
                         <ListItemButton onClick={() => handleSelectItem(currentItem)} selected={selectedItem === currentItem} key={currentItem.id}>
                             <ListItemText

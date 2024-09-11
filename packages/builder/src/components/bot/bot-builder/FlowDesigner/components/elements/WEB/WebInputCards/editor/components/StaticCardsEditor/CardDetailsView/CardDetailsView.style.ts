@@ -1,5 +1,7 @@
 import { makeStyles } from "tss-react/mui";
 
+const maxHeightSettings = "302px";
+
 export const useCardDetailsViewStyles = makeStyles()(({ spacing }) => ({
   root: {
     display: "flex",
@@ -19,21 +21,34 @@ export const useCardDetailsViewStyles = makeStyles()(({ spacing }) => ({
   },
   imagePreview: {
     padding: spacing(1),
-    // height: "100%",
     maxWidth: "40%",
     backgroundColor: "white",
     display: "flex",
     flexDirection: "column",
+    maxHeight: maxHeightSettings,
   },
-  textEditor: {
+  cardSettingsContainer: {
     flex: 1,
     backgroundColor: "white",
     marginLeft: spacing(1),
     padding: spacing(1),
+    maxHeight: maxHeightSettings,
+    overflowY: "auto",
+  },
+  textEditor: {
+    height: "70%",
   },
   img: {
     width: "100%",
     height: "calc(100% - 37px)",
     objectFit: "contain",
+  },
+  titleContainer: {
+    padding: spacing(1),
+    marginBottom: spacing(1),
+    backgroundColor: "white",
+  },
+  visibilityContainer: {
+    marginTop: spacing(1),
   },
 }));

@@ -1,4 +1,4 @@
-import { BotVariable, ElementType, FileDescription, InputButtonsUIElement, MessageDescription, UIElement } from "./BotTypes";
+import { BotVariable, ButtonElement, ConditionItem, ElementType, FileDescription, InputButtonsUIElement, LogicalOperator, MessageDescription, UIElement } from "./BotTypes";
 
 export interface WebStartCommand {
   id: string;
@@ -154,13 +154,20 @@ export enum WebCardsSourceStrategy {
   Dynamic,
 }
 
+export interface CardVisibilityCondition {
+  items: ConditionItem[];
+  logicalOperator: LogicalOperator;
+}
+
 export interface WebCardDescriptionClassic {
   id: string;
   imgUrl?: string;
   title?: string;
-  // description?: string;
   htmlDescription?: string;
   jsonDescription?: string;
+
+  useVisibilityConditions?: boolean;
+  visibilityConditionsDescription?: CardVisibilityCondition;
 }
 
 export interface WebCardTemplateDescriptionClassic {
@@ -179,7 +186,14 @@ export interface DynamicSourceDescription {
 }
 
 export interface WebInputCardsUIElement extends UIElement {
+  selectableCards: boolean;
   multipleChoice: boolean;
+  sendResponseOnSelect?: boolean;
+  sendButtonText?: string;
+  useCardButtons?: boolean;
   strategy: WebCardsSourceStrategy;
   sourceDescription?: StaticSourceDescription | DynamicSourceDescription;
+  buttons?: ButtonElement[];
+  variableId?: BotVariable["id"];
+  showSendButton?: boolean;
 }

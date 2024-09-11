@@ -1,7 +1,7 @@
 import { Box, Button, IconButton, List, ListItemButton, ListItemText, TextField } from '@mui/material'
 import { isNil } from 'lodash';
 import React, { useCallback, useMemo, useState } from 'react'
-import { ButtonPortDescription, type ButtonElement, type InputButtonsUIElement, BotVariable, MessageButtonsDescription } from '@kickoffbot.com/types';
+import { ButtonPortDescription, type ButtonElement, BotVariable } from '@kickoffbot.com/types';
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddIcon from '@mui/icons-material/Add';
 import { v4 } from 'uuid';
@@ -11,7 +11,7 @@ import { getTextVariableReference } from '~/components/bot/bot-builder/utils';
 import { EmojiButton } from '../../EmojiButton/EmojiButton';
 
 interface Props {
-    element: InputButtonsUIElement | MessageButtonsDescription;
+    element: { buttons?: ButtonElement[]; };
 }
 
 export const ManualStrategyButtonsEditor = ({ element }: Props) => {
