@@ -1,10 +1,10 @@
-import { ConditionItem, ConditionUIElement, LogicalOperator } from '@kickoffbot.com/types';
+import { CardVisibilityCondition, ConditionItem, ConditionUIElement, LogicalOperator } from '@kickoffbot.com/types';
 import { Box, Button } from '@mui/material';
 import React, { useCallback, useState } from 'react'
 import { ConditionItemComponent } from './ConditionItemComponent';
 import { v4 } from 'uuid';
 interface Props {
-    element: ConditionUIElement;
+    element: ConditionUIElement | CardVisibilityCondition;
 }
 
 export const ConditionEditor = ({ element }: Props) => {

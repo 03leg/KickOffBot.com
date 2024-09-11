@@ -5,7 +5,8 @@ export const useItemsListEditorStyles = makeStyles()(({ spacing }) => ({
     display: "flex",
     flex: 1,
     backgroundColor: "#F3F6F9",
-    height: "300px",
     padding: 1,
+    maxHeight: 400,
+    minHeight: 300,
   },
 }));

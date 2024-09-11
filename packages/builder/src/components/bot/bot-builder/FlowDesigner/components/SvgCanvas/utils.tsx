@@ -25,7 +25,7 @@ function getElementBySelector(selector: string) {
     const element = document.querySelector(selector);
 
     if (isNil(element)) {
-        throw new Error('InvalidOperationError');
+        return null;
     }
 
     // mapAppIdElement.set(selector, element);
@@ -254,19 +254,33 @@ export function getSvgPathForLink(link: FlowDesignerLink,
     viewPortOffset: PositionDescription,
     transformDescription: TransformDescription,
     incomeIndex: number,
-    outcomeIndex: number): string {
+    outcomeIndex: number
+): string | null {
 
 
     const output = link.output as ButtonPortDescription;
     const input = link.input;
 
     const outputElement = getOutputPortElement(output.buttonId ?? output.blockId);
+
+    if (!outputElement) {
+        return null;
+    }
+
     const outputElementPosition = getElementPosition(outputElement, viewPortOffset, transformDescription);
 
     const outputBlockElement = getElement(output.blockId);
+    if (!outputBlockElement) {
+        return null;
+    }
+
     const outputBlockElementPosition = getElementPosition(outputBlockElement, viewPortOffset, transformDescription);
 
     const inputElement = getElement(input.blockId);
+    if (!inputElement) {
+        return null;
+    }
+
     const inputElementPosition = getElementPosition(inputElement, viewPortOffset, transformDescription);
 
 
