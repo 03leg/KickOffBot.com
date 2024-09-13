@@ -346,7 +346,8 @@ export function getNewUIElementTemplate(id: string, data: DraggableElementData):
                 strategy: WebCardsSourceStrategy.Static,
                 sourceDescription: {
                     cards: []
-                }
+                },
+                selectableCards: false
             };
             return result;
         }
