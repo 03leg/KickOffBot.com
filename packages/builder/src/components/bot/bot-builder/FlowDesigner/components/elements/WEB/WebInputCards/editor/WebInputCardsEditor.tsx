@@ -69,7 +69,10 @@ export const WebInputCardsEditor = ({ element }: Props) => {
         element.strategy = newValue;
         element.sourceDescription = newValue === WebCardsSourceStrategy.Static ? {
             cards: []
-        } : {};
+        } : {
+            cardDescription: {
+            }
+        };
     }, [element]);
 
     const handleShowPreview = useCallback(() => {

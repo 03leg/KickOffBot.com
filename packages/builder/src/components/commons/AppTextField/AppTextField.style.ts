@@ -8,5 +8,6 @@ export const useAppTextFieldStyles = makeStyles()(({ spacing }) => ({
   },
   buttons: {
     marginLeft: spacing(1),
+    display: "flex",
   },
 }));
