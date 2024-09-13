@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { ButtonsSourceStrategy, ElementType, StaticSourceDescription, WebCardsSourceStrategy, WebInputCardsUIElement } from '@kickoffbot.com/types';
+import { ButtonsSourceStrategy, DynamicSourceDescription, StaticSourceDescription, WebCardsSourceStrategy, WebInputCardsUIElement } from '@kickoffbot.com/types';
 import { Alert, Box, Typography } from '@mui/material';
 import React, { useMemo } from 'react';
 import { Card1 } from '../../editor/components/StaticCardsEditor/CardDemoView/Card1';
@@ -23,6 +23,15 @@ export const CardsConfigurationDescription = ({ element }: Props) => {
         }
         return getVariableById(element.variableId);
     }, [element.variableId, getVariableById]);
+
+
+    const dataSourceVariable = useMemo(() => {
+        const dynamicDescription = (element.sourceDescription as DynamicSourceDescription);
+        if (!dynamicDescription.cardsVariableId) {
+            return null;
+        }
+        return getVariableById(dynamicDescription.cardsVariableId);
+    }, [element.sourceDescription, getVariableById]);
 
 
     return (
@@ -59,7 +68,11 @@ export const CardsConfigurationDescription = ({ element }: Props) => {
                     )}
                 </Box>
             </>}
-            {element.strategy === WebCardsSourceStrategy.Dynamic && <>Chat bot shows cards based on variable value.&nbsp;</>}
+            {element.strategy === WebCardsSourceStrategy.Dynamic &&
+                <>
+                    Chat bot shows cards based on variable value <span className={classes.variable}>{dataSourceVariable?.name}</span>.&nbsp;
+                </>
+            }
 
             {!element.selectableCards && element.useCardButtons && element.buttons && element.buttons.length > 0 &&
                 <>

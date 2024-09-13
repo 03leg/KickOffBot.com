@@ -1,8 +1,9 @@
 import { BotVariable, VariableConverter } from "@kickoffbot.com/types";
 import { isNil } from "lodash";
 import React, { useCallback } from "react";
-import { getTextVariableReference } from "~/components/bot/bot-builder/utils";
+import { getTextPropertyReference, getTextVariableReference } from "~/components/bot/bot-builder/utils";
 
+// TODO: rename "useInsertAppContextToText???", delete useInsertPropertyToText hook
 export function useInsertVariableToText(value: string, onChangeValue: (value: string) => void) {
   const [selectionStart, setSelectionStart] = React.useState<number>();
   const inputRef = React.useRef<HTMLInputElement>();
@@ -33,5 +34,25 @@ export function useInsertVariableToText(value: string, onChangeValue: (value: st
     [onChangeValue, selectionStart, value]
   );
 
-  return { handleInsertVariable, inputRef, updateSelectionStart };
+  const handleInsertContextPropertyInText = useCallback(
+    (property: string) => {
+      let position = selectionStart;
+      const content = value ?? "";
+
+      if (isNil(position)) {
+        position = content.length;
+      }
+      
+      const output = [
+        content.slice(0, position),
+        getTextPropertyReference(property),
+        content.slice(position),
+      ].join("");
+
+      onChangeValue(output);
+    },
+    [onChangeValue, selectionStart, value]
+  );
+
+  return { handleInsertVariable, inputRef, updateSelectionStart, handleInsertContextPropertyInText };
 }

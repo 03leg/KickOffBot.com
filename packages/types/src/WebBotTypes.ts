@@ -171,9 +171,10 @@ export interface WebCardDescriptionClassic {
 }
 
 export interface WebCardTemplateDescriptionClassic {
-  imgUrlObjectProperty?: string;
-  titleObjectProperty?: string;
-  descriptionObjectProperty?: string;
+  imgUrl?: string;
+  value?: string;
+  htmlDescription?: string;
+  jsonDescription?: string;
 }
 
 export interface StaticSourceDescription {
