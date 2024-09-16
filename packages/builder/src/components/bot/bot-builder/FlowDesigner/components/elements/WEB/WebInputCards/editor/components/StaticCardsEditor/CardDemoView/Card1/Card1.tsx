@@ -8,13 +8,14 @@ import { CardSelectionMark } from './CardSelectionMark';
 
 
 interface Props {
-    card: WebCardDescriptionClassic;
+    card: { imgUrl?: string, htmlDescription?: string };
     selected?: boolean;
     onSelectedChange?: (newValue: boolean) => void;
     isLast: boolean;
     selectableCard: boolean;
     useCardButtons?: boolean;
     cardButtons?: ButtonElement[];
+    onButtonClick?: (button: ButtonElement) => void;
 }
 
 const SelectableChatCard1 = styled(Card)<CardProps>(() => ({
@@ -44,8 +45,12 @@ const ChatCardContent = styled(CardContent)(({ theme }) => ({
     }
 }))
 
-export const Card1 = ({ card, selected, onSelectedChange, isLast, selectableCard, cardButtons }: Props) => {
+
+
+export const Card1 = ({ card, selected, onSelectedChange, isLast, selectableCard, cardButtons, onButtonClick }: Props) => {
     const { classes, cx } = useCard1Styles();
+
+
 
     return (
         <Box sx={{ marginRight: isLast ? 0 : 1 }}>
@@ -88,7 +93,7 @@ export const Card1 = ({ card, selected, onSelectedChange, isLast, selectableCard
                             }
                         }}>
                             {cardButtons?.map((button) => (
-                                <Button key={button.id} fullWidth variant='outlined' sx={{ textTransform: 'none' }} >{button.content}</Button>
+                                <Button key={button.id} fullWidth variant='outlined' sx={{ textTransform: 'none' }} onClick={() => onButtonClick?.(button)}>{button.content}</Button>
                             ))}
                         </CardActions>
                     }
