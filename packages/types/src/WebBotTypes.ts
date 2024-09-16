@@ -1,4 +1,14 @@
-import { BotVariable, ButtonElement, ConditionItem, ElementType, FileDescription, InputButtonsUIElement, LogicalOperator, MessageDescription, UIElement } from "./BotTypes";
+import {
+  BotVariable,
+  ButtonElement,
+  ConditionItem,
+  ElementType,
+  FileDescription,
+  InputButtonsUIElement,
+  LogicalOperator,
+  MessageDescription,
+  UIElement,
+} from "./BotTypes";
 
 export interface WebStartCommand {
   id: string;
@@ -132,6 +142,24 @@ export interface DateTimeRequestElement extends RequestElementBase {
   variableAvailableDateTimes?: string[];
 }
 
+export interface WebCardChatItem {
+  id: string;
+  value?: string;
+  imgUrl?: string;
+  htmlDescription?: string;
+}
+
+export interface CardsRequestElement extends RequestElementBase {
+  selectableCards: boolean;
+  multipleChoice: boolean;
+  sendResponseOnSelect?: boolean;
+  sendButtonText?: string;
+  useCardButtons?: boolean;
+  showSendButton?: boolean;
+  cardButtons?: ButtonElement[];
+  cardItems: WebCardChatItem[];
+}
+
 export interface PhoneRequestElement extends RequestElementBase {
   defaultCountry?: string;
 }
@@ -197,4 +225,10 @@ export interface WebInputCardsUIElement extends UIElement {
   buttons?: ButtonElement[];
   variableId?: BotVariable["id"];
   showSendButton?: boolean;
+}
+
+export interface CardsUserResponse {
+  selectedCards: Pick<WebCardChatItem, "id" | "value">[];
+  clickedButton?: ButtonElement;
+  actionName?: string;
 }

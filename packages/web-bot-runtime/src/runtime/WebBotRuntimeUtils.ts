@@ -256,6 +256,10 @@ export class WebBotRuntimeUtils {
   }
 
   getParsedText(text: string, userContext: WebUserContext): string {
+    if (text === undefined) {
+      return undefined;
+    }
+
     let result = this.parseTemplates(text, userContext);
 
     result = this.parseVariables(result, userContext);

@@ -1,5 +1,6 @@
 import {
   BotProject,
+  CardsUserResponse,
   ChatItemTypeWebRuntime,
   ChatItemWebRuntime,
   DeleteMessagesDescriptionWebRuntime,
@@ -85,6 +86,24 @@ export class WebRuntimeConnector {
     if (requestElement.element.elementType === ElementType.WEB_INPUT_BUTTONS) {
       const button = userData.data as RequestButtonDescription;
       return button.content;
+    }
+
+    if (requestElement.element.elementType === ElementType.WEB_INPUT_CARDS) {
+      const cardResponseData = userData.data as CardsUserResponse;
+      let responseText = cardResponseData.selectedCards
+        .map((c) => c.value)
+        .join(", ");
+
+      if (cardResponseData.clickedButton) {
+        responseText =
+          cardResponseData.clickedButton.content + ", " + responseText;
+      }
+
+      if (cardResponseData.actionName) {
+        responseText = cardResponseData.actionName;
+      }
+
+      return responseText;
     }
 
     return userData.data as string;

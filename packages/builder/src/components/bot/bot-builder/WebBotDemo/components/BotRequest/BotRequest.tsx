@@ -8,6 +8,7 @@ import { DateTimeBoxRequest } from './components/DateTimeBoxRequest';
 import { PhoneBoxRequest } from './components/PhoneBoxRequest';
 import { EmailBoxRequest } from './components/EmailBoxRequest';
 import { ButtonsBoxRequest } from './components/ButtonsBoxRequest';
+import { CardsBoxRequest } from './components/CardsBoxRequest';
 
 interface Props {
     request: RequestDescriptionWebRuntime;
@@ -37,6 +38,9 @@ export const BotRequest = ({ request }: Props) => {
             }
             case ElementType.WEB_INPUT_BUTTONS:{
                 return <ButtonsBoxRequest request={request} />
+            }
+            case ElementType.WEB_INPUT_CARDS: {
+                return <CardsBoxRequest request={request} />
             }
             default: {
                 throw new Error('NotImplementedError');

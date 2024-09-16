@@ -28,6 +28,8 @@ import {
   HTTPRequestIntegrationUIElement,
   SendTelegramMessageIntegrationUIElement,
   TelegramConnectionDescription,
+  WebInputCardsUIElement,
+  CardsUserResponse,
 } from '@kickoffbot.com/types';
 import { WebBotRuntimeUtils } from './WebBotRuntimeUtils';
 import { WebUserContext } from './WebUserContext';
@@ -42,6 +44,7 @@ import { ConditionChecker } from './ConditionChecker';
 import { GoogleSpreadsheetHelper } from './GoogleSpreadsheetHelper';
 import { SendReceiveHttpRequest } from './SendReceiveHttpRequest';
 import { Telegraf } from 'telegraf';
+import { CardsElementHelper } from './CardsElementHelper';
 
 export class WebBotRuntime {
   private _utils: WebBotRuntimeUtils;
@@ -161,6 +164,15 @@ export class WebBotRuntime {
         );
         break;
       }
+      case ElementType.WEB_INPUT_CARDS: {
+        const chatItem = this.handleCardsElement(
+          element as WebInputCardsUIElement,
+        );
+        chatItems.push(chatItem);
+
+        shouldHandleNextElement = false;
+        break;
+      }
       default: {
         throw new Error('NotImplementedError');
       }
@@ -176,6 +188,30 @@ export class WebBotRuntime {
     }
 
     return chatItems;
+  }
+
+  private handleCardsElement(
+    element: WebInputCardsUIElement,
+  ): ChatItemWebRuntime {
+    const helper = new CardsElementHelper(
+      element,
+      this._utils,
+      this._userContext,
+      this._project,
+    );
+
+    const requestElement = helper.getRequestElement();
+
+    const chatItem: ChatItemWebRuntime = {
+      content: {
+        element: requestElement,
+      },
+      uiElementId: element.id,
+      id: v4(),
+      itemType: ChatItemTypeWebRuntime.BOT_REQUEST,
+    };
+
+    return chatItem;
   }
 
   private async checkNextElement() {
@@ -266,17 +302,50 @@ export class WebBotRuntime {
       | WebInputNumberUIElement
       | WebInputPhoneUIElement
       | WebInputEmailUIElement
+      | WebInputCardsUIElement
       | WebInputDateTimeUIElement;
 
-    if (typedElement.type !== ElementType.WEB_INPUT_BUTTONS) {
-      if (typedElement.variableId) {
-        const variable = this._utils.getVariableById(typedElement.variableId);
-        this._userContext.updateVariable(variable.name, value);
-      }
-    } else if (typedElement.type === ElementType.WEB_INPUT_BUTTONS) {
+    if (typedElement.type === ElementType.WEB_INPUT_BUTTONS) {
       return await this.handleUserButtonsResponse(
         value as RequestButtonDescription,
       );
+    }
+
+    if (typedElement.type === ElementType.WEB_INPUT_CARDS) {
+      return await this.handleUserCardsResponse(
+        typedElement as WebInputCardsUIElement,
+        value as CardsUserResponse,
+      );
+    }
+
+    if (typedElement.variableId) {
+      const variable = this._utils.getVariableById(typedElement.variableId);
+      this._userContext.updateVariable(variable.name, value);
+    }
+
+    return await this.checkNextElement();
+  }
+
+  private async handleUserCardsResponse(
+    element: WebInputCardsUIElement,
+    value: CardsUserResponse,
+  ) {
+    const helper = new CardsElementHelper(
+      element,
+      this._utils,
+      this._userContext,
+      this._project,
+    );
+
+    const link = helper.handleUserResponse(value);
+
+    if (!isNil(link)) {
+      const block = this._utils.getBlockById(link.input.blockId);
+      const element = block.elements[0];
+
+      throwIfNil(element);
+
+      return await this.handleElement(block, element);
     }
 
     return await this.checkNextElement();

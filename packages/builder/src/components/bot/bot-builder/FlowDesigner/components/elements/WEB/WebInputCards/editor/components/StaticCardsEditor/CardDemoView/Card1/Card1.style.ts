@@ -16,5 +16,6 @@ export const useCard1Styles = makeStyles()(({ spacing }) => ({
     width: "100%",
     height: "auto",
     objectFit: "contain",
+    boxSizing: "border-box",
   },
 }));
