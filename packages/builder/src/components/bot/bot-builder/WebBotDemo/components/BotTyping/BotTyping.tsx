@@ -3,10 +3,10 @@ import { Box } from '@mui/material';
 
 import { BotAvatar } from '../BotAvatar';
 import { TypingLoading } from '../TypingLoading';
-import { useBotMessageStyles } from '../BotMessage/BotMessage.style';
+import { useBotTypingStyles } from './BotTyping.style';
 
 export const BotTyping = () => {
-    const { classes } = useBotMessageStyles({ hasAttachments: false });
+    const { classes } = useBotTypingStyles({ hasAttachments: false });
 
     return (
         <Box className={classes.root}>

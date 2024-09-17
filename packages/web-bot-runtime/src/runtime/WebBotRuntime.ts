@@ -30,6 +30,8 @@ import {
   TelegramConnectionDescription,
   WebInputCardsUIElement,
   CardsUserResponse,
+  BotMessageBodyType,
+  BotMessageBody,
 } from '@kickoffbot.com/types';
 import { WebBotRuntimeUtils } from './WebBotRuntimeUtils';
 import { WebUserContext } from './WebUserContext';
@@ -88,8 +90,11 @@ export class WebBotRuntime {
 
         chatItems.push({
           content: {
-            message: messageText,
-            attachments: typedElement.attachments,
+            type: BotMessageBodyType.MessageAndAttachments,
+            content: {
+              message: messageText,
+              attachments: typedElement.attachments,
+            },
           },
           uiElementId: typedElement.id,
           id: v4(),
@@ -203,14 +208,28 @@ export class WebBotRuntime {
 
     const requestElement = helper.getRequestElement();
 
-    const chatItem: ChatItemWebRuntime = {
-      content: {
-        element: requestElement,
-      },
-      uiElementId: element.id,
-      id: v4(),
-      itemType: ChatItemTypeWebRuntime.BOT_REQUEST,
-    };
+    let chatItem: ChatItemWebRuntime;
+
+    if (element.useCardButtons || element.selectableCards) {
+      chatItem = {
+        content: {
+          element: requestElement,
+        },
+        uiElementId: element.id,
+        id: v4(),
+        itemType: ChatItemTypeWebRuntime.BOT_REQUEST,
+      };
+    } else {
+      chatItem = {
+        content: {
+          content: requestElement,
+          type: BotMessageBodyType.Cards,
+        } as BotMessageBody,
+        uiElementId: element.id,
+        id: v4(),
+        itemType: ChatItemTypeWebRuntime.BOT_MESSAGE,
+      };
+    }
 
     return chatItem;
   }

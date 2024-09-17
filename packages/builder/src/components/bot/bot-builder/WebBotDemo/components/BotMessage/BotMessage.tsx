@@ -2,27 +2,26 @@ import React from 'react';
 import { Box } from '@mui/material';
 import { useBotMessageStyles } from './BotMessage.style';
 import { BotAvatar } from '../BotAvatar';
-import { AttachmentsViewer } from '../AttachmentsViewer';
-import { MessageDescriptionWebRuntime } from '@kickoffbot.com/types';
+import { BotMessageBody, BotMessageBodyType, CardsViewerElement, MessageDescriptionWebRuntime } from '@kickoffbot.com/types';
+import { MessageAndAttachments } from './components/MessageAndAttachments';
+import { CardsViewer } from './components/CardsViewer';
 
 interface Props {
-    message: MessageDescriptionWebRuntime;
+    message: BotMessageBody;
     onContentHeightChange: () => void;
 }
 
 export const BotMessage = ({ message, onContentHeightChange }: Props) => {
-    const hasAttachments = (message.attachments && message.attachments.length > 0) ?? false;
-    const { classes } = useBotMessageStyles({ hasAttachments });
+    const { classes } = useBotMessageStyles();
 
     return (
-        <Box className={classes.root}>
+        <Box className={classes.root} data-testid="BotMessage">
             <Box className={classes.avatar}>
                 <BotAvatar />
             </Box>
-            <Box className={classes.message}>
-                {message.message && <div className={classes.text} dangerouslySetInnerHTML={{ __html: message.message }}></div>}
-                {hasAttachments && <AttachmentsViewer attachments={message.attachments!} onContentHeightChange={onContentHeightChange} />}
-            </Box>
+
+            {message.type === BotMessageBodyType.MessageAndAttachments && <MessageAndAttachments message={message.content as MessageDescriptionWebRuntime} onContentHeightChange={onContentHeightChange} />}
+            {message.type === BotMessageBodyType.Cards && <CardsViewer cardsDescription={message.content as CardsViewerElement} onContentHeightChange={onContentHeightChange} />}
         </Box>
     )
 }

@@ -1,7 +1,13 @@
 import { create } from "zustand";
 import { ChatStoreState } from "./store.types";
 import { delay } from "../../utils";
-import { ChatItemTypeWebRuntime, ChatItemWebRuntime, MessageDescriptionWebRuntime, UIElement } from "@kickoffbot.com/types";
+import {
+  BotMessageBodyType,
+  ChatItemTypeWebRuntime,
+  ChatItemWebRuntime,
+  MessageDescriptionWebRuntime,
+  UIElement,
+} from "@kickoffbot.com/types";
 import { v4 } from "uuid";
 
 export const useUserChatStore = create<ChatStoreState>()((set, get) => ({
@@ -27,18 +33,29 @@ export const useUserChatStore = create<ChatStoreState>()((set, get) => ({
     });
   },
   clearHistory: () => set(() => ({ chatItems: [] })),
-  removeChatItemByUIElementId: (elementIds: UIElement["id"][]) => set((state) => ({ chatItems: state.chatItems.filter((m) => !elementIds.includes(m.uiElementId ?? '')) })),
+  removeChatItemByUIElementId: (elementIds: UIElement["id"][]) =>
+    set((state) => ({
+      chatItems: state.chatItems.filter(
+        (m) => !elementIds.includes(m.uiElementId ?? "")
+      ),
+    })),
   removeChatItem: (id: string) =>
     set((state) => ({
       chatItems: state.chatItems.filter((m) => m.id !== id),
     })),
-  sendUserResponse: (elementId: string, userResponse: MessageDescriptionWebRuntime) =>
+  sendUserResponse: (
+    elementId: string,
+    userResponse: MessageDescriptionWebRuntime
+  ) =>
     set((state) => ({
       chatItems: [
         ...state.chatItems,
         {
           itemType: ChatItemTypeWebRuntime.USER_MESSAGE,
-          content: userResponse,
+          content: {
+            content: userResponse,
+            type: BotMessageBodyType.MessageAndAttachments,
+          },
           id: v4(),
           uiElementId: elementId,
         },

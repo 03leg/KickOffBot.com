@@ -143,13 +143,13 @@ export class CardsElementHelper {
   public handleUserResponse(
     userResponse: CardsUserResponse,
   ): FlowDesignerLink | undefined {
-    console.log('userResponse', userResponse);
-
     if (this._element.strategy === WebCardsSourceStrategy.Static) {
       this.handleStaticCardsStrategy(userResponse);
     } else if (this._element.strategy === WebCardsSourceStrategy.Dynamic) {
       this.handleDynamicCardsStrategy(userResponse);
-    } else throw new Error('NotImplementedError: Unknown cards strategy');
+    } else {
+      throw new Error('NotImplementedError: Unknown cards strategy');
+    }
 
     if (this._element.useCardButtons && userResponse.clickedButton?.id) {
       const link = this.getButtonLink(userResponse.clickedButton.id);
@@ -189,6 +189,11 @@ export class CardsElementHelper {
       this._userContext.getVariableValueByName(
         dataSourceVariable.name,
       ) as Array<unknown>;
+
+    if (isNil(this._element.variableId)) {
+      return;
+    }
+
     const storeUserResponseVariable = this._utils.getVariableById(
       this._element.variableId,
     );
