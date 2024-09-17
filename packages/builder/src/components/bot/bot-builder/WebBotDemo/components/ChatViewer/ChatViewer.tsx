@@ -1,4 +1,4 @@
-import { BotProject, ChatItemTypeWebRuntime, MessageDescriptionWebRuntime, RequestDescriptionWebRuntime } from '@kickoffbot.com/types';
+import { BotMessageBody, BotProject, ChatItemTypeWebRuntime, RequestDescriptionWebRuntime } from '@kickoffbot.com/types';
 import React, { useCallback, useEffect, useLayoutEffect, useRef } from 'react';
 import { useUserChatStore } from '../../store/useUserChatStore';
 import { Box } from '@mui/material';
@@ -45,13 +45,13 @@ export const ChatViewer = ({ project, height, projectId }: Props) => {
             {storeState.chatItems.map(m => {
                 switch (m.itemType) {
                     case ChatItemTypeWebRuntime.BOT_MESSAGE: {
-                        return <BotMessage message={m.content as MessageDescriptionWebRuntime} key={m.id} onContentHeightChange={goToBottom} />
+                        return <BotMessage message={m.content as BotMessageBody} key={m.id} onContentHeightChange={goToBottom} />
                     }
                     case ChatItemTypeWebRuntime.BOT_REQUEST: {
                         return <BotRequest request={m.content as RequestDescriptionWebRuntime} key={m.id} />
                     }
                     case ChatItemTypeWebRuntime.USER_MESSAGE: {
-                        return <UserMessage message={m.content as MessageDescriptionWebRuntime} key={m.id} />
+                        return <UserMessage responseBody={m.content as BotMessageBody} key={m.id} />
                     }
                 }
             })}

@@ -109,10 +109,20 @@ export interface DeleteMessagesDescriptionWebRuntime {
   elementIds?: string[];
 }
 
+export enum BotMessageBodyType {
+  MessageAndAttachments = "message-and-attachments",
+  Cards = "cards",
+}
+
+export interface BotMessageBody {
+  type: BotMessageBodyType;
+  content: MessageDescriptionWebRuntime | CardsViewerElement;
+}
+
 export interface ChatItemWebRuntime {
   id: string;
   itemType: ChatItemTypeWebRuntime;
-  content: MessageDescriptionWebRuntime | RequestDescriptionWebRuntime | DeleteMessagesDescriptionWebRuntime;
+  content: BotMessageBody | RequestDescriptionWebRuntime | DeleteMessagesDescriptionWebRuntime;
   uiElementId: UIElement["id"];
 }
 
@@ -159,6 +169,8 @@ export interface CardsRequestElement extends RequestElementBase {
   cardButtons?: ButtonElement[];
   cardItems: WebCardChatItem[];
 }
+
+export interface CardsViewerElement extends Pick<CardsRequestElement, "cardItems"> {}
 
 export interface PhoneRequestElement extends RequestElementBase {
   defaultCountry?: string;

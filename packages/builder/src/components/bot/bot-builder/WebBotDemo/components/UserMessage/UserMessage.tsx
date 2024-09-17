@@ -1,14 +1,15 @@
 import React from 'react';
 import { Box } from '@mui/material';
 import { useUserMessageStyles } from './UserMessage.style';
-import { MessageDescriptionWebRuntime } from '@kickoffbot.com/types';
+import { BotMessageBody, MessageDescriptionWebRuntime } from '@kickoffbot.com/types';
 
 interface Props {
-    message: MessageDescriptionWebRuntime;
+    responseBody: BotMessageBody;
 }
 
-export const UserMessage = ({ message }: Props) => {
+export const UserMessage = ({ responseBody }: Props) => {
     const { classes } = useUserMessageStyles();
+    const message = responseBody.content as MessageDescriptionWebRuntime ;
 
     return (
         <Box className={classes.root}>
