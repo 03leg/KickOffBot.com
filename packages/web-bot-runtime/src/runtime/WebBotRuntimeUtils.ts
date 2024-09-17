@@ -138,7 +138,7 @@ export class WebBotRuntimeUtils {
     }
   }
 
-  private getTextForContextObject(
+  public getTextForContextObject(
     contextObject: unknown,
     template: string,
     index: number,

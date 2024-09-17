@@ -75,7 +75,7 @@ export const CardsBoxRequest = ({ request }: Props) => {
                         return <Card1
                             selectableCard={cardsElementRequestDescription.selectableCards}
                             useCardButtons={cardsElementRequestDescription.useCardButtons}
-                            cardButtons={cardsElementRequestDescription.cardButtons}
+                            cardButtons={cardsElementRequestDescription.useCardButtons ? cardsElementRequestDescription.cardButtons : undefined}
                             selected={selectedCards.includes(card)}
                             onSelectedChange={(newValue) => {
                                 handleSelectedChange(newValue, card);
