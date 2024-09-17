@@ -3,6 +3,7 @@ import {
   ButtonPortDescription,
   CardsRequestElement,
   CardsUserResponse,
+  DynamicSourceDescription,
   ElementType,
   FlowDesignerLink,
   StaticSourceDescription,
@@ -13,7 +14,7 @@ import {
 } from '@kickoffbot.com/types';
 import { WebBotRuntimeUtils } from './WebBotRuntimeUtils';
 import { WebUserContext } from './WebUserContext';
-import { isNil } from 'lodash';
+import { isNil, isEmpty } from 'lodash';
 
 export class CardsElementHelper {
   constructor(
@@ -25,6 +26,26 @@ export class CardsElementHelper {
 
   private getParsedText(text?: string): string | undefined {
     return this._utils.getParsedText(text, this._userContext);
+  }
+
+  private parseText(
+    contextObject: unknown,
+    text: string | undefined,
+    index: number,
+  ): string | undefined {
+    if (isEmpty(text)) {
+      return '';
+    }
+
+    const parsedText = this.getParsedText(text);
+
+    const temp1 = this._utils.getTextForContextObject(
+      contextObject,
+      parsedText,
+      index,
+    );
+
+    return temp1;
   }
 
   public getRequestElement(): CardsRequestElement {
@@ -44,9 +65,57 @@ export class CardsElementHelper {
       const cards = this.getStaticCards();
       result.cardItems = cards;
     } else if (this._element.strategy === WebCardsSourceStrategy.Dynamic) {
-      throw new Error('NotImplementedError: Dynamic cards not implemented yet');
+      const cards = this.getDynamicCards();
+      result.cardItems = cards;
     } else {
       throw new Error('NotImplementedError: Unknown cards strategy');
+    }
+
+    return result;
+  }
+
+  private getDynamicCards(): WebCardChatItem[] {
+    const result = [];
+    const dataSourceDescription = this._element
+      .sourceDescription as DynamicSourceDescription;
+
+    const dataSourceVariable = this._utils.getVariableById(
+      dataSourceDescription.cardsVariableId,
+    );
+
+    const currentValue: Array<unknown> =
+      this._userContext.getVariableValueByName(
+        dataSourceVariable.name,
+      ) as Array<unknown>;
+
+    if (currentValue instanceof Array === false) {
+      return result;
+    }
+
+    let index = 0;
+
+    for (const card of currentValue) {
+      const newItem: WebCardChatItem = {
+        id: index.toString(),
+        value: this.parseText(
+          card,
+          dataSourceDescription.cardDescription.value,
+          index,
+        ),
+        imgUrl: this.parseText(
+          card,
+          dataSourceDescription.cardDescription.imgUrl,
+          index,
+        ),
+        htmlDescription: this.parseText(
+          card,
+          dataSourceDescription.cardDescription.htmlDescription,
+          index,
+        ),
+      };
+
+      index++;
+      result.push(newItem);
     }
 
     return result;
@@ -79,6 +148,7 @@ export class CardsElementHelper {
     if (this._element.strategy === WebCardsSourceStrategy.Static) {
       this.handleStaticCardsStrategy(userResponse);
     } else if (this._element.strategy === WebCardsSourceStrategy.Dynamic) {
+      this.handleDynamicCardsStrategy(userResponse);
     } else throw new Error('NotImplementedError: Unknown cards strategy');
 
     if (this._element.useCardButtons && userResponse.clickedButton?.id) {
@@ -105,6 +175,75 @@ export class CardsElementHelper {
     }
 
     return link;
+  }
+
+  private handleDynamicCardsStrategy(userResponse: CardsUserResponse) {
+    const sourceDescription = this._element
+      .sourceDescription as DynamicSourceDescription;
+
+    const dataSourceVariable = this._utils.getVariableById(
+      sourceDescription.cardsVariableId,
+    );
+
+    const dataSourceVariableValue: Array<unknown> =
+      this._userContext.getVariableValueByName(
+        dataSourceVariable.name,
+      ) as Array<unknown>;
+    const storeUserResponseVariable = this._utils.getVariableById(
+      this._element.variableId,
+    );
+
+    if (this._element.selectableCards || this._element.useCardButtons) {
+      if (!this._element.multipleChoice || this._element.useCardButtons) {
+        if (userResponse.selectedCards.length === 0) {
+          return;
+        }
+
+        const cardIndex = Number(userResponse.selectedCards[0].id);
+
+        const selectedCardObject = dataSourceVariableValue[cardIndex];
+
+        if (storeUserResponseVariable.type === VariableType.ARRAY) {
+          this._userContext.updateVariable(storeUserResponseVariable.name, [
+            selectedCardObject,
+          ]);
+        } else if (storeUserResponseVariable.type === VariableType.OBJECT) {
+          this._userContext.updateVariable(
+            storeUserResponseVariable.name,
+            selectedCardObject,
+          );
+        } else {
+          this._userContext.updateVariable(
+            storeUserResponseVariable.name,
+            userResponse.selectedCards[0].value,
+          );
+        }
+      } else {
+        const selectedIndexCards = userResponse.selectedCards.map((c) => c.id);
+        const newVariableValue = dataSourceVariableValue.filter((c, index) =>
+          selectedIndexCards.includes(index.toString()),
+        );
+
+        if (storeUserResponseVariable.type === VariableType.ARRAY) {
+          if (storeUserResponseVariable.arrayItemType === VariableType.OBJECT) {
+            this._userContext.updateVariable(
+              storeUserResponseVariable.name,
+              newVariableValue,
+            );
+          } else {
+            this._userContext.updateVariable(
+              storeUserResponseVariable.name,
+              userResponse.selectedCards.map((c) => c.value),
+            );
+          }
+        } else {
+          this._userContext.updateVariable(
+            storeUserResponseVariable.name,
+            userResponse.selectedCards.map((c) => c.value).join(', '),
+          );
+        }
+      }
+    }
   }
 
   private handleStaticCardsStrategy(userResponse: CardsUserResponse) {

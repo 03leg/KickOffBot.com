@@ -165,12 +165,13 @@ export class WebBotRuntime {
         break;
       }
       case ElementType.WEB_INPUT_CARDS: {
-        const chatItem = this.handleCardsElement(
-          element as WebInputCardsUIElement,
-        );
+        const typedElement = element as WebInputCardsUIElement;
+        const chatItem = this.handleCardsElement(typedElement);
         chatItems.push(chatItem);
 
-        shouldHandleNextElement = false;
+        if (typedElement.useCardButtons || typedElement.selectableCards) {
+          shouldHandleNextElement = false;
+        }
         break;
       }
       default: {
@@ -249,6 +250,7 @@ export class WebBotRuntime {
       case ElementType.WEB_INPUT_EMAIL:
       case ElementType.WEB_INPUT_BUTTONS:
       case ElementType.WEB_LOGIC_REMOVE_MESSAGES:
+      case ElementType.WEB_INPUT_CARDS:
       case ElementType.WEB_CONTENT_MESSAGE: {
         result = await this.handleElement(block, nextElement);
         break;
