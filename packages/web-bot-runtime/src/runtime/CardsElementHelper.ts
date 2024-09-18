@@ -15,6 +15,7 @@ import {
 import { WebBotRuntimeUtils } from './WebBotRuntimeUtils';
 import { WebUserContext } from './WebUserContext';
 import { isNil, isEmpty } from 'lodash';
+import { ConditionChecker } from './ConditionChecker';
 
 export class CardsElementHelper {
   constructor(
@@ -127,6 +128,18 @@ export class CardsElementHelper {
       .sourceDescription as StaticSourceDescription;
 
     for (const cardDescription of dataSourceDescription.cards) {
+      if (cardDescription.useVisibilityConditions) {
+        if (
+          !ConditionChecker.check(
+            cardDescription.visibilityConditionsDescription,
+            this._utils,
+            this._userContext,
+          )
+        ) {
+          continue;
+        }
+      }
+
       const newItem: WebCardChatItem = {
         id: cardDescription.id,
         value: this.getParsedText(cardDescription.title),

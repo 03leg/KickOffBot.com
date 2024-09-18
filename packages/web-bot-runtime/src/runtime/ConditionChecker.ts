@@ -1,5 +1,4 @@
 import {
-  ConditionUIElement,
   LogicalOperator,
   ConditionItem,
   VariableType,
@@ -12,7 +11,7 @@ import { WebBotRuntimeUtils } from './WebBotRuntimeUtils';
 
 export class ConditionChecker {
   public static check(
-    element: ConditionUIElement,
+    element: { items: ConditionItem[]; logicalOperator: LogicalOperator },
     utils: WebBotRuntimeUtils,
     userContext: WebUserContext,
   ): boolean {
