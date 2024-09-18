@@ -55,7 +55,7 @@ export const CardDetailsView = ({ item, onChange }: Props) => {
         openDialog({
             content: <ImageSelector initImgUrl={imageUrl} onImageUrlChange={(url: string) => {
                 imageUrlResult = url;
-            }} />,
+            }} onSaveAndClose={() => handleUpdateImageUrl(imageUrlResult)} />,
             dialogMaxWidth: 'lg',
             title: 'Select image',
             buttons: [
