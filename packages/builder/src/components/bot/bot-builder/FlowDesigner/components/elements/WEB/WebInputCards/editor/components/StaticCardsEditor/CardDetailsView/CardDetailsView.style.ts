@@ -40,8 +40,9 @@ export const useCardDetailsViewStyles = makeStyles()(({ spacing }) => ({
   },
   img: {
     width: "100%",
-    height: "calc(100% - 37px)",
+    height: "calc(100% - 41px)",
     objectFit: "contain",
+    marginTop: spacing(1),
   },
   titleContainer: {
     padding: spacing(1),

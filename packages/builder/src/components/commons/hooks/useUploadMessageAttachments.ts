@@ -1,6 +1,9 @@
 import { ContentType, FileDescription } from "@kickoffbot.com/types";
 import { useCallback, useState } from "react";
-import { IMAGE_EXTENSIONS, VIDEO_EXTENSIONS } from "~/components/PostCreator/components/AttachEditor/constants";
+import {
+  IMAGE_EXTENSIONS,
+  VIDEO_EXTENSIONS,
+} from "~/components/PostCreator/components/AttachEditor/constants";
 import { uploadAttachments } from "~/components/PostCreator/utils";
 import { ClientFileDescription } from "~/types/ContentEditor";
 import { UploadAttachmentFileDescription } from "~/types/UploadAttachments";
@@ -8,7 +11,8 @@ import { showError, showSuccessMessage } from "~/utils/ClientStatusMessage";
 import { throwIfNil } from "~/utils/guard";
 
 export const useUploadMessageAttachments = (
-  attachments: FileDescription[] = []
+  attachments: FileDescription[] = [],
+  multiply = true
 ) => {
   const [uploadedFiles, setUploadedFiles] =
     useState<FileDescription[]>(attachments);
@@ -39,7 +43,9 @@ export const useUploadMessageAttachments = (
           size: file.size,
           typeContent: IMAGE_EXTENSIONS.includes(fileExt)
             ? ContentType.Image
-            : (VIDEO_EXTENSIONS.includes(fileExt) ? ContentType.Video : ContentType.Other),
+            : VIDEO_EXTENSIONS.includes(fileExt)
+            ? ContentType.Video
+            : ContentType.Other,
           url: file.storageUrl,
         } as FileDescription;
 
@@ -47,10 +53,15 @@ export const useUploadMessageAttachments = (
       });
 
       showSuccessMessage("Your files uploaded!");
-      setUploadedFiles([...uploadedFiles, ...newFiles]);
+
+      if (multiply) {
+        setUploadedFiles([...uploadedFiles, ...newFiles]);
+      } else {
+        setUploadedFiles([...newFiles]);
+      }
       setIsUploading(false);
     },
-    [uploadedFiles]
+    [multiply, uploadedFiles]
   );
 
   const handleAttachmentRemove = useCallback(

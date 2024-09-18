@@ -1,6 +1,7 @@
 import { Box, Tab, Tabs } from '@mui/material';
 import React from 'react';
 import { AppTextField } from '../AppTextField';
+import { ImageUploader } from './components/ImageUploader';
 
 interface TabPanelProps {
     children?: React.ReactNode;
@@ -32,12 +33,13 @@ function a11yProps(index: number) {
 }
 
 interface Props {
+    initImgUrl?: string;
     onImageUrlChange: (url: string) => void;
 }
 
-export const ImageSelector = ({ onImageUrlChange }: Props) => {
+export const ImageSelector = ({ initImgUrl, onImageUrlChange }: Props) => {
     const [value, setValue] = React.useState(0);
-    const [imageUrl, setImageUrl] = React.useState('');
+    const [imageUrl, setImageUrl] = React.useState(initImgUrl ?? '');
 
     const handleChange = (event: React.SyntheticEvent, newValue: number) => {
         setValue(newValue);
@@ -56,11 +58,13 @@ export const ImageSelector = ({ onImageUrlChange }: Props) => {
                 <AppTextField label="Image URL" value={imageUrl ?? ''} onValueChange={(newValue: string) => {
                     setImageUrl(newValue);
                     onImageUrlChange(newValue);
-                    console.log(newValue);
                 }} />
             </CustomTabPanel>
             <CustomTabPanel value={value} index={1}>
-                Item Two
+                <ImageUploader onValueChange={(newValue: string) => {
+                    setImageUrl(newValue);
+                    onImageUrlChange(newValue);
+                }}/>
             </CustomTabPanel>
             <CustomTabPanel value={value} index={2}>
                 Item Three
