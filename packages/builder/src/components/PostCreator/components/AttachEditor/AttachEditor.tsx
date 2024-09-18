@@ -13,9 +13,11 @@ interface AttachEditorProps {
     onAttachmentsAdd: (files: ClientFileDescription[]) => void;
     onAttachmentRemove: (file: FileDescription) => void;
     uploadedFiles: FileDescription[];
+    multiple?: boolean;
+    fileInputAccept?: string;
 }
 
-export const AttachEditor = ({ onAttachmentsAdd, onAttachmentRemove, uploadedFiles }: AttachEditorProps) => {
+export const AttachEditor = ({ onAttachmentsAdd, onAttachmentRemove, uploadedFiles, multiple = true, fileInputAccept }: AttachEditorProps) => {
     const fileInputRef = useRef<HTMLInputElement>(null);
 
     const handleFileInputChange = useCallback((event: SyntheticEvent<HTMLInputElement>) => {
@@ -47,16 +49,17 @@ export const AttachEditor = ({ onAttachmentsAdd, onAttachmentRemove, uploadedFil
 
     return (
         <Box sx={{ marginTop: (theme) => theme.spacing(2), display: 'flex', flexDirection: 'column' }}>
-            <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+            <Box sx={{ display: 'flex', justifyContent: 'center' }}>
                 <Button color='success' variant="contained" startIcon={<AddIcon />} onClick={handleAddFilesClick}>Upload from your device</Button>
                 <input
                     hidden
-                    multiple
+                    multiple={multiple}
                     ref={fileInputRef}
                     type='file'
                     className='custom-file-input'
                     id='customFile'
                     onChange={handleFileInputChange}
+                    accept={fileInputAccept}
                 />
             </Box>
             <AttachmentsViewer files={uploadedFiles} onDelete={handleAttachmentDelete} />

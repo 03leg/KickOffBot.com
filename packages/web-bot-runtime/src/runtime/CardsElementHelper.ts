@@ -269,6 +269,10 @@ export class CardsElementHelper {
       .sourceDescription as StaticSourceDescription;
 
     if (this._element.selectableCards || this._element.useCardButtons) {
+      if (isNil(this._element.variableId)) {
+        return;
+      }
+
       const variable = this._utils.getVariableById(this._element.variableId);
 
       if (!this._element.multipleChoice || this._element.useCardButtons) {

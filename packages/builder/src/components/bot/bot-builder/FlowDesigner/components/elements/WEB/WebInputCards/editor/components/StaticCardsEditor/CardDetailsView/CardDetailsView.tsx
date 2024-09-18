@@ -50,20 +50,20 @@ export const CardDetailsView = ({ item, onChange }: Props) => {
     }, [closeDialog, item, onChange]);
 
     const handleSelectImage = useCallback(() => {
-        let imageUrl: string | undefined;
+        let imageUrlResult: string | undefined;
 
         openDialog({
-            content: <ImageSelector onImageUrlChange={(url: string) => {
-                imageUrl = url;
+            content: <ImageSelector initImgUrl={imageUrl} onImageUrlChange={(url: string) => {
+                imageUrlResult = url;
             }} />,
             dialogMaxWidth: 'lg',
             title: 'Select image',
             buttons: [
-                <Button variant='contained' key={'ok'} color='success' onClick={() => handleUpdateImageUrl(imageUrl)}>Select</Button>
+                <Button variant='contained' key={'ok'} color='success' onClick={() => handleUpdateImageUrl(imageUrlResult)}>Select</Button>
             ],
         });
 
-    }, [handleUpdateImageUrl, openDialog]);
+    }, [handleUpdateImageUrl, imageUrl, openDialog]);
 
     const handleDescriptionChange = useCallback((jsonState: string, htmlContent: string) => {
         throwIfNil(item);
