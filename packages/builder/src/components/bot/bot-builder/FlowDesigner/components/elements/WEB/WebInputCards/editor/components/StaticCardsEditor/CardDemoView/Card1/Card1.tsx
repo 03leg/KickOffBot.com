@@ -1,6 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 'use client'
-import { ButtonElement, WebCardDescriptionClassic } from '@kickoffbot.com/types';
+import { ButtonElement } from '@kickoffbot.com/types';
 import React from 'react';
 import { useCard1Styles } from './Card1.style';
 import { Box, Button, Card, CardActions, CardContent, CardProps, styled } from '@mui/material';
@@ -28,7 +28,7 @@ const SelectableChatCard1 = styled(Card)<CardProps>(() => ({
     },
     '&.Mui-selected': {
         '& img': {
-            padding: '3px 3px 0px 3px'
+            padding: '3px'
         },
         boxShadow: '0px 0px 0px 2px #1976d2 inset'
     }

@@ -95,7 +95,7 @@ export const CardsBoxRequest = ({ request }: Props) => {
                     (!cardsElementRequestDescription.selectableCards && cardsElementRequestDescription.showSendButton)
                 ) &&
                 <Box sx={{ display: 'flex', justifyContent: 'flex-end', marginTop: 2 }}>
-                    <Button disabled={selectedCards.length === 0 && cardsElementRequestDescription.useCardButtons !== true && cardsElementRequestDescription.showSendButton !== true} sx={{ textTransform: 'none' }} variant='contained' onClick={() => sendResponse()}>
+                    <Button disabled={selectedCards.length === 0 && cardsElementRequestDescription.selectableCards} sx={{ textTransform: 'none' }} variant='contained' onClick={() => sendResponse()}>
                         {sendButtonText}
                     </Button>
                 </Box>
