@@ -1,14 +1,15 @@
 /* eslint-disable @next/next/no-img-element */
 'use client'
-import { ButtonElement } from '@kickoffbot.com/types';
+import { ButtonElement, UnsplashPhoto } from '@kickoffbot.com/types';
 import React from 'react';
 import { useCard1Styles } from './Card1.style';
 import { Box, Button, Card, CardActions, CardContent, CardProps, styled } from '@mui/material';
 import { CardSelectionMark } from './CardSelectionMark';
+import { Card1Image } from './Card1Image';
 
 
 interface Props {
-    card: { imgUrl?: string, htmlDescription?: string };
+    card: { image?: string | UnsplashPhoto, htmlDescription?: string };
     selected?: boolean;
     onSelectedChange?: (newValue: boolean) => void;
     isLast: boolean;
@@ -18,19 +19,23 @@ interface Props {
     onButtonClick?: (button: ButtonElement) => void;
 }
 
-const SelectableChatCard1 = styled(Card)<CardProps>(() => ({
+const SelectableChatCard1 = styled(Card)<CardProps>(({ theme }) => ({
     position: 'relative',
     boxShadow: '0px 4px 6px rgba(0, 0, 0, 0.1), 0px 1px 3px rgba(0, 0, 0, 0.08)',
     cursor: 'pointer',
     '&:hover': {
-
         boxShadow: '0px 10px 20px rgba(0, 0, 0, 0.25), 0px 5px 10px rgba(0, 0, 0, 0.15)'
     },
     '&.Mui-selected': {
         '& img': {
-            padding: '3px'
+            // border: '2px solid #1976d2',
+            // borderBottom: '0px',
+            // borderTopLeftRadius: theme.spacing(0.5),
+            // boxShadow: '0px 0px 0px 2px #1976d2 inset'
+
         },
-        boxShadow: '0px 0px 0px 2px #1976d2 inset'
+        // boxShadow: '0px 0px 0px 2px #1976d2 inset'
+        border: '3px solid #1976d2'
     }
 }));
 
@@ -50,20 +55,12 @@ const ChatCardContent = styled(CardContent)(({ theme }) => ({
 export const Card1 = ({ card, selected, onSelectedChange, isLast, selectableCard, cardButtons, onButtonClick }: Props) => {
     const { classes, cx } = useCard1Styles();
 
-
-
     return (
         <Box sx={{ marginRight: isLast ? 0 : 1 }}>
             {selectableCard &&
                 <SelectableChatCard1 className={cx(classes.root, selected ? 'Mui-selected' : '')} onClick={() => onSelectedChange?.(!selected)}>
                     {selected && <CardSelectionMark />}
-                    {card.imgUrl && <img
-                        className={classes.img}
-                        src={card.imgUrl}
-                        srcSet={card.imgUrl}
-                        loading="lazy"
-                        alt=""
-                    />}
+                    <Card1Image image={card.image} />
 
                     {card.htmlDescription && <ChatCardContent>
                         <div dangerouslySetInnerHTML={{ __html: card.htmlDescription }}>
@@ -73,13 +70,7 @@ export const Card1 = ({ card, selected, onSelectedChange, isLast, selectableCard
             }
             {!selectableCard &&
                 <NotSelectableChatCard1 className={cx(classes.root)}>
-                    {card.imgUrl && <img
-                        className={classes.img}
-                        src={card.imgUrl}
-                        srcSet={card.imgUrl}
-                        loading="lazy"
-                        alt=""
-                    />}
+                    <Card1Image image={card.image} />
 
                     {card.htmlDescription && <ChatCardContent>
                         <div dangerouslySetInnerHTML={{ __html: card.htmlDescription }}>
