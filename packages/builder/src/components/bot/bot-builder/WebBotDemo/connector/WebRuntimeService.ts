@@ -4,9 +4,10 @@ import {
   WebBotResponse,
 } from "@kickoffbot.com/types";
 import axios from "axios";
+import { env } from "~/env.mjs";
 
 export class WebRuntimeService {
-  private static host = "http://localhost:3001";
+  private static host = env.NEXT_PUBLIC_WEB_BOT_RUNTIME_HOST;
 
   public async uploadDemoProject(
     projectId: string,
