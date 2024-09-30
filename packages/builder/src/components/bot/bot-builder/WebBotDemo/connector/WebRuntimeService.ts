@@ -1,7 +1,6 @@
 import {
   BotProject,
   ChatItemWebRuntime,
-  RequestDescriptionWebRuntime,
   WebBotResponse,
 } from "@kickoffbot.com/types";
 import axios from "axios";
