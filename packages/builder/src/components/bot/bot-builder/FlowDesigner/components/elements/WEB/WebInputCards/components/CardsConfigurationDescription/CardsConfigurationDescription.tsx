@@ -64,7 +64,7 @@ export const CardsConfigurationDescription = ({ element }: Props) => {
                             cardButtons={[]}
                             isLast={index === (element.sourceDescription as StaticSourceDescription).cards.length - 1}
                             key={card.id}
-                            card={{ ...card, imgUrl: getImageSrc(card.image) }}
+                            card={card}
                             selectableCard={false} />
                     )}
                 </Box>

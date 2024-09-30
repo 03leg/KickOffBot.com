@@ -5,8 +5,12 @@ import { useEffect } from "react";
 import { createApi } from "unsplash-js";
 import { Random } from "unsplash-js/dist/methods/photos/types";
 
+const origin =
+  process.env.VERCEL_URL ??
+  `http://localhost:3000`;
+
 const browserApi = createApi({
-  apiUrl: "http://localhost:3000/api/unsplash-proxy",
+  apiUrl: origin + "/api/unsplash-proxy",
 });
 
 export const useUnsplash = (newQuery: string | null) => {
