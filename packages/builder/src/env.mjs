@@ -43,6 +43,7 @@ export const env = createEnv({
     NEXT_PUBLIC_GOOGLE_ANALYTICS_ID: z.string(),
     NEXT_PUBLIC_GIPHY_API_KEY: z.string(),
     NEXT_PUBLIC_UNSPLASH_APP_NAME: z.string(),
+    NEXT_PUBLIC_WEB_BOT_RUNTIME_HOST: z.string(),
   },
 
   /**
@@ -67,6 +68,7 @@ export const env = createEnv({
     NEXT_PUBLIC_GIPHY_API_KEY: process.env.NEXT_PUBLIC_GIPHY_API_KEY,
     NEXT_PUBLIC_UNSPLASH_APP_NAME: process.env.NEXT_PUBLIC_UNSPLASH_APP_NAME,
     UNSPLASH_API_KEY: process.env.UNSPLASH_API_KEY,
+    NEXT_PUBLIC_WEB_BOT_RUNTIME_HOST: process.env.NEXT_PUBLIC_WEB_BOT_RUNTIME_HOST,
   },
   /**
    * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation.
