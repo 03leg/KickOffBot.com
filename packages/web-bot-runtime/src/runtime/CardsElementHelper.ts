@@ -104,7 +104,7 @@ export class CardsElementHelper {
           dataSourceDescription.cardDescription.value,
           index,
         ),
-        imgUrl: this.parseText(
+        image: this.parseText(
           card,
           dataSourceDescription.cardDescription.imgUrl,
           index,
@@ -160,9 +160,12 @@ export class CardsElementHelper {
       const newItem: WebCardChatItem = {
         id: cardDescription.id,
         value: this.getParsedText(cardDescription.title),
-        imgUrl: this.getParsedText(
-          CardsElementHelper.getImageSrc(cardDescription.image),
-        ),
+        image:
+          cardDescription.image && typeof cardDescription.image === 'string'
+            ? this.getParsedText(
+                CardsElementHelper.getImageSrc(cardDescription.image),
+              )
+            : cardDescription.image,
         htmlDescription: this.getParsedText(cardDescription.htmlDescription),
       };
 

@@ -6,7 +6,7 @@ export const useCard1Styles = makeStyles()(({ spacing }) => ({
     flexDirection: "column",
     height: "100%",
     maxWidth: "250px",
-    width: 'max-content',
+    width: "max-content",
 
     "& p": {
       margin: 0,
@@ -17,5 +17,14 @@ export const useCard1Styles = makeStyles()(({ spacing }) => ({
     height: "auto",
     objectFit: "contain",
     boxSizing: "border-box",
+  },
+  unsplashImageContainer: {
+    position: "absolute",
+    bottom: 6,
+    left: 0,
+    color: "white",
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
+    padding: spacing(0.5),
+    "& a": { color: "white" },
   },
 }));

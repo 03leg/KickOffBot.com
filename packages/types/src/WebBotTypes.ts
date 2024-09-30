@@ -155,7 +155,7 @@ export interface DateTimeRequestElement extends RequestElementBase {
 export interface WebCardChatItem {
   id: string;
   value?: string;
-  imgUrl?: string;
+  image?: string | UnsplashPhoto;
   htmlDescription?: string;
 }
 
