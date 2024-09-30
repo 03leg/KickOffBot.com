@@ -20,7 +20,7 @@ export const StaticCardsEditor = ({ element }: Props) => {
     const handleNewCard = useCallback(() => {
         const newCard: WebCardDescriptionClassic = {
             id: v4(),
-            imgUrl: '',
+            image: '',
             title: getUniqueCardName(items.map(c => c.title ?? ''), 'New Card #'),
         }
         setItems([...items, newCard]);

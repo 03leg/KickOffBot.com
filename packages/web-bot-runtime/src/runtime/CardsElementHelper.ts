@@ -7,6 +7,7 @@ import {
   ElementType,
   FlowDesignerLink,
   StaticSourceDescription,
+  UnsplashPhoto,
   VariableType,
   WebCardChatItem,
   WebCardsSourceStrategy,
@@ -122,6 +123,22 @@ export class CardsElementHelper {
     return result;
   }
 
+  private static getImageSrc(
+    image?: string | UnsplashPhoto,
+  ): string | undefined {
+    if (!image) {
+      return undefined;
+    }
+    if (typeof image === 'string') {
+      return image;
+    }
+    if (image.source === 'unsplash') {
+      return image.regularSrc;
+    }
+
+    throw new Error('Unsupported image source');
+  }
+
   private getStaticCards(): WebCardChatItem[] {
     const result = [];
     const dataSourceDescription = this._element
@@ -143,7 +160,9 @@ export class CardsElementHelper {
       const newItem: WebCardChatItem = {
         id: cardDescription.id,
         value: this.getParsedText(cardDescription.title),
-        imgUrl: this.getParsedText(cardDescription.imgUrl),
+        imgUrl: this.getParsedText(
+          CardsElementHelper.getImageSrc(cardDescription.image),
+        ),
         htmlDescription: this.getParsedText(cardDescription.htmlDescription),
       };
 

@@ -201,7 +201,7 @@ export interface CardVisibilityCondition {
 
 export interface WebCardDescriptionClassic {
   id: string;
-  imgUrl?: string;
+  image?: string | UnsplashPhoto;
   title?: string;
   htmlDescription?: string;
   jsonDescription?: string;
@@ -243,4 +243,17 @@ export interface CardsUserResponse {
   selectedCards: Pick<WebCardChatItem, "id" | "value">[];
   clickedButton?: ButtonElement;
   actionName?: string;
+}
+
+export interface ExportedImage {
+  source: "unsplash";
+}
+
+export interface UnsplashPhoto extends ExportedImage {
+  regularSrc: string;
+  smallSrc: string;
+  thumbSrc: string;
+  id: string;
+  authorName: string;
+  authorNickname: string;
 }
