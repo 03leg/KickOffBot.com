@@ -105,7 +105,7 @@ export const botManagementRouter = createTRPCRouter({
       result.push(bot);
     }
 
-    return botDescriptions;
+    return result;
   }),
   getBotContent: protectedProcedure
     .input(IdModelScheme)
