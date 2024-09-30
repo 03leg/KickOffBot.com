@@ -6,6 +6,7 @@ import { Card1 } from '../../editor/components/StaticCardsEditor/CardDemoView/Ca
 import { ButtonsInput } from '../../../../ButtonsInput/ButtonsInput';
 import { useVariableInTextStyles } from '../../../../ChangeVariable/useContentWithVariable';
 import { useFlowDesignerStore } from '~/components/bot/bot-builder/store';
+import { getImageSrc } from '../../editor/getImageSrc';
 
 interface Props {
     element: WebInputCardsUIElement;
@@ -63,7 +64,7 @@ export const CardsConfigurationDescription = ({ element }: Props) => {
                             cardButtons={[]}
                             isLast={index === (element.sourceDescription as StaticSourceDescription).cards.length - 1}
                             key={card.id}
-                            card={card}
+                            card={{ ...card, imgUrl: getImageSrc(card.image) }}
                             selectableCard={false} />
                     )}
                 </Box>

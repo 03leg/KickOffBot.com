@@ -1,5 +1,5 @@
 /* eslint-disable @next/next/no-img-element */
-import { LogicalOperator, WebCardDescriptionClassic } from '@kickoffbot.com/types';
+import { LogicalOperator, UnsplashPhoto, WebCardDescriptionClassic } from '@kickoffbot.com/types';
 import React, { useCallback, useEffect } from 'react';
 import { useCardDetailsViewStyles } from './CardDetailsView.style';
 import { Box, Button, Checkbox, FormControlLabel, Typography } from '@mui/material';
@@ -9,22 +9,25 @@ import { throwIfNil } from '~/utils/guard';
 import { WebTextEditor } from '~/components/commons/WebTextEditor';
 import { AppTextField } from '~/components/commons/AppTextField';
 import { ConditionEditor } from '../../../../../../Condition/Editor';
+import { getImageSrc } from '../../../getImageSrc';
 
 interface Props {
     item?: WebCardDescriptionClassic;
     onChange: () => void;
 }
 
+
+
 export const CardDetailsView = ({ item, onChange }: Props) => {
     const { classes } = useCardDetailsViewStyles();
     const { openDialog, closeDialog } = useAppDialog();
-    const [imageUrl, setImageUrl] = React.useState<string | undefined>(item?.imgUrl);
+    const [imageUrl, setImageUrl] = React.useState<string | undefined>(getImageSrc(item?.image));
     const [title, setTitle] = React.useState<string>(item?.title ?? '');
     const [useVisibilityConditions, setUseVisibilityConditions] = React.useState<boolean>(item?.useVisibilityConditions ?? false);
 
     useEffect(() => {
-        setImageUrl(item?.imgUrl);
-    }, [item?.imgUrl]);
+        setImageUrl(getImageSrc(item?.image));
+    }, [item?.image]);
 
     useEffect(() => {
         setTitle(item?.title ?? '');
@@ -35,14 +38,16 @@ export const CardDetailsView = ({ item, onChange }: Props) => {
     }, [item?.useVisibilityConditions]);
 
 
-    const handleUpdateImageUrl = useCallback((imageUrl?: string) => {
+    const handleUpdateImageUrl = useCallback((image?: string | UnsplashPhoto) => {
         throwIfNil(item);
 
         closeDialog();
 
-        if (imageUrl) {
-            setImageUrl(imageUrl);
-            item.imgUrl = imageUrl;
+        if (image) {
+            const imageSrc = typeof image === 'string' ? image : image.regularSrc;
+
+            setImageUrl(imageSrc);
+            item.image = image;
             onChange();
         }
 
@@ -50,10 +55,10 @@ export const CardDetailsView = ({ item, onChange }: Props) => {
     }, [closeDialog, item, onChange]);
 
     const handleSelectImage = useCallback(() => {
-        let imageUrlResult: string | undefined;
+        let imageUrlResult: string | UnsplashPhoto | undefined;
 
         openDialog({
-            content: <ImageSelector initImgUrl={imageUrl} onImageUrlChange={(url: string) => {
+            content: <ImageSelector initImgUrl={imageUrl} onImageUrlChange={(url: string | UnsplashPhoto) => {
                 imageUrlResult = url;
             }} onSaveAndClose={() => handleUpdateImageUrl(imageUrlResult)} />,
             dialogMaxWidth: 'lg',

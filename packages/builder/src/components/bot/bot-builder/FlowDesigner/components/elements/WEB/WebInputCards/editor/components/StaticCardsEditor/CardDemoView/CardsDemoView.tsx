@@ -58,7 +58,7 @@ export const CardsDemoView = ({ element }: Props) => {
             const card: WebCardDescriptionClassic = {
                 id: v4(),
                 title: description.cardDescription?.value ? getTextForContextObject(item, description.cardDescription.value, index) : 'Unknown',
-                imgUrl: description.cardDescription?.imgUrl ? getTextForContextObject(item, description.cardDescription.imgUrl, index) : 'Unknown',
+                image: description.cardDescription?.imgUrl ? getTextForContextObject(item, description.cardDescription.imgUrl, index) : 'Unknown',
                 htmlDescription: description.cardDescription?.htmlDescription ? getTextForContextObject(item, description.cardDescription.htmlDescription, index) : 'Unknown',
             };
 
