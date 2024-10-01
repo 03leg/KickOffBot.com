@@ -41,10 +41,17 @@ export class WebBotRuntimeService {
   }
 
   async startBot(projectId: string) {
+    if (!projectId) {
+      throw new Error('InvalidOperationError: projectId is null');
+    }
+
     const projectFromDb = await BotStore.getActualBotProjectById(projectId);
 
     if (!projectFromDb) {
-      throw new Error('InvalidOperationError: Failed to get project from db');
+      throw new Error(
+        'InvalidOperationError: Failed to get project from db. projectId: ' +
+          projectId,
+      );
     }
 
     const runtime = new WebBotRuntime(projectFromDb);
