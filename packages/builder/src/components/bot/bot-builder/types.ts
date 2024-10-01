@@ -59,4 +59,8 @@ export interface FlowDesignerState {
   platform: BotPlatform;
   showWebBotDemo: boolean;
   toggleShowWebBotDemo: VoidFunction;
+
+
+  showPublishWebBotDialog: boolean;
+  togglePublishWebBotDialog: VoidFunction;
 }

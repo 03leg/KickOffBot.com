@@ -4,13 +4,10 @@ import React, { useCallback } from "react";
 import { useEffect } from "react";
 import { createApi } from "unsplash-js";
 import { Random } from "unsplash-js/dist/methods/photos/types";
-
-const origin =
-  process.env.VERCEL_URL ??
-  `http://localhost:3000`;
+import { env } from "~/env.mjs";
 
 const browserApi = createApi({
-  apiUrl: origin + "/api/unsplash-proxy",
+  apiUrl: env.NEXT_PUBLIC_APP_URL + "/api/unsplash-proxy",
 });
 
 export const useUnsplash = (newQuery: string | null) => {

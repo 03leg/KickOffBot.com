@@ -255,4 +255,9 @@ export const useFlowDesignerStore = create<FlowDesignerState>()((set, get) => ({
     set((state) => {
       return { showWebBotDemo: !state.showWebBotDemo };
     }),
+  showPublishWebBotDialog: false,
+  togglePublishWebBotDialog: () =>
+    set((state) => ({
+      showPublishWebBotDialog: !state.showPublishWebBotDialog,
+    })),
 }));

@@ -23,12 +23,14 @@ import { LoadingIndicator } from '~/components/commons/LoadingIndicator';
 import { ProjectViewer } from '~/components/bot/bot-builder/ProjectViewer';
 import { AppDialogProvider } from '~/components/bot/bot-builder/Dialog/AppDialogProvider';
 import { WebBotDemo } from '~/components/bot/bot-builder/WebBotDemo';
+import ShareIcon from '@mui/icons-material/Share';
+import { PublishWebBotDialog } from '~/components/bot/bot-builder/PublishWebBotDialog';
 
 export default function EditBotContent() {
     const router = useRouter()
     const flowDesignerTransformDescription = React.useRef<TransformDescription | null>(null);
     const [activeDraggableItem, setActiveDraggableItem] = useState<Active | null>();
-    const { platform, toggleShowWebBotDemo, blocks, updateBlock, addBlock, project, initProject, projectIsInitialized, setViewPortOffset, updateAllLinks, toggleVariablesViewer, toggleRuntimeEditor, destroyProject } = useFlowDesignerStore((state) => ({
+    const { togglePublishWebBotDialog, platform, toggleShowWebBotDemo, blocks, updateBlock, addBlock, project, initProject, projectIsInitialized, setViewPortOffset, updateAllLinks, toggleVariablesViewer, toggleRuntimeEditor, destroyProject } = useFlowDesignerStore((state) => ({
         blocks: state.project?.blocks ?? [],
         addBlock: state.addBlock,
         updateBlock: state.updateBlock,
@@ -41,7 +43,8 @@ export default function EditBotContent() {
         toggleRuntimeEditor: state.toggleRuntimeEditor,
         destroyProject: state.destroyProject,
         platform: state.platform,
-        toggleShowWebBotDemo: state.toggleShowWebBotDemo
+        toggleShowWebBotDemo: state.toggleShowWebBotDemo,
+        togglePublishWebBotDialog: state.togglePublishWebBotDialog
     }));
     const { mutateAsync, isLoading: isLoadingSaveBotDescription } = api.botManagement.saveBotContent.useMutation();
     const { changeTransformDescription } = useFlowDesignerStore((state) => ({ changeTransformDescription: state.changeTransformDescription }));
@@ -317,6 +320,11 @@ export default function EditBotContent() {
         toggleShowWebBotDemo();
     }, [toggleShowWebBotDemo]);
 
+
+    const handleShowShareWebBotWindow = useCallback(() => {
+        togglePublishWebBotDialog();
+    }, [togglePublishWebBotDialog]);
+
     return (
         <AppDialogProvider>
             <ConfirmProvider>
@@ -327,6 +335,11 @@ export default function EditBotContent() {
                             {platform === BotPlatform.Telegram &&
                                 <Button variant="outlined" startIcon={<RouterIcon />} onClick={toggleRuntimeEditor}>
                                     start&stop your bots
+                                </Button>
+                            }
+                            {platform === BotPlatform.WEB &&
+                                <Button variant="outlined" sx={{ textTransform: 'none' }} startIcon={<ShareIcon />} onClick={handleShowShareWebBotWindow}>
+                                    Publish
                                 </Button>
                             }
                         </Box>
@@ -372,6 +385,7 @@ export default function EditBotContent() {
                         </DndContext>
                         <ProjectViewer />
                         <RuntimeEditor projectId={projectIdFromQuery} />
+                        {platform === BotPlatform.WEB && <PublishWebBotDialog projectId={projectIdFromQuery} />}
                         {platform === BotPlatform.WEB && <WebBotDemo />}
                     </Box>
 
