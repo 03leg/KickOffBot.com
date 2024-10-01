@@ -1,5 +1,10 @@
-import { BotProject, WebBotResponse } from '@kickoffbot.com/types';
+import {
+  BotProject,
+  StartSavedBotResponse,
+  WebBotResponse,
+} from '@kickoffbot.com/types';
 import { Injectable } from '@nestjs/common';
+import { BotStore } from 'src/runtime/BotStore';
 import { WebBotRuntime } from 'src/runtime/WebBotRuntime';
 import { v4 } from 'uuid';
 
@@ -31,6 +36,28 @@ export class WebBotRuntimeService {
     };
 
     this._runtimeMap.set(demoProjectId, runtime);
+
+    return response;
+  }
+
+  async startBot(projectId: string) {
+    const projectFromDb = await BotStore.getActualBotProjectById(projectId);
+
+    if (!projectFromDb) {
+      throw new Error('InvalidOperationError: Failed to get project from db');
+    }
+
+    const runtime = new WebBotRuntime(projectFromDb);
+
+    const newChatItems = await runtime.startBot();
+    const runtimeProjectId = v4();
+
+    const response: StartSavedBotResponse = {
+      newItems: newChatItems,
+      runtimeProjectId,
+    };
+
+    this._runtimeMap.set(runtimeProjectId, runtime);
 
     return response;
   }

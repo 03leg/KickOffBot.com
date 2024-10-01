@@ -17,8 +17,14 @@ export class WebBotRuntimeController {
   }
 
   @Get('start-demo-bot')
-  async startBot(@Query('demoProjectId') demoProjectId: string) {
+  async startDemoBot(@Query('demoProjectId') demoProjectId: string) {
     const result = await this.botRuntimeService.startDemoBot(demoProjectId);
+    return result;
+  }
+
+  @Get('start-bot')
+  async startBot(@Query('projectId') projectId: string) {
+    const result = await this.botRuntimeService.startBot(projectId);
     return result;
   }
 
