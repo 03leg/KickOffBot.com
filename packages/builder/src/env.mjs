@@ -44,6 +44,7 @@ export const env = createEnv({
     NEXT_PUBLIC_GIPHY_API_KEY: z.string(),
     NEXT_PUBLIC_UNSPLASH_APP_NAME: z.string(),
     NEXT_PUBLIC_WEB_BOT_RUNTIME_HOST: z.string(),
+    NEXT_PUBLIC_APP_URL: z.string(),
   },
 
   /**
@@ -64,6 +65,7 @@ export const env = createEnv({
     SUPABASE_BUCKET_ID: process.env.SUPABASE_BUCKET_ID,
     NEXT_PUBLIC_GOOGLE_API_KEY: process.env.NEXT_PUBLIC_GOOGLE_API_KEY,
     APP_URL: process.env.APP_URL,
+    NEXT_PUBLIC_APP_URL: process.env.NEXT_PUBLIC_APP_URL,
     NEXT_PUBLIC_GOOGLE_ANALYTICS_ID: process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS_ID,
     NEXT_PUBLIC_GIPHY_API_KEY: process.env.NEXT_PUBLIC_GIPHY_API_KEY,
     NEXT_PUBLIC_UNSPLASH_APP_NAME: process.env.NEXT_PUBLIC_UNSPLASH_APP_NAME,
