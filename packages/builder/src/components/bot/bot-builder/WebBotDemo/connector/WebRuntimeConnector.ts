@@ -16,13 +16,13 @@ import { throwIfNil } from "~/utils/guard";
 
 export class WebRuntimeConnector {
   private _storeApi: ChatStoreState;
-  private _botProject: BotProject;
+  private _botProject?: BotProject;
   private _httpService = new WebRuntimeService();
   private _projectId: string;
-  private _demoProjectId: string | null = null;
+  private _runtimeProjectId: string | null = null;
 
   constructor(
-    project: BotProject,
+    project: BotProject | undefined,
     projectId: string,
     storeApi: ChatStoreState
   ) {
@@ -31,20 +31,34 @@ export class WebRuntimeConnector {
     this._projectId = projectId;
   }
 
+  // TODO: Add error handling
   async connect() {
     this._storeApi.clearHistory();
 
     this._storeApi.setLoadingValue(true);
-    this._demoProjectId = await this._httpService.uploadDemoProject(
-      this._projectId,
-      this._botProject
-    );
 
-    if (this._demoProjectId == null) {
-      return false;
+    let response: WebBotResponse | null = null;
+
+    if (this._botProject) {
+      this._runtimeProjectId = await this._httpService.uploadDemoProject(
+        this._projectId,
+        this._botProject
+      );
+      if (this._runtimeProjectId == null) {
+        return false;
+      }
+  
+      response = await this._httpService.startDemoBot(
+        this._runtimeProjectId
+      );
+
+    } else {
+      const startSavedBotResponse = await this._httpService.startSavedBot(this._projectId);
+      throwIfNil(startSavedBotResponse?.runtimeProjectId);
+      
+      this._runtimeProjectId = startSavedBotResponse.runtimeProjectId;
+      response = startSavedBotResponse;
     }
-
-    const response = await this._httpService.startDemoBot(this._demoProjectId);
 
     if (response) {
       await this.toStore(response);
@@ -113,7 +127,7 @@ export class WebRuntimeConnector {
     chatItemRequest: ChatItemWebRuntime,
     userData: UserResponseDescriptionWebRuntime
   ) {
-    throwIfNil(this._demoProjectId);
+    throwIfNil(this._runtimeProjectId);
 
     this._storeApi.removeChatItem(chatItemRequest.id);
     this._storeApi.sendUserResponse(chatItemRequest.uiElementId, {
@@ -126,7 +140,7 @@ export class WebRuntimeConnector {
     this._storeApi.setLoadingValue(true);
 
     const response = await this._httpService.sendUserResponse(
-      this._demoProjectId,
+      this._runtimeProjectId,
       chatItemRequest,
       userData.data
     );

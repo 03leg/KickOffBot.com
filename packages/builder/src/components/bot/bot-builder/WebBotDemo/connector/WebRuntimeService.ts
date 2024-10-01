@@ -1,6 +1,7 @@
 import {
   BotProject,
   ChatItemWebRuntime,
+  StartSavedBotResponse,
   WebBotResponse,
 } from "@kickoffbot.com/types";
 import axios from "axios";
@@ -28,6 +29,19 @@ export class WebRuntimeService {
     }
   }
 
+  public async startSavedBot(projectId: string) {
+    try {
+      const startResponse = await axios.get(
+        WebRuntimeService.host +
+          `/api/web-bot-runtime/start-bot?projectId=${projectId}`
+      );
+
+      return startResponse.data as StartSavedBotResponse;
+    } catch (error) {
+      return null;
+    }
+  }
+
   async startDemoBot(demoProjectId: string) {
     try {
       const startResponse = await axios.get(
@@ -48,7 +62,8 @@ export class WebRuntimeService {
   ) {
     try {
       const startResponse = await axios.post(
-        WebRuntimeService.host + `/api/web-bot-runtime/next-step?demoProjectId=${demoProjectId}`,
+        WebRuntimeService.host +
+          `/api/web-bot-runtime/next-step?demoProjectId=${demoProjectId}`,
         {
           elementId: chatItemRequest.uiElementId,
           value,

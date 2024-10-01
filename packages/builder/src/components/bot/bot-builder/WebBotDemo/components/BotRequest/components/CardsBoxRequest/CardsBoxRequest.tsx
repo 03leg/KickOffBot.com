@@ -68,26 +68,28 @@ export const CardsBoxRequest = ({ request }: Props) => {
     }, [request]);
 
     return (
-        <Box sx={{ width: '100%', display: 'flex', flexDirection: 'column', padding: 1, boxSizing: 'border-box' }}>
-            <Box sx={{ display: 'flex', flexDirection: 'row', padding: 1, overflowY: 'auto' }}>
-                {
-                    cardsElementRequestDescription.cardItems.map((card, index) => {
-                        return <Card1
-                            selectableCard={cardsElementRequestDescription.selectableCards}
-                            useCardButtons={cardsElementRequestDescription.useCardButtons}
-                            cardButtons={cardsElementRequestDescription.useCardButtons ? cardsElementRequestDescription.cardButtons : undefined}
-                            selected={selectedCards.includes(card)}
-                            onSelectedChange={(newValue) => {
-                                handleSelectedChange(newValue, card);
-                            }}
-                            onButtonClick={(button) => {
-                                handleButtonClick(button, card);
-                            }}
-                            isLast={index === cardsElementRequestDescription.cardItems.length - 1}
-                            key={card.id}
-                            card={card} />
-                    })
-                }
+        <Box data-testid="cards-box-request" sx={{ width: '100%', display: 'flex', flexDirection: 'column', padding: 1, boxSizing: 'border-box' }}>
+            <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+                <Box sx={{ display: 'flex', flexDirection: 'row', padding: 1, overflowY: 'auto' }}>
+                    {
+                        cardsElementRequestDescription.cardItems.map((card, index) => {
+                            return <Card1
+                                selectableCard={cardsElementRequestDescription.selectableCards}
+                                useCardButtons={cardsElementRequestDescription.useCardButtons}
+                                cardButtons={cardsElementRequestDescription.useCardButtons ? cardsElementRequestDescription.cardButtons : undefined}
+                                selected={selectedCards.includes(card)}
+                                onSelectedChange={(newValue) => {
+                                    handleSelectedChange(newValue, card);
+                                }}
+                                onButtonClick={(button) => {
+                                    handleButtonClick(button, card);
+                                }}
+                                isLast={index === cardsElementRequestDescription.cardItems.length - 1}
+                                key={card.id}
+                                card={card} />
+                        })
+                    }
+                </Box>
             </Box>
             {
                 (

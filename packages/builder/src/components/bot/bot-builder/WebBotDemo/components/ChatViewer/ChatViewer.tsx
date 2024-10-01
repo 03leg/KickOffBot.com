@@ -9,8 +9,8 @@ import { BotTyping } from '../BotTyping';
 import { WebRuntimeConnector } from '../../connector/WebRuntimeConnector';
 
 interface Props {
-    project: BotProject;
-    height?: number;
+    project?: BotProject;
+    height?: number | string;
     projectId: string;
 }
 
@@ -24,7 +24,7 @@ export const ChatViewer = ({ project, height, projectId }: Props) => {
     }));
 
     useLayoutEffect(() => {
-        if (!runtimeConnector.current && project) {
+        if (!runtimeConnector.current) {
             runtimeConnector.current = new WebRuntimeConnector(project, projectId, { ...storeState });
 
             void runtimeConnector.current.connect();
@@ -41,7 +41,7 @@ export const ChatViewer = ({ project, height, projectId }: Props) => {
     }, [storeState.chatItems, storeState.botIsTyping, goToBottom]);
 
     return (
-        <Box sx={{ height: height, overflow: 'auto', display: 'flex', flexDirection: 'column' }}>
+        <Box sx={{ height: height, overflow: 'auto', display: 'flex', flexDirection: 'column' }} data-testid="chat-viewer">
             {storeState.chatItems.map(m => {
                 switch (m.itemType) {
                     case ChatItemTypeWebRuntime.BOT_MESSAGE: {

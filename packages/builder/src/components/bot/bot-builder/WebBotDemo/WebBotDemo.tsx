@@ -25,8 +25,6 @@ export const WebBotDemo = () => {
     useLayoutEffect(() => {
         if (!showWebBotDemo) return;
 
-        console.log('Paint #1', containerRef.current?.clientHeight);
-
         const container = document.querySelector('#chat-box-root');
         if (!container) {
             throw new Error('InvalidOperationError');
