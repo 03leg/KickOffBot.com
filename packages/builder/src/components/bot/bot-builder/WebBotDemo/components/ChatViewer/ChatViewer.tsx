@@ -24,13 +24,13 @@ export const ChatViewer = ({ project, height, projectId }: Props) => {
     }));
 
     useLayoutEffect(() => {
-        if (!runtimeConnector.current) {
+        if (!runtimeConnector.current && (projectId || project)) {
             runtimeConnector.current = new WebRuntimeConnector(project, projectId, { ...storeState });
 
             void runtimeConnector.current.connect();
         }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [project]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [project, projectId]);
 
     const goToBottom = useCallback(() => {
         lastChildRef.current?.scrollIntoView({ behavior: 'smooth' });
