@@ -5,7 +5,18 @@
       "blockType": 2,
       "title": "/start",
       "position": { "x": 363, "y": 175 },
-      "elements": [{ "commands": [{ "id": "/start", "command": "/start", "description": "Start the bot" }] }]
+      "elements": [
+        {
+          "type": "telegram-start-commands",
+          "commands": [
+            {
+              "id": "/start",
+              "command": "/start",
+              "description": "Start the bot"
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "a5ef56a5-f4c2-4ca0-9cb8-4f2be9e9a375",
@@ -35,9 +46,18 @@
           "buttonsDescription": {
             "strategy": "manual",
             "buttons": [
-              { "content": "Greece 🇬🇷", "id": "a49c6a51-1adb-497c-8d71-ef6fd68310c7" },
-              { "content": "Italy 🇮🇹", "id": "2f6b0980-0b26-4d54-a12a-6ce500d2a179" },
-              { "content": "USA 🇺🇸", "id": "c7543de5-e127-4be3-9257-0c71efd25302" }
+              {
+                "content": "Greece 🇬🇷",
+                "id": "a49c6a51-1adb-497c-8d71-ef6fd68310c7"
+              },
+              {
+                "content": "Italy 🇮🇹",
+                "id": "2f6b0980-0b26-4d54-a12a-6ce500d2a179"
+              },
+              {
+                "content": "USA 🇺🇸",
+                "id": "c7543de5-e127-4be3-9257-0c71efd25302"
+              }
             ]
           },
           "json": "{\"blocks\":[{\"key\":\"3335k\",\"text\":\"Hey there! Which country's history are you an expert in? 😊\",\"type\":\"unstyled\",\"depth\":0,\"inlineStyleRanges\":[],\"entityRanges\":[],\"data\":{}}],\"entityMap\":{}}",
@@ -67,7 +87,9 @@
             "setDescription": {
               "source": "Variable",
               "variableSourceDescription": {
-                "path": { "variableId": "e5b5927f-df00-4fcb-b3d6-6ff12548dd9a" },
+                "path": {
+                  "variableId": "e5b5927f-df00-4fcb-b3d6-6ff12548dd9a"
+                },
                 "extraFilter": { "logicalOperator": "AND" }
               }
             }
@@ -96,7 +118,9 @@
             "setDescription": {
               "source": "Variable",
               "variableSourceDescription": {
-                "path": { "variableId": "c7800420-93e8-405d-b4f3-a5532798d9a1" },
+                "path": {
+                  "variableId": "c7800420-93e8-405d-b4f3-a5532798d9a1"
+                },
                 "extraFilter": { "logicalOperator": "AND" }
               }
             }
@@ -125,7 +149,9 @@
             "setDescription": {
               "source": "Variable",
               "variableSourceDescription": {
-                "path": { "variableId": "ab747f9b-01ae-4ad5-82e0-5577e16867c1" },
+                "path": {
+                  "variableId": "ab747f9b-01ae-4ad5-82e0-5577e16867c1"
+                },
                 "extraFilter": { "logicalOperator": "AND" }
               }
             }
@@ -184,7 +210,12 @@
                 "mode": "CONDITIONS",
                 "logicalOperator": "AND",
                 "conditions": [
-                  { "id": "89c27526-a0a1-413a-916f-eac6ca0bd3c0", "propertyName": "isCorrect", "operator": "EQUAL_TO", "value": true }
+                  {
+                    "id": "89c27526-a0a1-413a-916f-eac6ca0bd3c0",
+                    "propertyName": "isCorrect",
+                    "operator": "EQUAL_TO",
+                    "value": true
+                  }
                 ]
               }
             }
@@ -194,7 +225,9 @@
           "id": "logic-change-variable-63983627-860c-4f91-bcc6-93d0ee127bc6",
           "type": "logic-change-variable",
           "selectedVariableId": "12309506-ce6c-4399-82c6-b2e83f4040c3",
-          "workflowDescription": { "expression": "<%variables.question_count%> - 1" }
+          "workflowDescription": {
+            "expression": "<%variables.question_count%> - 1"
+          }
         },
         {
           "id": "content-text-c59ffe77-b411-4388-bd7b-814f987f8cf4",
@@ -205,7 +238,10 @@
             "strategy": "fromVariable",
             "buttons": [],
             "variableButtonsSource": {
-              "variableSource": { "variableId": "df37b0b9-a417-4022-a533-23e0c68c6592", "path": "answers" },
+              "variableSource": {
+                "variableId": "df37b0b9-a417-4022-a533-23e0c68c6592",
+                "path": "answers"
+              },
               "customTextTemplate": "<%text%>",
               "answerVariableId": "69dab50a-21d3-4473-b27c-5e596cc03707"
             }
@@ -235,7 +271,10 @@
               "strategy": "fromVariable",
               "buttons": [],
               "variableButtonsSource": {
-                "variableSource": { "variableId": "df37b0b9-a417-4022-a533-23e0c68c6592", "path": "answers" },
+                "variableSource": {
+                  "variableId": "df37b0b9-a417-4022-a533-23e0c68c6592",
+                  "path": "answers"
+                },
                 "customTextTemplate": "<%text%>",
                 "answerVariableId": "69dab50a-21d3-4473-b27c-5e596cc03707"
               }
@@ -435,7 +474,12 @@
           "showButtons": true,
           "buttonsDescription": {
             "strategy": "manual",
-            "buttons": [{ "content": "Yes... Let's go! 💪 ", "id": "95b7622d-1bc7-44e2-90a9-9ac6c68c01c9" }]
+            "buttons": [
+              {
+                "content": "Yes... Let's go! 💪 ",
+                "id": "95b7622d-1bc7-44e2-90a9-9ac6c68c01c9"
+              }
+            ]
           },
           "json": "{\"blocks\":[{\"key\":\"5rgeu\",\"text\":\"Would you like to give it another shot? 🤨\",\"type\":\"unstyled\",\"depth\":0,\"inlineStyleRanges\":[],\"entityRanges\":[],\"data\":{}}],\"entityMap\":{}}",
           "htmlContent": "<p>Would you like to give it another shot? 🤨</p>",
@@ -643,14 +687,62 @@
     }
   ],
   "variables": [
-    { "id": "user_id", "type": "number", "name": "user_id", "value": -1, "isPlatformVariable": true },
-    { "id": "user_first_name", "type": "string", "name": "user_first_name", "value": "", "isPlatformVariable": true },
-    { "id": "user_last_name", "type": "string", "name": "user_last_name", "value": "", "isPlatformVariable": true },
-    { "id": "username", "type": "string", "name": "username", "value": "", "isPlatformVariable": true },
-    { "id": "user_language_code", "type": "string", "name": "user_language_code", "value": "", "isPlatformVariable": true },
-    { "id": "is_premium", "type": "boolean", "name": "is_premium", "value": false, "isPlatformVariable": true },
-    { "id": "d5e84f92-4914-41e9-9457-b1366911b978", "name": "score", "type": "number", "value": 0, "isPlatformVariable": false },
-    { "id": "12309506-ce6c-4399-82c6-b2e83f4040c3", "name": "question_count", "type": "number", "value": "5", "isPlatformVariable": false },
+    {
+      "id": "user_id",
+      "type": "number",
+      "name": "user_id",
+      "value": -1,
+      "isPlatformVariable": true
+    },
+    {
+      "id": "user_first_name",
+      "type": "string",
+      "name": "user_first_name",
+      "value": "",
+      "isPlatformVariable": true
+    },
+    {
+      "id": "user_last_name",
+      "type": "string",
+      "name": "user_last_name",
+      "value": "",
+      "isPlatformVariable": true
+    },
+    {
+      "id": "username",
+      "type": "string",
+      "name": "username",
+      "value": "",
+      "isPlatformVariable": true
+    },
+    {
+      "id": "user_language_code",
+      "type": "string",
+      "name": "user_language_code",
+      "value": "",
+      "isPlatformVariable": true
+    },
+    {
+      "id": "is_premium",
+      "type": "boolean",
+      "name": "is_premium",
+      "value": false,
+      "isPlatformVariable": true
+    },
+    {
+      "id": "d5e84f92-4914-41e9-9457-b1366911b978",
+      "name": "score",
+      "type": "number",
+      "value": 0,
+      "isPlatformVariable": false
+    },
+    {
+      "id": "12309506-ce6c-4399-82c6-b2e83f4040c3",
+      "name": "question_count",
+      "type": "number",
+      "value": "5",
+      "isPlatformVariable": false
+    },
     {
       "id": "e5b5927f-df00-4fcb-b3d6-6ff12548dd9a",
       "name": "italy_questions",
