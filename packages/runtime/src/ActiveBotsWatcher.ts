@@ -23,7 +23,10 @@ export class ActiveBotsWatcher {
 
     this._intervalHandler = setInterval(async () => {
       await this.checkActualBotsState();
-      console.log((this._dbCheckCount++)+'. DB is checked...')
+
+      if (this._dbCheckCount % 750 === 0) {
+        console.log(this._dbCheckCount++ + ". DB is checked...");
+      }
     }, 20 * 1000);
   }
 
@@ -51,8 +54,7 @@ export class ActiveBotsWatcher {
   private async checkWorkflowVersion(activeBots: BotToken[]) {
     const tgTokens = new Set<string>();
     for (const changedBot of activeBots) {
-
-      if(tgTokens.has(changedBot.token)) {
+      if (tgTokens.has(changedBot.token)) {
         continue;
       }
 

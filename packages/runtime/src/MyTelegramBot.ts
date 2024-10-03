@@ -121,7 +121,7 @@ export class MyTelegramBot {
   }
 
   private async handleStart(context: NarrowedContext<Context<Update>, Update.MessageUpdate<Message>>) {
-    console.log("start");
+    console.log(`New user: ${context.from.id}, ${context.from.first_name} ${context.from.last_name}, ${context.from.username}, ${context.from.language_code}, ${context.from.is_premium}`);
     const userContext = new UserContext(this._botProject);
     userContext.updateTelegramVariableBasedOnMessage(context);
 
