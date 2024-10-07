@@ -1,4 +1,4 @@
-import { type ContentTextUIElement, ElementType, type InputTextUIElement, type FlowDesignerUIBlockDescription, type UIElement, type InputButtonsUIElement, type FlowDesignerLink, type ButtonPortDescription, type BotVariable, BlockType, TransformDescription, ChangeVariableUIElement, ConditionUIElement, LogicalOperator, ButtonsSourceStrategy, CommandsUIElement, EditMessageUIElement, RemoveMessageUIElement, VariableConverter, SendTelegramMessageIntegrationUIElement, GoogleSheetsIntegrationUIElement, HTTPRequestIntegrationUIElement, HTTPMethod, VariableType, BotProject, BotPlatform, WebStartCommandsUIElement, WebContentTextUIElement, WebInputTextUIElement, WebInputNumberUIElement, WebInputDateTimeUIElement, AvailableDateTimes, WebInputPhoneUIElement, WebInputEmailUIElement, WebInputButtonsUIElement, WebLogicRemoveMessagesUIElement, WebInputCardsUIElement, WebCardsSourceStrategy } from "@kickoffbot.com/types";
+import { type ContentTextUIElement, ElementType, type InputTextUIElement, type FlowDesignerUIBlockDescription, type UIElement, type InputButtonsUIElement, type FlowDesignerLink, type ButtonPortDescription, type BotVariable, BlockType, TransformDescription, ChangeVariableUIElement, ConditionUIElement, LogicalOperator, ButtonsSourceStrategy, CommandsUIElement, EditMessageUIElement, RemoveMessageUIElement, VariableConverter, SendTelegramMessageIntegrationUIElement, GoogleSheetsIntegrationUIElement, HTTPRequestIntegrationUIElement, HTTPMethod, VariableType, BotProject, BotPlatform, WebStartCommandsUIElement, WebContentTextUIElement, WebInputTextUIElement, WebInputNumberUIElement, WebInputDateTimeUIElement, AvailableDateTimes, WebInputPhoneUIElement, WebInputEmailUIElement, WebInputButtonsUIElement, WebLogicRemoveMessagesUIElement, WebInputCardsUIElement, WebCardsSourceStrategy, WebContentMediaUIElement, MediaViewMode } from "@kickoffbot.com/types";
 import MessageIcon from '@mui/icons-material/Message';
 import TextFieldsIcon from '@mui/icons-material/TextFields';
 import { isNil } from "lodash";
@@ -22,6 +22,7 @@ import PhoneIcon from '@mui/icons-material/Phone';
 import AlternateEmailIcon from '@mui/icons-material/AlternateEmail';
 import SmartButtonIcon from '@mui/icons-material/SmartButton';
 import BadgeIcon from '@mui/icons-material/Badge';
+import ImageIcon from '@mui/icons-material/Image';
 
 export const TELEGRAM_DEFAULT_PROJECT_STATE: BotProject = {
     blocks: [...getTelegramDefaultBlocks()],
@@ -107,6 +108,7 @@ export function getTelegramContentElements() {
 export function getWebContentElements() {
     return [
         { type: ElementType.WEB_CONTENT_MESSAGE, title: 'Message', icon: <MessageIcon /> },
+        { type: ElementType.WEB_CONTENT_IMAGES, title: 'Image(s)', icon: <ImageIcon /> },
     ]
 }
 
@@ -349,6 +351,15 @@ export function getNewUIElementTemplate(id: string, data: DraggableElementData):
                 },
                 selectableCards: false
             };
+            return result;
+        }
+        case ElementType.WEB_CONTENT_IMAGES:{
+            const result: WebContentMediaUIElement = {
+                id,
+                type: ElementType.WEB_CONTENT_IMAGES,
+                medias: [],
+                viewMode: MediaViewMode.HorizontalMediaList
+            }
             return result;
         }
         default: {

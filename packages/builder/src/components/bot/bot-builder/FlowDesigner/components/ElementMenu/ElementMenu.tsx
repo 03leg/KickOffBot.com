@@ -9,7 +9,7 @@ import { useConfirm } from 'material-ui-confirm';
 import { TextContentEditor } from '../elements/TextContent/Editor';
 import { ButtonsEditor } from '../elements/ButtonsInput/Editor';
 import { TextInputEditor } from '../elements/TextInput/Editor';
-import { ChangeVariableUIElement, ConditionUIElement, ContentTextUIElement, EditMessageUIElement, ElementType, GoogleSheetsIntegrationUIElement, HTTPRequestIntegrationUIElement, InputButtonsUIElement, InputTextUIElement, OutputPortDescription, RemoveMessageUIElement, SendTelegramMessageIntegrationUIElement, UIElement, WebContentTextUIElement, WebInputButtonsUIElement, WebInputCardsUIElement, WebInputDateTimeUIElement, WebInputEmailUIElement, WebInputNumberUIElement, WebInputPhoneUIElement, WebInputTextUIElement, WebLogicRemoveMessagesUIElement } from '@kickoffbot.com/types';
+import { ChangeVariableUIElement, ConditionUIElement, ContentTextUIElement, EditMessageUIElement, ElementType, GoogleSheetsIntegrationUIElement, HTTPRequestIntegrationUIElement, InputButtonsUIElement, InputTextUIElement, OutputPortDescription, RemoveMessageUIElement, SendTelegramMessageIntegrationUIElement, UIElement, WebContentMediaUIElement, WebContentTextUIElement, WebInputButtonsUIElement, WebInputCardsUIElement, WebInputDateTimeUIElement, WebInputEmailUIElement, WebInputNumberUIElement, WebInputPhoneUIElement, WebInputTextUIElement, WebLogicRemoveMessagesUIElement, WebMediaType } from '@kickoffbot.com/types';
 import { ChangeVariableEditor } from '../elements/ChangeVariable/Editor';
 import { ConditionEditor } from '../elements/Condition/Editor';
 import { EditMessageEditor } from '../elements/EditMessage/Editor';
@@ -27,6 +27,7 @@ import { WebEmailInputEditor } from '../elements/WEB/WebEmailInput/editor';
 import { WebButtonsInputEditor } from '../elements/WEB/WebButtonsInput/editor';
 import { WebLogicRemoveMessagesEditor } from '../elements/WEB/WebLogicRemoveMessage';
 import { WebInputCardsEditor } from '../elements/WEB/WebInputCards/editor';
+import { WebContentMediaEditor } from '../elements/WEB/WebContentMedia';
 
 
 
@@ -215,6 +216,11 @@ export const ElementMenu = ({ element }: Props) => {
                 const newElement: WebInputCardsUIElement = JSON.parse(JSON.stringify(initialElement));
 
                 return { content: (<WebInputCardsEditor element={newElement} />), title: 'Cards Input Editor', newElement, dialogMaxWidth: "lg" as Breakpoint };
+            }
+            case ElementType.WEB_CONTENT_IMAGES:{
+                const initialElement = elementArg as WebContentMediaUIElement;
+                const newElement: WebContentMediaUIElement = JSON.parse(JSON.stringify(initialElement));
+                return { content: (<WebContentMediaEditor mediaType={WebMediaType.IMAGE} element={newElement} />), title: 'Image(s) Editor', newElement, dialogMaxWidth: "md" as Breakpoint };
             }
             default: {
                 throw new Error('NotImplementedError');

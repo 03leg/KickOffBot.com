@@ -55,16 +55,16 @@ export const CardDetailsView = ({ item, onChange }: Props) => {
     }, [closeDialog, item, onChange]);
 
     const handleSelectImage = useCallback(() => {
-        let imageUrlResult: string | UnsplashPhoto | undefined;
+        let selectedImageResult: string | UnsplashPhoto | undefined;
 
         openDialog({
-            content: <ImageSelector initImgUrl={imageUrl} onImageUrlChange={(url: string | UnsplashPhoto) => {
-                imageUrlResult = url;
-            }} onSaveAndClose={() => handleUpdateImageUrl(imageUrlResult)} />,
+            content: <ImageSelector initImgUrl={imageUrl} onImageSelect={(image: string | UnsplashPhoto) => {
+                selectedImageResult = image;
+            }} onSaveAndClose={() => handleUpdateImageUrl(selectedImageResult)} />,
             dialogMaxWidth: 'lg',
             title: 'Select image',
             buttons: [
-                <Button variant='contained' key={'ok'} color='success' onClick={() => handleUpdateImageUrl(imageUrlResult)}>Select</Button>
+                <Button variant='contained' key={'ok'} color='success' onClick={() => handleUpdateImageUrl(selectedImageResult)}>Select</Button>
             ],
         });
 

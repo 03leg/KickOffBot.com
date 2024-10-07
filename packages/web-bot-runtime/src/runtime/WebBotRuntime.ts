@@ -32,6 +32,8 @@ import {
   CardsUserResponse,
   BotMessageBodyType,
   BotMessageBody,
+  WebContentMediaUIElement,
+  MediaMessageDescription,
 } from '@kickoffbot.com/types';
 import { WebBotRuntimeUtils } from './WebBotRuntimeUtils';
 import { WebUserContext } from './WebUserContext';
@@ -47,6 +49,7 @@ import { GoogleSpreadsheetHelper } from './GoogleSpreadsheetHelper';
 import { SendReceiveHttpRequest } from './SendReceiveHttpRequest';
 import { Telegraf } from 'telegraf';
 import { CardsElementHelper } from './CardsElementHelper';
+import { MediaMessageHelper } from './MediaMessageHelper';
 
 export class WebBotRuntime {
   private _utils: WebBotRuntimeUtils;
@@ -179,6 +182,24 @@ export class WebBotRuntime {
         }
         break;
       }
+      case ElementType.WEB_CONTENT_IMAGES: {
+        const typedElement = element as WebContentMediaUIElement;
+
+        const content: MediaMessageDescription =
+          MediaMessageHelper.getMediaMessageContent(typedElement);
+
+        chatItems.push({
+          content: {
+            type: BotMessageBodyType.Media,
+            content,
+          },
+          uiElementId: typedElement.id,
+          id: v4(),
+          itemType: ChatItemTypeWebRuntime.BOT_MESSAGE,
+        });
+
+        break;
+      }
       default: {
         throw new Error('NotImplementedError');
       }
@@ -270,6 +291,7 @@ export class WebBotRuntime {
       case ElementType.WEB_INPUT_BUTTONS:
       case ElementType.WEB_LOGIC_REMOVE_MESSAGES:
       case ElementType.WEB_INPUT_CARDS:
+      case ElementType.WEB_CONTENT_IMAGES:
       case ElementType.WEB_CONTENT_MESSAGE: {
         result = await this.handleElement(block, nextElement);
         break;
