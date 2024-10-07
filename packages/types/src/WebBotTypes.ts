@@ -26,6 +26,43 @@ export interface WebContentTextUIElement extends UIElement, MessageDescription {
   attachments: FileDescription[];
 }
 
+export enum WebMediaType {
+  IMAGE = "image",
+  VIDEO = "video",
+}
+
+export interface WebMediaDescription {
+  id: string;
+  type: WebMediaType;
+}
+
+export type WebImageDescription = string | UnsplashPhoto;
+
+export interface WebImageMediaDescription extends WebMediaDescription {
+  image: WebImageDescription;
+  isLink?: boolean;
+  imageLink?: string;
+
+  imageWidth?: string;
+  imageHeight?: string;
+  maxImageWidth?: string;
+  maxImageHeight?: string;
+}
+
+export interface WebVideoMediaDescription extends WebMediaDescription {}
+
+export enum MediaViewMode {
+  HorizontalMediaList = "horizontalMediaList",
+  VerticalMediaList = "verticalMediaList",
+  WrappedHorizontalMediaList = "wrappedHorizontalMediaList",
+  MasonryMediaList = "masonryMediaList",
+}
+
+export interface WebContentMediaUIElement extends UIElement {
+  medias: WebMediaDescription[];
+  viewMode: MediaViewMode;
+}
+
 export interface WebInputTextUIElement extends UIElement {
   label: string;
   variableId?: string;
@@ -112,11 +149,17 @@ export interface DeleteMessagesDescriptionWebRuntime {
 export enum BotMessageBodyType {
   MessageAndAttachments = "message-and-attachments",
   Cards = "cards",
+  Media = "media",
+}
+
+export interface MediaMessageDescription {
+  medias: WebMediaDescription[];
+  viewMode: MediaViewMode;
 }
 
 export interface BotMessageBody {
   type: BotMessageBodyType;
-  content: MessageDescriptionWebRuntime | CardsViewerElement;
+  content: MessageDescriptionWebRuntime | CardsViewerElement | MediaMessageDescription;
 }
 
 export interface ChatItemWebRuntime {

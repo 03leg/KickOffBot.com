@@ -37,11 +37,11 @@ function a11yProps(index: number) {
 
 interface Props {
     initImgUrl?: string;
-    onImageUrlChange: (url: string | UnsplashPhoto) => void;
+    onImageSelect: (url: string | UnsplashPhoto) => void;
     onSaveAndClose?: () => void; // for giphy
 }
 
-export const ImageSelector = ({ initImgUrl, onImageUrlChange, onSaveAndClose }: Props) => {
+export const ImageSelector = ({ initImgUrl, onImageSelect, onSaveAndClose }: Props) => {
     const [value, setValue] = React.useState(0);
     const [imageUrl, setImageUrl] = React.useState(initImgUrl ?? '');
 
@@ -62,26 +62,26 @@ export const ImageSelector = ({ initImgUrl, onImageUrlChange, onSaveAndClose }: 
             <CustomTabPanel value={value} index={0}>
                 <AppTextField label="Image URL" value={imageUrl ?? ''} onValueChange={(newValue: string) => {
                     setImageUrl(newValue);
-                    onImageUrlChange(newValue);
+                    onImageSelect(newValue);
                 }} />
             </CustomTabPanel>
             <CustomTabPanel value={value} index={1}>
                 <ImageUploader onValueChange={(newValue: string) => {
                     setImageUrl(newValue);
-                    onImageUrlChange(newValue);
+                    onImageSelect(newValue);
                 }} />
             </CustomTabPanel>
             <CustomTabPanel value={value} index={2}>
                 <GiphySelector onValueChange={(newValue: string) => {
                     setImageUrl(newValue);
-                    onImageUrlChange(newValue);
+                    onImageSelect(newValue);
                     onSaveAndClose?.();
                 }} />
             </CustomTabPanel>
             <CustomTabPanel value={value} index={3}>
                 <UnsplashSelector onValueChange={(newValue: UnsplashPhoto) => {
                     setImageUrl(newValue.regularSrc);
-                    onImageUrlChange(newValue);
+                    onImageSelect(newValue);
                     onSaveAndClose?.();
                 }} />
             </CustomTabPanel>

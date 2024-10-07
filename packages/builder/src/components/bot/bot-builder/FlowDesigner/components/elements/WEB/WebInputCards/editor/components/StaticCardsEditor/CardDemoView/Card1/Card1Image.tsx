@@ -4,7 +4,7 @@ import { isNil } from "lodash";
 import React from "react";
 import { useCard1Styles } from "./Card1.style";
 import { Box } from "@mui/material";
-import { env } from "~/env.mjs";
+import { UnsplashAuthorBox } from "~/components/bot/bot-builder/WebBotDemo/components/BotMessage/components/MediaMessage/components/UnsplashAuthorBox";
 
 interface Props {
   image?: string | UnsplashPhoto;
@@ -36,9 +36,7 @@ export const Card1Image = ({ image }: Props) => {
         loading="lazy"
         alt=""
       />
-      {showPhotoInfo && <Box className={classes.unsplashImageContainer}>
-        Photo by <a target='_blank' href={`https://unsplash.com/${image.authorNickname}?utm_source=${env.NEXT_PUBLIC_UNSPLASH_APP_NAME}&utm_medium=referral`}>{image.authorName}</a> on <a target='_blank' href={`https://unsplash.com/?utm_source=${env.NEXT_PUBLIC_UNSPLASH_APP_NAME}&utm_medium=referral`}>Unsplash</a>
-      </Box>}
+      {showPhotoInfo && <UnsplashAuthorBox image={image} />}
     </Box>}
   </>
 };
