@@ -36,7 +36,20 @@ export interface WebMediaDescription {
   type: WebMediaType;
 }
 
+export enum VideoSource {
+  YOUTUBE = "youtube",
+  TIKTOK = "tiktok",
+  UPLOADED = "uploaded",
+  DIRECT_VIDEO_URL = "directVideoUrl",
+}
+
+export interface VideoDataSource {
+  source: VideoSource;
+  url: string;
+}
+
 export type WebImageDescription = string | UnsplashPhoto;
+export type WebVideoDescription = VideoDataSource;
 
 export interface WebImageMediaDescription extends WebMediaDescription {
   image: WebImageDescription;
@@ -49,7 +62,19 @@ export interface WebImageMediaDescription extends WebMediaDescription {
   maxImageHeight?: string;
 }
 
-export interface WebVideoMediaDescription extends WebMediaDescription {}
+export interface WebVideoMediaDescription extends WebMediaDescription {
+  video: WebVideoDescription;
+
+  showVideoControls?: boolean;
+  autoPlay?: boolean;
+  videoWidth?: string;
+  videoHeight?: string;
+
+  startTime?: number;
+  endTime?: number;
+
+  loop?: boolean;
+}
 
 export enum MediaViewMode {
   HorizontalMediaList = "horizontalMediaList",

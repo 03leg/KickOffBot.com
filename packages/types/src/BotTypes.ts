@@ -21,6 +21,7 @@ export enum ElementType {
   WEB_START_COMMANDS = "web-start-commands",
   WEB_CONTENT_MESSAGE = "web-content-message",
   WEB_CONTENT_IMAGES = "web-content-images",
+  WEB_CONTENT_VIDEOS = "web-content-videos",
   WEB_INPUT_TEXT = "web-input-text",
   WEB_INPUT_NUMBER = "web-input-number",
   WEB_INPUT_DATE_TIME = "web-input-date-time",

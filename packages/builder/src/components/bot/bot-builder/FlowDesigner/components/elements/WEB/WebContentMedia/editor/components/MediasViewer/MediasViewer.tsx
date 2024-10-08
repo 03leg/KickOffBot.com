@@ -29,7 +29,7 @@ export const MediasViewer = ({ medias, onDelete, selectedItem, onSelectItem }: P
             }
 
             if (media.type === WebMediaType.VIDEO) {
-                result.push((<VideoMedia onDelete={onDelete} key={media.id} video={media as WebVideoMediaDescription} />));
+                result.push((<VideoMedia onDelete={onDelete} key={media.id} selected={selectedItem?.id === media.id} onSelect={handleSelectElement} video={media as WebVideoMediaDescription} />));
                 continue;
             }
 

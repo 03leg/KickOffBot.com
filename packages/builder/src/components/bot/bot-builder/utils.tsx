@@ -23,6 +23,7 @@ import AlternateEmailIcon from '@mui/icons-material/AlternateEmail';
 import SmartButtonIcon from '@mui/icons-material/SmartButton';
 import BadgeIcon from '@mui/icons-material/Badge';
 import ImageIcon from '@mui/icons-material/Image';
+import VideoCameraBackIcon from '@mui/icons-material/VideoCameraBack';
 
 export const TELEGRAM_DEFAULT_PROJECT_STATE: BotProject = {
     blocks: [...getTelegramDefaultBlocks()],
@@ -109,6 +110,7 @@ export function getWebContentElements() {
     return [
         { type: ElementType.WEB_CONTENT_MESSAGE, title: 'Message', icon: <MessageIcon /> },
         { type: ElementType.WEB_CONTENT_IMAGES, title: 'Image(s)', icon: <ImageIcon /> },
+        { type: ElementType.WEB_CONTENT_VIDEOS, title: 'Video(s)', icon: <VideoCameraBackIcon /> },
     ]
 }
 
@@ -359,6 +361,15 @@ export function getNewUIElementTemplate(id: string, data: DraggableElementData):
                 type: ElementType.WEB_CONTENT_IMAGES,
                 medias: [],
                 viewMode: MediaViewMode.HorizontalMediaList
+            }
+            return result;
+        }
+        case ElementType.WEB_CONTENT_VIDEOS:{
+            const result: WebContentMediaUIElement = {
+                id,
+                type: ElementType.WEB_CONTENT_VIDEOS,
+                medias: [],
+                viewMode: MediaViewMode.VerticalMediaList
             }
             return result;
         }

@@ -222,6 +222,11 @@ export const ElementMenu = ({ element }: Props) => {
                 const newElement: WebContentMediaUIElement = JSON.parse(JSON.stringify(initialElement));
                 return { content: (<WebContentMediaEditor mediaType={WebMediaType.IMAGE} element={newElement} />), title: 'Image(s) Editor', newElement, dialogMaxWidth: "md" as Breakpoint };
             }
+            case ElementType.WEB_CONTENT_VIDEOS:{
+                const initialElement = elementArg as WebContentMediaUIElement;
+                const newElement: WebContentMediaUIElement = JSON.parse(JSON.stringify(initialElement));
+                return { content: (<WebContentMediaEditor mediaType={WebMediaType.VIDEO} element={newElement} />), title: 'Video(s) Editor', newElement, dialogMaxWidth: "md" as Breakpoint };
+            }
             default: {
                 throw new Error('NotImplementedError');
             }

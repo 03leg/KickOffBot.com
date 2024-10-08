@@ -16,8 +16,6 @@ export const ImageMediaItem = ({ image, isLast, direction, wrapped, count }: Pro
     const { classes } = useImageMediaItemStyles({ image, isLast, direction, wrapped, count });
     const [showPhotoInfo, setShowPhotoInfo] = React.useState(false);
 
-
-
     const imageUrl = useMemo(() => {
         if (typeof image.image === 'string') {
             return image.image
