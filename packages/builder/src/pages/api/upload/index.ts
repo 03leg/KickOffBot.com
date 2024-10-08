@@ -42,6 +42,7 @@ export default async function POST(
     const storeProvider: AttachmentUploaderProvider =
       new AttachmentUploaderSupaBase();
 
+      // TODO: Use project id as directory
     return response.json(await storeProvider.uploadfiles(uploadFiles, `attachments/${session.user.id}/`));
   } catch (error) {
     response.status(500).json({ error: ServerErrorCode.API_HANDLER_ERROR });

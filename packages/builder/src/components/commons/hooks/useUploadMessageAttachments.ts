@@ -20,46 +20,49 @@ export const useUploadMessageAttachments = (
 
   const handleAttachmentsAdd = useCallback(
     async (files: FileDescription[]) => {
-      setIsUploading(true);
-
-      let attachments: UploadAttachmentFileDescription[] = [];
       try {
-        attachments = await uploadAttachments(
-          files.map((f) => (f as ClientFileDescription).browserFile)
-        );
-      } catch {
-        showError("Failed to save your post... Sorry 😔");
-        return;
+        setIsUploading(true);
+
+        let attachments: UploadAttachmentFileDescription[] = [];
+        try {
+          attachments = await uploadAttachments(
+            files.map((f) => (f as ClientFileDescription).browserFile)
+          );
+        } catch {
+          showError("Failed to save your post... Sorry 😔");
+          return;
+        }
+
+        const newFiles = attachments.map((file) => {
+          throwIfNil(file.name);
+
+          const fileExt = file.name
+            .slice(file.name.lastIndexOf("."))
+            .toLowerCase();
+          const result = {
+            name: file.name,
+            size: file.size,
+            typeContent: IMAGE_EXTENSIONS.includes(fileExt)
+              ? ContentType.Image
+              : VIDEO_EXTENSIONS.includes(fileExt)
+              ? ContentType.Video
+              : ContentType.Other,
+            url: file.storageUrl,
+          } as FileDescription;
+
+          return result;
+        });
+
+        showSuccessMessage("Your files uploaded!");
+
+        if (multiply) {
+          setUploadedFiles([...uploadedFiles, ...newFiles]);
+        } else {
+          setUploadedFiles([...newFiles]);
+        }
+      } finally {
+        setIsUploading(false);
       }
-
-      const newFiles = attachments.map((file) => {
-        throwIfNil(file.name);
-
-        const fileExt = file.name
-          .slice(file.name.lastIndexOf("."))
-          .toLowerCase();
-        const result = {
-          name: file.name,
-          size: file.size,
-          typeContent: IMAGE_EXTENSIONS.includes(fileExt)
-            ? ContentType.Image
-            : VIDEO_EXTENSIONS.includes(fileExt)
-            ? ContentType.Video
-            : ContentType.Other,
-          url: file.storageUrl,
-        } as FileDescription;
-
-        return result;
-      });
-
-      showSuccessMessage("Your files uploaded!");
-
-      if (multiply) {
-        setUploadedFiles([...uploadedFiles, ...newFiles]);
-      } else {
-        setUploadedFiles([...newFiles]);
-      }
-      setIsUploading(false);
     },
     [multiply, uploadedFiles]
   );

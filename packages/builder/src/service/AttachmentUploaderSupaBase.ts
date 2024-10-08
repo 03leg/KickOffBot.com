@@ -16,7 +16,6 @@ export class AttachmentUploaderSupaBase implements AttachmentUploaderProvider {
     files: formidable.File[],
     prefixPath?: string
   ): Promise<UploadAttachmentFileDescription[]> {
-    console.log(files);
     const result: UploadAttachmentFileDescription[] = [];
     for (const item of files) {
       const fileBin = await fs.readFile(item.filepath);
@@ -29,6 +28,10 @@ export class AttachmentUploaderSupaBase implements AttachmentUploaderProvider {
             cacheControl: "3600",
             upsert: false,
           });
+
+      // if (error) {
+      //   console.error(uploadResult, error, fileBin.byteLength);
+      // }
 
       if (!isNil(error) || isNil(uploadResult)) {
         result.push({
