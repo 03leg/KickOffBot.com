@@ -9,6 +9,7 @@ export const useImageMediaStyles = makeStyles()((theme) => ({
     flex: "none",
     position: "relative",
     padding: theme.spacing(0.2),
+    cursor: "pointer",
   },
   img: {
     height: "100%",
