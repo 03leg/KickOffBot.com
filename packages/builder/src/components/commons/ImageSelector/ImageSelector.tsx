@@ -1,7 +1,7 @@
 import { Box, Tab, Tabs } from '@mui/material';
 import React from 'react';
 import { AppTextField } from '../AppTextField';
-import { ImageUploader } from './components/ImageUploader';
+import { MediaUploader } from './components/MediaUploader';
 import { GiphySelector } from './components/GiphySelector';
 import { UnsplashSelector } from './components/UnsplashSelector';
 import { UnsplashPhoto } from '@kickoffbot.com/types';
@@ -66,7 +66,7 @@ export const ImageSelector = ({ initImgUrl, onImageSelect, onSaveAndClose }: Pro
                 }} />
             </CustomTabPanel>
             <CustomTabPanel value={value} index={1}>
-                <ImageUploader onValueChange={(newValue: string) => {
+                <MediaUploader accept='image/*' onValueChange={(newValue: string) => {
                     setImageUrl(newValue);
                     onImageSelect(newValue);
                 }} />

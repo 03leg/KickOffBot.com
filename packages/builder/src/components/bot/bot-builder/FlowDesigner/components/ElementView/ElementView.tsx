@@ -119,6 +119,10 @@ export const ElementView = ({ element, scale }: Props) => {
                 result = <WebContentMedia element={element as WebContentMediaUIElement} />
                 return result;
             }
+            case ElementType.WEB_CONTENT_VIDEOS:{
+                result = <WebContentMedia element={element as WebContentMediaUIElement} />
+                return result;
+            }
             default: {
                 throw new Error('NotImplementedError');
             }

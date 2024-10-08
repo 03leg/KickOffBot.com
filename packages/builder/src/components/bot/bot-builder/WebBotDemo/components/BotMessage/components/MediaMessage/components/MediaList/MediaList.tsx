@@ -1,8 +1,9 @@
-import { WebImageMediaDescription, WebMediaDescription, WebMediaType } from '@kickoffbot.com/types';
+import { WebImageMediaDescription, WebMediaDescription, WebMediaType, WebVideoMediaDescription } from '@kickoffbot.com/types';
 import { Box } from '@mui/material';
 import React from 'react';
 import { useMediaListStyles } from './MediaList.style';
 import { ImageMediaItem } from '../ImageMediaItem';
+import { VideoMediaItem } from '../VideoMediaItem';
 
 interface Props {
     medias: WebMediaDescription[];
@@ -21,7 +22,7 @@ export const MediaList = ({ medias, wrapped = false, direction }: Props) => {
                 }
 
                 if (media.type === WebMediaType.VIDEO) {
-                    return <>Not implemented yet...</>
+                    return <VideoMediaItem  key={media.id} video={media as WebVideoMediaDescription} isLast={index + 1 === medias.length}></VideoMediaItem>
                 }
 
                 throw new Error('Unsupported media type');

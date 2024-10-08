@@ -182,6 +182,7 @@ export class WebBotRuntime {
         }
         break;
       }
+      case ElementType.WEB_CONTENT_VIDEOS:
       case ElementType.WEB_CONTENT_IMAGES: {
         const typedElement = element as WebContentMediaUIElement;
 
@@ -292,6 +293,7 @@ export class WebBotRuntime {
       case ElementType.WEB_LOGIC_REMOVE_MESSAGES:
       case ElementType.WEB_INPUT_CARDS:
       case ElementType.WEB_CONTENT_IMAGES:
+      case ElementType.WEB_CONTENT_VIDEOS:
       case ElementType.WEB_CONTENT_MESSAGE: {
         result = await this.handleElement(block, nextElement);
         break;

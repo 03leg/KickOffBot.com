@@ -5,22 +5,23 @@ import { AttachEditor } from '~/components/PostCreator/components/AttachEditor';
 
 interface Props {
     onValueChange: (value: string) => void;
+    accept?: string;
 }
 
-export const ImageUploader = ({ onValueChange }: Props) => {
+export const MediaUploader = ({ onValueChange, accept }: Props) => {
     const { isUploading, handleAttachmentsAdd, handleAttachmentRemove, uploadedFiles } = useUploadMessageAttachments([], false);
 
     useEffect(() => {
-        const imageUrl = uploadedFiles[0]?.url;
-        if (imageUrl) {
-            onValueChange(imageUrl);
+        const fileUrl = uploadedFiles[0]?.url;
+        if (fileUrl) {
+            onValueChange(fileUrl);
         }
     }, [uploadedFiles, onValueChange]);
 
     return (
         <div>
             {isUploading && <LinearProgress sx={{ marginTop: 3 }} />}
-            {!isUploading && <AttachEditor fileInputAccept="image/*" onAttachmentsAdd={handleAttachmentsAdd} onAttachmentRemove={handleAttachmentRemove} uploadedFiles={uploadedFiles} multiple={false} />}
+            {!isUploading && <AttachEditor fileInputAccept={accept} onAttachmentsAdd={handleAttachmentsAdd} onAttachmentRemove={handleAttachmentRemove} uploadedFiles={uploadedFiles} multiple={false} />}
         </div>
     )
 }
