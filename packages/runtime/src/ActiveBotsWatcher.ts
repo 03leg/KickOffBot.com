@@ -24,9 +24,12 @@ export class ActiveBotsWatcher {
     this._intervalHandler = setInterval(async () => {
       await this.checkActualBotsState();
 
-      if (this._dbCheckCount % 750 === 0) {
-        console.log(this._dbCheckCount++ + ". DB is checked...");
+      if (this._dbCheckCount % 1000 === 0) {
+        console.log(this._dbCheckCount + ". DB is checked...");
       }
+
+      this._dbCheckCount++;
+
     }, 20 * 1000);
   }
 
