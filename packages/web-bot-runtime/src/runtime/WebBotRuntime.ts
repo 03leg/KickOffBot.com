@@ -351,9 +351,15 @@ export class WebBotRuntime {
       | WebInputDateTimeUIElement;
 
     if (typedElement.type === ElementType.WEB_INPUT_BUTTONS) {
-      return await this.handleUserButtonsResponse(
+      const localResult = await this.handleUserButtonsResponse(
         value as RequestButtonDescription,
       );
+
+      if (localResult) {
+        return localResult;
+      }
+
+      return await this.checkNextElement();
     }
 
     if (typedElement.type === ElementType.WEB_INPUT_CARDS) {
