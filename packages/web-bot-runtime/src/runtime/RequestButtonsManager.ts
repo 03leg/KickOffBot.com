@@ -185,6 +185,7 @@ export class RequestButtonsManager {
       throw new Error('ButtonsElement not found');
     }
 
+    // TODO: When variable to save answer is not set we have runtime error here
     throwIfNil(buttonsElement.variableButtonsSource?.variableSource);
     throwIfNil(buttonsElement.variableButtonsSource?.answerVariableId);
 
