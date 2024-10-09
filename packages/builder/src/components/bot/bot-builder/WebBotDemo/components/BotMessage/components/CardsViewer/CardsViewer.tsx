@@ -27,6 +27,7 @@ export const CardsViewer = ({ cardsDescription, onContentHeightChange }: Props) 
                             card={card} />
                     })
                 }
+                {cardsDescription.cardItems.length === 0 && <Box sx={{ display: 'flex', justifyContent: 'center' }}>There is no cards....</Box>}
             </Box>
         </Box>
     )

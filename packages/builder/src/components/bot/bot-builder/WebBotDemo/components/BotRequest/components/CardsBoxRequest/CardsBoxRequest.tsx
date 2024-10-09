@@ -89,6 +89,7 @@ export const CardsBoxRequest = ({ request }: Props) => {
                                 card={card} />
                         })
                     }
+                    {cardsElementRequestDescription.cardItems.length === 0 && <Box sx={{ display: 'flex', justifyContent: 'center' }}>There is no cards....</Box>}
                 </Box>
             </Box>
             {
