@@ -181,6 +181,7 @@ export const useFlowDesignerStore = create<FlowDesignerState>()((set, get) => ({
       viewPortOffset: { x: 0, y: 0 },
       selectedLink: null,
       showRuntimeEditor: false,
+      showWebBotDemo: false,
     })),
   removeTemplate: (template: BotTemplate) =>
     set((state) => {
