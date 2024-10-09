@@ -3,6 +3,7 @@ import { ChatItemWebRuntime, MessageDescriptionWebRuntime, UIElement } from "@ki
 export interface ChatStoreState {
   botIsTyping: boolean;
   chatItems: ChatItemWebRuntime[];
+  errorMessages: string[];
   sendBotMessage: (item: ChatItemWebRuntime) => Promise<void>;
   sendBotRequest: (item: ChatItemWebRuntime) => void;
   sendUserResponse: (id: string, userResponse: MessageDescriptionWebRuntime) => void;
@@ -13,4 +14,6 @@ export interface ChatStoreState {
   
   removeChatItemByUIElementId: (elementId: UIElement["id"][]) => void;
   setLoadingValue: (value: boolean) => void;
+
+  showError: (message: string) => void;
 }

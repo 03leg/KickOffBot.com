@@ -12,6 +12,7 @@ import { v4 } from "uuid";
 
 export const useUserChatStore = create<ChatStoreState>()((set, get) => ({
   chatItems: [],
+  errorMessages: [],
   botIsTyping: false,
   setLoadingValue: (value: boolean) => set(() => ({ botIsTyping: value })),
   sendBotMessage: async (item: ChatItemWebRuntime) => {
@@ -32,7 +33,7 @@ export const useUserChatStore = create<ChatStoreState>()((set, get) => ({
       return { chatItems: messages };
     });
   },
-  clearHistory: () => set(() => ({ chatItems: [] })),
+  clearHistory: () => set(() => ({ chatItems: [], errorMessages: [] })),
   removeChatItemByUIElementId: (elementIds: UIElement["id"][]) =>
     set((state) => ({
       chatItems: state.chatItems.filter(
@@ -42,6 +43,10 @@ export const useUserChatStore = create<ChatStoreState>()((set, get) => ({
   removeChatItem: (id: string) =>
     set((state) => ({
       chatItems: state.chatItems.filter((m) => m.id !== id),
+    })),
+  showError: (message: string) =>
+    set((state) => ({
+      errorMessages: [...state.errorMessages, message],
     })),
   sendUserResponse: (
     elementId: string,

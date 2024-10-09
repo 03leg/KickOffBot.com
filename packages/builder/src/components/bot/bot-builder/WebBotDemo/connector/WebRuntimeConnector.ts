@@ -39,32 +39,30 @@ export class WebRuntimeConnector {
 
     let response: WebBotResponse | null = null;
 
-    if (this._botProject) {
-      this._runtimeProjectId = await this._httpService.uploadDemoProject(
-        this._projectId,
-        this._botProject
-      );
-      if (this._runtimeProjectId == null) {
-        return false;
+    try {
+      if (this._botProject) {
+        this._runtimeProjectId = await this._httpService.uploadDemoProject(
+          this._projectId,
+          this._botProject
+        );
+
+        response = await this._httpService.startDemoBot(this._runtimeProjectId);
+      } else {
+        const startSavedBotResponse = await this._httpService.startSavedBot(
+          this._projectId
+        );
+        throwIfNil(startSavedBotResponse?.runtimeProjectId);
+
+        this._runtimeProjectId = startSavedBotResponse.runtimeProjectId;
+        response = startSavedBotResponse;
       }
-  
-      response = await this._httpService.startDemoBot(
-        this._runtimeProjectId
-      );
 
-    } else {
-      const startSavedBotResponse = await this._httpService.startSavedBot(this._projectId);
-      throwIfNil(startSavedBotResponse?.runtimeProjectId);
-      
-      this._runtimeProjectId = startSavedBotResponse.runtimeProjectId;
-      response = startSavedBotResponse;
-    }
-
-    if (response) {
       await this.toStore(response);
+    } catch {
+      this._storeApi.showError("Failed to start the bot. Please try again.");
+    } finally {
+      this._storeApi.setLoadingValue(false);
     }
-
-    this._storeApi.setLoadingValue(false);
   }
 
   private async toStore(response: WebBotResponse) {
@@ -139,16 +137,18 @@ export class WebRuntimeConnector {
 
     this._storeApi.setLoadingValue(true);
 
-    const response = await this._httpService.sendUserResponse(
-      this._runtimeProjectId,
-      chatItemRequest,
-      userData.data
-    );
+    try {
+      const response = await this._httpService.sendUserResponse(
+        this._runtimeProjectId,
+        chatItemRequest,
+        userData.data
+      );
 
-    if (response) {
       await this.toStore(response);
+    } catch {
+      this._storeApi.showError("Failed to send your response. Please try to use bot later.");
+    } finally {
+      this._storeApi.setLoadingValue(false);
     }
-
-    this._storeApi.setLoadingValue(false);
   }
 }
