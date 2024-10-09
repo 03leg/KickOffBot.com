@@ -24,7 +24,7 @@ export const useParsedProjectEntriesHtml = (htmlContent?: string) => {
       const variableRefItems = value?.split('.');
       const variableName = variableRefItems?.[0];
 
-      if (isNil(getVariableByName(variableName))) {
+      if (!isNil(variableName) && isNil(getVariableByName(variableName))) {
         html = isNil(value)
           ? html
           : html.replace(
@@ -48,7 +48,7 @@ export const useParsedProjectEntriesHtml = (htmlContent?: string) => {
     for (const m of templateMatches) {
       const value = m[1];
 
-      if (isNil(getTemplateByName(value))) {
+      if (!isNil(value) && isNil(getTemplateByName(value))) {
         html = isNil(value)
           ? html
           : html.replace(
