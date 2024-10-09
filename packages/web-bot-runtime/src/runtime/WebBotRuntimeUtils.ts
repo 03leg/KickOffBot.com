@@ -56,6 +56,7 @@ export class WebBotRuntimeUtils {
 
     if (path ?? converter) {
       const variableValue = userContext.getVariableValueByName(variableName);
+
       const variableMetaData = this._botProject.variables.find(
         (v) => v.name === variableName,
       );
@@ -66,8 +67,15 @@ export class WebBotRuntimeUtils {
       ) {
         return (variableValue as Record<string, string>)[path] ?? '';
       } else if (variableValue instanceof Array) {
-        throwIfNil(converter);
-        throwIfNil(variableValue);
+        if (isNil(converter)) {
+          // TODO: return empty string and add it to service messages
+          return 'We cannot convert an array to a string';
+        }
+
+        if (isNil(variableValue)) {
+          // TODO: return empty string and add it to service messages
+          return 'We cannot convert an empty array to a string';
+        }
 
         if (variableMetaData?.arrayItemType === VariableType.OBJECT) {
           if (VariableConverter.COUNT === converter) {
@@ -94,9 +102,7 @@ export class WebBotRuntimeUtils {
 
         return text;
       } else {
-        throw new Error(
-          'InvalidOperationError: variable value does not contain the path',
-        );
+        return variableValue as string;
       }
     }
 

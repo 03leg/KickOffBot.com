@@ -42,6 +42,8 @@ export interface FlowDesignerState {
   updateVariable: (variable: BotVariable) => void;
   removeVariable: (variable: BotVariable) => void;
   getVariableById: (variableId: BotVariable["id"]) => BotVariable | null;
+  getVariableByName: (variableName: BotVariable["name"]) => BotVariable | null;
+  getTemplateByName: (templateName: BotTemplate["name"]) => BotTemplate | null;
 
   showRuntimeEditor: boolean;
   toggleRuntimeEditor: VoidFunction;
