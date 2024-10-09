@@ -7,6 +7,7 @@ import { BotRequest } from '../BotRequest';
 import { UserMessage } from '../UserMessage';
 import { BotTyping } from '../BotTyping';
 import { WebRuntimeConnector } from '../../connector/WebRuntimeConnector';
+import { ErrorMessages } from '../ErrorMessages';
 
 interface Props {
     project?: BotProject;
@@ -29,7 +30,7 @@ export const ChatViewer = ({ project, height, projectId }: Props) => {
 
             void runtimeConnector.current.connect();
         }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [project, projectId]);
 
     const goToBottom = useCallback(() => {
@@ -56,6 +57,7 @@ export const ChatViewer = ({ project, height, projectId }: Props) => {
                 }
             })}
             {storeState.botIsTyping && <BotTyping />}
+            {storeState.errorMessages.length > 0 && <ErrorMessages errorMessages={storeState.errorMessages} />}
             <div ref={lastChildRef}></div>
         </Box>
     )
