@@ -5,13 +5,6 @@ import React, { useCallback, useEffect, useState } from 'react'
 import { MessageContentDescription } from '@kickoffbot.com/types';
 import { TextEditor } from '../../TextEditor';
 import { AttachEditor } from '~/components/PostCreator/components/AttachEditor';
-import { ClientFileDescription } from '~/types/ContentEditor';
-import { ContentType, FileDescription } from '@kickoffbot.com/types';
-import { UploadAttachmentFileDescription } from '~/types/UploadAttachments';
-import { uploadAttachments } from '~/components/PostCreator/utils';
-import { showError, showSuccessMessage } from '~/utils/ClientStatusMessage';
-import { throwIfNil } from '~/utils/guard';
-import { IMAGE_EXTENSIONS } from '~/components/PostCreator/components/AttachEditor/constants';
 import { ButtonsEditor } from '../../ButtonsInput/Editor';
 import { useUploadMessageAttachments } from '~/components/commons/hooks/useUploadMessageAttachments';
 

@@ -1,11 +1,9 @@
 import { WebContentTextUIElement } from '@kickoffbot.com/types'
 import React, { useCallback, useEffect } from 'react'
-import { TextEditor } from '../../../TextEditor'
-import { convertFromRaw, EditorState } from 'draft-js'
-import { isNil } from 'lodash'
-import { LinearProgress } from '@mui/material'
+import { Box, LinearProgress } from '@mui/material'
 import { AttachEditor } from '~/components/PostCreator/components/AttachEditor'
 import { useUploadMessageAttachments } from '~/components/commons/hooks/useUploadMessageAttachments'
+import { WebTextEditor } from '~/components/commons/WebTextEditor'
 
 interface Props {
     element: WebContentTextUIElement
@@ -16,18 +14,19 @@ export const WebMessageEditor = ({ element }: Props) => {
         element.json = jsonState;
         element.htmlContent = htmlContent;
     }, [element]);
-    const initialValue = isNil(element.json) ? void 0 : EditorState.createWithContent(convertFromRaw(JSON.parse(element.json)));
     const { isUploading, handleAttachmentsAdd, handleAttachmentRemove, uploadedFiles } = useUploadMessageAttachments(element.attachments);
-    
-    
+
     useEffect(() => {
         element.attachments = uploadedFiles;
     }, [element, uploadedFiles]);
 
-    
     return (
         <div>
-            <TextEditor onContentChange={handleContentChange} initialState={initialValue} />
+            <Box sx={{ width: '100%', height: 200 }}>
+                <WebTextEditor
+                    jsonState={element.json}
+                    onContentChange={handleContentChange} />
+            </Box>
             {isUploading && <LinearProgress sx={{ marginTop: 3 }} />}
             {!isUploading && <AttachEditor onAttachmentsAdd={handleAttachmentsAdd} onAttachmentRemove={handleAttachmentRemove} uploadedFiles={uploadedFiles} />}
         </div>

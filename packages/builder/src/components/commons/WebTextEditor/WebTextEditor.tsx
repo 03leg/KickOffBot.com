@@ -41,7 +41,12 @@ export const WebTextEditor = ({ onContentChange, jsonState, contextObjectPropert
 
     const initialState = isNil(jsonState) ? EditorState.createEmpty(draftJsEditorDecorator) : EditorState.createWithContent(convertFromRaw(JSON.parse(jsonState)), draftJsEditorDecorator);
     const [editorState, setEditorState] = React.useState<EditorState>(initialState);
-    const { handleAddLink } = useNewLink(editorState, (newState) => setEditorState(newState));
+    const { handleAddLink } = useNewLink(editorState, (newState, contentChanged) => {
+        setEditorState(newState);
+        if (contentChanged) {
+            generatePublicContentChange(newState);
+        }
+    });
 
 
     const generatePublicContentChange = useCallback((newState: EditorState) => {
@@ -66,9 +71,9 @@ export const WebTextEditor = ({ onContentChange, jsonState, contextObjectPropert
                             fontSize: fontSize?.replace(CUSTOM_STYLE_PREFIX_FONT_SIZE, '') ?? 'unset',
                             backgroundColor: backgroundColor?.replace(CUSTOM_STYLE_PREFIX_BACKGROUND_COLOR, '') ?? 'unset',
                             // if background color is set, add 2px border radius to the left and right
-                            borderRadius: backgroundColor === undefined ? 'unset' : '2px',
-                            paddingLeft: backgroundColor === undefined ? 'unset' : '2px',
-                            paddingRight: backgroundColor === undefined ? 'unset' : '2px',
+                            // borderRadius: backgroundColor === undefined ? 'unset' : '2px',
+                            // paddingLeft: backgroundColor === undefined ? 'unset' : '3px',
+                            // paddingRight: backgroundColor === undefined ? 'unset' : '3px',
                         },
                     };
                 }
