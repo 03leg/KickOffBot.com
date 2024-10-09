@@ -1,5 +1,5 @@
 import { VariableButtonsSourceStrategyDescription } from '@kickoffbot.com/types';
-import { Box } from '@mui/material';
+import { Alert, Box } from '@mui/material';
 import React, { useMemo } from 'react'
 import { useFlowDesignerStore } from '~/components/bot/bot-builder/store';
 import { useVariableInTextStyles } from '../ChangeVariable/useContentWithVariable';
@@ -58,7 +58,10 @@ export const ButtonsFromVariableDescriptionView = ({ variableButtonSource }: Pro
                 <span dangerouslySetInnerHTML={{ __html: buttonTemplateView }}></span>
             </Box>
             <Box sx={{ marginTop: 1 }}>
-                save user input to <span className={classes.variable}>{answerVariable?.name}</span>
+                {answerVariable?.name && <>save user input to <span className={classes.variable}>{answerVariable.name}</span></>}
+                {!answerVariable?.name && <>
+                    <Alert sx={{ mb: 2 }} severity="error">Please set a variable to store the user input.</Alert>
+                </>}
             </Box>
         </Box>
     )
