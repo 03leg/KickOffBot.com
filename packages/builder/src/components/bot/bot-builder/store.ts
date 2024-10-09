@@ -168,6 +168,10 @@ export const useFlowDesignerStore = create<FlowDesignerState>()((set, get) => ({
     }),
   getVariableById: (variableId: string) =>
     get().project.variables.find((v) => v.id == variableId) ?? null,
+  getVariableByName: (name: string) =>
+    get().project.variables.find((v) => v.name == name) ?? null,
+  getTemplateByName: (name: string) =>
+    get().project.templates.find((t) => t.name == name) ?? null,
 
   showRuntimeEditor: false,
   toggleRuntimeEditor: () =>
