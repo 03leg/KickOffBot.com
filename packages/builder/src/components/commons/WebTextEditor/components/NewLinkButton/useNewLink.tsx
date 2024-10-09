@@ -30,7 +30,7 @@ const insertLink = (editorState: EditorState, linkText: string, linkUrl: string)
     anchorOffset: selectionState.getAnchorOffset() + linkText.length,
     focusOffset: selectionState.getAnchorOffset() + linkText.length
   }));
- 
+
 };
 
 const findLinkEntities = (contentBlock: ContentBlock, callback: (start: number, end: number) => void, contentState: ContentState) => {
@@ -49,7 +49,7 @@ export const draftJsEditorDecorator = new CompositeDecorator([
 
 export const useNewLink = (
   editorState: EditorState,
-  onEditorStateChange: (newState: EditorState) => void
+  onEditorStateChange: (newState: EditorState, contentChanged: boolean) => void
 ) => {
 
   const handleAddLink = useCallback(
@@ -57,9 +57,10 @@ export const useNewLink = (
 
       if (editorState.getSelection().isCollapsed()) {
         linkText = linkText ?? "Link";
-        onEditorStateChange(insertLink(editorState, linkText, linkUrl));
+        onEditorStateChange(insertLink(editorState, linkText, linkUrl), false);
       }
       else {
+
         const contentWithNewLink = editorState
           .getCurrentContent()
           .createEntity("LINK", "MUTABLE", { linkUrl });
@@ -69,11 +70,13 @@ export const useNewLink = (
           currentContent: contentWithNewLink
         });
 
-        onEditorStateChange(RichUtils.toggleLink(
+        const updatedState = RichUtils.toggleLink(
           newEditorState,
           newEditorState.getSelection(),
           entityKey
-        ));
+        );
+
+        onEditorStateChange(updatedState, true);
       }
     },
     [editorState, onEditorStateChange]

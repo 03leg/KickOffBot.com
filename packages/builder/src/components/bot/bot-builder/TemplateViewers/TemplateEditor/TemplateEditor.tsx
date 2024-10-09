@@ -1,4 +1,4 @@
-import { BotTemplate, BotVariable, VariableType } from '@kickoffbot.com/types';
+import { BotPlatform, BotTemplate, BotVariable, VariableType } from '@kickoffbot.com/types';
 import { Box, Checkbox, FormControlLabel, InputLabel, TextField } from '@mui/material';
 import React, { useCallback, useMemo, useState } from 'react';
 import { VariableSelector } from '../../FlowDesigner/components/VariableSelector';
@@ -6,6 +6,7 @@ import { TextEditor } from '../../FlowDesigner/components/elements/TextEditor';
 import { isNil } from 'lodash';
 import { EditorState, convertFromRaw } from 'draft-js';
 import { useFlowDesignerStore } from '../../store';
+import { WebTextEditor } from '~/components/commons/WebTextEditor';
 
 interface Props {
     template: BotTemplate;
@@ -18,6 +19,9 @@ export const TemplateEditor = ({ template, onTemplateChange }: Props) => {
     const { getVariableById } = useFlowDesignerStore((state) => ({
         getVariableById: state.getVariableById
     }));
+    const { platform } = useFlowDesignerStore((state) => ({
+        platform: state.platform
+    }));
     const [showContentWhenArrayIsEmpty, setShowContentWhenArrayIsEmpty] = useState<boolean>(template.showContentWhenArrayIsEmpty ?? false);
 
     const itemContent = isNil(template.json) ? void 0 : EditorState.createWithContent(convertFromRaw(JSON.parse(template.json)));
@@ -29,14 +33,14 @@ export const TemplateEditor = ({ template, onTemplateChange }: Props) => {
         onTemplateChange(template);
     }, [onTemplateChange, template]);
 
-    const handleContentChange = useCallback((jsonState: string, htmlContent: string, telegramContent: string) => {
+    const handleContentChange = useCallback((jsonState: string, htmlContent: string, telegramContent?: string) => {
         template.json = jsonState;
         template.htmlContent = htmlContent;
         template.telegramContent = telegramContent;
         onTemplateChange(template); //?
     }, [onTemplateChange, template]);
 
-    const handleEmptyArrayContentChange = useCallback((jsonState: string, htmlContent: string, telegramContent: string) => {
+    const handleEmptyArrayContentChange = useCallback((jsonState: string, htmlContent: string, telegramContent?: string) => {
         template.emptyArrayJson = jsonState;
         template.emptyArrayHtmlContent = htmlContent;
         template.emptyArrayTelegramContent = telegramContent;
@@ -91,9 +95,15 @@ export const TemplateEditor = ({ template, onTemplateChange }: Props) => {
             {!isNil(contextVariableId) &&
                 <>
                     <InputLabel sx={{ marginBottom: 1, fontSize: '0.75rem' }}>Content for each array item</InputLabel>
-                    <TextEditor showInsertTemplateButton={false} onContentChange={handleContentChange} initialState={itemContent} contextObjectProperties={contextObjectProperties} />
+                    {platform === BotPlatform.Telegram && <TextEditor showInsertTemplateButton={false} onContentChange={handleContentChange} initialState={itemContent} contextObjectProperties={contextObjectProperties} />}
+                    {platform === BotPlatform.WEB && <WebTextEditor showInsertTemplateButton={false} onContentChange={handleContentChange} jsonState={template.json} contextObjectProperties={contextObjectProperties} />}
                     <FormControlLabel sx={{ marginTop: 2 }} control={<Checkbox checked={showContentWhenArrayIsEmpty} onChange={handleShowContentChange} />} label="Show content when array is empty" />
-                    {showContentWhenArrayIsEmpty && <TextEditor showInsertTemplateButton={false} onContentChange={handleEmptyArrayContentChange} initialState={emptyArrayContent} />}
+                    {showContentWhenArrayIsEmpty &&
+                        <>
+                            {platform === BotPlatform.Telegram && <TextEditor showInsertTemplateButton={false} onContentChange={handleEmptyArrayContentChange} initialState={emptyArrayContent} />}
+                            {platform === BotPlatform.WEB && <WebTextEditor showInsertTemplateButton={false} onContentChange={handleEmptyArrayContentChange} jsonState={template.emptyArrayJson} />}
+                        </>
+                    }
                 </>
             }
         </Box>
