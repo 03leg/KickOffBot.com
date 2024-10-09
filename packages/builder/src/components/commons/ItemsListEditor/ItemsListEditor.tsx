@@ -2,6 +2,9 @@ import React, { useCallback } from 'react'
 import { useItemsListEditorStyles } from './ItemsListEditor.style'
 import { Box, Button, List, ListItemButton, ListItemText } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
+import DeleteIcon from '@mui/icons-material/Delete';
+import { isNil } from 'lodash';
+
 
 interface ItemBase {
     id: string;
@@ -30,6 +33,10 @@ export const ItemsListEditor = <T extends ItemBase>({ items, onNewItem, onDelete
         onSelect(item);
     }, [onSelect])
 
+    const handleDeleteItem = useCallback((item: T) => {
+        onDeleteItem(item);
+    }, [onDeleteItem])
+
     return (
         <Box className={classes.root}>
             <Box sx={{ width: '300px', backgroundColor: 'white', display: 'flex', flexDirection: 'column', margin: 1 }}>
@@ -44,6 +51,7 @@ export const ItemsListEditor = <T extends ItemBase>({ items, onNewItem, onDelete
                 </List>
                 <Box sx={{ padding: 1 }}>
                     <Button color='success' fullWidth variant="contained" startIcon={<AddIcon />} onClick={handleNewItem}>Add new {entryName}</Button>
+                    {items.length > 0 && <Button sx={{ marginTop: 1 }} color='error' disabled={isNil(selectedItem)} fullWidth variant="contained" startIcon={<DeleteIcon />} onClick={() => handleDeleteItem(selectedItem!)}>Delete {entryName}</Button>}
                 </Box>
             </Box>
             <Box sx={{ padding: 1, paddingLeft: 0, height: '100%', width: '100%' }}>

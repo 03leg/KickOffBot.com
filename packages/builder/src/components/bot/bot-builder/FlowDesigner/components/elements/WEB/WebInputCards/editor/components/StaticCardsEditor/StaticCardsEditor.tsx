@@ -27,12 +27,25 @@ export const StaticCardsEditor = ({ element }: Props) => {
 
         staticSourceDescription.cards = [...items, newCard];
         setSelectedCard(newCard);
-        // setDemoCardDescription({ ...newCard })
+
+    }, [items, staticSourceDescription]);
+
+    const handleDeleteCard = useCallback((card: WebCardDescriptionClassic) => {
+        const newCards = items.filter(c => c.id !== card.id);
+
+        setItems(newCards);
+        staticSourceDescription.cards = newCards;
+        if (newCards.length >= 1) {
+            setSelectedCard(newCards[0]);
+        }
+        else {
+            setSelectedCard(undefined);
+        }
+
     }, [items, staticSourceDescription]);
 
     const handleSelectCard = useCallback((card: WebCardDescriptionClassic) => {
         setSelectedCard(card);
-        // setDemoCardDescription({ ...card })
     }, []);
 
 
@@ -42,7 +55,7 @@ export const StaticCardsEditor = ({ element }: Props) => {
             <ItemsListEditor
                 items={items}
                 entryName='Card'
-                onDeleteItem={() => { }}
+                onDeleteItem={handleDeleteCard}
                 onNewItem={handleNewCard}
                 onSelect={handleSelectCard}
                 selectedItem={selectedCard}
