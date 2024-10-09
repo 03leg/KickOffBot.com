@@ -61,15 +61,21 @@ export const WebBotDemo = () => {
             }
         });
 
-        ReactDOM.createRoot(shadowRootElement).render(
+        const root = ReactDOM.createRoot(shadowRootElement);
+
+        root.render(
             <React.StrictMode>
                 <CacheProvider value={cache}>
                     <ThemeProvider theme={shadowTheme}>
-                        <ChatViewer height={containerRef.current?.clientHeight} project={project} projectId={projectIdFromQuery}/>
+                        <ChatViewer height={containerRef.current?.clientHeight} project={project} projectId={projectIdFromQuery} />
                     </ThemeProvider>
                 </CacheProvider>
             </React.StrictMode>
         );
+
+        return () => {
+            root.unmount();
+        }
     }, [project, projectIdFromQuery, showWebBotDemo]);
 
     if (!showWebBotDemo) {
