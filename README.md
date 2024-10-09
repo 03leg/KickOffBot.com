@@ -1,6 +1,6 @@
 <p align="center">Hey there!👋</p>
 
-<p align="center">✨Imagine having the power to effortlessly craft your own customized bots for Telegram, without any coding hassle. With <a href='https://www.kickoffbot.com'>kickoffbot.com</a>, that's exactly what you get.😎</p>
+<p align="center">✨Imagine having the power to effortlessly craft your own customized bots (WEB, Telegram), without any coding hassle. With <a href='https://www.kickoffbot.com'>kickoffbot.com</a>, that's exactly what you get.😎</p>
 
 ## Demo
 
@@ -13,7 +13,7 @@ https://github.com/03leg/KickOffBot.com/assets/91701505/74ec73bb-ac18-403d-959c-
 - **Real-time Variable Modification:** Change variables dynamically during runtime to adapt to evolving user needs and preferences. This flexibility ensures that the system remains responsive and can adjust to changing circumstances on the fly.
 - **Variable-based Interaction Paths:** Your bot can select the next steps of interaction based on variable values. This adaptive approach allows for personalized and optimized user journeys, ensuring that each interaction is tailored to the individual user's context and requirements.
 
-## Sample #1. History quiz bot
+## Sample #1. History quiz bot (telegram bot)
 
 🚀📚 Engage in a fun and educational journey through history with 🤖 [Country_History_Quiz_KickoffBot](https://t.me/Country_History_Quiz_KickoffBot)! Test your knowledge of Italian, Greek and USA history with interactive quizzes. Receive instant feedback on your answers and learn fascinating facts along the way. 🤖[Country_History_Quiz_KickoffBot](https://t.me/Country_History_Quiz_KickoffBot) allows you to challenge yourself, track your progress, and even compete with friends.
 
