@@ -1,7 +1,90 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { isNil } from "lodash";
 import { useMemo } from "react";
 import { useEntriesHtmlStyles } from "../styles/useEntriesHtml";
 import { useFlowDesignerStore } from "~/components/bot/bot-builder/store";
+import { BotTemplate, BotVariable } from "@kickoffbot.com/types";
+
+const parseVariables = (html: string, regex: RegExp, getVariableByName: (variableName: BotVariable["name"]) => BotVariable | null, classes: any) => {
+  const variableMatches = html.matchAll(regex);
+
+  for (const m of variableMatches) {
+    const value = m[1];
+
+    const variableRefItems = value?.split('.');
+    const variableName = variableRefItems?.[0];
+
+    if (!isNil(variableName) && isNil(getVariableByName(variableName))) {
+      html = isNil(value)
+        ? html
+        : html.replace(
+          m[0],
+          `<span class="${classes.notFoundEntry}">Not found: ${variableName}</span>`
+        );
+
+      continue;
+    }
+
+    html = isNil(value)
+      ? html
+      : html.replace(
+        m[0],
+        `<span class="${classes.variable}">${value}</span>`
+      );
+  }
+
+  return html;
+}
+
+const parseTemplates = (html: string, regex: RegExp, getTemplateByName: (templateName: BotTemplate["name"]) => BotTemplate | null, classes: any) => {
+  const templateMatches = html.matchAll(regex);
+
+  for (const m of templateMatches) {
+    const value = m[1];
+
+    if (!isNil(value) && isNil(getTemplateByName(value))) {
+      html = isNil(value)
+        ? html
+        : html.replace(
+          m[0],
+          `<span class="${classes.notFoundEntry}">Not found: ${value}</span>`
+        );
+
+      continue;
+    }
+
+
+    html = isNil(value)
+      ? html
+      : html.replace(
+        m[0],
+        `<span class="${classes.template}">${value}</span>`
+      );
+  }
+
+  return html;
+}
+
+const parseObjectProperty = (html: string, regex: RegExp, classes: any) => {
+  const objectPropMatches = html.matchAll(regex);
+
+  for (const m of objectPropMatches) {
+    const value = m[1];
+
+    if (value?.includes('.')) {
+      continue;
+    }
+
+    html = isNil(value)
+      ? html
+      : html.replace(
+        m[0],
+        `<span class="${classes.objectProperty}">${value}</span>`
+      );
+  }
+
+  return html;
+}
 
 export const useParsedProjectEntriesHtml = (htmlContent?: string) => {
   const { classes } = useEntriesHtmlStyles();
@@ -16,60 +99,16 @@ export const useParsedProjectEntriesHtml = (htmlContent?: string) => {
       return html;
     }
 
-    const variableMatches = html.matchAll(/&lt;%variables.(.*?)%&gt;/g);
+    html = parseVariables(html, /&lt;%variables.(.*?)%&gt;/g, getVariableByName, classes);
+    html = parseVariables(html, /<%variables.(.*?)%>/g, getVariableByName, classes);
 
-    for (const m of variableMatches) {
-      const value = m[1];
+    html = parseTemplates(html, /&lt;%templates.(.*?)%&gt;/g, getTemplateByName, classes);
+    html = parseTemplates(html, /<%templates.(.*?)%>/g, getTemplateByName, classes);
 
-      const variableRefItems = value?.split('.');
-      const variableName = variableRefItems?.[0];
-
-      if (!isNil(variableName) && isNil(getVariableByName(variableName))) {
-        html = isNil(value)
-          ? html
-          : html.replace(
-            m[0],
-            `<span class="${classes.notFoundEntry}">Not found: ${variableName}</span>`
-          );
-
-        continue;
-      }
-
-      html = isNil(value)
-        ? html
-        : html.replace(
-          m[0],
-          `<span class="${classes.variable}">${value}</span>`
-        );
-    }
-
-    const templateMatches = html.matchAll(/&lt;%templates.(.*?)%&gt;/g);
-
-    for (const m of templateMatches) {
-      const value = m[1];
-
-      if (!isNil(value) && isNil(getTemplateByName(value))) {
-        html = isNil(value)
-          ? html
-          : html.replace(
-            m[0],
-            `<span class="${classes.notFoundEntry}">Not found: ${value}</span>`
-          );
-
-        continue;
-      }
-
-
-      html = isNil(value)
-        ? html
-        : html.replace(
-          m[0],
-          `<span class="${classes.template}">${value}</span>`
-        );
-    }
+    html = parseObjectProperty(html, /<%(.*?)%>/g, classes);
 
     return html;
-  }, [classes.notFoundEntry, classes.template, classes.variable, getTemplateByName, getVariableByName, htmlContent]);
+  }, [classes, getTemplateByName, getVariableByName, htmlContent]);
 
 
   return textContent;

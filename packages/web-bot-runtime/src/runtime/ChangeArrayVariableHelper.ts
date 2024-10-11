@@ -26,8 +26,6 @@ export class ChangeArrayVariableHelper {
       variable.name,
     ) as unknown[];
 
-    // console.log(sourceVariableValue);
-
     if (!Array.isArray(sourceVariableValue)) {
       throw new Error(
         'InvalidOperationError: sourceVariableValue is not array',
