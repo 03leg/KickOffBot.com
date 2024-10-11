@@ -5,6 +5,7 @@ import { makeStyles } from 'tss-react/mui';
 import { useFlowDesignerStore } from '~/components/bot/bot-builder/store';
 import { getConditionOperatorLabelByType } from '../Condition/utils';
 import { isEmpty, isNil } from 'lodash';
+import { useParsedProjectEntriesHtml } from '~/components/commons/hooks/useParsedProjectEntriesHtml';
 
 interface Props {
   workflow: ChangeObjectVariableWorkflow;
@@ -53,10 +54,18 @@ export const ObjectVariableDescriptionView = ({ workflow, variable }: Props) => 
     return false;
   }, [sourceVariable?.type, sourceVariable?.value, workflow.variableSource?.path]);
 
+  const insertPropertyDescription = `where will be inserted ${workflow.propertyName?.includes('<%') && workflow.propertyName?.includes('%>') ? workflow.propertyName : `<%${workflow.propertyName}%>`} property with value "${workflow.propertyValue as string}"`;
+  const insertPropertyDescriptionView = useParsedProjectEntriesHtml(insertPropertyDescription);
+
+  const removePropertyDescription = `where will be deleted ${workflow.propertyName?.includes('<%') && workflow.propertyName?.includes('%>') ? workflow.propertyName : `<%${workflow.propertyName}%>`}`;
+  const removePropertyDescriptionView = useParsedProjectEntriesHtml(removePropertyDescription);
+
   return (
     <div>
       <span className={classes.variable}>{variable?.name}</span><span> = </span>
       {workflow.source === ChangeObjectVariableDataSource.JSON && <span className={componentClasses.jsonValue}>(JSON value)</span>}
+      {workflow.source === ChangeObjectVariableDataSource.INSERT_PROPERTY && <span className={componentClasses.value}><span className={classes.variable}>{variable?.name}</span> <span dangerouslySetInnerHTML={{ __html: insertPropertyDescriptionView ?? ''}} ></span></span>}
+      {workflow.source === ChangeObjectVariableDataSource.REMOVE_PROPERTY && <span className={componentClasses.value}><span className={classes.variable}>{variable?.name}</span> <span dangerouslySetInnerHTML={{ __html: removePropertyDescriptionView ?? ''}} ></span></span>}
       {workflow.source === ChangeObjectVariableDataSource.VARIABLE && (sourceVariable?.type === VariableType.ARRAY || objectPropertyIsArray) &&
         <span>
           {<span>

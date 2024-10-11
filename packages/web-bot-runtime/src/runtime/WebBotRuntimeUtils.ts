@@ -61,11 +61,13 @@ export class WebBotRuntimeUtils {
         (v) => v.name === variableName,
       );
 
-      if (
-        isPlainObject(variableValue) &&
-        path in (variableValue as Record<string, unknown>)
-      ) {
-        return (variableValue as Record<string, string>)[path] ?? '';
+      if (isPlainObject(variableValue)) {
+        if (path in (variableValue as Record<string, unknown>)) {
+          return (variableValue as Record<string, string>)[path] ?? '';
+        } else {
+          // path does not exist in object
+          return '';
+        }
       } else if (variableValue instanceof Array) {
         if (isNil(converter)) {
           // TODO: return empty string and add it to service messages

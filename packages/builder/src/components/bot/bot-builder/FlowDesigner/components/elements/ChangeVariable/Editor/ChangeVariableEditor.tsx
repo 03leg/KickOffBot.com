@@ -32,6 +32,10 @@ export const ChangeVariableEditor = ({ element }: Props) => {
         return getVariableById(selectedVariableId)?.type ?? null;
     }, [getVariableById, selectedVariableId]);
 
+    const targetVariableValue = useMemo(() => {
+        return getVariableById(selectedVariableId)?.value ?? null;
+    }, [getVariableById, selectedVariableId]);
+
     const handleVariableChange = useCallback((variable: BotVariable) => {
         setSelectedVariableId(variable.id);
         element.selectedVariableId = variable.id;
@@ -98,7 +102,7 @@ export const ChangeVariableEditor = ({ element }: Props) => {
                     <BooleanTypeVariableEditor workflow={element.workflowDescription as ChangeBooleanVariableWorkflow} onWorkflowChange={handleWorkflowChange} />
                 )}
                 {(variableType !== null && (variableType === VariableType.OBJECT) &&
-                    <ObjectTypeVariableEditor workflow={element.workflowDescription as ChangeObjectVariableWorkflow} onWorkflowChange={handleWorkflowChange} />
+                    <ObjectTypeVariableEditor targetVariableValue={JSON.parse(targetVariableValue as string)} workflow={element.workflowDescription as ChangeObjectVariableWorkflow} onWorkflowChange={handleWorkflowChange} />
                 )}
                 {(variableType !== null && (variableType === VariableType.ARRAY) && arrayItemType &&
                     <ArrayTypeVariableEditor jsonTypeOfArrayItem={arrayItemType} firstItemOfArray={firstItemOfArray} workflow={element.workflowDescription as ChangeArrayVariableWorkflow} onWorkflowChange={handleWorkflowChange} />

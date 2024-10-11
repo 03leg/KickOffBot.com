@@ -12,6 +12,7 @@ interface Props extends Pick<TextFieldProps, 'label'> {
     value: string;
     onValueChange: (value: string) => void;
     contextObjectProperties?: string[];
+    showVariableSelector?: boolean;
 }
 
 export const AppTextField = (props: Props) => {
@@ -28,7 +29,7 @@ export const AppTextField = (props: Props) => {
             <TextField fullWidth {...props} value={props.value} onChange={(e) => props.onValueChange(e.target.value)} inputRef={inputRef}
                 onSelect={updateSelectionStart} />
             <Box className={classes.buttons}>
-                <VariableSelectorDialog onInsertVariable={handleInsertVariable} supportPathForObject={false} />
+                {(props.showVariableSelector ?? true) && <VariableSelectorDialog onInsertVariable={handleInsertVariable} supportPathForObject={false} />}
                 {!isNil(contextObjectProperties) && <StringItemsMenu values={contextObjectProperties} onInsertItem={handleInsertContextPropertyInText} buttonIcon={<ControlPointIcon />} />}
             </Box>
         </Box>

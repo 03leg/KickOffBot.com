@@ -86,6 +86,7 @@ export class WebBotRuntime {
     switch (element.type) {
       case ElementType.WEB_CONTENT_MESSAGE: {
         const typedElement = element as WebContentTextUIElement;
+
         const messageText = this._utils.getParsedText(
           typedElement.htmlContent ?? '',
           this._userContext,
@@ -529,11 +530,8 @@ export class WebBotRuntime {
           break;
         }
 
-        const workflowDescription =
-          element.workflowDescription as ChangeObjectVariableWorkflow;
-
         newValue = ChangeObjectVariableHelper.getObjectValue(
-          workflowDescription,
+          element,
           userContext,
           this._utils,
         ) as object;

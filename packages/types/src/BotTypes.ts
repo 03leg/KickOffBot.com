@@ -124,6 +124,8 @@ export enum ChangeBooleanVariableWorkflowStrategy {
 export enum ChangeObjectVariableDataSource {
   JSON,
   VARIABLE,
+  INSERT_PROPERTY,
+  REMOVE_PROPERTY
 }
 
 export enum ArrayFilterType {
@@ -148,6 +150,11 @@ export interface ChangeObjectVariableWorkflow {
   source: ChangeObjectVariableDataSource;
   json?: string;
   variableSource?: VariableValueSource;
+
+  // for insert or remove property
+  propertyName?: string;
+  // for insert property
+  propertyValue?: unknown;
 }
 
 export enum ChangeArrayOperation {
