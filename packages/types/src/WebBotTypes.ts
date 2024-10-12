@@ -233,9 +233,11 @@ export interface CardsRequestElement extends RequestElementBase {
   sendResponseOnSelect?: boolean;
   sendButtonText?: string;
   useCardButtons?: boolean;
-  showSendButton?: boolean;
   cardButtons?: ButtonElement[];
   cardItems: WebCardChatItem[];
+
+  useGeneralButtons?: boolean;
+  generalButtons?: ButtonElement[];
 }
 
 export interface CardsViewerElement extends Pick<CardsRequestElement, "cardItems"> {}
@@ -302,14 +304,17 @@ export interface WebInputCardsUIElement extends UIElement {
   useCardButtons?: boolean;
   strategy: WebCardsSourceStrategy;
   sourceDescription?: StaticSourceDescription | DynamicSourceDescription;
-  buttons?: ButtonElement[];
+  cardButtons?: ButtonElement[];
   variableId?: BotVariable["id"];
-  showSendButton?: boolean;
+
+  useGeneralButtons?: boolean;
+  generalButtons?: ButtonElement[];
 }
 
 export interface CardsUserResponse {
   selectedCards: Pick<WebCardChatItem, "id" | "value">[];
-  clickedButton?: ButtonElement;
+  clickedCardButton?: ButtonElement;
+  clickedGeneralButton?: ButtonElement;
   actionName?: string;
 }
 

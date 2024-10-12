@@ -178,7 +178,11 @@ export class WebBotRuntime {
         const chatItem = this.handleCardsElement(typedElement);
         chatItems.push(chatItem);
 
-        if (typedElement.useCardButtons || typedElement.selectableCards) {
+        if (
+          typedElement.useCardButtons ||
+          typedElement.selectableCards ||
+          typedElement.useGeneralButtons
+        ) {
           shouldHandleNextElement = false;
         }
         break;
@@ -233,7 +237,11 @@ export class WebBotRuntime {
 
     let chatItem: ChatItemWebRuntime;
 
-    if (element.useCardButtons || element.selectableCards) {
+    if (
+      element.useCardButtons ||
+      element.selectableCards ||
+      element.useGeneralButtons
+    ) {
       chatItem = {
         content: {
           element: requestElement,

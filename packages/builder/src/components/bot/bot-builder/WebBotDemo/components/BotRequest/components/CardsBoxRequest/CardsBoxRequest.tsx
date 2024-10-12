@@ -26,14 +26,10 @@ export const CardsBoxRequest = ({ request }: Props) => {
             selectedCards: data
         };
 
-        if (data.length === 0 && cardsElementRequestDescription.useCardButtons && cardsElementRequestDescription.showSendButton) {
-            response.actionName = sendButtonText;
-        }
-
         request.onResponse({
             data: response
         });
-    }, [cardsElementRequestDescription.showSendButton, cardsElementRequestDescription.useCardButtons, request, selectedCards, sendButtonText]);
+    }, [request, selectedCards]);
 
     const handleSelectedChange = useCallback((newValue: boolean, card: WebCardChatItem) => {
         if (cardsElementRequestDescription.selectableCards) {
@@ -59,13 +55,28 @@ export const CardsBoxRequest = ({ request }: Props) => {
 
         const response: CardsUserResponse = {
             selectedCards: [card].map(c => ({ id: c.id, value: c.value })),
-            clickedButton: button
+            clickedCardButton: button
         };
 
         request.onResponse({
             data: response
         });
     }, [request]);
+
+    const handleGeneralButtonClick = useCallback((button: ButtonElement) => {
+        throwIfNil(request.onResponse);
+
+        const response: CardsUserResponse = {
+            selectedCards: [],
+            clickedGeneralButton: button,
+            actionName: button.content
+        };
+
+        request.onResponse({
+            data: response
+        });
+        
+    },[request]);
 
     return (
         <Box data-testid="cards-box-request" sx={{ width: '100%', display: 'flex', flexDirection: 'column', padding: 1, boxSizing: 'border-box' }}>
@@ -94,13 +105,24 @@ export const CardsBoxRequest = ({ request }: Props) => {
             </Box>
             {
                 (
-                    (cardsElementRequestDescription.selectableCards && (cardsElementRequestDescription.multipleChoice || (!cardsElementRequestDescription.multipleChoice && !cardsElementRequestDescription.sendResponseOnSelect))) ||
-                    (!cardsElementRequestDescription.selectableCards && cardsElementRequestDescription.showSendButton)
+                    (cardsElementRequestDescription.selectableCards && (cardsElementRequestDescription.multipleChoice || (!cardsElementRequestDescription.multipleChoice && !cardsElementRequestDescription.sendResponseOnSelect)))
                 ) &&
                 <Box sx={{ display: 'flex', justifyContent: 'flex-end', marginTop: 2 }}>
-                    <Button disabled={selectedCards.length === 0 && cardsElementRequestDescription.selectableCards} sx={{ textTransform: 'none' }} variant='contained' onClick={() => sendResponse()}>
+                    <Button disabled={selectedCards.length === 0 && cardsElementRequestDescription.selectableCards} sx={{ textTransform: 'none' }} variant='outlined' onClick={() => sendResponse()}>
                         {sendButtonText}
                     </Button>
+                </Box>
+            }
+            {
+                (
+                    (!cardsElementRequestDescription.selectableCards && cardsElementRequestDescription.useGeneralButtons && (cardsElementRequestDescription.generalButtons ?? []).length > 0)
+                ) &&
+                <Box sx={{ display: 'flex', justifyContent: 'flex-end', marginTop: 1 }}>
+                    {cardsElementRequestDescription.generalButtons?.map((button) => {
+                        return <Button key={button.id} sx={{ textTransform: 'none', margin: ({ spacing }) => spacing(0, 1, 1, 0) }} variant='outlined' onClick={() => handleGeneralButtonClick(button)}>
+                            {button.content}
+                        </Button>;
+                    })}
                 </Box>
             }
         </Box>

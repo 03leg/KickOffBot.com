@@ -58,9 +58,12 @@ export class CardsElementHelper {
       multipleChoice: this._element.multipleChoice,
       sendResponseOnSelect: this._element.sendResponseOnSelect,
       sendButtonText: this.getParsedText(this._element.sendButtonText),
+
       useCardButtons: this._element.useCardButtons,
-      cardButtons: this._element.buttons,
-      showSendButton: this._element.showSendButton,
+      cardButtons: this._element.cardButtons,
+
+      useGeneralButtons: this._element.useGeneralButtons,
+      generalButtons: this._element.generalButtons,
     };
 
     if (this._element.strategy === WebCardsSourceStrategy.Static) {
@@ -186,8 +189,16 @@ export class CardsElementHelper {
       throw new Error('NotImplementedError: Unknown cards strategy');
     }
 
-    if (this._element.useCardButtons && userResponse.clickedButton?.id) {
-      const link = this.getButtonLink(userResponse.clickedButton.id);
+    if (this._element.useCardButtons && userResponse.clickedCardButton?.id) {
+      const link = this.getButtonLink(userResponse.clickedCardButton.id);
+      return link;
+    }
+
+    if (
+      this._element.useGeneralButtons &&
+      userResponse.clickedGeneralButton?.id
+    ) {
+      const link = this.getButtonLink(userResponse.clickedGeneralButton.id);
       return link;
     }
   }

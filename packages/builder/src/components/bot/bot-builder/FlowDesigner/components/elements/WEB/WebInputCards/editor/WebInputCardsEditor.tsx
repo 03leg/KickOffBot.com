@@ -7,7 +7,7 @@ import PreviewIcon from '@mui/icons-material/Preview';
 import { useAppDialog } from '~/components/bot/bot-builder/Dialog/useAppDialog';
 import { CardsDemoView } from './components/StaticCardsEditor/CardDemoView/CardsDemoView';
 import { AppTextField } from '~/components/commons/AppTextField';
-import { CardButtonsEditor } from './components/CardButtonsEditor';
+import { CardsElementButtonsEditor } from './components/CardsElementButtonsEditor';
 import { VariableSelector } from '../../../../VariableSelector';
 import { v4 } from 'uuid';
 
@@ -23,7 +23,6 @@ export const WebInputCardsEditor = ({ element }: Props) => {
     const [cardsSourceStrategy, setCardsSourceStrategy] = React.useState<WebCardsSourceStrategy>(element.strategy);
     const [sendButtonText, setSendButtonText] = React.useState<string>(element.sendButtonText ?? '');
     const [selectedVariableId, setSelectedVariableId] = useState<string>(element.variableId ?? '');
-    const [showSendButton, setShowSendButton] = useState<boolean>(element.showSendButton ?? false);
     const { openDialog } = useAppDialog();
 
     const handleMultipleChoiceValueChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
@@ -58,7 +57,7 @@ export const WebInputCardsEditor = ({ element }: Props) => {
         }
 
         if (!event.target.checked) {
-            element.buttons = [];
+            element.cardButtons = [];
         }
     }, [element]);
 
@@ -94,13 +93,30 @@ export const WebInputCardsEditor = ({ element }: Props) => {
         element.variableId = newVariable.id;
     }, [element]);
 
+    const [useGeneralButtons, setUseGeneralButtons] = useState<boolean>(element.useGeneralButtons ?? false);
+
+    const handleUseGeneralButtonsChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
+        const newValue = event.target.checked;
+
+        if (newValue) {
+            element.generalButtons = [{
+                content: 'General Button #1',
+                id: 'button-' + v4(),
+            }];
+        }
+
+        setUseGeneralButtons(newValue);
+        element.useGeneralButtons = newValue;
+    }, [element]);
+
+
     const [useCardButtons, setUseCardButtons] = useState<boolean>(element.useCardButtons ?? false);
     const handleUseCardButtonsChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
         const newValue = event.target.checked;
 
         if (newValue) {
-            element.buttons = [{
-                content: 'Button #1',
+            element.cardButtons = [{
+                content: 'Card Button #1',
                 id: 'button-' + v4(),
             }];
         }
@@ -108,15 +124,6 @@ export const WebInputCardsEditor = ({ element }: Props) => {
         setUseCardButtons(newValue);
         element.useCardButtons = newValue;
 
-
-
-    }, [element]);
-
-    const handleShowSendButtonChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
-        const newValue = event.target.checked;
-
-        setShowSendButton(newValue);
-        element.showSendButton = newValue;
     }, [element]);
 
     return (
@@ -168,25 +175,32 @@ export const WebInputCardsEditor = ({ element }: Props) => {
 
 
                 {!selectableCardsValue &&
-                    <Box sx={{ marginTop: 1 }}>
+                    <Box sx={{ marginTop: 1, display: 'flex', flexDirection: 'column' }}>
                         <FormControlLabel control={<Checkbox checked={useCardButtons} onChange={handleUseCardButtonsChange} />} label="Use card buttons" />
 
 
                         {useCardButtons &&
-                            <>
-                                <Box sx={{ ml: 4, marginBottom: 1 }}>
-                                    <FormControlLabel sx={{ marginBottom: 1 }} control={<Checkbox checked={showSendButton} onChange={handleShowSendButtonChange} />} label="Display the 'Send' button when clicking on card buttons is optional." />
-                                    {showSendButton && <AppTextField label="Send button text" value={sendButtonText ?? ''} onValueChange={handleSendButtonTextChange} />}
-                                </Box>
+                            <Box sx={{ marginLeft: 4 }}>
                                 <Box sx={{ marginBottom: 2 }}>
                                     <Typography sx={{ marginBottom: 1 }}>
                                         Select variable to save current card:
                                     </Typography>
                                     <VariableSelector valueId={selectedVariableId} onVariableChange={handleVariableChange} />
                                 </Box>
-                                <CardButtonsEditor element={element} />
-                            </>}
-                    </Box>}
+                                <CardsElementButtonsEditor element={element} property='cardButtons' />
+                            </Box>}
+
+                        <FormControlLabel control={<Checkbox checked={useGeneralButtons} onChange={handleUseGeneralButtonsChange} />} label="Use general buttons" />
+
+                        {useGeneralButtons &&
+                            <Box sx={{ marginLeft: 4 }}>
+                                <CardsElementButtonsEditor element={element} property='generalButtons' />
+                            </Box>
+                        }
+
+                    </Box>
+
+                }
             </Box>
         </Box>
     )
