@@ -11,10 +11,11 @@ import { getTextVariableReference } from '~/components/bot/bot-builder/utils';
 import { EmojiButton } from '../../EmojiButton/EmojiButton';
 
 interface Props {
-    element: { buttons?: ButtonElement[]; };
+    buttons?: ButtonElement[];
+    onButtonsChange: (buttons: ButtonElement[]) => void;
 }
 
-export const ManualStrategyButtonsEditor = ({ element }: Props) => {
+export const ManualStrategyButtonsEditor = ({ buttons = [], onButtonsChange }: Props) => {
     const inputRef = React.useRef<HTMLInputElement>();
     const [selectionStart, setSelectionStart] = React.useState<number>();
     const [selectedButton, setSelectedButton] = useState<ButtonElement>();
@@ -45,23 +46,27 @@ export const ManualStrategyButtonsEditor = ({ element }: Props) => {
 
     const handleAddButton = useCallback(() => {
         const newButton = { content: '#New button#', id: v4() };
-        element.buttons!.push(newButton);
+
+        onButtonsChange([...buttons, newButton]);
 
         setSelectedButton(newButton);
         setButtonContent(newButton.content);
 
-    }, [element.buttons]);
+    }, [buttons, onButtonsChange]);
 
     const handleDeleteButton = useCallback(() => {
-        const indexButton = element.buttons!.findIndex(b => b === selectedButton);
-        element.buttons!.splice(indexButton, 1);
+        const indexButton = buttons.findIndex(b => b === selectedButton);
+        buttons.splice(indexButton, 1);
 
         setSelectedButton(undefined);
         setButtonContent('');
-    }, [element.buttons, selectedButton]);
+
+        onButtonsChange([...buttons]);
+
+    }, [buttons, onButtonsChange, selectedButton]);
 
     const canDeleteButton = useMemo(() => {
-        if (element.buttons!.length === 1) {
+        if (buttons.length === 1) {
             return false;
         }
 
@@ -70,7 +75,7 @@ export const ManualStrategyButtonsEditor = ({ element }: Props) => {
         }
 
         return true;
-    }, [element.buttons, links, selectedButton?.id]);
+    }, [buttons.length, links, selectedButton?.id]);
 
     const insertInButtonText = useCallback((text: string) => {
         if (isNil(selectedButton)) {
@@ -98,7 +103,7 @@ export const ManualStrategyButtonsEditor = ({ element }: Props) => {
         <Box sx={{ flex: 1, display: 'flex', backgroundColor: '#F3F6F9', height: '300px', padding: 1 }}>
             <Box sx={{ width: '200px', backgroundColor: 'white', display: 'flex', flexDirection: 'column' }}>
                 <List dense={true} sx={{ flex: 1, height: 'calc(100% - 55px)', overflowY: 'auto' }}>
-                    {element.buttons!.map(b => (
+                    {buttons.map(b => (
                         <ListItemButton onClick={() => handleSelectButton(b)} selected={selectedButton === b} key={b.id}><ListItemText
                             primary={b.content}
                             primaryTypographyProps={{ style: { whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' } }} /></ListItemButton>

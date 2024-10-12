@@ -106,9 +106,9 @@ export class WebRuntimeConnector {
         .map((c) => c.value)
         .join(", ");
 
-      if (cardResponseData.clickedButton) {
+      if (cardResponseData.clickedCardButton) {
         responseText =
-          cardResponseData.clickedButton.content + ", " + responseText;
+          cardResponseData.clickedCardButton.content + ", " + responseText;
       }
 
       if (cardResponseData.actionName) {
@@ -146,7 +146,9 @@ export class WebRuntimeConnector {
 
       await this.toStore(response);
     } catch {
-      this._storeApi.showError("Failed to send your response. Please try to use bot later.");
+      this._storeApi.showError(
+        "Failed to send your response. Please try to use bot later."
+      );
     } finally {
       this._storeApi.setLoadingValue(false);
     }

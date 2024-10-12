@@ -81,7 +81,7 @@ export const CardsDemoView = ({ element }: Props) => {
                                     <Card1
                                         selectableCard={element.selectableCards}
                                         useCardButtons={element.useCardButtons}
-                                        cardButtons={element.buttons}
+                                        cardButtons={element.cardButtons}
                                         selected={selectedCards.includes(card)}
                                         onSelectedChange={(newValue) => {
                                             handleSelectedChange(newValue, card);
@@ -96,7 +96,7 @@ export const CardsDemoView = ({ element }: Props) => {
                                     <Card1
                                         selectableCard={element.selectableCards}
                                         useCardButtons={element.useCardButtons}
-                                        cardButtons={element.buttons}
+                                        cardButtons={element.cardButtons}
                                         selected={selectedCards.includes(card)}
                                         onSelectedChange={(newValue) => {
                                             handleSelectedChange(newValue, card);
@@ -109,13 +109,22 @@ export const CardsDemoView = ({ element }: Props) => {
                         </Box>
                         {
                             (
-                                (element.selectableCards && (element.multipleChoice || (!element.multipleChoice && !element.sendResponseOnSelect))) ||
-                                (!element.selectableCards && element.showSendButton)
+                                (element.selectableCards && (element.multipleChoice || (!element.multipleChoice && !element.sendResponseOnSelect)))
                             ) &&
                             <Box sx={{ display: 'flex', justifyContent: 'flex-end', marginTop: 2 }}>
-                                <Button disabled={selectedCards.length === 0} sx={{ textTransform: 'none' }} variant='contained' onClick={() => setShowUserResponse(true)}>
+                                <Button disabled={selectedCards.length === 0} sx={{ textTransform: 'none' }} variant='outlined' onClick={() => setShowUserResponse(true)}>
                                     {element.sendButtonText && !isEmpty(element.sendButtonText) ? element.sendButtonText : 'Send'}
                                 </Button>
+                            </Box>
+                        }
+                        {
+                            (!element.selectableCards && element.useGeneralButtons && element.generalButtons && element.generalButtons.length > 0) &&
+                            <Box sx={{ display: 'flex', justifyContent: 'flex-end', marginTop: 2 }}>
+                                {element.generalButtons.map((button) => (
+                                    <Button key={button.id} sx={{ textTransform: 'none', margin: ({ spacing }) => spacing(0, 1, 1, 0) }} variant='outlined'>
+                                        {button.content}
+                                    </Button>)
+                                )}
                             </Box>
                         }
                     </Box>

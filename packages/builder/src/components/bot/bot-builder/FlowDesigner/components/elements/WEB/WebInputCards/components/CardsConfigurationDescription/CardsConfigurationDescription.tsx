@@ -7,6 +7,7 @@ import { ButtonsInput } from '../../../../ButtonsInput/ButtonsInput';
 import { useVariableInTextStyles } from '../../../../ChangeVariable/useContentWithVariable';
 import { useFlowDesignerStore } from '~/components/bot/bot-builder/store';
 import { getImageSrc } from '../../editor/getImageSrc';
+import { button } from 'telegraf/typings/markup';
 
 interface Props {
     element: WebInputCardsUIElement;
@@ -75,17 +76,22 @@ export const CardsConfigurationDescription = ({ element }: Props) => {
                 </>
             }
 
-            {!element.selectableCards && element.useCardButtons && element.buttons && element.buttons.length > 0 &&
+            {!element.selectableCards && element.useCardButtons && element.cardButtons && element.cardButtons.length > 0 &&
                 <>
                     <Typography sx={{ marginTop: 2, marginBottom: 1 }}>Each card have <strong>buttons</strong> that you configured.&nbsp;</Typography>
                     <Box sx={{ marginBottom: 1 }}>
-                        <ButtonsInput element={{ ...element, strategy: ButtonsSourceStrategy.Manual } as any} />
+                        <ButtonsInput element={{ ...element, buttons: element.cardButtons, strategy: ButtonsSourceStrategy.Manual } as any} />
                     </Box>
-                    {variable === null && <Alert severity="error" sx={{ marginTop: 1, marginBottom: 1 }}>Please set a variable to store the card information when the user clicks on a button.</Alert>}
+                    {variable === null && <Alert severity="error" sx={{ marginTop: 1, marginBottom: 1 }}>Please set a variable to store the card information when the user clicks on a card button.</Alert>}
                     {variable !== null && <>The information of the chosen card will be stored in a variable <span className={classes.variable}>{variable?.name}</span>.&nbsp;</>}
-
-                    {element.showSendButton && <><br />Additionally, display the &apos;Send&apos; button if clicking on the card buttons is not required for the user.</>}
-
+                </>
+            }
+            {!element.selectableCards && element.useGeneralButtons && element.generalButtons && element.generalButtons.length > 0 &&
+                <>
+                    <Typography sx={{ marginTop: 2, marginBottom: 1 }}>Cards element has <strong>general buttons</strong> that you configured.</Typography>
+                    <Box sx={{ marginBottom: 1 }}>
+                        <ButtonsInput element={{ ...element, buttons: element.generalButtons, strategy: ButtonsSourceStrategy.Manual } as any} />
+                    </Box>
                 </>
             }
 
