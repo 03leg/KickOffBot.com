@@ -117,11 +117,12 @@ export const CardsBoxRequest = ({ request, onContentHeightChange }: Props) => {
             }
             {
                 (
-                    (!cardsElementRequestDescription.selectableCards && cardsElementRequestDescription.useGeneralButtons && (cardsElementRequestDescription.generalButtons ?? []).length > 0)
+                    (cardsElementRequestDescription.useGeneralButtons && (cardsElementRequestDescription.generalButtons ?? []).length > 0)
                 ) &&
-                <Box sx={{ display: 'flex', justifyContent: 'flex-end', marginTop: 1 }}>
+                <Box sx={{ display: 'flex', justifyContent: 'flex-end', marginTop: 1, 
+                    flexWrap: "wrap", }}>
                     {cardsElementRequestDescription.generalButtons?.map((button) => {
-                        return <Button key={button.id} sx={{ textTransform: 'none', margin: ({ spacing }) => spacing(0, 1, 1, 0) }} variant='outlined' onClick={() => handleGeneralButtonClick(button)}>
+                        return <Button key={button.id} sx={{ textTransform: 'none', margin: ({ spacing }) => spacing(0, 0, 1, 1) }} variant='outlined' onClick={() => handleGeneralButtonClick(button)}>
                             {button.content}
                         </Button>;
                     })}

@@ -118,10 +118,10 @@ export const CardsDemoView = ({ element }: Props) => {
                             </Box>
                         }
                         {
-                            (!element.selectableCards && element.useGeneralButtons && element.generalButtons && element.generalButtons.length > 0) &&
-                            <Box sx={{ display: 'flex', justifyContent: 'flex-end', marginTop: 2 }}>
+                            (element.useGeneralButtons && element.generalButtons && element.generalButtons.length > 0) &&
+                            <Box sx={{ display: 'flex', justifyContent: 'flex-end', marginTop: 1 }}>
                                 {element.generalButtons.map((button) => (
-                                    <Button key={button.id} sx={{ textTransform: 'none', margin: ({ spacing }) => spacing(0, 1, 1, 0) }} variant='outlined'>
+                                    <Button key={button.id} sx={{ textTransform: 'none', margin: ({ spacing }) => spacing(0, 0, 1, 1) }} variant='outlined'>
                                         {button.content}
                                     </Button>)
                                 )}

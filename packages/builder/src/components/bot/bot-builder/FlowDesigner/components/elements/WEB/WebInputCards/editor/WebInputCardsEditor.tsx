@@ -189,17 +189,15 @@ export const WebInputCardsEditor = ({ element }: Props) => {
                                 </Box>
                                 <CardsElementButtonsEditor element={element} property='cardButtons' />
                             </Box>}
-
-                        <FormControlLabel control={<Checkbox checked={useGeneralButtons} onChange={handleUseGeneralButtonsChange} />} label="Use general buttons" />
-
-                        {useGeneralButtons &&
-                            <Box sx={{ marginLeft: 4 }}>
-                                <CardsElementButtonsEditor element={element} property='generalButtons' />
-                            </Box>
-                        }
-
                     </Box>
+                }
 
+                <FormControlLabel control={<Checkbox checked={useGeneralButtons} onChange={handleUseGeneralButtonsChange} />} label="Use general buttons" />
+
+                {useGeneralButtons &&
+                    <Box sx={{ marginLeft: 4 }}>
+                        <CardsElementButtonsEditor element={element} property='generalButtons' />
+                    </Box>
                 }
             </Box>
         </Box>
