@@ -35,7 +35,6 @@ export const ChatViewer = ({ project, height, projectId }: Props) => {
 
     const goToBottom = useCallback(() => {
         lastChildRef.current?.scrollIntoView({ behavior: 'smooth' });
-        lastChildRef.current?.focus();
     }, [])
 
     useEffect(() => {
@@ -43,7 +42,7 @@ export const ChatViewer = ({ project, height, projectId }: Props) => {
     }, [storeState.chatItems, storeState.botIsTyping, goToBottom]);
 
     return (
-        <Box sx={{ height: height, overflow: 'auto', display: 'flex', flexDirection: 'column', WebkitOverflowScrolling: 'touch' }} data-testid="chat-viewer">
+        <Box sx={{ height: height, overflow: 'auto' }} data-testid="chat-viewer">
             {storeState.chatItems.map(m => {
                 switch (m.itemType) {
                     case ChatItemTypeWebRuntime.BOT_MESSAGE: {
@@ -59,7 +58,7 @@ export const ChatViewer = ({ project, height, projectId }: Props) => {
             })}
             {storeState.botIsTyping && <BotTyping />}
             {storeState.errorMessages.length > 0 && <ErrorMessages errorMessages={storeState.errorMessages} />}
-            <div ref={lastChildRef} tabIndex={0}></div>
+            <div ref={lastChildRef} ></div>
         </Box>
     )
 }
