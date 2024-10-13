@@ -39,8 +39,6 @@ export class WebBotRuntimeController {
       response.value,
     );
 
-    console.log('result1', result);
-
     return result;
   }
 }
