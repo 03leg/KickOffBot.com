@@ -86,7 +86,7 @@ export const CardsConfigurationDescription = ({ element }: Props) => {
                     {variable !== null && <>The information of the chosen card will be stored in a variable <span className={classes.variable}>{variable?.name}</span>.&nbsp;</>}
                 </>
             }
-            {!element.selectableCards && element.useGeneralButtons && element.generalButtons && element.generalButtons.length > 0 &&
+            {element.useGeneralButtons && element.generalButtons && element.generalButtons.length > 0 &&
                 <>
                     <Typography sx={{ marginTop: 2, marginBottom: 1 }}>Cards element has <strong>general buttons</strong> that you configured.</Typography>
                     <Box sx={{ marginBottom: 1 }}>
