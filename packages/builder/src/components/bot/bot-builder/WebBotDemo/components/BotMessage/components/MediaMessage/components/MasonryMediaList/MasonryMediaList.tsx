@@ -8,6 +8,7 @@ import { UnsplashAuthorBox } from '../UnsplashAuthorBox';
 
 interface Props {
     medias: WebMediaDescription[];
+    onContentHeightChange: () => void;
 }
 
 
@@ -23,7 +24,7 @@ const getImageUrl = (image: WebImageMediaDescription) => {
     throw new Error('Unsupported image source');
 };
 
-export const MasonryMediaList = ({ medias }: Props) => {
+export const MasonryMediaList = ({ medias, onContentHeightChange}: Props) => {
     const [selectedImage, setSelectedImage] = React.useState<WebImageMediaDescription | undefined>(undefined);
 
     const handleImageClick = useCallback((image: WebImageMediaDescription) => {
@@ -59,7 +60,7 @@ export const MasonryMediaList = ({ medias }: Props) => {
                         }}
                     />);
 
-                    return <ImageListItem key={item.id}  onMouseEnter={() => setSelectedImage(imgDescription)} onMouseLeave={() => setSelectedImage(undefined)}>
+                    return <ImageListItem key={item.id} onLoad={onContentHeightChange}  onMouseEnter={() => setSelectedImage(imgDescription)} onMouseLeave={() => setSelectedImage(undefined)}>
                         {imgElement}
                         {typeof imgDescription.image !== "string" && imgDescription.image.source === 'unsplash' && isVisibleUnsplashAuthorBox(imgDescription) && <UnsplashAuthorBox image={imgDescription.image} />}
                     </ImageListItem>

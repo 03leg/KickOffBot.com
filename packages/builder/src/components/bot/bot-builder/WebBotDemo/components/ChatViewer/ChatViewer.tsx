@@ -49,7 +49,7 @@ export const ChatViewer = ({ project, height, projectId }: Props) => {
                         return <BotMessage message={m.content as BotMessageBody} key={m.id} onContentHeightChange={goToBottom} />
                     }
                     case ChatItemTypeWebRuntime.BOT_REQUEST: {
-                        return <BotRequest request={m.content as RequestDescriptionWebRuntime} key={m.id} />
+                        return <BotRequest request={m.content as RequestDescriptionWebRuntime} onContentHeightChange={goToBottom} key={m.id} />
                     }
                     case ChatItemTypeWebRuntime.USER_MESSAGE: {
                         return <UserMessage responseBody={m.content as BotMessageBody} key={m.id} />

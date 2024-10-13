@@ -17,6 +17,7 @@ interface Props {
     useCardButtons?: boolean;
     cardButtons?: ButtonElement[];
     onButtonClick?: (button: ButtonElement) => void;
+    onContentHeightChange?: () => void;
 }
 
 const SelectableChatCard1 = styled(Card)<CardProps>(({ theme }) => ({
@@ -52,7 +53,7 @@ const ChatCardContent = styled(CardContent)(({ theme }) => ({
 
 
 
-export const Card1 = ({ card, selected, onSelectedChange, isLast, selectableCard, cardButtons, onButtonClick }: Props) => {
+export const Card1 = ({ card, selected, onSelectedChange, isLast, selectableCard, cardButtons, onButtonClick, onContentHeightChange }: Props) => {
     const { classes, cx } = useCard1Styles();
 
     return (
@@ -60,7 +61,7 @@ export const Card1 = ({ card, selected, onSelectedChange, isLast, selectableCard
             {selectableCard &&
                 <SelectableChatCard1 className={cx(classes.root, selected ? 'Mui-selected' : '')} onClick={() => onSelectedChange?.(!selected)}>
                     {selected && <CardSelectionMark />}
-                    <Card1Image image={card.image} />
+                    <Card1Image image={card.image} onImageLoaded={onContentHeightChange ?? (() => {})} />
 
                     {card.htmlDescription && <ChatCardContent>
                         <div dangerouslySetInnerHTML={{ __html: card.htmlDescription }}>
@@ -70,7 +71,7 @@ export const Card1 = ({ card, selected, onSelectedChange, isLast, selectableCard
             }
             {!selectableCard &&
                 <NotSelectableChatCard1 className={cx(classes.root)}>
-                    <Card1Image image={card.image} />
+                    <Card1Image image={card.image} onImageLoaded={onContentHeightChange ?? (() => {})}/>
 
                     {card.htmlDescription && <ChatCardContent>
                         <div dangerouslySetInnerHTML={{ __html: card.htmlDescription }}>

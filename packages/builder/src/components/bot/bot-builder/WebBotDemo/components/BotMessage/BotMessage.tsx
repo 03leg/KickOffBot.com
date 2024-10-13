@@ -23,7 +23,7 @@ export const BotMessage = ({ message, onContentHeightChange }: Props) => {
 
             {message.type === BotMessageBodyType.MessageAndAttachments && <MessageAndAttachments message={message.content as MessageDescriptionWebRuntime} onContentHeightChange={onContentHeightChange} />}
             {message.type === BotMessageBodyType.Cards && <CardsViewer cardsDescription={message.content as CardsViewerElement} onContentHeightChange={onContentHeightChange} />}
-            {message.type === BotMessageBodyType.Media && <MediaMessage content={message.content as MediaMessageDescription} />}
+            {message.type === BotMessageBodyType.Media && <MediaMessage content={message.content as MediaMessageDescription} onContentHeightChange={onContentHeightChange} />}
         </Box>
     )
 }

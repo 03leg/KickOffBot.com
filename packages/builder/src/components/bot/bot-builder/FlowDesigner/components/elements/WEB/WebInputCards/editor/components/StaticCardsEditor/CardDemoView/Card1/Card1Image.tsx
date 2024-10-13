@@ -8,10 +8,11 @@ import { UnsplashAuthorBox } from "~/components/bot/bot-builder/WebBotDemo/compo
 
 interface Props {
   image?: string | UnsplashPhoto;
+  onImageLoaded: () => void; 
 }
 
-export const Card1Image = ({ image }: Props) => {
-  const { classes, cx } = useCard1Styles();
+export const Card1Image = ({ image, onImageLoaded }: Props) => {
+  const { classes } = useCard1Styles();
   const [showPhotoInfo, setShowPhotoInfo] = React.useState(false);
 
   if (isNil(image)) {
@@ -26,6 +27,7 @@ export const Card1Image = ({ image }: Props) => {
         srcSet={image}
         loading="lazy"
         alt=""
+        onLoad={() => onImageLoaded()}
       />}
     {typeof image === "object" && image.source === "unsplash" && <Box sx={{ position: 'relative' }} onMouseEnter={() => setShowPhotoInfo(true)}
       onMouseLeave={() => setShowPhotoInfo(false)}>
@@ -35,6 +37,7 @@ export const Card1Image = ({ image }: Props) => {
         srcSet={image.regularSrc}
         loading="lazy"
         alt=""
+        onLoad={() => onImageLoaded()}
       />
       {showPhotoInfo && <UnsplashAuthorBox image={image} />}
     </Box>}
