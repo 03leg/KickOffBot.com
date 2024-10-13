@@ -18,6 +18,7 @@ export const CardsViewer = ({ cardsDescription, onContentHeightChange }: Props) 
                             selectableCard={false}
                             useCardButtons={false}
                             selected={false}
+                            onContentHeightChange={onContentHeightChange}
                             onSelectedChange={() => {
                             }}
                             onButtonClick={() => {

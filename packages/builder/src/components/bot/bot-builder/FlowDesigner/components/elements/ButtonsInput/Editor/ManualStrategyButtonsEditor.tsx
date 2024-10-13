@@ -90,8 +90,8 @@ export const ManualStrategyButtonsEditor = ({ buttons = [], onButtonsChange }: P
     }, [buttonContent, selectedButton, selectionStart]);
 
 
-    const handleInsertVariable = useCallback((variable: BotVariable) => {
-        insertInButtonText(getTextVariableReference(variable));
+    const handleInsertVariable = useCallback((variable: BotVariable, path?: string) => {
+        insertInButtonText(getTextVariableReference(variable, path));
     }, [insertInButtonText]);
 
     const handleInsertEmoji = useCallback((emoji: string) => {
@@ -129,7 +129,7 @@ export const ManualStrategyButtonsEditor = ({ buttons = [], onButtonsChange }: P
                             </IconButton>
                             <EmojiButton onInsertEmoji={handleInsertEmoji} />
 
-                            <VariableSelectorDialog onInsertVariable={handleInsertVariable} supportPathForObject={false} />
+                            <VariableSelectorDialog onInsertVariable={handleInsertVariable} supportPathForObject={true} />
                         </Box>
 
                     </Box>

@@ -12,9 +12,10 @@ import { CardsBoxRequest } from './components/CardsBoxRequest';
 
 interface Props {
     request: RequestDescriptionWebRuntime;
+    onContentHeightChange: () => void;
 }
 
-export const BotRequest = ({ request }: Props) => {
+export const BotRequest = ({ request, onContentHeightChange }: Props) => {
     const { classes } = useBotRequestStyles();
 
     const requestElement = useMemo(() => {
@@ -40,14 +41,14 @@ export const BotRequest = ({ request }: Props) => {
                 return <ButtonsBoxRequest request={request} />
             }
             case ElementType.WEB_INPUT_CARDS: {
-                return <CardsBoxRequest request={request} />
+                return <CardsBoxRequest request={request} onContentHeightChange={onContentHeightChange} />
             }
             default: {
                 throw new Error('NotImplementedError');
             }
         }
 
-    }, [request]);
+    }, [onContentHeightChange, request]);
 
     return (
         <Box className={classes.root}>

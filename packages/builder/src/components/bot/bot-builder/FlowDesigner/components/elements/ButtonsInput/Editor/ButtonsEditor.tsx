@@ -5,8 +5,6 @@ import React, { useCallback } from 'react'
 import { ManualStrategyButtonsEditor } from './ManualStrategyButtonsEditor';
 import { FromVariableStrategyButtonsEditor } from './FromVariableStrategyButtonsEditor';
 
-
-
 interface Props {
     element: InputButtonsUIElement | MessageButtonsDescription;
 }

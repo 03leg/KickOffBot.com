@@ -23,14 +23,14 @@ export const NumberStringTypeVariableEditor = ({ workflow, onWorkflowChange }: P
         setExpression(event.target.value);
     }, [onWorkflowChange]);
 
-    const handleSelectVariable = useCallback((variable: BotVariable) => {
+    const handleSelectVariable = useCallback((variable: BotVariable, path?: string) => {
         if (variable.type === VariableType.ARRAY && (variable.arrayItemType === VariableType.NUMBER || variable.arrayItemType === VariableType.OBJECT)) {
             setSelectedVariable(variable);
             setShowConvertArrayOptionsDialog(true);
             return;
         }
 
-        handleInsertVariable(variable);
+        handleInsertVariable(variable, path);
     }, [handleInsertVariable]);
 
     const handleConvertArrayOptionsDialogClose = useCallback((result?: ConvertArrayOptionsDialogResult) => {
@@ -41,7 +41,7 @@ export const NumberStringTypeVariableEditor = ({ workflow, onWorkflowChange }: P
     }, [handleInsertVariable, selectedVariable])
 
     const handleCustomVariableFilter = useCallback((variable: BotVariable) => {
-        if ([VariableType.NUMBER, VariableType.ARRAY, VariableType.STRING].includes(variable.type)) {
+        if ([VariableType.NUMBER, VariableType.ARRAY, VariableType.STRING, VariableType.OBJECT].includes(variable.type)) {
             return true;
         }
 

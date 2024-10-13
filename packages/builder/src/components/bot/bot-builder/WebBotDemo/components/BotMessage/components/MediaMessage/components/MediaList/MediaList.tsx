@@ -9,16 +9,20 @@ interface Props {
     medias: WebMediaDescription[];
     wrapped?: boolean;
     direction: 'row' | 'column';
+    onContentHeightChange: () => void;
 }
 
-export const MediaList = ({ medias, wrapped = false, direction }: Props) => {
+export const MediaList = ({ medias, wrapped = false, direction, onContentHeightChange }: Props) => {
     const { classes } = useMediaListStyles({ wrapped, direction });
     return (
         <Box className={classes.root}>
             {medias.map((media, index) => {
 
                 if (media.type === WebMediaType.IMAGE) {
-                    return <ImageMediaItem image={media as WebImageMediaDescription} count={medias.length} key={media.id} wrapped={wrapped} isLast={index + 1 === medias.length} direction={direction} />
+                    return <ImageMediaItem image={media as WebImageMediaDescription} count={medias.length} 
+                    key={media.id} wrapped={wrapped} isLast={index + 1 === medias.length} direction={direction} 
+                    onContentHeightChange={onContentHeightChange}
+                    />
                 }
 
                 if (media.type === WebMediaType.VIDEO) {

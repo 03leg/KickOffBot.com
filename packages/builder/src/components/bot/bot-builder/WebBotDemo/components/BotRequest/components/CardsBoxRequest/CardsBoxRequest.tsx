@@ -7,9 +7,10 @@ import { throwIfNil } from '~/utils/guard';
 
 interface Props {
     request: RequestDescriptionWebRuntime;
+    onContentHeightChange: () => void;
 }
 
-export const CardsBoxRequest = ({ request }: Props) => {
+export const CardsBoxRequest = ({ request, onContentHeightChange }: Props) => {
     const cardsElementRequestDescription = request.element as CardsRequestElement;
     const [selectedCards, setSelectedCards] = React.useState<WebCardChatItem[]>([]);
 
@@ -89,6 +90,7 @@ export const CardsBoxRequest = ({ request }: Props) => {
                                 useCardButtons={cardsElementRequestDescription.useCardButtons}
                                 cardButtons={cardsElementRequestDescription.useCardButtons ? cardsElementRequestDescription.cardButtons : undefined}
                                 selected={selectedCards.includes(card)}
+                                onContentHeightChange={onContentHeightChange}
                                 onSelectedChange={(newValue) => {
                                     handleSelectedChange(newValue, card);
                                 }}
