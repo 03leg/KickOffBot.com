@@ -61,11 +61,7 @@ export const StaticCardsEditor = ({ element }: Props) => {
                 selectedItem={selectedCard}
                 detailsView={<CardDetailsView item={selectedCard} onChange={() => { }} />}
             />
-
-            {/* {demoCardDescription &&
-                <Box sx={{ height: '100%', width: '40%', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 1, backgroundColor: "#F3F6F9" }}>
-                    <CardDemoView card={demoCardDescription} />
-                </Box>} */}
+            
         </Box>
     )
 }

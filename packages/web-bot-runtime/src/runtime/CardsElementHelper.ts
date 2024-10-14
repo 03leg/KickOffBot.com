@@ -58,10 +58,7 @@ export class CardsElementHelper {
       multipleChoice: this._element.multipleChoice,
       sendResponseOnSelect: this._element.sendResponseOnSelect,
       sendButtonText: this.getParsedText(this._element.sendButtonText),
-
       useCardButtons: this._element.useCardButtons,
-      cardButtons: this._element.cardButtons,
-
       useGeneralButtons: this._element.useGeneralButtons,
       generalButtons: this._element.generalButtons,
     };
@@ -117,6 +114,10 @@ export class CardsElementHelper {
           dataSourceDescription.cardDescription.htmlDescription,
           index,
         ),
+        cardButtons: this._element.cardButtons?.map((button) => ({
+          id: button.id,
+          content: this.parseText(card, button.content, index),
+        })),
       };
 
       index++;
@@ -170,6 +171,10 @@ export class CardsElementHelper {
               )
             : cardDescription.image,
         htmlDescription: this.getParsedText(cardDescription.htmlDescription),
+        cardButtons: this._element.cardButtons?.map((button) => ({
+          id: button.id,
+          content: this.getParsedText(button.content),
+        })),
       };
 
       result.push(newItem);

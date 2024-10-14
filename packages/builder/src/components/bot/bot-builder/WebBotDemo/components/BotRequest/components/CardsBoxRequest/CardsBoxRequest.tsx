@@ -88,7 +88,7 @@ export const CardsBoxRequest = ({ request, onContentHeightChange }: Props) => {
                             return <Card1
                                 selectableCard={cardsElementRequestDescription.selectableCards}
                                 useCardButtons={cardsElementRequestDescription.useCardButtons}
-                                cardButtons={cardsElementRequestDescription.useCardButtons ? cardsElementRequestDescription.cardButtons : undefined}
+                                cardButtons={cardsElementRequestDescription.useCardButtons ? card.cardButtons : undefined}
                                 selected={selectedCards.includes(card)}
                                 onContentHeightChange={onContentHeightChange}
                                 onSelectedChange={(newValue) => {
