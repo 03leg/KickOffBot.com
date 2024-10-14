@@ -225,6 +225,7 @@ export interface WebCardChatItem {
   value?: string;
   image?: string | UnsplashPhoto;
   htmlDescription?: string;
+  cardButtons?: ButtonElement[];
 }
 
 export interface CardsRequestElement extends RequestElementBase {
@@ -233,7 +234,7 @@ export interface CardsRequestElement extends RequestElementBase {
   sendResponseOnSelect?: boolean;
   sendButtonText?: string;
   useCardButtons?: boolean;
-  cardButtons?: ButtonElement[];
+
   cardItems: WebCardChatItem[];
 
   useGeneralButtons?: boolean;

@@ -7,19 +7,24 @@ import AddIcon from '@mui/icons-material/Add';
 import { v4 } from 'uuid';
 import { useFlowDesignerStore } from '~/components/bot/bot-builder/store';
 import { VariableSelectorDialog } from '../../../VariableSelectorDialog';
-import { getTextVariableReference } from '~/components/bot/bot-builder/utils';
+import { getTextPropertyReference, getTextVariableReference } from '~/components/bot/bot-builder/utils';
 import { EmojiButton } from '../../EmojiButton/EmojiButton';
+import { StringItemsMenu } from '../../TextEditor/StringItemsMenu';
+import ControlPointIcon from '@mui/icons-material/ControlPoint';
+
 
 interface Props {
     buttons?: ButtonElement[];
     onButtonsChange: (buttons: ButtonElement[]) => void;
+    contextObjectProperties?: string[];
 }
 
-export const ManualStrategyButtonsEditor = ({ buttons = [], onButtonsChange }: Props) => {
+export const ManualStrategyButtonsEditor = ({ buttons = [], onButtonsChange, contextObjectProperties }: Props) => {
     const inputRef = React.useRef<HTMLInputElement>();
     const [selectionStart, setSelectionStart] = React.useState<number>();
     const [selectedButton, setSelectedButton] = useState<ButtonElement>();
     const [buttonContent, setButtonContent] = useState<string>();
+ 
     const { links } = useFlowDesignerStore((state) => ({
         links: state.project.links,
     }));
@@ -98,6 +103,10 @@ export const ManualStrategyButtonsEditor = ({ buttons = [], onButtonsChange }: P
         insertInButtonText(emoji);
     }, [insertInButtonText]);
 
+    const handleInsertObjectProperty = useCallback((property: string) => {
+        insertInButtonText(getTextPropertyReference(property));
+    }, [insertInButtonText]);
+
 
     return (
         <Box sx={{ flex: 1, display: 'flex', backgroundColor: '#F3F6F9', height: '300px', padding: 1 }}>
@@ -130,6 +139,7 @@ export const ManualStrategyButtonsEditor = ({ buttons = [], onButtonsChange }: P
                             <EmojiButton onInsertEmoji={handleInsertEmoji} />
 
                             <VariableSelectorDialog onInsertVariable={handleInsertVariable} supportPathForObject={true} />
+                            {!isNil(contextObjectProperties) && <StringItemsMenu values={contextObjectProperties} onInsertItem={handleInsertObjectProperty} buttonIcon={<ControlPointIcon />} />}
                         </Box>
 
                     </Box>
