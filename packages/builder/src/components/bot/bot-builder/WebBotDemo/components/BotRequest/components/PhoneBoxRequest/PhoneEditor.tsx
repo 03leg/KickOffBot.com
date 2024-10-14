@@ -45,6 +45,7 @@ export const PhoneEditor: React.FC<PhoneEditorProps> = ({
             value={inputValue}
             onChange={handlePhoneValueChange}
             type="tel"
+            fullWidth
             inputRef={inputRef}
             InputProps={{
                 startAdornment: (

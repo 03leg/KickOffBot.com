@@ -1,10 +1,12 @@
 import { makeStyles } from "tss-react/mui";
 
-export const useDateTimeBoxRequestStyles = makeStyles()(({ spacing }) => ({
+export const useDateTimeBoxRequestStyles = makeStyles()(({ spacing, breakpoints }) => ({
   root: {
     display: "flex",
     alignItems: "center",
-    // width: "90%",
+    [breakpoints.down("sm")]: {
+      width: "calc(100% - 66px)",
+    },
   },
   textField: {
     flex: 1,

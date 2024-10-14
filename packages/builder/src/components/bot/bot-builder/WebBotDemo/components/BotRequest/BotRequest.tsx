@@ -51,7 +51,7 @@ export const BotRequest = ({ request, onContentHeightChange }: Props) => {
     }, [onContentHeightChange, request]);
 
     return (
-        <Box className={classes.root}>
+        <Box data-testid="BotRequest" className={classes.root}>
             {requestElement}
         </Box>
     )
