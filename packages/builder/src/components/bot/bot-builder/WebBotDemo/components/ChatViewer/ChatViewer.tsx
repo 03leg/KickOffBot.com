@@ -15,11 +15,9 @@ interface Props {
     projectId: string;
 }
 
-// let chatManager: ChatManager | null = null;
-
 export const ChatViewer = ({ project, height, projectId }: Props) => {
     const runtimeConnector = useRef<WebRuntimeConnector | null>(null);
-    const lastChildRef = useRef<HTMLDivElement>(null);
+    const messageListRef = useRef<HTMLDivElement>(null);
     const storeState = useUserChatStore((state) => ({
         ...state,
     }));
@@ -34,7 +32,15 @@ export const ChatViewer = ({ project, height, projectId }: Props) => {
     }, [project, projectId]);
 
     const goToBottom = useCallback(() => {
-        lastChildRef.current?.scrollIntoView({ behavior: 'smooth' });
+        const messageList = messageListRef.current;
+        if (!messageList) {
+            return;
+        }
+        const scrollHeight = messageList.scrollHeight;
+        const height = messageList.clientHeight;
+        const maxScrollTop = scrollHeight - height;
+        
+        messageList.scrollTop = maxScrollTop > 0 ? maxScrollTop : 0;
     }, [])
 
     useEffect(() => {
@@ -42,11 +48,11 @@ export const ChatViewer = ({ project, height, projectId }: Props) => {
     }, [storeState.chatItems, storeState.botIsTyping, goToBottom]);
 
     return (
-        <Box sx={{ height: height, overflow: 'auto', display: 'flex', flexDirection: 'column' }} data-testid="chat-viewer">
+        <Box ref={messageListRef} sx={{ height: height, overflow: 'auto', display: 'flex', flexDirection: 'column' }} data-testid="chat-viewer">
             {storeState.chatItems.map(m => {
                 switch (m.itemType) {
                     case ChatItemTypeWebRuntime.BOT_MESSAGE: {
-                        return <BotMessage message={m.content as BotMessageBody} key={m.id} onContentHeightChange={goToBottom} />
+                        return <BotMessage message={m.content as BotMessageBody} onContentHeightChange={goToBottom} key={m.id} />
                     }
                     case ChatItemTypeWebRuntime.BOT_REQUEST: {
                         return <BotRequest request={m.content as RequestDescriptionWebRuntime} onContentHeightChange={goToBottom} key={m.id} />
@@ -58,7 +64,6 @@ export const ChatViewer = ({ project, height, projectId }: Props) => {
             })}
             {storeState.botIsTyping && <BotTyping />}
             {storeState.errorMessages.length > 0 && <ErrorMessages errorMessages={storeState.errorMessages} />}
-            <div ref={lastChildRef}></div>
         </Box>
     )
 }
