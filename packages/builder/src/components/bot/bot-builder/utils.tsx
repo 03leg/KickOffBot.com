@@ -355,7 +355,7 @@ export function getNewUIElementTemplate(id: string, data: DraggableElementData):
             };
             return result;
         }
-        case ElementType.WEB_CONTENT_IMAGES:{
+        case ElementType.WEB_CONTENT_IMAGES: {
             const result: WebContentMediaUIElement = {
                 id,
                 type: ElementType.WEB_CONTENT_IMAGES,
@@ -364,7 +364,7 @@ export function getNewUIElementTemplate(id: string, data: DraggableElementData):
             }
             return result;
         }
-        case ElementType.WEB_CONTENT_VIDEOS:{
+        case ElementType.WEB_CONTENT_VIDEOS: {
             const result: WebContentMediaUIElement = {
                 id,
                 type: ElementType.WEB_CONTENT_VIDEOS,
@@ -471,12 +471,21 @@ export const canLink = (newLink: FlowDesignerLink, links: FlowDesignerLink[]) =>
 
 };
 
-export const getTextVariableReference = (variable: BotVariable, path?: string, converter?: VariableConverter): string => {
-    if (isNil(path)) {
-        return `<%variables.${variable.name}` + (converter ? `|${converter}` : '') + '%>';
+const getConverter = (converter: VariableConverter, converterParams?: (string | number)[]) => {
+    if (isNil(converterParams) || converterParams.length === 0) {
+        return converter;
     }
 
-    return `<%variables.${variable.name}.${path}` + (converter ? `|${converter}` : '') + '%>'
+    return converter + '(' + converterParams.map(p => typeof p === "number" ? p.toString() : '"' + p + '"').join(', ') + ')';
+
+}
+
+export const getTextVariableReference = (variable: BotVariable, path?: string, converter?: VariableConverter, converterParams?: (string | number)[]): string => {
+    if (isNil(path)) {
+        return `<%variables.${variable.name}` + (converter ? `|${getConverter(converter, converterParams)}` : '') + '%>';
+    }
+
+    return `<%variables.${variable.name}.${path}` + (converter ? `|${getConverter(converter, converterParams)}` : '') + '%>'
 }
 
 export const getTextPropertyReference = (propertyName: string): string => {

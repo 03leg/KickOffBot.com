@@ -3,20 +3,23 @@ import { Box, TextField } from '@mui/material';
 import React, { useCallback, useState } from 'react';
 import { useInsertVariableToText } from './useInsertVariableToText';
 import { VariableSelectorDialog } from '../../../VariableSelectorDialog';
-import { ConvertArrayOptionsDialog, ConvertArrayOptionsDialogResult } from './ConvertArrayOptionsDialog';
+import { ConvertArrayToNumberOptionsDialog, ConvertArrayOptionsDialogResult } from './ConvertArrayToNumberOptionsDialog';
+import { ConvertArrayToStringOptionsDialog } from './ConvertArrayToStringOptionsDialog';
 interface Props {
+    targetVariableType: VariableType.NUMBER | VariableType.STRING;
     workflow?: ChangeNumberStringVariableWorkflow;
     onWorkflowChange: (newWorkflow: ChangeNumberStringVariableWorkflow) => void;
 }
 
-export const NumberStringTypeVariableEditor = ({ workflow, onWorkflowChange }: Props) => {
+export const NumberStringTypeVariableEditor = ({ workflow, onWorkflowChange, targetVariableType }: Props) => {
     const [expression, setExpression] = useState<string>(workflow?.expression ?? '');
     const { handleInsertVariable, inputRef, updateSelectionStart } = useInsertVariableToText(expression, (newValue) => {
         setExpression(newValue);
         onWorkflowChange({ expression: newValue });
     });
     const [selectedVariable, setSelectedVariable] = useState<BotVariable | undefined>();
-    const [showConvertArrayOptionsDialog, setShowConvertArrayOptionsDialog] = useState<boolean>(false);
+    const [showConvertArrayToNumberOptionsDialog, setShowConvertArrayToNumberOptionsDialog] = useState<boolean>(false);
+    const [showConvertArrayToStringOptionsDialog, setShowConvertArrayToStringOptionsDialog] = useState<boolean>(false);
 
     const handleValueChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
         onWorkflowChange({ expression: event.target.value });
@@ -24,20 +27,33 @@ export const NumberStringTypeVariableEditor = ({ workflow, onWorkflowChange }: P
     }, [onWorkflowChange]);
 
     const handleSelectVariable = useCallback((variable: BotVariable, path?: string) => {
-        if (variable.type === VariableType.ARRAY && (variable.arrayItemType === VariableType.NUMBER || variable.arrayItemType === VariableType.OBJECT)) {
+        if (variable.type === VariableType.ARRAY && targetVariableType === VariableType.NUMBER && (variable.arrayItemType === VariableType.NUMBER || variable.arrayItemType === VariableType.OBJECT)) {
             setSelectedVariable(variable);
-            setShowConvertArrayOptionsDialog(true);
+            setShowConvertArrayToNumberOptionsDialog(true);
+            return;
+        }
+
+        if (variable.type === VariableType.ARRAY && targetVariableType === VariableType.STRING && (variable.arrayItemType === VariableType.STRING || variable.arrayItemType === VariableType.OBJECT)) {
+            setSelectedVariable(variable);
+            setShowConvertArrayToStringOptionsDialog(true);
             return;
         }
 
         handleInsertVariable(variable, path);
-    }, [handleInsertVariable]);
+    }, [handleInsertVariable, targetVariableType]);
 
-    const handleConvertArrayOptionsDialogClose = useCallback((result?: ConvertArrayOptionsDialogResult) => {
+    const handleConvertArrayToNumberOptionsDialogClose = useCallback((result?: ConvertArrayOptionsDialogResult) => {
         if (result) {
             handleInsertVariable(selectedVariable!, result?.propertyName, result?.converter);
         }
-        setShowConvertArrayOptionsDialog(false);
+        setShowConvertArrayToNumberOptionsDialog(false);
+    }, [handleInsertVariable, selectedVariable])
+
+    const handleConvertArrayToStringOptionsDialogClose = useCallback((result?: ConvertArrayOptionsDialogResult) => {
+        if (result) {
+            handleInsertVariable(selectedVariable!, result?.propertyName, result?.converter, result?.params);
+        }
+        setShowConvertArrayToStringOptionsDialog(false);
     }, [handleInsertVariable, selectedVariable])
 
     const handleCustomVariableFilter = useCallback((variable: BotVariable) => {
@@ -62,7 +78,8 @@ export const NumberStringTypeVariableEditor = ({ workflow, onWorkflowChange }: P
             />
             <Box sx={{ marginLeft: 1 }}>
                 <VariableSelectorDialog onInsertVariable={handleSelectVariable} onCustomVariableFilter={handleCustomVariableFilter} supportPathForObject={true} />
-                {showConvertArrayOptionsDialog && selectedVariable && <ConvertArrayOptionsDialog variable={selectedVariable} onClose={handleConvertArrayOptionsDialogClose} />}
+                {showConvertArrayToNumberOptionsDialog && selectedVariable && <ConvertArrayToNumberOptionsDialog variable={selectedVariable} onClose={handleConvertArrayToNumberOptionsDialogClose} />}
+                {showConvertArrayToStringOptionsDialog && selectedVariable && <ConvertArrayToStringOptionsDialog variable={selectedVariable} onClose={handleConvertArrayToStringOptionsDialogClose} />}
             </Box>
         </Box>
     )

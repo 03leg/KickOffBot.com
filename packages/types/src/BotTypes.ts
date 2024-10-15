@@ -362,6 +362,9 @@ export enum VariableConverter {
   MAX = "max",
   AVG = "avg",
   COUNT = "count",
+
+  RANDOM = "random",
+  CONCAT = "concat",
 }
 
 export interface SendTelegramMessageIntegrationUIElement extends UIElement, MessageDescription {
