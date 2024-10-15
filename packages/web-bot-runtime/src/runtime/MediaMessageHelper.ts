@@ -18,8 +18,9 @@ export class MediaMessageHelper {
     const result = [];
 
     for (const media of medias) {
-      if (media.type === WebMediaType.IMAGE) {
-        const mediaImg = media as WebImageMediaDescription;
+      const mediaCopy = JSON.parse(JSON.stringify(media));
+      if (mediaCopy.type === WebMediaType.IMAGE) {
+        const mediaImg = mediaCopy as WebImageMediaDescription;
 
         if (mediaImg.isLink) {
           mediaImg.imageLink = utils.getParsedText(
@@ -31,8 +32,8 @@ export class MediaMessageHelper {
         if (typeof mediaImg.image === 'string') {
           mediaImg.image = utils.getParsedText(mediaImg.image, userContext);
         }
-      } else if (media.type === WebMediaType.VIDEO) {
-        const mediaVideo = media as WebVideoMediaDescription;
+      } else if (mediaCopy.type === WebMediaType.VIDEO) {
+        const mediaVideo = mediaCopy as WebVideoMediaDescription;
 
         if (mediaVideo.video.url) {
           mediaVideo.video.url = utils.getParsedText(
@@ -44,7 +45,7 @@ export class MediaMessageHelper {
         throw new Error('Unsupported media type');
       }
 
-      result.push(media);
+      result.push(mediaCopy);
     }
 
     return result;
