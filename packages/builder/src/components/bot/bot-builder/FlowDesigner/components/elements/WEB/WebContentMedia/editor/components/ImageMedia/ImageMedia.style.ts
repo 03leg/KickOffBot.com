@@ -28,4 +28,12 @@ export const useImageMediaStyles = makeStyles()((theme) => ({
     border: `3px solid ${Colors.SELECTED}`,
     borderRadius: theme.shape.borderRadius,
   },
+  notImageBox: {
+    display: "flex",
+    alignItems: "center",
+    height: "100%",
+    textAlign: "center",
+    border: `1px solid ${Colors.BORDER}`,
+    borderRadius: theme.shape.borderRadius,
+  },
 }));

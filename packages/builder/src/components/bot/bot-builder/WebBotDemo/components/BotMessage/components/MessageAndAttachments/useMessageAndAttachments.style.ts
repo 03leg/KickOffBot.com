@@ -16,5 +16,6 @@ export const useMessageAndAttachmentsStyles = makeStyles<
   },
   text: {
     marginBottom: options?.hasAttachments ? spacing(1) : undefined,
+    overflowWrap: "break-word"
   },
 }));

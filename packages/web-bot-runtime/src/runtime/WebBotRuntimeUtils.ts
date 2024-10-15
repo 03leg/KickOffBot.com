@@ -45,11 +45,59 @@ export class WebBotRuntimeUtils {
     return currentBlock;
   }
 
+  private static parseConverterParams(input: string): (string | number)[] {
+    const result: (string | number)[] = [];
+    const regex = /(".*?"|[^,]+)/g;
+    const matches = input.match(regex);
+
+    if (matches) {
+      for (const match of matches) {
+        const trimmed = match.trim();
+        // Check if the match is a number or a quoted string
+        if (trimmed.startsWith('"') && trimmed.endsWith('"')) {
+          result.push(trimmed.slice(1, -1)); // Remove quotes
+        } else {
+          const numberValue = Number(trimmed);
+          if (!isNaN(numberValue)) {
+            result.push(numberValue);
+          } else {
+            result.push(trimmed); // In case of unexpected values
+          }
+        }
+      }
+    }
+
+    return result;
+  }
+
   private getVariableValue(text: string, userContext: WebUserContext): string {
     const parsedArray = text.split('|') as [string, string];
-    const converter: VariableConverter | undefined = parsedArray[1] as
+    const converterPart: string | undefined = parsedArray[1] as
       | VariableConverter
       | undefined;
+    let converter: VariableConverter | undefined = undefined;
+    let converterParams: (string | number)[] | undefined = undefined;
+
+    if (converterPart) {
+      const paramsStartIndex = converterPart.indexOf('(');
+      const paramsEndIndex = converterPart.indexOf(')');
+      if (paramsStartIndex > 0 && paramsEndIndex > 0 && paramsEndIndex) {
+        converter = converterPart.slice(
+          0,
+          paramsStartIndex,
+        ) as VariableConverter;
+
+        const paramsString = converterPart.slice(
+          paramsStartIndex + 1,
+          paramsEndIndex,
+        );
+
+        converterParams = WebBotRuntimeUtils.parseConverterParams(paramsString);
+      } else {
+        converter = converterPart as VariableConverter;
+      }
+    }
+
     const variablePathArray = parsedArray[0].split('.') as [string, string];
     const variableName = variablePathArray[0];
     const path = variablePathArray[1];
@@ -86,18 +134,23 @@ export class WebBotRuntimeUtils {
 
           throwIfNil(path);
           const valueForArrayOfObjects =
-            WebBotRuntimeUtils.getValueForArrayOfNumbers(
+            WebBotRuntimeUtils.getValueForArrayOfNumbersOrString(
               // eslint-disable-next-line @typescript-eslint/no-explicit-any
               variableValue.map((v: any) => v[path] as number),
               converter,
+              converterParams,
             );
 
           return valueForArrayOfObjects.toString();
-        } else if (variableMetaData?.arrayItemType === VariableType.NUMBER) {
+        } else if (
+          variableMetaData?.arrayItemType === VariableType.NUMBER ||
+          variableMetaData?.arrayItemType === VariableType.STRING
+        ) {
           const valueForArrayOfNumbers =
-            WebBotRuntimeUtils.getValueForArrayOfNumbers(
+            WebBotRuntimeUtils.getValueForArrayOfNumbersOrString(
               variableValue as number[],
               converter,
+              converterParams,
             );
           return valueForArrayOfNumbers.toString();
         }
@@ -111,13 +164,14 @@ export class WebBotRuntimeUtils {
     return userContext.getVariableValueByName(text) as string;
   }
 
-  private static getValueForArrayOfNumbers(
-    arrayOfNumbers: number[],
+  private static getValueForArrayOfNumbersOrString(
+    arrayOfItems: number[],
     converter: VariableConverter,
-  ): number {
+    converterParams?: (string | number)[],
+  ): number | string {
     switch (converter) {
       case VariableConverter.SUM: {
-        const v = arrayOfNumbers.reduce(
+        const v = arrayOfItems.reduce(
           (partialSum: number, a: number) => partialSum + a,
           0,
         );
@@ -125,20 +179,31 @@ export class WebBotRuntimeUtils {
       }
       case VariableConverter.AVG: {
         const v =
-          arrayOfNumbers.reduce(
+          arrayOfItems.reduce(
             (partialSum: number, a: number) => partialSum + a,
             0,
-          ) / arrayOfNumbers.length;
+          ) / arrayOfItems.length;
         return Math.ceil(v * 100) / 100;
       }
       case VariableConverter.MAX: {
-        return Math.max(...arrayOfNumbers);
+        return Math.max(...arrayOfItems);
       }
       case VariableConverter.MIN: {
-        return Math.min(...arrayOfNumbers);
+        return Math.min(...arrayOfItems);
       }
       case VariableConverter.COUNT: {
-        return arrayOfNumbers.length;
+        return arrayOfItems.length;
+      }
+      case VariableConverter.RANDOM: {
+        return arrayOfItems[Math.floor(Math.random() * arrayOfItems.length)];
+      }
+      case VariableConverter.CONCAT: {
+        const separator = (converterParams?.[0] as string) ?? ', ';
+
+        return arrayOfItems
+          .map((v) => v.toString())
+          .join(separator)
+          .toString();
       }
       default: {
         throw new Error('InvalidOperationError: converter is not supported');

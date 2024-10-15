@@ -192,7 +192,11 @@ export class WebBotRuntime {
         const typedElement = element as WebContentMediaUIElement;
 
         const content: MediaMessageDescription =
-          MediaMessageHelper.getMediaMessageContent(typedElement);
+          MediaMessageHelper.getMediaMessageContent(
+            typedElement,
+            this._utils,
+            this._userContext,
+          );
 
         chatItems.push({
           content: {

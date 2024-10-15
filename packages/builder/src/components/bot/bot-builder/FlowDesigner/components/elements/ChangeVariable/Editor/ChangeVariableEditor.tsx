@@ -96,7 +96,7 @@ export const ChangeVariableEditor = ({ element }: Props) => {
 
             <Box className={restoreInitialValue ? classes.disabled : ''}>
                 {(variableType !== null && (variableType === VariableType.NUMBER || variableType === VariableType.STRING) &&
-                    <NumberStringTypeVariableEditor workflow={element.workflowDescription as ChangeNumberStringVariableWorkflow} onWorkflowChange={handleWorkflowChange} />
+                    <NumberStringTypeVariableEditor targetVariableType={variableType} workflow={element.workflowDescription as ChangeNumberStringVariableWorkflow} onWorkflowChange={handleWorkflowChange} />
                 )}
                 {(variableType !== null && (variableType === VariableType.BOOLEAN) &&
                     <BooleanTypeVariableEditor workflow={element.workflowDescription as ChangeBooleanVariableWorkflow} onWorkflowChange={handleWorkflowChange} />

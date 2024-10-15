@@ -1,10 +1,16 @@
 import { BotVariable, VariableConverter } from "@kickoffbot.com/types";
 import { isNil } from "lodash";
 import React, { useCallback } from "react";
-import { getTextPropertyReference, getTextVariableReference } from "~/components/bot/bot-builder/utils";
+import {
+  getTextPropertyReference,
+  getTextVariableReference,
+} from "~/components/bot/bot-builder/utils";
 
 // TODO: rename "useInsertAppContextToText???", delete useInsertPropertyToText hook
-export function useInsertVariableToText(value: string, onChangeValue: (value: string) => void) {
+export function useInsertVariableToText(
+  value: string,
+  onChangeValue: (value: string) => void
+) {
   const [selectionStart, setSelectionStart] = React.useState<number>();
   const inputRef = React.useRef<HTMLInputElement>();
 
@@ -15,17 +21,22 @@ export function useInsertVariableToText(value: string, onChangeValue: (value: st
   };
 
   const handleInsertVariable = useCallback(
-    (variable: BotVariable, path?: string, converter?: VariableConverter) => {
+    (
+      variable: BotVariable,
+      path?: string,
+      converter?: VariableConverter,
+      converterParams?: (string | number)[]
+    ) => {
       let position = selectionStart;
       const content = value ?? "";
 
       if (isNil(position)) {
         position = content.length;
       }
-      
+
       const output = [
         content.slice(0, position),
-        getTextVariableReference(variable, path, converter),
+        getTextVariableReference(variable, path, converter, converterParams),
         content.slice(position),
       ].join("");
 
@@ -42,7 +53,7 @@ export function useInsertVariableToText(value: string, onChangeValue: (value: st
       if (isNil(position)) {
         position = content.length;
       }
-      
+
       const output = [
         content.slice(0, position),
         getTextPropertyReference(property),
@@ -54,5 +65,10 @@ export function useInsertVariableToText(value: string, onChangeValue: (value: st
     [onChangeValue, selectionStart, value]
   );
 
-  return { handleInsertVariable, inputRef, updateSelectionStart, handleInsertContextPropertyInText };
+  return {
+    handleInsertVariable,
+    inputRef,
+    updateSelectionStart,
+    handleInsertContextPropertyInText,
+  };
 }

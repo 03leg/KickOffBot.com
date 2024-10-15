@@ -9,4 +9,10 @@ export const useSingleMediaViewStyles = makeStyles()(({ spacing, shape }) => ({
     borderRadius: shape.borderRadius,
     objectFit: "contain",
   },
+  notImageBox: {
+    display: "flex",
+    alignItems: "center",
+    height: "100%",
+    textAlign: "center",
+  },
 }));

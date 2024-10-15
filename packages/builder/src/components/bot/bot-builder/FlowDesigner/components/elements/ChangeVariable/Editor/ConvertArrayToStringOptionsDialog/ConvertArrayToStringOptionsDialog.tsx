@@ -1,23 +1,21 @@
 import { BotVariable, VariableConverter } from '@kickoffbot.com/types'
-import { Box, Button, FormControlLabel, Radio, RadioGroup, Typography } from '@mui/material';
-import React, { useCallback, useMemo } from 'react'
+import { Box, Button, FormControlLabel, Radio, RadioGroup, TextField, Typography } from '@mui/material';
+import React, { useCallback, useEffect, useMemo } from 'react'
 import AppDialog from '~/components/commons/Dialog/AppDialog';
 import { PropertySelector } from '../VariableValueSource/condition/PropertySelector';
 import { isPlainObject } from 'lodash';
+import { ConvertArrayOptionsDialogResult } from '../ConvertArrayToNumberOptionsDialog';
 
 export interface Props {
     variable: BotVariable;
     onClose: (result?: ConvertArrayOptionsDialogResult) => void;
 }
 
-export interface ConvertArrayOptionsDialogResult {
-    converter: VariableConverter;
-    propertyName: string | undefined;
-}
 
-export const ConvertArrayOptionsDialog = ({ variable, onClose }: Props) => {
-    const [converter, setConverter] = React.useState<VariableConverter>(VariableConverter.COUNT);
+export const ConvertArrayToStringOptionsDialog = ({ variable, onClose }: Props) => {
+    const [converter, setConverter] = React.useState<VariableConverter>(VariableConverter.RANDOM);
     const [selectedPropertyName, setSelectedPropertyName] = React.useState<string | undefined>(undefined);
+    const [separatorValue, setSeparatorValue] = React.useState<string>(', ');
 
     const handleConverterChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
         setConverter(e.target.value as VariableConverter);
@@ -30,15 +28,16 @@ export const ConvertArrayOptionsDialog = ({ variable, onClose }: Props) => {
     const handleInsert = useCallback(() => {
         onClose({
             converter,
-            propertyName: converter === VariableConverter.COUNT ? undefined : selectedPropertyName
+            propertyName: selectedPropertyName,
+            params: converter === VariableConverter.CONCAT ? [separatorValue] : undefined
         })
-    }, [converter, onClose, selectedPropertyName]);
+    }, [converter, onClose, selectedPropertyName, separatorValue]);
 
     const availableProperties = useMemo(() => {
         const value = JSON.parse(variable.value as string);
 
         if (value instanceof Array && isPlainObject(value[0])) {
-            return Object.keys(value[0]).filter(key => typeof value[0][key] === "number");
+            return Object.keys(value[0]).filter(key => typeof value[0][key] === "number" || typeof value[0][key] === "string");
         }
 
         return [];
@@ -49,8 +48,15 @@ export const ConvertArrayOptionsDialog = ({ variable, onClose }: Props) => {
     }, []);
 
     const insertButtonDisabled = useMemo(() => {
-        return (converter !== VariableConverter.COUNT && selectedPropertyName === undefined && availableProperties.length !== 0);
-    }, [availableProperties.length, converter, selectedPropertyName]);
+        return (selectedPropertyName === undefined && availableProperties.length !== 0);
+    }, [availableProperties.length, selectedPropertyName]);
+
+    useEffect(() => {
+        if (availableProperties.length === 0) {
+            setSelectedPropertyName(undefined);
+        }
+
+    }, [availableProperties])
 
     return (
         <AppDialog
@@ -62,18 +68,15 @@ export const ConvertArrayOptionsDialog = ({ variable, onClose }: Props) => {
             ]}
             open={true} title={'Select Operation for Array Conversion'}>
             <Box sx={{ marginBottom: 2 }}>
-                <Typography>Choose the operation you want to perform to convert the array into a single number.</Typography>
+                <Typography>Choose the operation you want to perform to convert the array into a single string.</Typography>
                 <RadioGroup sx={{ flex: 1 }} value={converter} onChange={handleConverterChange}>
-                    <FormControlLabel value={VariableConverter.COUNT} control={<Radio />} label="Count Items" />
-                    {availableProperties.length > 0 && <>
-                        <FormControlLabel value={VariableConverter.SUM} control={<Radio />} label="Calculate Sum" />
-                        <FormControlLabel value={VariableConverter.AVG} control={<Radio />} label="Calculate Average" />
-                        <FormControlLabel value={VariableConverter.MAX} control={<Radio />} label="Find Maximum Value" />
-                        <FormControlLabel value={VariableConverter.MIN} control={<Radio />} label="Find Minimum Value" />
-                    </>}
+                    <FormControlLabel value={VariableConverter.RANDOM} control={<Radio />} label="Select Random Value" />
+                    <FormControlLabel value={VariableConverter.CONCAT} control={<Radio />} label="Concatenate values into a single string" />
                 </RadioGroup>
 
-                {availableProperties.length > 0 && converter !== VariableConverter.COUNT && <Box sx={{ marginTop: 2 }}>
+                {converter === VariableConverter.CONCAT && <TextField sx={{ marginTop: 2 }} label="Separator" fullWidth variant="outlined" value={separatorValue} onChange={e => setSeparatorValue(e.target.value)} />}
+
+                {availableProperties.length > 0 && <Box sx={{ marginTop: 2 }}>
                     <Typography sx={{ mb: 2 }}>Choose the property of the array object you want to perform the selected operation on.</Typography>
                     <PropertySelector propsDataSource={availableProperties} selectedPropertyName={selectedPropertyName} onPropertyNameChange={handlePropertyNameChange} arrayObject={{}} />
                 </Box>}
