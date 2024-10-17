@@ -10,6 +10,7 @@ import createCache from "@emotion/cache";
 import { CacheProvider } from "@emotion/react";
 import { ChatViewer } from './components/ChatViewer';
 import { useRouter } from 'next/router';
+import { createChatTheme } from './theme/createChatTheme';
 
 
 
@@ -41,25 +42,7 @@ export const WebBotDemo = () => {
             container: shadowContainer
         });
 
-        const shadowTheme = createTheme({
-            components: {
-                MuiPopover: {
-                    defaultProps: {
-                        container: shadowRootElement
-                    }
-                },
-                MuiPopper: {
-                    defaultProps: {
-                        container: shadowRootElement
-                    }
-                },
-                MuiModal: {
-                    defaultProps: {
-                        container: shadowRootElement
-                    }
-                }
-            }
-        });
+        const shadowTheme = createChatTheme(shadowRootElement);
 
         const root = ReactDOM.createRoot(shadowRootElement);
 

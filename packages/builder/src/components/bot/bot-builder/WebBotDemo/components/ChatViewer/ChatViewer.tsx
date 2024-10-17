@@ -8,6 +8,7 @@ import { UserMessage } from '../UserMessage';
 import { BotTyping } from '../BotTyping';
 import { WebRuntimeConnector } from '../../connector/WebRuntimeConnector';
 import { ErrorMessages } from '../ErrorMessages';
+import { useChatViewerStyles } from './ChatViewer.style';
 
 interface Props {
     project?: BotProject;
@@ -15,7 +16,11 @@ interface Props {
     projectId: string;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+// let handler: any = undefined;
+
 export const ChatViewer = ({ project, height, projectId }: Props) => {
+    const { classes, cx } = useChatViewerStyles({ height });
     const runtimeConnector = useRef<WebRuntimeConnector | null>(null);
     const messageListRef = useRef<HTMLDivElement>(null);
     const storeState = useUserChatStore((state) => ({
@@ -47,8 +52,18 @@ export const ChatViewer = ({ project, height, projectId }: Props) => {
         goToBottom();
     }, [storeState.chatItems, storeState.botIsTyping, goToBottom]);
 
+    // useEffect(() => {
+
+    //     clearTimeout(handler);
+        
+    //     handler = setTimeout(() => {
+    //         console.log(JSON.stringify(storeState.chatItems));
+    //     }, 10000);
+        
+    // }, [storeState.chatItems]);
+
     return (
-        <Box ref={messageListRef} sx={{ height: height, overflow: 'auto', display: 'flex', flexDirection: 'column' }} className="chat-box-root" data-testid="chat-viewer">
+        <Box ref={messageListRef} className={cx(classes.root, 'chat-box-root')} data-testid="chat-viewer">
             {storeState.chatItems.map(m => {
                 switch (m.itemType) {
                     case ChatItemTypeWebRuntime.BOT_MESSAGE: {
