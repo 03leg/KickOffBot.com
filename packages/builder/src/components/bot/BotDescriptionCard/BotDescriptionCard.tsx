@@ -10,6 +10,7 @@ import { Badge, Box, Chip, IconButton, Menu, MenuItem } from '@mui/material';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { BotPlatform } from '@kickoffbot.com/types';
 import { useMemo } from 'react';
+import { useRouter } from 'next/router';
 
 interface Props {
     description: BotDescription;
@@ -20,6 +21,7 @@ interface Props {
 export const BotDescriptionCard = ({ description, onEdit, onRemove }: Props) => {
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
     const openMenu = Boolean(anchorEl);
+    const router = useRouter();
 
     const handleOpenMenu = React.useCallback((event: React.MouseEvent<HTMLElement>) => {
         setAnchorEl(event.currentTarget);
@@ -32,6 +34,10 @@ export const BotDescriptionCard = ({ description, onEdit, onRemove }: Props) => 
         onRemove(description);
         handleClose();
     }, [description, handleClose, onRemove]);
+
+    const handleNavigateThemeEditor = React.useCallback(() => {
+        void router.push(`/theme-editor/${description.id}`);
+    }, [description.id, router]);
 
     const platform = useMemo(() => {
         if (description.botType === BotPlatform.Telegram) {
@@ -92,6 +98,10 @@ export const BotDescriptionCard = ({ description, onEdit, onRemove }: Props) => 
             <MenuItem onClick={handleRemove}>
                 Remove
             </MenuItem>
+            {description.botType === BotPlatform.WEB &&
+                <MenuItem onClick={handleNavigateThemeEditor}>
+                    Theme Editor
+                </MenuItem>}
         </Menu>
     </Card>);
 

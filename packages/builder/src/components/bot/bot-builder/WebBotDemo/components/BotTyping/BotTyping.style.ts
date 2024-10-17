@@ -2,7 +2,7 @@ import { makeStyles } from "tss-react/mui";
 
 export const useBotTypingStyles = makeStyles<
   { hasAttachments: boolean } | undefined
->()(({ spacing, shape }, options) => ({
+>()(({ spacing, shape, palette }, options) => ({
   root: {
     display: "flex",
     flexDirection: "row",
@@ -18,8 +18,8 @@ export const useBotTypingStyles = makeStyles<
   message: {
     padding: spacing(1, 2),
     borderRadius: shape.borderRadius,
-    backgroundColor: "#1976d2",
-    color: "white",
+    backgroundColor: palette.botMessage.main,
+    color: palette.botMessage.contrastText,
     maxWidth: "100%",
     display: "flex",
     flexDirection: "column",

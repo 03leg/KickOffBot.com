@@ -1,0 +1,321 @@
+[
+  {
+    "content": {
+      "type": "message-and-attachments",
+      "content": {
+        "message": "<p>Hey there! Welcome to Bot Designer!</p>",
+        "attachments": []
+      }
+    },
+    "uiElementId": "web-content-message-1",
+    "id": "1",
+    "itemType": "bot-message"
+  },
+  {
+    "itemType": "user-message",
+    "content": {
+      "content": { "message": "Hey there! Welcome to Bot Designer!" },
+      "type": "message-and-attachments"
+    },
+    "id": "584b2cce-2856-4c11-a691-b4eb2c9ad202",
+    "uiElementId": "web-input-buttons-aed7f592-14ef-457f-90d8-d239ed1f1dfd"
+  },
+  {
+    "content": {
+      "type": "message-and-attachments",
+      "content": {
+        "message": "<p>User Input, Text</p>",
+        "attachments": []
+      }
+    },
+    "uiElementId": "web-content-message-3",
+    "id": "3",
+    "itemType": "bot-message"
+  },
+  {
+    "content": {
+      "element": {
+        "elementType": "web-input-text",
+        "placeholder": "Write your text..."
+      }
+    },
+    "uiElementId": "web-input-text-f56bd779-32d9-4a9a-8ac5-d6ddc6aaead0",
+    "id": "7e7e314c-9838-4937-937c-aad906b89619",
+    "itemType": "bot-request"
+  },
+  {
+    "content": {
+      "type": "message-and-attachments",
+      "content": {
+        "message": "<p>User Input, Number</p>",
+        "attachments": []
+      }
+    },
+    "uiElementId": "web-content-message-4",
+    "id": "4",
+    "itemType": "bot-message"
+  },
+  {
+    "content": {
+      "element": {
+        "elementType": "web-input-number",
+        "placeholder": "Write your number..."
+      }
+    },
+    "uiElementId": "web-input-number-8bb60dac-7209-49b0-82fa-12db4bc921cf",
+    "id": "3f06774a-f589-40f7-a22a-3b479c1db373",
+    "itemType": "bot-request"
+  },
+  {
+    "content": {
+      "type": "message-and-attachments",
+      "content": {
+        "message": "<p>User Input, Date</p>",
+        "attachments": []
+      }
+    },
+    "uiElementId": "web-content-message-5",
+    "id": "5",
+    "itemType": "bot-message"
+  },
+  {
+    "content": {
+      "element": {
+        "elementType": "web-input-date-time",
+        "useTime": true,
+        "dateTimeFormat": "DD/MM/YYYY",
+        "availableDateTimes": "All"
+      }
+    },
+    "uiElementId": "web-input-date-time-e4177bb9-8b71-41c2-9d5f-848015edd76f",
+    "id": "a1304f17-cf31-44ef-933c-e0b1dbfc8fc9",
+    "itemType": "bot-request"
+  },
+  {
+    "content": {
+      "type": "message-and-attachments",
+      "content": {
+        "message": "<p>User Input, Phone</p>",
+        "attachments": []
+      }
+    },
+    "uiElementId": "web-content-message-6",
+    "id": "6",
+    "itemType": "bot-message"
+  },
+  {
+    "content": { "element": { "elementType": "web-input-phone" } },
+    "uiElementId": "web-input-phone-6a44b520-2be9-447c-a40a-1581cfe92d95",
+    "id": "7425bfa6-09d5-4171-b75e-2ff9d696b055",
+    "itemType": "bot-request"
+  },
+  {
+    "content": {
+      "type": "message-and-attachments",
+      "content": {
+        "message": "<p>User Input, Email</p>",
+        "attachments": []
+      }
+    },
+    "uiElementId": "web-content-message-7",
+    "id": "7",
+    "itemType": "bot-message"
+  },
+  {
+    "content": {
+      "element": {
+        "elementType": "web-input-email",
+        "placeholder": "Write your e-mail..."
+      }
+    },
+    "uiElementId": "web-input-email-bdf1e2ac-2bec-4418-b434-6a06bb16f23b",
+    "id": "90933300-8a49-409b-9091-c84c74aa45de",
+    "itemType": "bot-request"
+  },
+  {
+    "content": {
+      "type": "message-and-attachments",
+      "content": {
+        "message": "<p>User Input, Buttons</p>",
+        "attachments": []
+      }
+    },
+    "uiElementId": "web-content-message-2",
+    "id": "2",
+    "itemType": "bot-message"
+  },
+  {
+    "content": {
+      "element": {
+        "elementType": "web-input-buttons",
+        "buttons": [
+          {
+            "id": "m_6bb4bfab-b04c-4e13-802b-9c2c84c6d73c",
+            "content": "Button #1"
+          },
+          {
+            "id": "m_2023d70d-0bd1-4300-9a66-aaf451e08b7d",
+            "content": "Button #2"
+          },
+          {
+            "id": "m_0b437a0e-d423-49e7-93bf-5b8bff9fc44e",
+            "content": "Button #3"
+          },
+          {
+            "id": "m_5b5222df-4337-4233-99f2-752310f61417",
+            "content": "Button #4"
+          }
+        ]
+      }
+    },
+    "uiElementId": "web-input-buttons-3",
+    "id": "3",
+    "itemType": "bot-request"
+  },
+  {
+    "content": {
+      "type": "message-and-attachments",
+      "content": {
+        "message": "<p>Content, Image(s)</p>",
+        "attachments": []
+      }
+    },
+    "uiElementId": "web-content-message-8",
+    "id": "8",
+    "itemType": "bot-message"
+  },
+  {
+    "content": {
+      "type": "media",
+      "content": {
+        "medias": [
+          {
+            "image": "https://media1.giphy.com/media/3NtY188QaxDdC/giphy-downsized.gif?cid=42e3a184g8jo7pjm3tybqa5cf3u8cqqi0jh53f0vs30827qa&ep=v1_gifs_trending&rid=giphy-downsized.gif&ct=g",
+            "type": "image",
+            "id": "bbb90be8-6266-488e-a1e8-6b13e4eb893e"
+          }
+        ],
+        "viewMode": "horizontalMediaList"
+      }
+    },
+    "uiElementId": "web-content-images-7b4f2f22-dbd1-4696-a5a2-70021c5bd290",
+    "id": "0a505284-cbfb-411a-94e3-c21a07c71700",
+    "itemType": "bot-message"
+  },
+  {
+    "content": {
+      "type": "message-and-attachments",
+      "content": {
+        "message": "<p>Content, Video(s)</p>",
+        "attachments": []
+      }
+    },
+    "uiElementId": "web-content-message-8",
+    "id": "8",
+    "itemType": "bot-message"
+  },
+  {
+    "content": {
+      "type": "media",
+      "content": {
+        "medias": [
+          {
+            "video": {
+              "url": "https://hjzvmehimumkehfknjlw.supabase.co/storage/v1/object/public/plz-post-bucket/attachments/clke8q9j80000u9po8d0pb3hs/1729173556139_video.mp4",
+              "source": "uploaded"
+            },
+            "type": "video",
+            "id": "8890a608-a6e0-4649-80fb-34be3cf2d464",
+            "loop": false
+          }
+        ],
+        "viewMode": "verticalMediaList"
+      }
+    },
+    "uiElementId": "web-content-videos-64645d92-4bf7-4185-88f9-1c86cdce8a38",
+    "id": "4148776e-91ec-4a16-9584-049c90c60107",
+    "itemType": "bot-message"
+  },
+  {
+    "content": {
+      "type": "message-and-attachments",
+      "content": {
+        "message": "<p>User Input, Cards</p>",
+        "attachments": []
+      }
+    },
+    "uiElementId": "web-content-message-9",
+    "id": "9",
+    "itemType": "bot-message"
+  },
+  {
+    "content": {
+      "element": {
+        "cardItems": [
+          {
+            "id": "0a98111c-10a0-4978-98ad-9ae4d30378b0",
+            "value": "Image #1",
+            "image": {
+              "regularSrc": "https://images.unsplash.com/photo-1725714834984-4f37a2406563?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w2NTU0MjR8MHwxfHJhbmRvbXx8fHx8fHx8fDE3MjkxNzM3MDJ8&ixlib=rb-4.0.3&q=80&w=1080",
+              "smallSrc": "https://images.unsplash.com/photo-1725714834984-4f37a2406563?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w2NTU0MjR8MHwxfHJhbmRvbXx8fHx8fHx8fDE3MjkxNzM3MDJ8&ixlib=rb-4.0.3&q=80&w=400",
+              "thumbSrc": "https://images.unsplash.com/photo-1725714834984-4f37a2406563?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w2NTU0MjR8MHwxfHJhbmRvbXx8fHx8fHx8fDE3MjkxNzM3MDJ8&ixlib=rb-4.0.3&q=80&w=200",
+              "id": "YRkiQbXQCZU",
+              "source": "unsplash",
+              "authorName": "Mathias Reding",
+              "authorNickname": "matreding"
+            },
+            "htmlDescription": "<p><span style=\"color: unset; font-size: 18px; background-color: unset\"><strong>Image #1</strong></span></p>\n<p>Image #1, Image #1, Image #1, Image #1</p>"
+          },
+          {
+            "id": "54fd064b-8b45-4f2f-a8da-636e188c24dd",
+            "value": "Image #2",
+            "image": {
+              "regularSrc": "https://images.unsplash.com/photo-1728818331662-a8b337eb91d1?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w2NTU0MjR8MHwxfHJhbmRvbXx8fHx8fHx8fDE3MjkxNzM4OTl8&ixlib=rb-4.0.3&q=80&w=1080",
+              "smallSrc": "https://images.unsplash.com/photo-1728818331662-a8b337eb91d1?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w2NTU0MjR8MHwxfHJhbmRvbXx8fHx8fHx8fDE3MjkxNzM4OTl8&ixlib=rb-4.0.3&q=80&w=400",
+              "thumbSrc": "https://images.unsplash.com/photo-1728818331662-a8b337eb91d1?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w2NTU0MjR8MHwxfHJhbmRvbXx8fHx8fHx8fDE3MjkxNzM4OTl8&ixlib=rb-4.0.3&q=80&w=200",
+              "id": "KAy0-OVr9A8",
+              "source": "unsplash",
+              "authorName": "Jérémy Oberson",
+              "authorNickname": "oberkvlt"
+            },
+            "htmlDescription": "<p><span style=\"color: unset; font-size: 18px; background-color: unset\"><strong>Image #2</strong></span></p>\n<p>Image #2, Image #2, Image #2, Image #2</p>"
+          }
+        ],
+        "elementType": "web-input-cards",
+        "selectableCards": true,
+        "multipleChoice": false,
+        "sendResponseOnSelect": false,
+        "useGeneralButtons": true,
+        "generalButtons": [
+          {
+            "content": "Button #1",
+            "id": "button-192aba1a-9fb0-4f89-97ab-80dbed812b56"
+          },
+          {
+            "content": "Button #2",
+            "id": "fc233e8f-f3aa-413b-864e-2461eeb31ff6"
+          },
+          {
+            "content": "Button #3",
+            "id": "67cd6b7c-3d2c-4e9e-b904-1d4ea8014688"
+          }
+        ]
+      }
+    },
+    "uiElementId": "web-input-cards-e8568202-a231-4e84-87a0-412b4936f7e3",
+    "id": "f8a545fe-9a74-4820-a6bf-c8ecbe4d0447",
+    "itemType": "bot-request"
+  },
+  {
+    "content": {
+      "type": "message-and-attachments",
+      "content": {
+        "message": "<p>Weather, much like life, has its ups and downs! ☀️ Whether you’re basking in the warm sunshine, dancing in the rain, or marveling at fluffy snowflakes, each type of weather brings its own kind of joy. 🌈 Just imagine the thrill of splashing in puddles on a rainy day or the pure bliss of a cozy evening during a snowstorm! ❄️ So, let's embrace every forecast with a smile, finding beauty in the sunshine and the clouds alike! 😊</p>",
+        "attachments": []
+      }
+    },
+    "uiElementId": "web-content-message-9",
+    "id": "9",
+    "itemType": "bot-message"
+  }
+]
