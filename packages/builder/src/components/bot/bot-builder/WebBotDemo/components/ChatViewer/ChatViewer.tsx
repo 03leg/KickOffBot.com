@@ -48,7 +48,7 @@ export const ChatViewer = ({ project, height, projectId }: Props) => {
     }, [storeState.chatItems, storeState.botIsTyping, goToBottom]);
 
     return (
-        <Box ref={messageListRef} sx={{ height: height, overflow: 'auto', display: 'flex', flexDirection: 'column' }} data-testid="chat-viewer">
+        <Box ref={messageListRef} sx={{ height: height, overflow: 'auto', display: 'flex', flexDirection: 'column' }} className="chat-box-root" data-testid="chat-viewer">
             {storeState.chatItems.map(m => {
                 switch (m.itemType) {
                     case ChatItemTypeWebRuntime.BOT_MESSAGE: {
