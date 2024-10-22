@@ -39,9 +39,10 @@ interface Props {
     initImgUrl?: string;
     onImageSelect: (url: string | UnsplashPhoto) => void;
     onSaveAndClose?: () => void; // for giphy
+    showVariableSelector?: boolean;
 }
 
-export const ImageSelector = ({ initImgUrl, onImageSelect, onSaveAndClose }: Props) => {
+export const ImageSelector = ({ initImgUrl, onImageSelect, onSaveAndClose, showVariableSelector=true }: Props) => {
     const [value, setValue] = React.useState(0);
     const [imageUrl, setImageUrl] = React.useState(initImgUrl ?? '');
 
@@ -60,7 +61,7 @@ export const ImageSelector = ({ initImgUrl, onImageSelect, onSaveAndClose }: Pro
                 </Tabs>
             </Box>
             <CustomTabPanel value={value} index={0}>
-                <AppTextField label="Image URL" value={imageUrl ?? ''} onValueChange={(newValue: string) => {
+                <AppTextField showVariableSelector={showVariableSelector} label="Image URL" value={imageUrl ?? ''} onValueChange={(newValue: string) => {
                     setImageUrl(newValue);
                     onImageSelect(newValue);
                 }} />

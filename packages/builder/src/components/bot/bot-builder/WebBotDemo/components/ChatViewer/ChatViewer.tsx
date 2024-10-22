@@ -1,4 +1,4 @@
-import { BotMessageBody, BotProject, ChatItemTypeWebRuntime, RequestDescriptionWebRuntime } from '@kickoffbot.com/types';
+import { BotMessageBody, BotProject, ChatItemTypeWebRuntime, RequestDescriptionWebRuntime, WebViewBotOptions } from '@kickoffbot.com/types';
 import React, { useCallback, useEffect, useLayoutEffect, useRef } from 'react';
 import { useUserChatStore } from '../../store/useUserChatStore';
 import { Box } from '@mui/material';
@@ -14,13 +14,14 @@ interface Props {
     project?: BotProject;
     height?: number | string;
     projectId: string;
+    webViewOptions?: WebViewBotOptions;
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 // let handler: any = undefined;
 
-export const ChatViewer = ({ project, height, projectId }: Props) => {
-    const { classes, cx } = useChatViewerStyles({ height });
+export const ChatViewer = ({ project, height, projectId, webViewOptions }: Props) => {
+    const { classes, cx } = useChatViewerStyles({ height, webViewOptions });
     const runtimeConnector = useRef<WebRuntimeConnector | null>(null);
     const messageListRef = useRef<HTMLDivElement>(null);
     const storeState = useUserChatStore((state) => ({
@@ -44,7 +45,7 @@ export const ChatViewer = ({ project, height, projectId }: Props) => {
         const scrollHeight = messageList.scrollHeight;
         const height = messageList.clientHeight;
         const maxScrollTop = scrollHeight - height;
-        
+
         messageList.scrollTop = maxScrollTop > 0 ? maxScrollTop : 0;
     }, [])
 
@@ -55,11 +56,11 @@ export const ChatViewer = ({ project, height, projectId }: Props) => {
     // useEffect(() => {
 
     //     clearTimeout(handler);
-        
+
     //     handler = setTimeout(() => {
     //         console.log(JSON.stringify(storeState.chatItems));
     //     }, 10000);
-        
+
     // }, [storeState.chatItems]);
 
     return (
