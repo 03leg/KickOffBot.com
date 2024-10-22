@@ -10,7 +10,4 @@ export const useBotMessageStyles = makeStyles()(({ spacing }) => ({
       margin: 0,
     },
   },
-  avatar: {
-    margin: spacing(0, 1, 1, 1),
-  },
 }));

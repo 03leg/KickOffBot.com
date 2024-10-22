@@ -347,6 +347,29 @@ export interface WebChatBackgroundDescription {
   imageUrl?: string;
 }
 
+export enum AvatarView {
+  ColorInitials = 'color-initials',
+  Image = 'image',
+}
+
+export interface AvatarSettings {
+  showAvatar?: boolean;
+  avatarImageUrl?: string;
+  avatarColor?: string;
+  avatarText?: string;
+  avatarSize?: "small" | "medium" | "large";
+  avatarView?: AvatarView;
+}
+
+export interface MessageAppearanceDescription {
+  backgroundColor?: string;
+  textColor?: string;
+
+  avatarSettings?: AvatarSettings;
+}
+
 export interface WebViewBotOptions {
   background?: WebChatBackgroundDescription;
+  userMessageAppearance: MessageAppearanceDescription;
+  botMessageAppearance: MessageAppearanceDescription;
 }

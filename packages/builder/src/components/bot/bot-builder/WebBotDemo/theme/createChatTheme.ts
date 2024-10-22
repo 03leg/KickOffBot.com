@@ -1,6 +1,7 @@
 import {
   BackgroundColorSchema,
   WebChatBackgroundDescription,
+  WebViewBotOptions,
 } from "@kickoffbot.com/types";
 import {
   createTheme,
@@ -36,7 +37,7 @@ declare module "@mui/material/styles" {
 
 export const createChatTheme = (
   shadowRootElement: HTMLElement | undefined = undefined,
-  background: WebChatBackgroundDescription
+  viewOptions?: WebViewBotOptions
 ) =>
   createTheme({
     // colorSchemes: {
@@ -49,17 +50,18 @@ export const createChatTheme = (
       //   light: "#d41919",
       // },
       botMessage: {
-        main: "#e3e3e3",
-        contrastText: "#000000",
+        main: viewOptions?.botMessageAppearance?.backgroundColor ?? "#e3e3e3",
+        contrastText: viewOptions?.botMessageAppearance?.textColor ?? "#000000",
       },
       userMessage: {
-        main: "#c5ecbe",
-        contrastText: "#000000",
+        main: viewOptions?.userMessageAppearance?.backgroundColor ?? "#c5ecbe",
+        contrastText:
+          viewOptions?.userMessageAppearance?.textColor ?? "#000000",
       },
       background: {
         default:
-          background.schema === BackgroundColorSchema.OneColor
-            ? background.color1
+          viewOptions?.background?.schema === BackgroundColorSchema.OneColor
+            ? viewOptions.background.color1
             : "#ffffff",
       },
     },
