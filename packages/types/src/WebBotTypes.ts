@@ -331,3 +331,22 @@ export interface UnsplashPhoto extends ExportedImage {
   authorName: string;
   authorNickname: string;
 }
+
+export enum BackgroundColorSchema {
+  OneColor = "one-color",
+  Schema1 = "schema-1",
+  Schema2 = "schema-2",
+  Schema3 = "schema-3",
+  Image = "image",
+}
+
+export interface WebChatBackgroundDescription {
+  schema?: BackgroundColorSchema;
+  color1?: string;
+  color2?: string;
+  imageUrl?: string;
+}
+
+export interface WebViewBotOptions {
+  background?: WebChatBackgroundDescription;
+}

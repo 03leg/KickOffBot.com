@@ -6,29 +6,33 @@ import { ChatViewer } from '~/components/bot/bot-builder/WebBotDemo/components/C
 import { useUserChatStore } from '~/components/bot/bot-builder/WebBotDemo/store/useUserChatStore';
 import { createChatTheme } from '~/components/bot/bot-builder/WebBotDemo/theme/createChatTheme';
 import chatHistory from './demoChatHistory.json';
+import { useThemeDesignerStore } from '../ThemeSelector/store/useThemeDesignerStore';
 
 export default function ChatView() {
 
-    const { classes } = useChatViewStyles();
+  const { classes } = useChatViewStyles();
+  const { background } = useThemeDesignerStore((state) => ({
+    background: state.background,
+  }));
 
-    const storeState = useUserChatStore((state) => ({
-        setLoadingValue: state.setLoadingValue,
-        setChatItems: state.setChatItems
-    }));
+  const storeState = useUserChatStore((state) => ({
+    setLoadingValue: state.setLoadingValue,
+    setChatItems: state.setChatItems
+  }));
 
-    // storeState.setLoadingValue(true);
+  // storeState.setLoadingValue(true);
 
-    useEffect(() => {
-        storeState.setLoadingValue(true);
-        storeState.setChatItems(chatHistory as any);
+  useEffect(() => {
+    storeState.setLoadingValue(true);
+    storeState.setChatItems(chatHistory as any);
 
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
-    const chatTheme = createChatTheme();
+  const chatTheme = createChatTheme(undefined, background);
 
-    return (
-        <><style jsx global>{`
+  return (
+    <><style jsx global>{`
       
 
 .chat-box-root::-webkit-scrollbar {
@@ -53,11 +57,11 @@ export default function ChatView() {
 }
 
     `}</style>
-            <Box className={classes.root}>
-                <ThemeProvider theme={chatTheme}>
-                    <ChatViewer height={'100%'} projectId='' />
-                </ThemeProvider>
-            </Box>
-        </>
-    )
+      <Box className={classes.root}>
+        <ThemeProvider theme={chatTheme}>
+          <ChatViewer height={'100%'} projectId='' webViewOptions={{ background}} />
+        </ThemeProvider>
+      </Box>
+    </>
+  )
 }

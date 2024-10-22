@@ -1,9 +1,11 @@
-import { green, red } from "@mui/material/colors";
+import {
+  BackgroundColorSchema,
+  WebChatBackgroundDescription,
+} from "@kickoffbot.com/types";
 import {
   createTheme,
   PaletteColor,
   PaletteColorOptions,
-  PaletteOptions,
 } from "@mui/material/styles";
 
 // declare module "@mui/material/styles" {
@@ -33,10 +35,19 @@ declare module "@mui/material/styles" {
 }
 
 export const createChatTheme = (
-  shadowRootElement: HTMLElement | undefined = undefined
+  shadowRootElement: HTMLElement | undefined = undefined,
+  background: WebChatBackgroundDescription
 ) =>
   createTheme({
+    // colorSchemes: {
+    //   dark: true,
+    // },
     palette: {
+      // mode: "dark",
+      // primary: {
+      //   main: "#d41919",
+      //   light: "#d41919",
+      // },
       botMessage: {
         main: "#e3e3e3",
         contrastText: "#000000",
@@ -45,9 +56,12 @@ export const createChatTheme = (
         main: "#c5ecbe",
         contrastText: "#000000",
       },
-      // background: {
-      //   default: "#f5f5f5",
-      // }
+      background: {
+        default:
+          background.schema === BackgroundColorSchema.OneColor
+            ? background.color1
+            : "#ffffff",
+      },
     },
     components: {
       MuiButton: {

@@ -168,8 +168,8 @@
         ]
       }
     },
-    "uiElementId": "web-input-buttons-3",
-    "id": "3",
+    "uiElementId": "web-input-buttons-12",
+    "id": "12",
     "itemType": "bot-request"
   },
   {
@@ -210,8 +210,8 @@
         "attachments": []
       }
     },
-    "uiElementId": "web-content-message-8",
-    "id": "8",
+    "uiElementId": "web-content-message-11",
+    "id": "11",
     "itemType": "bot-message"
   },
   {
@@ -314,8 +314,8 @@
         "attachments": []
       }
     },
-    "uiElementId": "web-content-message-9",
-    "id": "9",
+    "uiElementId": "web-content-message-10",
+    "id": "10",
     "itemType": "bot-message"
   }
 ]
