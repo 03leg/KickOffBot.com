@@ -8,11 +8,12 @@ import { useAppDialog } from '~/components/bot/bot-builder/Dialog/useAppDialog';
 
 
 interface Props {
+    label: string;
     url?: string;
     onChangeUrl: (url?: string) => void;
 }
 
-export default function BackgroundImageEditor({ url, onChangeUrl }: Props) {
+export default function ImageUrlEditor({ url, onChangeUrl, label }: Props) {
     const { openDialog, closeDialog } = useAppDialog();
 
 
@@ -50,7 +51,7 @@ export default function BackgroundImageEditor({ url, onChangeUrl }: Props) {
         <Box sx={{ width: '100%', display: 'flex' }}>
             <TextField sx={{ flex: 1 }} InputProps={{
                 readOnly: true,
-            }} label="Background Image" variant="outlined" value={url ?? ""} fullWidth />
+            }} label={label} variant="outlined" value={url ?? ""} fullWidth />
             <Box sx={{ display: 'flex', alignItems: 'center', ml: 1 }}>
                 <IconButton onClick={handleEdit}>
                     <EditIcon />

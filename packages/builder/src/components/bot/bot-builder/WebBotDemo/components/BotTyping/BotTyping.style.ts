@@ -8,12 +8,10 @@ export const useBotTypingStyles = makeStyles<
     flexDirection: "row",
     maxWidth: "90%",
     marginTop: spacing(1),
+    
     "& p": {
       margin: 0,
     },
-  },
-  avatar: {
-    margin: spacing(0, 1, 1, 1),
   },
   message: {
     padding: spacing(1, 2),
@@ -25,6 +23,7 @@ export const useBotTypingStyles = makeStyles<
     flexDirection: "column",
     justifyContent: "center",
     minWidth: 0,
+    minHeight: 40,
   },
   text: {
     marginBottom: options?.hasAttachments ? spacing(1) : undefined,

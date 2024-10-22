@@ -5,7 +5,7 @@ import { useThemeDesignerStore } from '../../store/useThemeDesignerStore';
 import ColorSchemaSelector from '../ColorSchemaSelector/ColorSchemaSelector';
 import { BackgroundColorSchema } from '@kickoffbot.com/types';
 import { Box } from '@mui/material';
-import BackgroundImageEditor from '../BackgroundImageEditor/BackgroundImageEditor';
+import ImageUrlEditor from '../ImageUrlEditor/ImageUrlEditor';
 
 export default function BackgroundEditor() {
     const { setBackground, backgroundColorSchema, color1, color2, backgroundImageUrl } = useThemeDesignerStore((state) => ({
@@ -65,7 +65,7 @@ export default function BackgroundEditor() {
                 </Box>
             </ThemeFieldEditor>}
             {backgroundColorSchema === BackgroundColorSchema.Image && <ThemeFieldEditor label="Background Image">
-                <BackgroundImageEditor url={backgroundImageUrl} onChangeUrl={(url) => setBackground({ imageUrl: url })} />
+                <ImageUrlEditor url={backgroundImageUrl} onChangeUrl={(url) => setBackground({ imageUrl: url })} label='Background Image' />
             </ThemeFieldEditor>}
         </>
     )
