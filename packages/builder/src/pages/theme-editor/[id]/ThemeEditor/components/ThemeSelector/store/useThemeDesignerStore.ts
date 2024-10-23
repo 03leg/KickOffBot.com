@@ -5,22 +5,23 @@ import {
   AvatarView,
   BackgroundColorSchema,
   MessageAppearanceDescription,
+  PrimaryColors,
   WebChatBackgroundDescription,
 } from "@kickoffbot.com/types";
+import { orange } from "@mui/material/colors";
 
 export const useThemeDesignerStore = create<ThemeDesignerState>()(
   (set, get) => ({
+    primaryColors: {
+      main: orange[900],
+      contrastText: "#fff",
+    },
     background: {
       schema: BackgroundColorSchema.OneColor,
       color1: "#ffffff",
       color2: "#ffffff",
+      paperColor: "#ffffff",
     },
-    setBackground: (background: Partial<WebChatBackgroundDescription>) =>
-      set((state) => {
-        return {
-          background: { ...state.background, ...background },
-        };
-      }),
     userMessageAppearance: {
       avatarSettings: {
         showAvatar: false,
@@ -31,6 +32,22 @@ export const useThemeDesignerStore = create<ThemeDesignerState>()(
       backgroundColor: "#c5ecbe",
       textColor: "#000000",
     },
+    botMessageAppearance: {
+      backgroundColor: "#e3e3e3",
+      textColor: "#000000",
+      avatarSettings: {
+        showAvatar: true,
+        avatarSize: "medium",
+        avatarView: AvatarView.ColorInitials,
+        avatarColor: "#bbb",
+      },
+    },
+    setBackground: (background: Partial<WebChatBackgroundDescription>) =>
+      set((state) => {
+        return {
+          background: { ...state.background, ...background },
+        };
+      }),
     setUserMessageAppearance: (
       userMessageAppearance: Partial<MessageAppearanceDescription>
     ) =>
@@ -54,16 +71,7 @@ export const useThemeDesignerStore = create<ThemeDesignerState>()(
           },
         };
       }),
-    botMessageAppearance: {
-      backgroundColor: "#e3e3e3",
-      textColor: "#000000",
-      avatarSettings: {
-        showAvatar: true,
-        avatarSize: "medium",
-        avatarView: AvatarView.ColorInitials,
-        avatarColor: "#bbb",
-      },
-    },
+
     setBotMessageAppearance: (
       botMessageAppearance: Partial<MessageAppearanceDescription>
     ) =>
@@ -85,6 +93,12 @@ export const useThemeDesignerStore = create<ThemeDesignerState>()(
               ...avatarSettings,
             },
           },
+        };
+      }),
+    setPrimaryColors: (primaryColors: Partial<PrimaryColors>) =>
+      set((state) => {
+        return {
+          primaryColors: { ...state.primaryColors, ...primaryColors },
         };
       }),
   })

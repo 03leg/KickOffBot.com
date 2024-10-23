@@ -83,12 +83,25 @@
       "element": {
         "elementType": "web-input-date-time",
         "useTime": true,
-        "dateTimeFormat": "DD/MM/YYYY",
+        "dateTimeFormat": "DD/MM/YYYY HH:mm",
         "availableDateTimes": "All"
       }
     },
     "uiElementId": "web-input-date-time-e4177bb9-8b71-41c2-9d5f-848015edd76f",
     "id": "a1304f17-cf31-44ef-933c-e0b1dbfc8fc9",
+    "itemType": "bot-request"
+  },
+  {
+    "content": {
+      "element": {
+        "elementType": "web-input-date-time",
+        "useTime": false,
+        "dateTimeFormat": "DD/MM/YYYY",
+        "availableDateTimes": "FutureDates"
+      }
+    },
+    "uiElementId": "web-input-date-time-bbe355f7-dcc5-4264-b5ea-fce73c09d37c",
+    "id": "0a28f775-948a-4092-8bc6-b58e6b5a78d8",
     "itemType": "bot-request"
   },
   {
@@ -304,6 +317,68 @@
     },
     "uiElementId": "web-input-cards-e8568202-a231-4e84-87a0-412b4936f7e3",
     "id": "f8a545fe-9a74-4820-a6bf-c8ecbe4d0447",
+    "itemType": "bot-request"
+  },
+  {
+    "content": {
+      "element": {
+        "cardItems": [
+          {
+            "id": "0",
+            "value": "Product #123",
+            "image": "https://images.unsplash.com/photo-1725714834984-4f37a2406563?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w2NTU0MjR8MHwxfHJhbmRvbXx8fHx8fHx8fDE3MjkxNzM3MDJ8&ixlib=rb-4.0.3&q=80&w=1080",
+            "htmlDescription": "<p><span style=\"color: unset; font-size: 22px; background-color: unset\"><strong>Image #1</strong></span></p>\n<p><span style=\"color: unset; font-size: 16px; background-color: unset\"><em>Image #1, Image #1, Image #1, Image #1</em></span></p>",
+            "cardButtons": [
+              {
+                "id": "button-08966ea2-2684-4cc4-907d-cf94b7e9d061",
+                "content": "Button #1 😯"
+              },
+              {
+                "id": "00e36572-fe6b-45c6-9f6c-6e340201b32d",
+                "content": "Button #2 😍"
+              }
+            ]
+          },
+          {
+            "id": "1",
+            "value": "Product #321",
+            "image": "https://images.unsplash.com/photo-1728818331662-a8b337eb91d1?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w2NTU0MjR8MHwxfHJhbmRvbXx8fHx8fHx8fDE3MjkxNzM4OTl8&ixlib=rb-4.0.3&q=80&w=1080",
+            "htmlDescription": "<p><span style=\"color: unset; font-size: 22px; background-color: unset\"><strong>Image #2</strong></span></p>\n<p><span style=\"color: unset; font-size: 16px; background-color: unset\"><em>Image #2, Image #2, Image #2, Image #2</em></span></p>",
+            "cardButtons": [
+              {
+                "id": "button-08966ea2-2684-4cc4-907d-cf94b7e9d061",
+                "content": "Button #1 😯"
+              },
+              {
+                "id": "00e36572-fe6b-45c6-9f6c-6e340201b32d",
+                "content": "Button #2 😍"
+              }
+            ]
+          }
+        ],
+        "elementType": "web-input-cards",
+        "selectableCards": false,
+        "multipleChoice": false,
+        "useCardButtons": true,
+        "useGeneralButtons": true,
+        "generalButtons": [
+          {
+            "content": "Button #1",
+            "id": "button-e309e789-920c-430b-a37a-412e73eac646"
+          },
+          {
+            "content": "Button #2",
+            "id": "9d9e28af-dfd0-44bd-9f8d-54329b8b080f"
+          },
+          {
+            "content": "Button #3",
+            "id": "6ec05abe-507a-4a11-abea-736fb164b998"
+          }
+        ]
+      }
+    },
+    "uiElementId": "web-input-cards-5862def5-d414-44d7-b9c9-e035ee1a1f93",
+    "id": "ae3eebce-14df-4fa1-94fc-607127273ea0",
     "itemType": "bot-request"
   },
   {

@@ -1,9 +1,9 @@
 import React, { useCallback, useState } from 'react';
-import { Box, IconButton, TextField } from '@mui/material';
+import { Box, TextField } from '@mui/material';
 import { useTextBoxRequestStyles } from './TextBotRequest.style';
-import SendIcon from '@mui/icons-material/Send';
 import { RequestDescriptionWebRuntime, TextRequestElement } from '@kickoffbot.com/types';
 import { throwIfNil } from '~/utils/guard';
+import { SendResponseButton } from '../SendResponseButton';
 
 interface Props {
     request: RequestDescriptionWebRuntime;
@@ -32,12 +32,11 @@ export const TextBotRequest = ({ request }: Props) => {
     return (
         <Box className={classes.root}>
             <TextField
+                color='primary'
                 autoFocus /* multiline maxRows={4} */
                 onKeyDown={handleTextFieldKeyDown}
                 className={classes.textField} fullWidth variant="outlined" value={currentValue} onChange={handleValueChange} placeholder={placeholder} />
-            <IconButton onClick={handleSendResponse}>
-                <SendIcon />
-            </IconButton>
+            <SendResponseButton onSendResponse={handleSendResponse} />
         </Box>
     )
 }

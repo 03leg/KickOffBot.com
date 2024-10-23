@@ -17,7 +17,7 @@ interface Props {
     webViewOptions?: WebViewBotOptions;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+// //eslint-disable-next-line @typescript-eslint/no-explicit-any
 // let handler: any = undefined;
 
 export const ChatViewer = ({ project, height, projectId, webViewOptions }: Props) => {

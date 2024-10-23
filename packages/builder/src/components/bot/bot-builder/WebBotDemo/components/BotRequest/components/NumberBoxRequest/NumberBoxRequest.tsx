@@ -1,9 +1,9 @@
-import { Box, TextField, IconButton } from '@mui/material';
+import { Box, TextField } from '@mui/material';
 import React, { useCallback, useMemo, useState } from 'react';
-import SendIcon from '@mui/icons-material/Send';
 import { useNumberBoxRequestStyles } from './NumberBoxRequest.style';
 import { NumberRequestElement, RequestDescriptionWebRuntime } from '@kickoffbot.com/types';
 import { throwIfNil } from '~/utils/guard';
+import { SendResponseButton } from '../SendResponseButton';
 
 interface Props {
     request: RequestDescriptionWebRuntime;
@@ -41,7 +41,7 @@ export const NumberBoxRequest = ({ request }: Props) => {
     }, [handleSendResponse]);
 
     const buttonSendDisabled = useMemo(() => {
-         return typeof currentValue !== 'number';
+        return typeof currentValue !== 'number';
     }, [currentValue]);
 
     return (
@@ -54,9 +54,8 @@ export const NumberBoxRequest = ({ request }: Props) => {
                 className={classes.textField} fullWidth
                 variant="outlined" value={currentValue ?? ''}
                 onChange={handleValueChange} placeholder={numberElement.placeholder} />
-            <IconButton onClick={handleSendResponse} disabled={buttonSendDisabled}>
-                <SendIcon />
-            </IconButton>
+
+            <SendResponseButton onSendResponse={handleSendResponse} disabled={buttonSendDisabled}/>
         </Box>
     )
 }

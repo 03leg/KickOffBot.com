@@ -1,9 +1,9 @@
 import React, { useCallback, useState } from 'react'
 import { EmailRequestElement, RequestDescriptionWebRuntime } from '@kickoffbot.com/types';
-import { Box, TextField, IconButton } from '@mui/material';
+import { Box, TextField } from '@mui/material';
 import { useEmailBoxRequestStyles } from './EmailBoxRequest.style';
-import SendIcon from '@mui/icons-material/Send';
 import { throwIfNil } from '~/utils/guard';
+import { SendResponseButton } from '../SendResponseButton';
 
 
 interface Props {
@@ -57,9 +57,7 @@ export const EmailBoxRequest = ({ request }: Props) => {
                 helperText={showEmailError && emailError ? 'Email is not valid' : undefined}
                 error={showEmailError && emailError}
                 className={classes.textField} fullWidth variant="outlined" value={currentValue} onChange={handleValueChange} placeholder={placeholder} />
-            <IconButton onClick={handleSendResponse}>
-                <SendIcon />
-            </IconButton>
+            <SendResponseButton onSendResponse={handleSendResponse} />
         </Box>
     )
 }

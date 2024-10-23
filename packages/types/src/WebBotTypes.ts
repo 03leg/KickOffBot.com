@@ -345,11 +345,13 @@ export interface WebChatBackgroundDescription {
   color1?: string;
   color2?: string;
   imageUrl?: string;
+
+  paperColor: string;
 }
 
 export enum AvatarView {
-  ColorInitials = 'color-initials',
-  Image = 'image',
+  ColorInitials = "color-initials",
+  Image = "image",
 }
 
 export interface AvatarSettings {
@@ -368,8 +370,14 @@ export interface MessageAppearanceDescription {
   avatarSettings?: AvatarSettings;
 }
 
+export interface PrimaryColors {
+  main: string;
+  contrastText: string;
+}
+
 export interface WebViewBotOptions {
   background?: WebChatBackgroundDescription;
+  primaryColors: PrimaryColors;
   userMessageAppearance: MessageAppearanceDescription;
   botMessageAppearance: MessageAppearanceDescription;
 }

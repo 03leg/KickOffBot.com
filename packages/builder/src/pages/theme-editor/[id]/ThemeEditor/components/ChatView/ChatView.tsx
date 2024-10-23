@@ -11,10 +11,11 @@ import { useThemeDesignerStore } from '../ThemeSelector/store/useThemeDesignerSt
 export default function ChatView() {
 
   const { classes } = useChatViewStyles();
-  const { background, userMessageAppearance, botMessageAppearance } = useThemeDesignerStore((state) => ({
+  const { background, userMessageAppearance, botMessageAppearance, primaryColors } = useThemeDesignerStore((state) => ({
     background: state.background,
     userMessageAppearance: state.userMessageAppearance,
-    botMessageAppearance: state.botMessageAppearance
+    botMessageAppearance: state.botMessageAppearance,
+    primaryColors: state.primaryColors
   }));
 
   const storeState = useUserChatStore((state) => ({
@@ -31,7 +32,7 @@ export default function ChatView() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  const chatTheme = createChatTheme(undefined, { background, userMessageAppearance, botMessageAppearance });
+  const chatTheme = createChatTheme(undefined, { background, userMessageAppearance, botMessageAppearance, primaryColors });
 
   return (
     <><style jsx global>{`
@@ -61,7 +62,7 @@ export default function ChatView() {
     `}</style>
       <Box className={classes.root}>
         <ThemeProvider theme={chatTheme}>
-          <ChatViewer height={'100%'} projectId='' webViewOptions={{ background, botMessageAppearance, userMessageAppearance }} />
+          <ChatViewer height={'100%'} projectId='' webViewOptions={{ background, botMessageAppearance, userMessageAppearance, primaryColors }} />
         </ThemeProvider>
       </Box>
     </>
