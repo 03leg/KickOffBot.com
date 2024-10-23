@@ -5,6 +5,7 @@ import {
     Select,
     TextField,
     Typography,
+    alpha
 } from '@mui/material';
 import React from 'react';
 import {
@@ -14,6 +15,7 @@ import {
     parseCountry,
     usePhoneInput,
 } from 'react-international-phone';
+import { usePhoneBoxRequestStyles } from './PhoneBoxRequest.style';
 
 export interface PhoneEditorProps extends BaseTextFieldProps {
     value: string;
@@ -27,6 +29,7 @@ export const PhoneEditor: React.FC<PhoneEditorProps> = ({
     defaultCountry = 'us',
     ...restProps
 }) => {
+    const { classes } = usePhoneBoxRequestStyles();
     const { inputValue, handlePhoneValueChange, inputRef, country, setCountry } =
         usePhoneInput({
             defaultCountry,
@@ -84,6 +87,7 @@ export const PhoneEditor: React.FC<PhoneEditorProps> = ({
                                 },
                                 svg: {
                                     right: 0,
+                                    color: (theme) => theme.palette.primary.main,
                                 },
                             }}
                             value={country.iso2}
@@ -95,13 +99,13 @@ export const PhoneEditor: React.FC<PhoneEditorProps> = ({
                             {defaultCountries.map((c) => {
                                 const country = parseCountry(c);
                                 return (
-                                    <MenuItem key={country.iso2} value={country.iso2}>
+                                    <MenuItem key={country.iso2} value={country.iso2} sx={{ '&:hover': { backgroundColor: (theme) => alpha(theme.palette.primary.main, theme.palette.action.hoverOpacity) }}}>
                                         <FlagImage
                                             iso2={country.iso2}
                                             style={{ marginRight: '8px', height: '24px', width: '24px', boxSizing: 'border-box' }}
                                         />
                                         <Typography marginRight="8px">{country.name}</Typography>
-                                        <Typography color="gray">+{country.dialCode}</Typography>
+                                        <Typography className={classes.dialCode}>+{country.dialCode}</Typography>
                                     </MenuItem>
                                 );
                             })}

@@ -3,7 +3,7 @@
 import { ButtonElement, UnsplashPhoto } from '@kickoffbot.com/types';
 import React from 'react';
 import { useCard1Styles } from './Card1.style';
-import { Box, Button, Card, CardActions, CardContent, CardProps, styled } from '@mui/material';
+import { alpha, Box, Button, Card, CardActions, CardContent, CardProps, styled } from '@mui/material';
 import { CardSelectionMark } from './CardSelectionMark';
 import { Card1Image } from './Card1Image';
 
@@ -20,28 +20,23 @@ interface Props {
     onContentHeightChange?: () => void;
 }
 
-const SelectableChatCard1 = styled(Card)<CardProps>(({ theme }) => ({
-    position: 'relative',
-    boxShadow: '0px 4px 6px rgba(0, 0, 0, 0.1), 0px 1px 3px rgba(0, 0, 0, 0.08)',
-    cursor: 'pointer',
-    '&:hover': {
-        boxShadow: '0px 10px 20px rgba(0, 0, 0, 0.25), 0px 5px 10px rgba(0, 0, 0, 0.15)'
-    },
-    '&.Mui-selected': {
-        '& img': {
-            // border: '2px solid #1976d2',
-            // borderBottom: '0px',
-            // borderTopLeftRadius: theme.spacing(0.5),
-            // boxShadow: '0px 0px 0px 2px #1976d2 inset'
+const SelectableChatCard1 = styled(Card)<CardProps>(({ theme }) => {
+    return {
+        position: 'relative',
+        boxShadow: `0px 4px 6px ${alpha(theme.palette.text.primary, 0.1)}, 0px 1px 3px ${alpha(theme.palette.text.primary, 0.08)}`,
+        cursor: 'pointer',
+        '&:hover': {
+            boxShadow: `0px 4px 6px ${alpha(theme.palette.text.primary, 0.25)}, 0px 1px 3px ${alpha(theme.palette.text.primary, 0.15)}`,
 
         },
-        // boxShadow: '0px 0px 0px 2px #1976d2 inset'
-        border: '3px solid #1976d2'
-    }
-}));
+        '&.Mui-selected': {
+            border: `3px solid ${theme.palette.primary.main}`
+        }
+    };
+});
 
-const NotSelectableChatCard1 = styled(Card)<CardProps>(() => ({
-    boxShadow: '0px 4px 6px rgba(0, 0, 0, 0.1), 0px 1px 3px rgba(0, 0, 0, 0.08)',
+const NotSelectableChatCard1 = styled(Card)<CardProps>(({ theme }) => ({
+    boxShadow: `0px 4px 6px ${alpha(theme.palette.text.primary, 0.1)}, 0px 1px 3px ${alpha(theme.palette.text.primary, 0.08)}`,
 }));
 
 const ChatCardContent = styled(CardContent)(({ theme }) => ({
@@ -61,7 +56,7 @@ export const Card1 = ({ card, selected, onSelectedChange, isLast, selectableCard
             {selectableCard &&
                 <SelectableChatCard1 className={cx(classes.root, selected ? 'Mui-selected' : '')} onClick={() => onSelectedChange?.(!selected)}>
                     {selected && <CardSelectionMark />}
-                    <Card1Image image={card.image} onImageLoaded={onContentHeightChange ?? (() => {})} />
+                    <Card1Image image={card.image} onImageLoaded={onContentHeightChange ?? (() => { })} />
 
                     {card.htmlDescription && <ChatCardContent>
                         <div dangerouslySetInnerHTML={{ __html: card.htmlDescription }}>
@@ -71,7 +66,7 @@ export const Card1 = ({ card, selected, onSelectedChange, isLast, selectableCard
             }
             {!selectableCard &&
                 <NotSelectableChatCard1 className={cx(classes.root)}>
-                    <Card1Image image={card.image} onImageLoaded={onContentHeightChange ?? (() => {})}/>
+                    <Card1Image image={card.image} onImageLoaded={onContentHeightChange ?? (() => { })} />
 
                     {card.htmlDescription && <ChatCardContent>
                         <div dangerouslySetInnerHTML={{ __html: card.htmlDescription }}>
@@ -85,7 +80,7 @@ export const Card1 = ({ card, selected, onSelectedChange, isLast, selectableCard
                             }
                         }}>
                             {cardButtons?.map((button) => (
-                                <Button key={button.id} fullWidth variant='outlined' sx={{ textTransform: 'none' }} onClick={() => onButtonClick?.(button)}>{button.content}</Button>
+                                <Button key={button.id} fullWidth variant='outlined' onClick={() => onButtonClick?.(button)}>{button.content}</Button>
                             ))}
                         </CardActions>
                     }

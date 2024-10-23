@@ -14,7 +14,7 @@ const typingAnimation = keyframes({
   },
 });
 
-export const useTypingLoadingStyles = makeStyles()(() => ({
+export const useTypingLoadingStyles = makeStyles()(({ palette }) => ({
   typing: {
     position: "relative",
     width: 40,
@@ -26,7 +26,7 @@ export const useTypingLoadingStyles = makeStyles()(() => ({
     animationFillMode: "both",
     height: "10px",
     width: "10px",
-    background: "white",
+    background: palette.botMessage.contrastText,
     position: "absolute",
     left: 0,
     top: 0,

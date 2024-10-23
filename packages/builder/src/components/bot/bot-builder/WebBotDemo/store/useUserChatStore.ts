@@ -66,4 +66,6 @@ export const useUserChatStore = create<ChatStoreState>()((set, get) => ({
         },
       ],
     })),
+
+    setChatItems: (items: ChatItemWebRuntime[]) => set(() => ({ chatItems: items }))
 }));

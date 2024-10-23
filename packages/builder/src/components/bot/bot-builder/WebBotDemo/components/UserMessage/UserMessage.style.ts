@@ -1,6 +1,6 @@
 import { makeStyles } from "tss-react/mui";
 
-export const useUserMessageStyles = makeStyles()(({ spacing, shape }) => ({
+export const useUserMessageStyles = makeStyles()(({ spacing, shape, palette }) => ({
   root: {
     display: "flex",
     flexDirection: "row",
@@ -15,7 +15,8 @@ export const useUserMessageStyles = makeStyles()(({ spacing, shape }) => ({
   message: {
     padding: spacing(1, 2),
     borderRadius: shape.borderRadius,
-    backgroundColor: "#ebebeb",
+    backgroundColor: palette.userMessage.main,
+    color: palette.userMessage.contrastText,
     maxWidth: "100%",
     display: "flex",
     flexDirection: "column",

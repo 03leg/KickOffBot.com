@@ -9,6 +9,5 @@ export const useButtonsBoxRequestStyles = makeStyles()(({ spacing }) => ({
   },
   button: {
     margin: spacing(0, 1, 1, 0),
-    textTransform: "none",
   },
 }));

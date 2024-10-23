@@ -1,6 +1,5 @@
 import React, { useCallback, useMemo, useState } from 'react';
-import { Box, IconButton } from '@mui/material';
-import SendIcon from '@mui/icons-material/Send';
+import { Box } from '@mui/material';
 import { useDateTimeBoxRequestStyles } from './DateTimeBoxRequest.style';
 import { AvailableDateTimes, DateTimeRequestElement, RequestDescriptionWebRuntime } from '@kickoffbot.com/types';
 import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
@@ -9,6 +8,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DateTimePicker, DateTimeValidationError, TimeView } from '@mui/x-date-pickers';
 import { throwIfNil } from '~/utils/guard';
+import { SendResponseButton } from '../SendResponseButton';
 
 
 interface Props {
@@ -23,7 +23,7 @@ export const DateTimeBoxRequest = ({ request }: Props) => {
 
     const handleSendResponse = useCallback(() => {
         throwIfNil(request.onResponse);
-        
+
         request.onResponse({ data: dateValue?.format(dateTimeElement.dateTimeFormat) })
     }, [dateTimeElement.dateTimeFormat, dateValue, request]);
 
@@ -148,9 +148,7 @@ export const DateTimeBoxRequest = ({ request }: Props) => {
                     />}
                 </LocalizationProvider>
             </Box>
-            <IconButton onClick={handleSendResponse} disabled={buttonSendDisabled}>
-                <SendIcon />
-            </IconButton>
+            <SendResponseButton onSendResponse={handleSendResponse} disabled={buttonSendDisabled} />
         </Box>
     )
 }
