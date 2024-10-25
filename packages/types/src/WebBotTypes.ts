@@ -364,10 +364,10 @@ export interface AvatarSettings {
 }
 
 export interface MessageAppearanceDescription {
-  backgroundColor?: string;
-  textColor?: string;
+  backgroundColor: string;
+  textColor: string;
 
-  avatarSettings?: AvatarSettings;
+  avatarSettings: AvatarSettings;
 }
 
 export interface PrimaryColors {
@@ -375,7 +375,7 @@ export interface PrimaryColors {
   contrastText: string;
 }
 
-export interface WebViewBotOptions {
+export interface WebChatTheme {
   background?: WebChatBackgroundDescription;
   primaryColors: PrimaryColors;
   userMessageAppearance: MessageAppearanceDescription;

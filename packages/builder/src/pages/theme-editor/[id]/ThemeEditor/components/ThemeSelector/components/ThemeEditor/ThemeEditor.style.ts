@@ -1,7 +1,7 @@
 import { makeStyles } from "tss-react/mui";
 import { Colors } from "~/themes/Colors";
 
-export const useThemeSelectorStyles = makeStyles()(({ spacing }) => ({
+export const useThemeEditorStyles = makeStyles()(({ spacing }) => ({
   root: {
     backgroundColor: "white",
     border: `1px solid ${Colors.BORDER}`,
@@ -11,16 +11,15 @@ export const useThemeSelectorStyles = makeStyles()(({ spacing }) => ({
     height: "100%",
     overflow: "auto",
   },
-  toolbar: {
-    display: "flex",
-    justifyContent: "end",
+  actionButton: {
+    marginLeft: spacing(1),
+    textTransform: "none",
   },
-  header: {
-    marginTop: spacing(1.5),
+  themeName: {
+    marginTop: spacing(2),
   },
-  themes: {
-    padding: spacing(1, 0),
+  actionButtons: {
     display: "flex",
-    flexWrap: "wrap",
+    justifyContent: "flex-end",
   },
 }));

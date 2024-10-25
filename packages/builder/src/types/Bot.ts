@@ -1,4 +1,5 @@
 import { BotPlatform } from "@kickoffbot.com/types";
+import { JsonValue } from "@prisma/client/runtime/library";
 import { z } from "zod";
 
 export interface BotDescription {
@@ -29,3 +30,38 @@ export const TelegramTokenScheme = z.object({
   projectId: z.string(),
   token: z.string(),
 });
+
+export const ThemeScheme = z.object({
+
+  themeId: z.string().optional(),
+  title: z.string(),
+
+  botId: z.string(),
+
+  theme: z.string(),
+});
+
+export const GetThemesScheme = z.object({
+  botId: z.string(),
+});
+
+export const DeleteThemeScheme = z.object({
+  id: z.string(),
+});
+
+export const ApplyThemeScheme = z.object({
+  themeId: z.string(),
+  botId: z.string(),
+});
+
+export interface ThemeResponse {
+  id: string;
+  title: string;
+  theme: JsonValue;
+}
+
+export interface GetAllThemesResponse {
+  userThemes: ThemeResponse[];
+  publicThemes: ThemeResponse[];
+  currentThemeId?: ThemeResponse["id"] | null;
+}

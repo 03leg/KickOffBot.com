@@ -100,7 +100,7 @@ export const BotDescriptionCard = ({ description, onEdit, onRemove }: Props) => 
             </MenuItem>
             {description.botType === BotPlatform.WEB &&
                 <MenuItem onClick={handleNavigateThemeEditor}>
-                    Theme Editor
+                    Theme
                 </MenuItem>}
         </Menu>
     </Card>);

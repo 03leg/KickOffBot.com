@@ -1,7 +1,7 @@
 import { makeStyles } from "tss-react/mui";
 import { Colors } from "~/themes/Colors";
 
-export const useThemeSelectorStyles = makeStyles()(({ spacing }) => ({
+export const useThemeGalleryStyles = makeStyles()(({ spacing }) => ({
   root: {
     backgroundColor: "white",
     border: `1px solid ${Colors.BORDER}`,

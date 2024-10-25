@@ -1,6 +1,6 @@
 import {
   BackgroundColorSchema,
-  WebViewBotOptions,
+  WebChatTheme,
 } from "@kickoffbot.com/types";
 import { blue } from "@mui/material/colors";
 import {
@@ -40,7 +40,7 @@ declare module "@mui/material/styles" {
 
 export const createChatTheme = (
   shadowRootElement: HTMLElement | undefined = undefined,
-  viewOptions?: WebViewBotOptions
+  viewOptions?: WebChatTheme
 ) => {
   const mainColor = viewOptions?.primaryColors?.main ?? blue[800];
   const contrastText = viewOptions?.primaryColors?.contrastText ?? "#ffffff";

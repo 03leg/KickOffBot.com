@@ -1,12 +1,12 @@
 import React from 'react';
 import { Box } from '@mui/material';
 import { useUserMessageStyles } from './UserMessage.style';
-import { BotMessageBody, MessageDescriptionWebRuntime, WebViewBotOptions } from '@kickoffbot.com/types';
+import { BotMessageBody, MessageDescriptionWebRuntime, WebChatTheme } from '@kickoffbot.com/types';
 import { BotAvatar } from '../BotAvatar';
 
 interface Props {
     responseBody: BotMessageBody;
-    webViewOptions?: WebViewBotOptions;
+    webViewOptions?: WebChatTheme;
 }
 
 export const UserMessage = ({ responseBody, webViewOptions }: Props) => {

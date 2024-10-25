@@ -1,16 +1,23 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useEffect } from 'react'
 import { useChatViewStyles } from './ChatView.style';
-import { Box, ThemeProvider } from '@mui/material';
+import { Box, LinearProgress, ThemeProvider } from '@mui/material';
 import { ChatViewer } from '~/components/bot/bot-builder/WebBotDemo/components/ChatViewer';
 import { useUserChatStore } from '~/components/bot/bot-builder/WebBotDemo/store/useUserChatStore';
 import { createChatTheme } from '~/components/bot/bot-builder/WebBotDemo/theme/createChatTheme';
 import chatHistory from './demoChatHistory.json';
 import { useThemeDesignerStore } from '../ThemeSelector/store/useThemeDesignerStore';
+import { api } from '~/utils/api';
+import { useRouter } from 'next/router';
 
 export default function ChatView() {
-
+  const router = useRouter();
+  const botId = router.query.id as string;
   const { classes } = useChatViewStyles();
+  const { isLoading: getThemesLoading } = api.botManagement.getThemes.useQuery({ botId }, {
+    enabled: true,
+    refetchOnWindowFocus: false,
+  });
   const { background, userMessageAppearance, botMessageAppearance, primaryColors } = useThemeDesignerStore((state) => ({
     background: state.background,
     userMessageAppearance: state.userMessageAppearance,
@@ -33,6 +40,11 @@ export default function ChatView() {
   }, [])
 
   const chatTheme = createChatTheme(undefined, { background, userMessageAppearance, botMessageAppearance, primaryColors });
+
+
+  if (getThemesLoading) {
+    return <Box className={classes.root}><LinearProgress sx={{ marginTop: 3 }} /></Box>
+  }
 
   return (
     <><style jsx global>{`

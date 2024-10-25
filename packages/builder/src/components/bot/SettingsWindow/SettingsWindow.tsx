@@ -27,9 +27,6 @@ export const SettingsWindow = ({ onUpdate, buttonText = 'Create New Bot' }: Prop
     const router = useRouter();
     const [platform, setPlatform] = React.useState<BotPlatform>(BotPlatform.WEB);
 
-    console.log('platform', platform);
-
-
     const resetState = useCallback(() => {
         setError(undefined);
         setBotName('');

@@ -1,10 +1,10 @@
 import { Box } from '@mui/material'
 import React from 'react'
 import { useChatBackgroundImageStyles } from './ChatBackgroundImage.style';
-import { WebViewBotOptions } from '@kickoffbot.com/types';
+import { WebChatTheme } from '@kickoffbot.com/types';
 
 interface Props {
-    webViewOptions: WebViewBotOptions;
+    webViewOptions: WebChatTheme;
 }
 
 export const ChatBackgroundImage = ({ webViewOptions }: Props) => {
