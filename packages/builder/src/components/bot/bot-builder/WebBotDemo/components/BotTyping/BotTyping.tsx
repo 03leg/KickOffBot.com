@@ -4,10 +4,10 @@ import { Box } from '@mui/material';
 import { BotAvatar } from '../BotAvatar';
 import { TypingLoading } from '../TypingLoading';
 import { useBotTypingStyles } from './BotTyping.style';
-import { WebViewBotOptions } from '@kickoffbot.com/types';
+import { WebChatTheme } from '@kickoffbot.com/types';
 
 interface Props {
-    webViewOptions?: WebViewBotOptions;
+    webViewOptions?: WebChatTheme;
 }
 
 export const BotTyping = ({ webViewOptions }: Props) => {

@@ -57,6 +57,7 @@ model User {
     sessions                 Session[]
     bots                     BotDescription[]
     GoogleIntegrationAccount GoogleIntegrationAccount[]
+    themes                   WebBotTheme[]
 }
 
 model VerificationToken {
@@ -76,8 +77,10 @@ model BotDescription {
     deleted       Boolean     @default(false)
     createdAt     DateTime    @default(now())
     updatedAt     DateTime    @updatedAt
+    themeId       String?     
     user          User        @relation(fields: [userId], references: [id], onDelete: Cascade)
     botContentRef BotContent? @relation(fields: [contentId], references: [id], onDelete: Cascade)
+    themeRef      WebBotTheme? @relation(fields: [themeId], references: [id])
     BotToken      BotToken[]
 }
 
@@ -107,6 +110,20 @@ model GoogleIntegrationAccount {
     credentials String @db.Text
     createdAt DateTime @default(now())
     user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+
+model WebBotTheme {
+    id            String      @id @default(cuid())
+    title         String
+    isPublic      Boolean     @default(false)
+    userId        String
+    theme         Json
+    deleted       Boolean     @default(false)
+    createdAt     DateTime    @default(now())
+    updatedAt     DateTime    @updatedAt
+    user          User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+    Bot           BotDescription[]
 }
 
 // npx prisma generate

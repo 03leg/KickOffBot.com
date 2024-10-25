@@ -7,40 +7,75 @@ import {
   MessageAppearanceDescription,
   PrimaryColors,
   WebChatBackgroundDescription,
+  WebChatTheme,
 } from "@kickoffbot.com/types";
 import { orange } from "@mui/material/colors";
 
+const defaultInitialTheme: WebChatTheme = {
+  primaryColors: {
+    main: orange[900],
+    contrastText: "#fff",
+  },
+  background: {
+    schema: BackgroundColorSchema.OneColor,
+    color1: "#ffffff",
+    color2: "#ffffff",
+    paperColor: "#ffffff",
+  },
+  userMessageAppearance: {
+    avatarSettings: {
+      showAvatar: false,
+      avatarSize: "medium",
+      avatarView: AvatarView.ColorInitials,
+      avatarColor: "#bbb",
+    },
+    backgroundColor: "#c5ecbe",
+    textColor: "#000000",
+  },
+  botMessageAppearance: {
+    backgroundColor: "#e3e3e3",
+    textColor: "#000000",
+    avatarSettings: {
+      showAvatar: true,
+      avatarSize: "medium",
+      avatarView: AvatarView.ColorInitials,
+      avatarColor: "#bbb",
+    },
+  },
+};
+
 export const useThemeDesignerStore = create<ThemeDesignerState>()(
   (set, get) => ({
+    themeTitle: "",
+    mode: "view",
+    currentThemeId: null,
     primaryColors: {
-      main: orange[900],
-      contrastText: "#fff",
+      ...defaultInitialTheme.primaryColors,
     },
     background: {
-      schema: BackgroundColorSchema.OneColor,
-      color1: "#ffffff",
-      color2: "#ffffff",
-      paperColor: "#ffffff",
+      ...defaultInitialTheme.background,
     },
     userMessageAppearance: {
+      ...defaultInitialTheme.userMessageAppearance,
       avatarSettings: {
-        showAvatar: false,
-        avatarSize: "medium",
-        avatarView: AvatarView.ColorInitials,
-        avatarColor: "#bbb",
+        ...defaultInitialTheme.userMessageAppearance.avatarSettings,
       },
-      backgroundColor: "#c5ecbe",
-      textColor: "#000000",
     },
     botMessageAppearance: {
-      backgroundColor: "#e3e3e3",
-      textColor: "#000000",
+      ...defaultInitialTheme.botMessageAppearance,
       avatarSettings: {
-        showAvatar: true,
-        avatarSize: "medium",
-        avatarView: AvatarView.ColorInitials,
-        avatarColor: "#bbb",
+        ...defaultInitialTheme.botMessageAppearance.avatarSettings,
       },
+    },
+    getTheme: () => {
+      const result: WebChatTheme = {
+        botMessageAppearance: get().botMessageAppearance,
+        userMessageAppearance: get().userMessageAppearance,
+        primaryColors: get().primaryColors,
+        background: get().background,
+      };
+
+      return result;
     },
     setBackground: (background: Partial<WebChatBackgroundDescription>) =>
       set((state) => {
@@ -101,5 +136,50 @@ export const useThemeDesignerStore = create<ThemeDesignerState>()(
           primaryColors: { ...state.primaryColors, ...primaryColors },
         };
       }),
+
+    applySavedTheme: (themeId: string, theme: WebChatTheme) => {
+      set(() => {
+        return {
+          primaryColors: theme.primaryColors,
+          background: theme.background,
+          userMessageAppearance: theme.userMessageAppearance,
+          botMessageAppearance: theme.botMessageAppearance,
+          currentThemeId: themeId,
+        };
+      });
+    },
+    editTheme: (themeId: string, title: string, theme: WebChatTheme) => {
+      set(() => {
+        return {
+          primaryColors: theme.primaryColors,
+          background: theme.background,
+          userMessageAppearance: theme.userMessageAppearance,
+          botMessageAppearance: theme.botMessageAppearance,
+          currentThemeId: themeId,
+          themeTitle: title,
+          mode: "edit",
+        };
+      });
+    },
+    createTheme: (title: string) => {
+      set(() => {
+        return {
+          ...defaultInitialTheme,
+          currentThemeId: null,
+          themeTitle: title,
+          mode: "edit",
+        };
+      });
+    },
+    showGallery: () => {
+      set(() => {
+        return {
+          currentThemeId: null,
+          title: "",
+          mode: "view",
+        };
+      });
+    },
+    changeThemeTitle: (title: string) => set(() => ({ themeTitle: title })),
   })
 );

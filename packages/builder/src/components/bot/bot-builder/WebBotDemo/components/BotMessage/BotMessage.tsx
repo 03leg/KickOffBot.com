@@ -2,14 +2,14 @@ import React from 'react';
 import { Box } from '@mui/material';
 import { useBotMessageStyles } from './BotMessage.style';
 import { BotAvatar } from '../BotAvatar';
-import { BotMessageBody, BotMessageBodyType, CardsViewerElement, MediaMessageDescription, MessageDescriptionWebRuntime, WebViewBotOptions } from '@kickoffbot.com/types';
+import { BotMessageBody, BotMessageBodyType, CardsViewerElement, MediaMessageDescription, MessageDescriptionWebRuntime, WebChatTheme } from '@kickoffbot.com/types';
 import { MessageAndAttachments } from './components/MessageAndAttachments';
 import { CardsViewer } from './components/CardsViewer';
 import { MediaMessage } from './components/MediaMessage';
 
 interface Props {
     message: BotMessageBody;
-    webViewOptions?: WebViewBotOptions;
+    webViewOptions?: WebChatTheme;
     onContentHeightChange: () => void;
 }
 

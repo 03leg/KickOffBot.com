@@ -1,11 +1,16 @@
 import { isNil } from "lodash";
 import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
 import {
+  ApplyThemeScheme,
   BotContentScheme,
   BotDescription,
   BotDescriptionScheme,
+  DeleteThemeScheme,
+  GetAllThemesResponse,
+  GetThemesScheme,
   IdModelScheme,
   TelegramTokenScheme,
+  ThemeScheme,
 } from "~/types/Bot";
 import { prisma } from "~/server/db";
 import { TelegramToken } from "@kickoffbot.com/types";
@@ -13,9 +18,112 @@ import { getPreviewToken } from "~/server/utility/getPreviewToken";
 import { z } from "zod";
 import { Telegraf } from "telegraf";
 import { getDbVersionProject } from "~/utils/getDbVersionProject";
+import { v4 } from "uuid";
 // import fs from "fs";
 
 export const botManagementRouter = createTRPCRouter({
+  deleteTheme: protectedProcedure
+    .input(DeleteThemeScheme)
+    .mutation(async ({ ctx, input }) => {
+      const userId = ctx.session?.user.id;
+      await ctx.prisma.webBotTheme.update({
+        where: { id: input.id, userId },
+        data: { deleted: true },
+      });
+    }),
+  applyTheme: protectedProcedure
+    .input(ApplyThemeScheme)
+    .mutation(async ({ ctx, input }) => {
+      const userId = ctx.session?.user.id;
+      const { id: themeId } = await ctx.prisma.webBotTheme.findFirstOrThrow({
+        where: { id: input.themeId, deleted: false },
+        select: { id: true },
+      });
+
+      await ctx.prisma.botDescription.update({
+        data: { themeId },
+        where: { id: input.botId, userId },
+      });
+    }),
+  saveTheme: protectedProcedure
+    .input(ThemeScheme)
+    .mutation(async ({ ctx, input }) => {
+      const userId = ctx.session?.user.id;
+      let savedThemeId: string | null = null;
+
+      if (!input.themeId) {
+        const { id: themeId } = await ctx.prisma.webBotTheme.create({
+          data: {
+            userId,
+            theme: input.theme,
+            id: v4(),
+            isPublic: false,
+            title: input.title,
+          },
+          select: { id: true },
+        });
+        savedThemeId = themeId;
+      } else {
+        const { isPublic } = await ctx.prisma.webBotTheme.findFirstOrThrow({
+          where: { id: input.themeId, deleted: false },
+          select: { isPublic: true },
+        });
+
+        if (isPublic) {
+          const { id: themeId } = await ctx.prisma.webBotTheme.create({
+            data: {
+              userId,
+              theme: input.theme,
+              id: v4(),
+              isPublic: false,
+              title: input.title,
+            },
+            select: { id: true },
+          });
+          savedThemeId = themeId;
+        } else {
+          const { id: themeId } = await ctx.prisma.webBotTheme.update({
+            where: { id: input.themeId, userId },
+            data: { theme: input.theme, title: input.title },
+            select: { id: true },
+          });
+          savedThemeId = themeId;
+        }
+      }
+
+      if (savedThemeId) {
+        await ctx.prisma.botDescription.update({
+          data: { themeId: savedThemeId },
+          where: { id: input.botId, userId },
+        });
+      }
+
+      return savedThemeId;
+    }),
+  getThemes: protectedProcedure
+    .input(GetThemesScheme)
+    .query<GetAllThemesResponse>(async ({ input, ctx }) => {
+      const userId = ctx.session?.user.id;
+
+      const userThemes = await ctx.prisma.webBotTheme.findMany({
+        where: { userId, deleted: false },
+      });
+
+      const publicThemes = await ctx.prisma.webBotTheme.findMany({
+        where: { deleted: false, isPublic: true },
+      });
+
+      const currentThemeId = await ctx.prisma.botDescription.findUnique({
+        where: { userId, id: input.botId },
+        select: { themeId: true },
+      });
+
+      return {
+        userThemes,
+        publicThemes,
+        currentThemeId: currentThemeId?.themeId,
+      };
+    }),
   saveBot: protectedProcedure
     .input(BotDescriptionScheme)
     .mutation(async ({ ctx, input }) => {

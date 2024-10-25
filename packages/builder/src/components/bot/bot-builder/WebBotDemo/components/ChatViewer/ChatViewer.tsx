@@ -1,4 +1,4 @@
-import { BotMessageBody, BotProject, ChatItemTypeWebRuntime, RequestDescriptionWebRuntime, WebViewBotOptions } from '@kickoffbot.com/types';
+import { BotMessageBody, BotProject, ChatItemTypeWebRuntime, RequestDescriptionWebRuntime, WebChatTheme } from '@kickoffbot.com/types';
 import React, { useCallback, useEffect, useLayoutEffect, useRef } from 'react';
 import { useUserChatStore } from '../../store/useUserChatStore';
 import { Box } from '@mui/material';
@@ -14,7 +14,7 @@ interface Props {
     project?: BotProject;
     height?: number | string;
     projectId: string;
-    webViewOptions?: WebViewBotOptions;
+    webViewOptions?: WebChatTheme;
 }
 
 // //eslint-disable-next-line @typescript-eslint/no-explicit-any

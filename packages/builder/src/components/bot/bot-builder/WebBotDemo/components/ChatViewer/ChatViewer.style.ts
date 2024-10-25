@@ -1,11 +1,11 @@
 import {
-  WebViewBotOptions,
+  WebChatTheme,
 } from "@kickoffbot.com/types";
 import { makeStyles } from "tss-react/mui";
 import { getBackgroundColor, getBackgroundImage } from "../../theme/createChatTheme.utils";
 
 export const useChatViewerStyles = makeStyles<
-  { height?: number | string; webViewOptions?: WebViewBotOptions } | undefined
+  { height?: number | string; webViewOptions?: WebChatTheme } | undefined
 >()(({ palette }, options) => ({
   root: {
     height: options?.height,

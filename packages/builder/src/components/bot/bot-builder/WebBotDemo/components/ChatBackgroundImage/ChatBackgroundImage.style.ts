@@ -1,12 +1,12 @@
 import {
     BackgroundColorSchema,
-    WebViewBotOptions,
+    WebChatTheme,
   } from "@kickoffbot.com/types";
   import { makeStyles } from "tss-react/mui";
   import { getBackgroundColor } from "../../theme/createChatTheme.utils";
   
   export const useChatBackgroundImageStyles = makeStyles<
-    { webViewOptions?: WebViewBotOptions } | undefined
+    { webViewOptions?: WebChatTheme } | undefined
   >()(({ palette }, options) => ({
     root: {
       height: '100%',
