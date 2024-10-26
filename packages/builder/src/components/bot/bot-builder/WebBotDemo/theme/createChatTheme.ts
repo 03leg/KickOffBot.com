@@ -60,11 +60,11 @@ export const createChatTheme = (
         contrastText: contrastText,
       },
       botMessage: {
-        main: viewOptions?.botMessageAppearance?.backgroundColor ?? "#e3e3e3",
-        contrastText: viewOptions?.botMessageAppearance?.textColor ?? "#000000",
+        main: viewOptions?.botMessageAppearance?.backgroundColor ?? "#1565c0",
+        contrastText: viewOptions?.botMessageAppearance?.textColor ?? "#ffffff",
       },
       userMessage: {
-        main: viewOptions?.userMessageAppearance?.backgroundColor ?? "#c5ecbe",
+        main: viewOptions?.userMessageAppearance?.backgroundColor ?? "#f0f0f0",
         contrastText:
           viewOptions?.userMessageAppearance?.textColor ?? "#000000",
       },
