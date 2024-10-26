@@ -21,13 +21,13 @@ export interface ThemeDesignerState {
 
   userMessageAppearance: Required<MessageAppearanceDescription>;
   setUserMessageAppearance: (
-    userMessageAppearance: MessageAppearanceDescription
+    userMessageAppearance: Partial<MessageAppearanceDescription>
   ) => void;
   setUserMessageAvatarAppearance: (avatarSettings: AvatarSettings) => void;
 
   botMessageAppearance: Required<MessageAppearanceDescription>;
   setBotMessageAppearance: (
-    userMessageAppearance: MessageAppearanceDescription
+    userMessageAppearance: Partial<MessageAppearanceDescription>
   ) => void;
   setBotMessageAvatarAppearance: (avatarSettings: AvatarSettings) => void;
 

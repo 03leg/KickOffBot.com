@@ -1,7 +1,7 @@
 import React, { useLayoutEffect, useRef } from 'react'
 import * as ReactDOM from "react-dom/client";
 import { useFlowDesignerStore } from '../store';
-import { Box } from '@mui/material';
+import { Box, LinearProgress } from '@mui/material';
 import {
     createTheme,
     ThemeProvider
@@ -11,6 +11,7 @@ import { CacheProvider } from "@emotion/react";
 import { ChatViewer } from './components/ChatViewer';
 import { useRouter } from 'next/router';
 import { createChatTheme } from './theme/createChatTheme';
+import { api } from '~/utils/api';
 
 
 
@@ -22,9 +23,13 @@ export const WebBotDemo = () => {
     }));
     const containerRef = useRef<HTMLDivElement>(null);
     const projectIdFromQuery = router.query.id as string;
+    const { data: themeResponse = undefined, isLoading: getThemesLoading } = api.botManagement.getThemeById.useQuery({ botId: projectIdFromQuery }, { enabled: true, refetchOnWindowFocus: false });
+
 
     useLayoutEffect(() => {
-        if (!showWebBotDemo) return;
+        if (!showWebBotDemo || themeResponse === undefined || getThemesLoading) return;
+
+        const themeObject = themeResponse ? JSON.parse(themeResponse.theme as string) : undefined
 
         const container = document.querySelector('#chat-box-root');
         if (!container) {
@@ -42,7 +47,7 @@ export const WebBotDemo = () => {
             container: shadowContainer
         });
 
-        const shadowTheme = createChatTheme(shadowRootElement);
+        const shadowTheme = createChatTheme(shadowRootElement, themeObject);
 
         const root = ReactDOM.createRoot(shadowRootElement);
 
@@ -50,7 +55,7 @@ export const WebBotDemo = () => {
             <React.StrictMode>
                 <CacheProvider value={cache}>
                     <ThemeProvider theme={shadowTheme}>
-                        <ChatViewer height={containerRef.current?.clientHeight} project={project} projectId={projectIdFromQuery} />
+                        <ChatViewer height={containerRef.current?.clientHeight} project={project} projectId={projectIdFromQuery} webViewOptions={themeObject} />
                     </ThemeProvider>
                 </CacheProvider>
             </React.StrictMode>
@@ -59,10 +64,14 @@ export const WebBotDemo = () => {
         return () => {
             root.unmount();
         }
-    }, [project, projectIdFromQuery, showWebBotDemo]);
+    }, [getThemesLoading, project, projectIdFromQuery, showWebBotDemo, themeResponse]);
 
     if (!showWebBotDemo) {
         return null;
+    }
+
+    if (getThemesLoading) {
+        return <LinearProgress sx={{ mt: 3 }} />;
     }
 
     return (

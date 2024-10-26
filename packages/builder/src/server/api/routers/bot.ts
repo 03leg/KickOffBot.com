@@ -7,6 +7,7 @@ import {
   BotDescriptionScheme,
   DeleteThemeScheme,
   GetAllThemesResponse,
+  GetThemeByIdScheme,
   GetThemesScheme,
   IdModelScheme,
   TelegramTokenScheme,
@@ -19,6 +20,7 @@ import { z } from "zod";
 import { Telegraf } from "telegraf";
 import { getDbVersionProject } from "~/utils/getDbVersionProject";
 import { v4 } from "uuid";
+import { Prisma } from "@prisma/client";
 // import fs from "fs";
 
 export const botManagementRouter = createTRPCRouter({
@@ -124,6 +126,25 @@ export const botManagementRouter = createTRPCRouter({
         currentThemeId: currentThemeId?.themeId,
       };
     }),
+  getThemeById: protectedProcedure.input(GetThemeByIdScheme).query<{
+    theme: Prisma.JsonValue;
+  } | null>(async ({ input, ctx }) => {
+    const botDescriptionItem = await ctx.prisma.botDescription.findUnique({
+      where: { id: input.botId },
+      select: { themeId: true },
+    });
+
+    if (!botDescriptionItem?.themeId) {
+      return null;
+    }
+
+    const theme = await ctx.prisma.webBotTheme.findUnique({
+      where: { id: botDescriptionItem.themeId },
+      select: { theme: true },
+    });
+
+    return theme;
+  }),
   saveBot: protectedProcedure
     .input(BotDescriptionScheme)
     .mutation(async ({ ctx, input }) => {
