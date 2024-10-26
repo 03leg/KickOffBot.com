@@ -3,7 +3,6 @@ import * as ReactDOM from "react-dom/client";
 import { useFlowDesignerStore } from '../store';
 import { Box, LinearProgress } from '@mui/material';
 import {
-    createTheme,
     ThemeProvider
 } from "@mui/material/styles";
 import createCache from "@emotion/cache";

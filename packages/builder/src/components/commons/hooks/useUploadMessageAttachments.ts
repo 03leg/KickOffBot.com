@@ -1,4 +1,5 @@
 import { ContentType, FileDescription } from "@kickoffbot.com/types";
+import { useRouter } from "next/router";
 import { useCallback, useState } from "react";
 import {
   IMAGE_EXTENSIONS,
@@ -11,12 +12,15 @@ import { showError, showSuccessMessage } from "~/utils/ClientStatusMessage";
 import { throwIfNil } from "~/utils/guard";
 
 export const useUploadMessageAttachments = (
+
   attachments: FileDescription[] = [],
   multiply = true
 ) => {
   const [uploadedFiles, setUploadedFiles] =
     useState<FileDescription[]>(attachments);
   const [isUploading, setIsUploading] = useState<boolean>(false);
+  const router = useRouter();
+  const projectIdFromQuery = router.query.id as string;
 
   const handleAttachmentsAdd = useCallback(
     async (files: FileDescription[]) => {
@@ -26,6 +30,7 @@ export const useUploadMessageAttachments = (
         let attachments: UploadAttachmentFileDescription[] = [];
         try {
           attachments = await uploadAttachments(
+            projectIdFromQuery,
             files.map((f) => (f as ClientFileDescription).browserFile)
           );
         } catch {
