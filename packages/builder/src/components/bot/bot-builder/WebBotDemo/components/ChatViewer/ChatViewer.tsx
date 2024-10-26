@@ -64,22 +64,24 @@ export const ChatViewer = ({ project, height, projectId, webViewOptions }: Props
     // }, [storeState.chatItems]);
 
     return (
-        <Box ref={messageListRef} className={cx(classes.root, 'chat-box-root')} data-testid="chat-viewer">
-            {storeState.chatItems.map(m => {
-                switch (m.itemType) {
-                    case ChatItemTypeWebRuntime.BOT_MESSAGE: {
-                        return <BotMessage webViewOptions={webViewOptions} message={m.content as BotMessageBody} onContentHeightChange={goToBottom} key={m.id} />
+        <Box className={classes.viewPort}>
+            <Box ref={messageListRef} className={cx(classes.root, 'chat-box-root')} data-testid="chat-viewer">
+                {storeState.chatItems.map(m => {
+                    switch (m.itemType) {
+                        case ChatItemTypeWebRuntime.BOT_MESSAGE: {
+                            return <BotMessage webViewOptions={webViewOptions} message={m.content as BotMessageBody} onContentHeightChange={goToBottom} key={m.id} />
+                        }
+                        case ChatItemTypeWebRuntime.BOT_REQUEST: {
+                            return <BotRequest request={m.content as RequestDescriptionWebRuntime} onContentHeightChange={goToBottom} key={m.id} />
+                        }
+                        case ChatItemTypeWebRuntime.USER_MESSAGE: {
+                            return <UserMessage webViewOptions={webViewOptions} responseBody={m.content as BotMessageBody} key={m.id} />
+                        }
                     }
-                    case ChatItemTypeWebRuntime.BOT_REQUEST: {
-                        return <BotRequest request={m.content as RequestDescriptionWebRuntime} onContentHeightChange={goToBottom} key={m.id} />
-                    }
-                    case ChatItemTypeWebRuntime.USER_MESSAGE: {
-                        return <UserMessage webViewOptions={webViewOptions} responseBody={m.content as BotMessageBody} key={m.id} />
-                    }
-                }
-            })}
-            {storeState.botIsTyping && <BotTyping webViewOptions={webViewOptions} />}
-            {storeState.errorMessages.length > 0 && <ErrorMessages errorMessages={storeState.errorMessages} />}
+                })}
+                {storeState.botIsTyping && <BotTyping webViewOptions={webViewOptions} />}
+                {storeState.errorMessages.length > 0 && <ErrorMessages errorMessages={storeState.errorMessages} />}
+            </Box>
         </Box>
     )
 }

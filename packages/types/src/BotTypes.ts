@@ -125,7 +125,7 @@ export enum ChangeObjectVariableDataSource {
   JSON,
   VARIABLE,
   INSERT_PROPERTY,
-  REMOVE_PROPERTY
+  REMOVE_PROPERTY,
 }
 
 export enum ArrayFilterType {

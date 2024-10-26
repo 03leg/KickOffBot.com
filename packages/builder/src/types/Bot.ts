@@ -45,6 +45,10 @@ export const GetThemesScheme = z.object({
   botId: z.string(),
 });
 
+export const GetThemeByIdScheme = z.object({
+  botId: z.string(),
+});
+
 export const DeleteThemeScheme = z.object({
   id: z.string(),
 });
