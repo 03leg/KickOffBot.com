@@ -30,6 +30,7 @@ export default async function POST(
   response: NextApiResponse
 ) {
   try {
+    const botProjectId = request.query.botProjectId as string;
     const session = await getSession({ req: request });
 
     if (isNil(session) || isNil(session.user.id)) {
@@ -42,8 +43,7 @@ export default async function POST(
     const storeProvider: AttachmentUploaderProvider =
       new AttachmentUploaderSupaBase();
 
-      // TODO: Use project id as directory
-    return response.json(await storeProvider.uploadfiles(uploadFiles, `attachments/${session.user.id}/`));
+    return response.json(await storeProvider.uploadfiles(uploadFiles, `attachments/user-${session.user.id}/bot-${botProjectId}/`));
   } catch (error) {
     response.status(500).json({ error: ServerErrorCode.API_HANDLER_ERROR });
     console.log(error);

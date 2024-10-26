@@ -6,7 +6,7 @@ import {
 } from "~/types/UploadAttachments";
 import { showError } from "~/utils/ClientStatusMessage";
 
-export async function uploadAttachments(clientFiles: File[]) {
+export async function uploadAttachments(projectName: string, clientFiles: File[]) {
   try {
     const formData = new FormData();
 
@@ -15,7 +15,7 @@ export async function uploadAttachments(clientFiles: File[]) {
     }
 
     const { data } = await axios.post<UploadAttachmentFileDescription[]>(
-      "/api/upload",
+      `/api/upload?botProjectId=${projectName}`,
       formData
     );
 
