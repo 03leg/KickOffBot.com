@@ -38,4 +38,5 @@ export interface ThemeDesignerState {
   showGallery: () => void;
 
   createTheme: (title: string) => void;
+  resetState: () => void;
 }

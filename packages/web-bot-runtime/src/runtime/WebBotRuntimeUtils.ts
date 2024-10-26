@@ -27,7 +27,7 @@ export class WebBotRuntimeUtils {
     );
 
     if (isNil(currentLink)) {
-      throw new Error('InvalidOperationError: link is null');
+      return null;
     }
 
     return currentLink;

@@ -9,11 +9,11 @@ import {
   WebChatBackgroundDescription,
   WebChatTheme,
 } from "@kickoffbot.com/types";
-import { orange } from "@mui/material/colors";
+import { blue } from "@mui/material/colors";
 
 const defaultInitialTheme: WebChatTheme = {
   primaryColors: {
-    main: orange[900],
+    main: blue[800],
     contrastText: "#fff",
   },
   background: {
@@ -181,5 +181,14 @@ export const useThemeDesignerStore = create<ThemeDesignerState>()(
       });
     },
     changeThemeTitle: (title: string) => set(() => ({ themeTitle: title })),
+    resetState: () =>
+      set(() => {
+        return {
+          ...defaultInitialTheme,
+          currentThemeId: null,
+          title: "",
+          mode: "view",
+        };
+      }),
   })
 );
