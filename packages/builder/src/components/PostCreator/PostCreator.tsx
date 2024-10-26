@@ -17,7 +17,7 @@ export const PostCreator = () => {
 
         if (!isNil(currentPost.current) && currentPost.current.attachments.length > 0) {
             try {
-                attachments = await uploadAttachments(currentPost.current.attachments.map((f) => (f as ClientFileDescription).browserFile));
+                attachments = await uploadAttachments("redundant component", currentPost.current.attachments.map((f) => (f as ClientFileDescription).browserFile));
             }
             catch {
                 showError('Failed to save your post... Sorry 😔');
