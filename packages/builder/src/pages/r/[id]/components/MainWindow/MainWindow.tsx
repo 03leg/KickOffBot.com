@@ -11,7 +11,7 @@ export default function MainWindow() {
     const { data: themeResponse = undefined, isLoading: getThemesLoading } = api.botManagement.getThemeById.useQuery({ botId: projectId }, { enabled: true, refetchOnWindowFocus: false });
 
     if (getThemesLoading || themeResponse === undefined) {
-        return <LinearProgress sx={{ mt: 3 }} />
+        return <LinearProgress />
     }
 
     const themeObject = themeResponse ? JSON.parse(themeResponse.theme as string) : undefined

@@ -67,11 +67,35 @@ export class WebBotRuntime {
 
   async startBot() {
     const startLink = this._utils.getLinkByBlockId('/start');
+
+    if (isNil(startLink)) {
+      return [
+        this.getServiceMessageToChat(
+          'It looks like your bot is missing a start block! 😊 Please add one to get things going. 😊',
+        ),
+      ];
+    }
+
     const block = this._utils.getBlockById(startLink.input.blockId);
     const firstElement = block.elements[0];
     const response = await this.handleElement(block, firstElement);
 
     return response;
+  }
+
+  private getServiceMessageToChat(serviceMessage: string) {
+    return {
+      content: {
+        type: BotMessageBodyType.MessageAndAttachments,
+        content: {
+          message: serviceMessage,
+          attachments: [],
+        },
+      },
+      uiElementId: 'start',
+      id: v4(),
+      itemType: ChatItemTypeWebRuntime.BOT_MESSAGE,
+    };
   }
 
   private async handleElement(
