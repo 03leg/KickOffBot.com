@@ -1,5 +1,5 @@
 import { Box, Button, FormControl, FormControlLabel, Radio, RadioGroup, TextField, Typography } from '@mui/material'
-import React, { useCallback, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import AddIcon from '@mui/icons-material/Add';
 import { isEmpty } from 'lodash';
 import { api } from '~/utils/api';
@@ -9,19 +9,21 @@ import { useRouter } from 'next/router';
 import { EDIT_BOT_PATH } from '~/constants';
 import { TemplateDescription } from './types';
 import { BotPlatform } from '@kickoffbot.com/types';
+import { getUniqueBotName } from './SettingsWindow.utils';
 
 interface Props {
     onUpdate?: VoidFunction;
     buttonText?: string;
+    botNames?: string[];
 }
 
-const DEFAULT_BOT_NAME = 'My Bot #1';
+const DEFAULT_BOT_NAME = 'My Bot #';
 
-export const SettingsWindow = ({ onUpdate, buttonText = 'Create New Bot' }: Props) => {
+export const SettingsWindow = ({ onUpdate, buttonText = 'Create New Bot', botNames }: Props) => {
     const [open, setOpen] = React.useState(false);
     const [isLoading, setIsLoading] = React.useState(false);
     const [error, setError] = React.useState<string>();
-    const [botName, setBotName] = React.useState<string>(DEFAULT_BOT_NAME);
+    const [botName, setBotName] = React.useState<string>(DEFAULT_BOT_NAME + 1);
     const { mutateAsync } = api.botManagement.saveBot.useMutation();
     const [botTemplate, setBotTemplate] = useState<TemplateDescription | undefined>();
     const router = useRouter();
@@ -29,7 +31,6 @@ export const SettingsWindow = ({ onUpdate, buttonText = 'Create New Bot' }: Prop
 
     const resetState = useCallback(() => {
         setError(undefined);
-        setBotName('');
         setIsLoading(false);
     }, []);
 
@@ -78,6 +79,12 @@ export const SettingsWindow = ({ onUpdate, buttonText = 'Create New Bot' }: Prop
         setPlatform(Number((event.target as HTMLInputElement).value) as BotPlatform);
     }, []);
 
+    useEffect(() => {
+
+        setBotName(getUniqueBotName(DEFAULT_BOT_NAME, botNames ?? []));
+
+    }, [botNames]);
+
     return (
         <>
             <Button startIcon={<AddIcon />} variant="contained" color='success' onClick={handleClickOpen}>{buttonText}</Button>
@@ -113,7 +120,7 @@ export const SettingsWindow = ({ onUpdate, buttonText = 'Create New Bot' }: Prop
                     </FormControl>
 
                     <Typography sx={{ mt: 2 }} variant='h6'>Templates</Typography>
-                    <TemplatesViewer  onTemplateChange={handleTemplateChange} platform={platform} />
+                    <TemplatesViewer onTemplateChange={handleTemplateChange} platform={platform} />
                 </Box>
             </AppDialog>
         </>

@@ -11,6 +11,7 @@ import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { BotPlatform } from '@kickoffbot.com/types';
 import { useMemo } from 'react';
 import { useRouter } from 'next/router';
+import { useConfirm } from 'material-ui-confirm';
 
 interface Props {
     description: BotDescription;
@@ -22,6 +23,7 @@ export const BotDescriptionCard = ({ description, onEdit, onRemove }: Props) => 
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
     const openMenu = Boolean(anchorEl);
     const router = useRouter();
+    const confirm = useConfirm();
 
     const handleOpenMenu = React.useCallback((event: React.MouseEvent<HTMLElement>) => {
         setAnchorEl(event.currentTarget);
@@ -31,9 +33,14 @@ export const BotDescriptionCard = ({ description, onEdit, onRemove }: Props) => 
     }, []);
 
     const handleRemove = React.useCallback(() => {
-        onRemove(description);
+
+        void confirm({ description: <>This will permanently delete the bot with name <b>{description.name}</b>.</>, title: 'Are you sure?' })
+            .then(() => {
+                onRemove(description);
+            }).catch();
+
         handleClose();
-    }, [description, handleClose, onRemove]);
+    }, [confirm, description, handleClose, onRemove]);
 
     const handleNavigateThemeEditor = React.useCallback(() => {
         void router.push(`/theme-editor/${description.id}`);
@@ -50,27 +57,25 @@ export const BotDescriptionCard = ({ description, onEdit, onRemove }: Props) => 
     }, [description.botType]);
 
     const cardContent = (<Card sx={{
-        minWidth: 275, maxWidth: 275,
+        width: 275,
         display: "flex",
         flexDirection: "column",
     }}>
         <CardContent>
-            <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-
-                {moment(description.updatedAt).local().format('YYYY-MM-DD HH:mm')}
-            </Typography>
-
-
-            <Typography variant="h5" component="div">
-                {description.name}
-            </Typography>
-
-
-            <Box>
+            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
+                    {moment(description.updatedAt).local().format('YYYY-MM-DD HH:mm')}
+                </Typography>
                 <Chip label={platform} color={description.botType === BotPlatform.WEB ? 'success' : "info"} />
             </Box>
 
-
+            <Typography variant="h5" component="div" sx={{
+                whiteSpace: "nowrap",
+                overflow: "hidden",
+                textOverflow: "ellipsis",
+            }} title={description.name}>
+                {description.name}
+            </Typography>
         </CardContent>
         <CardActions sx={{ mt: "auto", display: 'flex', justifyContent: 'space-between' }}>
             <Button size="small" onClick={() => (onEdit(description))}>Edit</Button>
