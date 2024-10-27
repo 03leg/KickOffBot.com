@@ -62,7 +62,7 @@ export const OpinionScale = ({ min, max, value, onValueChange, showLabels, minLa
             return <Typography fontWeight={"bold"} color='primary'>{eachOptionLabel[value]}</Typography>;
         }
 
-        return "";
+        return <Typography color='primary' sx={{ visibility: 'hidden'}}>{'☀️'}</Typography>;
     }, [eachOptionLabel, hoverOption, showLabelsMode, value]);
 
     return (
