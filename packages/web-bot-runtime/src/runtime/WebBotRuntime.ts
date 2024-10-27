@@ -34,6 +34,7 @@ import {
   BotMessageBody,
   WebContentMediaUIElement,
   MediaMessageDescription,
+  WebOpinionScaleUIElement,
 } from '@kickoffbot.com/types';
 import { WebBotRuntimeUtils } from './WebBotRuntimeUtils';
 import { WebUserContext } from './WebUserContext';
@@ -136,6 +137,7 @@ export class WebBotRuntime {
       case ElementType.WEB_INPUT_NUMBER:
       case ElementType.WEB_INPUT_EMAIL:
       case ElementType.WEB_INPUT_BUTTONS:
+      case ElementType.WEB_OPINION_SCALE:
       case ElementType.WEB_INPUT_TEXT: {
         const typedElement = element as
           | WebInputTextUIElement
@@ -143,6 +145,7 @@ export class WebBotRuntime {
           | WebInputPhoneUIElement
           | WebInputEmailUIElement
           | WebInputButtonsUIElement
+          | WebOpinionScaleUIElement
           | WebInputDateTimeUIElement;
 
         const request: ChatItemWebRuntime = {
@@ -331,6 +334,7 @@ export class WebBotRuntime {
       case ElementType.WEB_INPUT_CARDS:
       case ElementType.WEB_CONTENT_IMAGES:
       case ElementType.WEB_CONTENT_VIDEOS:
+      case ElementType.WEB_OPINION_SCALE:
       case ElementType.WEB_CONTENT_MESSAGE: {
         result = await this.handleElement(block, nextElement);
         break;
@@ -385,6 +389,7 @@ export class WebBotRuntime {
       | WebInputPhoneUIElement
       | WebInputEmailUIElement
       | WebInputCardsUIElement
+      | WebOpinionScaleUIElement
       | WebInputDateTimeUIElement;
 
     if (typedElement.type === ElementType.WEB_INPUT_BUTTONS) {

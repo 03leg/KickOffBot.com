@@ -9,6 +9,7 @@ import { PhoneBoxRequest } from './components/PhoneBoxRequest';
 import { EmailBoxRequest } from './components/EmailBoxRequest';
 import { ButtonsBoxRequest } from './components/ButtonsBoxRequest';
 import { CardsBoxRequest } from './components/CardsBoxRequest';
+import { OpinionScaleRequest } from './components/OpinionScaleRequest';
 
 interface Props {
     request: RequestDescriptionWebRuntime;
@@ -42,6 +43,9 @@ export const BotRequest = ({ request, onContentHeightChange }: Props) => {
             }
             case ElementType.WEB_INPUT_CARDS: {
                 return <CardsBoxRequest request={request} onContentHeightChange={onContentHeightChange} />
+            }
+            case ElementType.WEB_OPINION_SCALE: {
+                return <OpinionScaleRequest request={request} />
             }
             default: {
                 throw new Error('NotImplementedError');

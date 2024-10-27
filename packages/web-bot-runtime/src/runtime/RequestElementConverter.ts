@@ -5,6 +5,7 @@ import {
   ElementType,
   EmailRequestElement,
   NumberRequestElement,
+  OpinionScaleRequestElement,
   PhoneRequestElement,
   RequestElementBase,
   TextRequestElement,
@@ -15,6 +16,7 @@ import {
   WebInputNumberUIElement,
   WebInputPhoneUIElement,
   WebInputTextUIElement,
+  WebOpinionScaleUIElement,
 } from '@kickoffbot.com/types';
 import { WebBotRuntimeUtils } from './WebBotRuntimeUtils';
 import { WebUserContext } from './WebUserContext';
@@ -56,6 +58,11 @@ export class RequestElementConverter {
       case ElementType.WEB_INPUT_BUTTONS: {
         return this.getButtonsInputElement(
           typedElement as WebInputButtonsUIElement,
+        );
+      }
+      case ElementType.WEB_OPINION_SCALE: {
+        return this.getOpinionScaleInputElement(
+          typedElement as WebOpinionScaleUIElement,
         );
       }
       default:
@@ -153,6 +160,27 @@ export class RequestElementConverter {
         element,
         this._utils,
       ),
+    };
+
+    return result;
+  }
+
+  getOpinionScaleInputElement(
+    element: WebOpinionScaleUIElement,
+  ): RequestElementBase {
+    const result: OpinionScaleRequestElement = {
+      elementType: ElementType.WEB_OPINION_SCALE,
+
+      min: element.min,
+      max: element.max,
+      defaultAnswer: element.defaultAnswer,
+
+      showLabels: element.showLabels,
+      minLabel: element.minLabel,
+      maxLabel: element.maxLabel,
+
+      showLabelsMode: element.showLabelsMode,
+      eachOptionLabel: element.eachOptionLabel,
     };
 
     return result;

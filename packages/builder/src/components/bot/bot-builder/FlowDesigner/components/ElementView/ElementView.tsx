@@ -2,7 +2,7 @@ import { Box } from '@mui/material'
 import React, { useCallback, useContext, useMemo } from 'react'
 import { TextContent } from '../elements/TextContent';
 import { Colors } from '~/themes/Colors';
-import { ContentTextUIElement, ElementType, GoogleSheetsIntegrationUIElement, HTTPRequestIntegrationUIElement, SendTelegramMessageIntegrationUIElement, WebContentMediaUIElement, WebContentTextUIElement, WebInputButtonsUIElement, WebInputCardsUIElement, WebInputDateTimeUIElement, WebInputEmailUIElement, WebInputNumberUIElement, WebInputPhoneUIElement, WebInputTextUIElement, WebLogicRemoveMessagesUIElement, type UIElement } from '@kickoffbot.com/types';
+import { ContentTextUIElement, ElementType, GoogleSheetsIntegrationUIElement, HTTPRequestIntegrationUIElement, SendTelegramMessageIntegrationUIElement, WebContentMediaUIElement, WebContentTextUIElement, WebInputButtonsUIElement, WebInputCardsUIElement, WebInputDateTimeUIElement, WebInputEmailUIElement, WebInputNumberUIElement, WebInputPhoneUIElement, WebInputTextUIElement, WebLogicRemoveMessagesUIElement, WebOpinionScaleUIElement, type UIElement } from '@kickoffbot.com/types';
 import { getIconByType } from '../../../utils';
 import { CSS } from '@dnd-kit/utilities';
 import { useSortable } from '@dnd-kit/sortable';
@@ -28,6 +28,7 @@ import { WebButtonsInput } from '../elements/WEB/WebButtonsInput';
 import { WebLogicRemoveMessages } from '../elements/WEB/WebLogicRemoveMessage';
 import { WebInputCards } from '../elements/WEB/WebInputCards';
 import { WebContentMedia } from '../elements/WEB/WebContentMedia';
+import { WebOpinionScale } from '../elements/WEB/WebOpinionScale';
 
 interface Props {
     element: UIElement;
@@ -121,6 +122,10 @@ export const ElementView = ({ element, scale }: Props) => {
             }
             case ElementType.WEB_CONTENT_VIDEOS:{
                 result = <WebContentMedia element={element as WebContentMediaUIElement} />
+                return result;
+            }
+            case ElementType.WEB_OPINION_SCALE:{
+                result = <WebOpinionScale element={element as WebOpinionScaleUIElement} />
                 return result;
             }
             default: {
