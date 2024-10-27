@@ -2,13 +2,13 @@ import {
   BackgroundColorSchema,
   WebChatTheme,
 } from "@kickoffbot.com/types";
-import { blue } from "@mui/material/colors";
 import {
   alpha,
   createTheme,
   PaletteColor,
   PaletteColorOptions,
 } from "@mui/material/styles";
+import { defaultThemeObject } from "~/feature/theme/ThemeEditor/components/ThemeSelector/store/defaultThemeObject";
 
 // declare module "@mui/material/styles" {
 //   interface Theme {
@@ -36,14 +36,12 @@ declare module "@mui/material/styles" {
   }
 }
 
-// const mainColor = orange[700];
-
 export const createChatTheme = (
   shadowRootElement: HTMLElement | undefined = undefined,
-  viewOptions?: WebChatTheme
+  viewOptions: WebChatTheme = defaultThemeObject,
 ) => {
-  const mainColor = viewOptions?.primaryColors?.main ?? blue[800];
-  const contrastText = viewOptions?.primaryColors?.contrastText ?? "#ffffff";
+  const mainColor = viewOptions.primaryColors.main;
+  const contrastText = viewOptions.primaryColors.contrastText;
 
   return createTheme({
     palette: {
@@ -60,21 +58,21 @@ export const createChatTheme = (
         contrastText: contrastText,
       },
       botMessage: {
-        main: viewOptions?.botMessageAppearance?.backgroundColor ?? "#1565c0",
-        contrastText: viewOptions?.botMessageAppearance?.textColor ?? "#ffffff",
+        main: viewOptions.botMessageAppearance.backgroundColor,
+        contrastText: viewOptions.botMessageAppearance.textColor,
       },
       userMessage: {
-        main: viewOptions?.userMessageAppearance?.backgroundColor ?? "#f0f0f0",
+        main: viewOptions.userMessageAppearance.backgroundColor,
         contrastText:
-          viewOptions?.userMessageAppearance?.textColor ?? "#000000",
+          viewOptions.userMessageAppearance.textColor,
       },
       background: {
         default:
-          viewOptions?.background?.schema === BackgroundColorSchema.OneColor
+          viewOptions.background.schema === BackgroundColorSchema.OneColor
             ? viewOptions.background.color1
             : "#ffffff",
 
-        paper: viewOptions?.background?.paperColor ?? "#ffffff",
+        paper: viewOptions.background.paperColor,
       },
     },
     components: {

@@ -2,47 +2,12 @@ import { create } from "zustand";
 import { ThemeDesignerState } from "./store.types";
 import {
   AvatarSettings,
-  AvatarView,
-  BackgroundColorSchema,
   MessageAppearanceDescription,
   PrimaryColors,
   WebChatBackgroundDescription,
   WebChatTheme,
 } from "@kickoffbot.com/types";
-import { blue } from "@mui/material/colors";
-
-const defaultInitialTheme: WebChatTheme = {
-  primaryColors: {
-    main: blue[800],
-    contrastText: "#fff",
-  },
-  background: {
-    schema: BackgroundColorSchema.OneColor,
-    color1: "#ffffff",
-    color2: "#ffffff",
-    paperColor: "#ffffff",
-  },
-  userMessageAppearance: {
-    avatarSettings: {
-      showAvatar: false,
-      avatarSize: "medium",
-      avatarView: AvatarView.ColorInitials,
-      avatarColor: "#bbb",
-    },
-    backgroundColor: "#c5ecbe",
-    textColor: "#000000",
-  },
-  botMessageAppearance: {
-    backgroundColor: "#e3e3e3",
-    textColor: "#000000",
-    avatarSettings: {
-      showAvatar: true,
-      avatarSize: "medium",
-      avatarView: AvatarView.ColorInitials,
-      avatarColor: "#bbb",
-    },
-  },
-};
+import { defaultThemeObject } from "./defaultThemeObject";
 
 export const useThemeDesignerStore = create<ThemeDesignerState>()(
   (set, get) => ({
@@ -50,21 +15,21 @@ export const useThemeDesignerStore = create<ThemeDesignerState>()(
     mode: "view",
     currentThemeId: null,
     primaryColors: {
-      ...defaultInitialTheme.primaryColors,
+      ...defaultThemeObject.primaryColors,
     },
     background: {
-      ...defaultInitialTheme.background,
+      ...defaultThemeObject.background,
     },
     userMessageAppearance: {
-      ...defaultInitialTheme.userMessageAppearance,
+      ...defaultThemeObject.userMessageAppearance,
       avatarSettings: {
-        ...defaultInitialTheme.userMessageAppearance.avatarSettings,
+        ...defaultThemeObject.userMessageAppearance.avatarSettings,
       },
     },
     botMessageAppearance: {
-      ...defaultInitialTheme.botMessageAppearance,
+      ...defaultThemeObject.botMessageAppearance,
       avatarSettings: {
-        ...defaultInitialTheme.botMessageAppearance.avatarSettings,
+        ...defaultThemeObject.botMessageAppearance.avatarSettings,
       },
     },
     getTheme: () => {
@@ -164,7 +129,7 @@ export const useThemeDesignerStore = create<ThemeDesignerState>()(
     createTheme: (title: string) => {
       set(() => {
         return {
-          ...defaultInitialTheme,
+          ...defaultThemeObject,
           currentThemeId: null,
           themeTitle: title,
           mode: "edit",
@@ -184,7 +149,7 @@ export const useThemeDesignerStore = create<ThemeDesignerState>()(
     resetState: () =>
       set(() => {
         return {
-          ...defaultInitialTheme,
+          ...defaultThemeObject,
           currentThemeId: null,
           title: "",
           mode: "view",
