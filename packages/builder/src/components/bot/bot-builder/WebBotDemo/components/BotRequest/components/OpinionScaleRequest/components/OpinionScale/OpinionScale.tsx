@@ -70,6 +70,7 @@ export const OpinionScale = ({ min, max, value, onValueChange, showLabels, minLa
             <Box sx={{
                 display: "flex",
                 alignItems: "center",
+                justifyContent: "flex-end",
             }}>
                 <ToggleButtonGroup className={classes.toggleButtonGroup} ref={toggleButtonGroupRef} color='primary' onChange={handleChange} value={[value]}>
                     {Array.from({ length: maxValue - min + 1 }, (_, i) => <ToggleButton className={classes.toggleButton}
@@ -88,7 +89,7 @@ export const OpinionScale = ({ min, max, value, onValueChange, showLabels, minLa
                 </>}
             </Box>}
 
-            {showLabels && showLabelsMode === OpinionScaleShowLabelsMode.EachOption && <Box className={classes.maxMinLabels} sx={{ width: toggleButtonGroupWidth }}>
+            {showLabels && showLabelsMode === OpinionScaleShowLabelsMode.EachOption && <Box className={classes.maxMinLabels}>
                 {eachOptionLabelString}
             </Box>}
         </Box>
