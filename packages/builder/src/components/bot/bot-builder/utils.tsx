@@ -1,4 +1,14 @@
-import { type ContentTextUIElement, ElementType, type InputTextUIElement, type FlowDesignerUIBlockDescription, type UIElement, type InputButtonsUIElement, type FlowDesignerLink, type ButtonPortDescription, type BotVariable, BlockType, TransformDescription, ChangeVariableUIElement, ConditionUIElement, LogicalOperator, ButtonsSourceStrategy, CommandsUIElement, EditMessageUIElement, RemoveMessageUIElement, VariableConverter, SendTelegramMessageIntegrationUIElement, GoogleSheetsIntegrationUIElement, HTTPRequestIntegrationUIElement, HTTPMethod, VariableType, BotProject, BotPlatform, WebStartCommandsUIElement, WebContentTextUIElement, WebInputTextUIElement, WebInputNumberUIElement, WebInputDateTimeUIElement, AvailableDateTimes, WebInputPhoneUIElement, WebInputEmailUIElement, WebInputButtonsUIElement, WebLogicRemoveMessagesUIElement, WebInputCardsUIElement, WebCardsSourceStrategy, WebContentMediaUIElement, MediaViewMode } from "@kickoffbot.com/types";
+import {
+    type ContentTextUIElement, ElementType, type InputTextUIElement, type FlowDesignerUIBlockDescription,
+    type UIElement, type InputButtonsUIElement, type FlowDesignerLink, type ButtonPortDescription, type BotVariable,
+    BlockType, TransformDescription, ChangeVariableUIElement, ConditionUIElement,
+    LogicalOperator, ButtonsSourceStrategy, CommandsUIElement, EditMessageUIElement, RemoveMessageUIElement, VariableConverter,
+    SendTelegramMessageIntegrationUIElement, GoogleSheetsIntegrationUIElement, HTTPRequestIntegrationUIElement, HTTPMethod, VariableType, BotProject,
+    BotPlatform, WebStartCommandsUIElement, WebContentTextUIElement, WebInputTextUIElement, WebInputNumberUIElement, WebInputDateTimeUIElement, AvailableDateTimes,
+    WebInputPhoneUIElement, WebInputEmailUIElement, WebInputButtonsUIElement, WebLogicRemoveMessagesUIElement, WebInputCardsUIElement, WebCardsSourceStrategy,
+    WebContentMediaUIElement, MediaViewMode, WebOpinionScaleUIElement,
+    OpinionScaleShowLabelsMode
+} from "@kickoffbot.com/types";
 import MessageIcon from '@mui/icons-material/Message';
 import TextFieldsIcon from '@mui/icons-material/TextFields';
 import { isNil } from "lodash";
@@ -24,6 +34,7 @@ import SmartButtonIcon from '@mui/icons-material/SmartButton';
 import BadgeIcon from '@mui/icons-material/Badge';
 import ImageIcon from '@mui/icons-material/Image';
 import VideoCameraBackIcon from '@mui/icons-material/VideoCameraBack';
+import SentimentNeutralIcon from '@mui/icons-material/SentimentNeutral';
 
 export const TELEGRAM_DEFAULT_PROJECT_STATE: BotProject = {
     blocks: [...getTelegramDefaultBlocks()],
@@ -129,6 +140,7 @@ export function getWebInputElements() {
         { type: ElementType.WEB_INPUT_EMAIL, title: 'E-mail', icon: <AlternateEmailIcon /> },
         { type: ElementType.WEB_INPUT_BUTTONS, title: 'Buttons', icon: <SmartButtonIcon /> },
         { type: ElementType.WEB_INPUT_CARDS, title: 'Cards', icon: <BadgeIcon /> },
+        { type: ElementType.WEB_OPINION_SCALE, title: 'Opinion scale', icon: <SentimentNeutralIcon />, size: 12 },
     ];
 }
 
@@ -370,6 +382,21 @@ export function getNewUIElementTemplate(id: string, data: DraggableElementData):
                 type: ElementType.WEB_CONTENT_VIDEOS,
                 medias: [],
                 viewMode: MediaViewMode.VerticalMediaList
+            }
+            return result;
+        }
+        case ElementType.WEB_OPINION_SCALE: {
+            const result: WebOpinionScaleUIElement = {
+                id,
+                type: ElementType.WEB_OPINION_SCALE,
+
+                min: 1,
+                max: 5,
+                minLabel: 'Not Likely',
+                maxLabel: 'Very Likely',
+                showLabels: false,
+                showLabelsMode: OpinionScaleShowLabelsMode.MaxAndMin,
+                eachOptionLabel: {}
             }
             return result;
         }

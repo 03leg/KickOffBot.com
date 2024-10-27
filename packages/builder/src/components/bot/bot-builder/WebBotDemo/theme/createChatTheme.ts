@@ -1,7 +1,4 @@
-import {
-  BackgroundColorSchema,
-  WebChatTheme,
-} from "@kickoffbot.com/types";
+import { BackgroundColorSchema, WebChatTheme } from "@kickoffbot.com/types";
 import {
   alpha,
   createTheme,
@@ -38,7 +35,7 @@ declare module "@mui/material/styles" {
 
 export const createChatTheme = (
   shadowRootElement: HTMLElement | undefined = undefined,
-  viewOptions: WebChatTheme = defaultThemeObject,
+  viewOptions: WebChatTheme = defaultThemeObject
 ) => {
   const mainColor = viewOptions.primaryColors.main;
   const contrastText = viewOptions.primaryColors.contrastText;
@@ -63,8 +60,7 @@ export const createChatTheme = (
       },
       userMessage: {
         main: viewOptions.userMessageAppearance.backgroundColor,
-        contrastText:
-          viewOptions.userMessageAppearance.textColor,
+        contrastText: viewOptions.userMessageAppearance.textColor,
       },
       background: {
         default:
@@ -100,6 +96,23 @@ export const createChatTheme = (
               //   // '&.Mui-focused fieldset': {
               //   //   borderColor: '#3E68A8',
               //   // },
+            },
+          },
+        },
+      },
+      MuiToggleButton: {
+        styleOverrides: {
+          sizeMedium: {
+            color: mainColor,
+            borderColor: mainColor,
+
+            "&.Mui-selected": {
+              color: contrastText,
+              backgroundColor: mainColor,
+            },
+            "&.Mui-selected:hover": {
+              color: contrastText,
+              backgroundColor: alpha(mainColor, 0.8),
             },
           },
         },

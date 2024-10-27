@@ -202,6 +202,21 @@ export interface TextRequestElement extends RequestElementBase {
   placeholder?: string;
 }
 
+export interface OpinionScaleRequestElement extends RequestElementBase {
+  min: number;
+  max: number;
+
+  defaultAnswer?: number;
+
+  showLabels: boolean;
+  showLabelsMode: OpinionScaleShowLabelsMode;
+
+  minLabel?: string;
+  maxLabel?: string;
+  
+  eachOptionLabel?: Record<number, string>;
+}
+
 export interface NumberRequestElement extends RequestElementBase {
   placeholder?: string;
   min?: number;
@@ -310,6 +325,28 @@ export interface WebInputCardsUIElement extends UIElement {
 
   useGeneralButtons?: boolean;
   generalButtons?: ButtonElement[];
+}
+
+export enum OpinionScaleShowLabelsMode {
+  MaxAndMin = "max-and-min",
+  EachOption = "each-option",
+}
+
+export interface WebOpinionScaleUIElement extends UIElement {
+  min: number;
+  max: number;
+  defaultAnswer?: number;
+
+  showLabels: boolean;
+
+  showLabelsMode: OpinionScaleShowLabelsMode;
+
+  minLabel?: string;
+  maxLabel?: string;
+
+  eachOptionLabel?: Record<number, string>;
+
+  variableId?: BotVariable["id"];
 }
 
 export interface CardsUserResponse {

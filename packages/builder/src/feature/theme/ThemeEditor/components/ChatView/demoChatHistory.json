@@ -385,6 +385,58 @@
     "content": {
       "type": "message-and-attachments",
       "content": {
+        "message": "<p>User Input, Opinion scale</p>",
+        "attachments": []
+      }
+    },
+    "uiElementId": "web-content-message-4c36858b-fc0d-4f40-82cf-03138cbd64ba",
+    "id": "9f4b8db6-3fa4-4bba-b432-130b1a413a1b",
+    "itemType": "bot-message"
+  },
+  {
+    "content": {
+      "element": {
+        "elementType": "web-opinion-scale",
+        "min": 1,
+        "max": 10,
+        "showLabels": true,
+        "minLabel": "Not Likely",
+        "maxLabel": "Very Likely",
+        "showLabelsMode": "max-and-min"
+      }
+    },
+    "uiElementId": "web-opinion-scale-0afc813f-9ac8-47b4-a45f-988b6d9ea4b3",
+    "id": "e49d6b08-e142-4fa8-a15e-56a14b092be7",
+    "itemType": "bot-request"
+  },
+  {
+    "content": {
+      "element": {
+        "elementType": "web-opinion-scale",
+        "min": 1,
+        "max": 5,
+        "defaultAnswer": 4,
+        "showLabels": true,
+        "minLabel": "Not Likely",
+        "maxLabel": "Very Likely",
+        "showLabelsMode": "each-option",
+        "eachOptionLabel": {
+          "1": "Terrible 😢",
+          "2": "Poor 😕",
+          "3": "Average 😐",
+          "4": "Good 🙂",
+          "5": "Excellent 😄"
+        }
+      }
+    },
+    "uiElementId": "web-opinion-scale-f0681d20-c269-465b-b553-ba3c9be44e6b",
+    "id": "05a1ac57-b8ff-4386-a5d5-3c24efe1e8fe",
+    "itemType": "bot-request"
+  },
+  {
+    "content": {
+      "type": "message-and-attachments",
+      "content": {
         "message": "<p>Weather, much like life, has its ups and downs! ☀️ Whether you’re basking in the warm sunshine, dancing in the rain, or marveling at fluffy snowflakes, each type of weather brings its own kind of joy. 🌈 Just imagine the thrill of splashing in puddles on a rainy day or the pure bliss of a cozy evening during a snowstorm! ❄️ So, let's embrace every forecast with a smile, finding beauty in the sunshine and the clouds alike! 😊</p>",
         "attachments": []
       }
