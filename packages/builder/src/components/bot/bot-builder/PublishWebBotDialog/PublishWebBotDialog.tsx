@@ -30,7 +30,7 @@ export const PublishWebBotDialog = ({ projectId }: Props) => {
             buttons={[
                 <Button key={'close'} onClick={handleClose}>Close</Button>
             ]}
-            open={true} title={'Publish'}>
+            open={true} title={'Share your bot'}>
             <Box sx={{ display: 'flex', flexDirection: 'column', padding: (theme) => theme.spacing(1, 0) }}>
                 <Typography variant='h5'>Your bot link:</Typography>
                 <Box sx={{ display: 'flex', flexDirection: 'column', padding: (theme) => theme.spacing(2), alignItems: 'center' }}>

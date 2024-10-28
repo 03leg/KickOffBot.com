@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Box, Button, Checkbox } from '@mui/material';
+import { Box, Button, LinearProgress } from '@mui/material';
 import { DndContext, MeasuringStrategy, type DragEndEvent, pointerWithin, type DragOverEvent, type DragStartEvent, type UniqueIdentifier, useDroppable, useSensor, useSensors, PointerSensor, KeyboardSensor, type Active, type DataRef } from '@dnd-kit/core';
 import { useCallback, useEffect, useLayoutEffect, useMemo, useState } from 'react';
 import { findIndex, isNil, remove } from 'lodash';
@@ -15,37 +15,42 @@ import { SnackbarProvider } from 'notistack';
 import { showError, showSuccessMessage } from '~/utils/ClientStatusMessage';
 import { ConfirmProvider } from 'material-ui-confirm';
 import AbcIcon from '@mui/icons-material/Abc';
-import AbcRounded from '@mui/icons-material/AbcRounded';
 import { BotPlatform, ElementType, FlowDesignerUIBlockDescription, TransformDescription, UIElement } from '@kickoffbot.com/types';
 import RouterIcon from '@mui/icons-material/Router';
 import { RuntimeEditor } from '~/components/bot/bot-builder/RuntimeEditor';
-import { LoadingIndicator } from '~/components/commons/LoadingIndicator';
 import { ProjectViewer } from '~/components/bot/bot-builder/ProjectViewer';
 import { AppDialogProvider } from '~/components/bot/bot-builder/Dialog/AppDialogProvider';
 import { WebBotDemo } from '~/components/bot/bot-builder/WebBotDemo';
 import ShareIcon from '@mui/icons-material/Share';
 import { PublishWebBotDialog } from '~/components/bot/bot-builder/PublishWebBotDialog';
+import SaveIcon from '@mui/icons-material/Save';
+import BiotechIcon from '@mui/icons-material/Biotech';
+
 
 export default function EditBotContent() {
     const router = useRouter()
     const flowDesignerTransformDescription = React.useRef<TransformDescription | null>(null);
     const [activeDraggableItem, setActiveDraggableItem] = useState<Active | null>();
-    const { togglePublishWebBotDialog, platform, toggleShowWebBotDemo, blocks, updateBlock, addBlock, project, initProject, projectIsInitialized, setViewPortOffset, updateAllLinks, toggleVariablesViewer, toggleRuntimeEditor, destroyProject } = useFlowDesignerStore((state) => ({
-        blocks: state.project?.blocks ?? [],
-        addBlock: state.addBlock,
-        updateBlock: state.updateBlock,
-        project: state.project,
-        initProject: state.initProject,
-        projectIsInitialized: state.projectIsInitialized,
-        setViewPortOffset: state.setViewPortOffset,
-        updateAllLinks: state.updateAllLinks,
-        toggleVariablesViewer: state.toggleProjectItemsViewer,
-        toggleRuntimeEditor: state.toggleRuntimeEditor,
-        destroyProject: state.destroyProject,
-        platform: state.platform,
-        toggleShowWebBotDemo: state.toggleShowWebBotDemo,
-        togglePublishWebBotDialog: state.togglePublishWebBotDialog
-    }));
+    const { togglePublishWebBotDialog, platform, toggleShowWebBotDemo, blocks, updateBlock, addBlock, showProjectItemsViewer, project, initProject,
+        projectIsInitialized, setViewPortOffset, updateAllLinks, toggleVariablesViewer, toggleRuntimeEditor, destroyProject,
+        showWebBotDemo } = useFlowDesignerStore((state) => ({
+            blocks: state.project?.blocks ?? [],
+            addBlock: state.addBlock,
+            updateBlock: state.updateBlock,
+            project: state.project,
+            initProject: state.initProject,
+            projectIsInitialized: state.projectIsInitialized,
+            setViewPortOffset: state.setViewPortOffset,
+            updateAllLinks: state.updateAllLinks,
+            toggleVariablesViewer: state.toggleProjectItemsViewer,
+            toggleRuntimeEditor: state.toggleRuntimeEditor,
+            destroyProject: state.destroyProject,
+            platform: state.platform,
+            toggleShowWebBotDemo: state.toggleShowWebBotDemo,
+            togglePublishWebBotDialog: state.togglePublishWebBotDialog,
+            showProjectItemsViewer: state.showProjectItemsViewer,
+            showWebBotDemo: state.showWebBotDemo,
+        }));
     const { mutateAsync, isLoading: isLoadingSaveBotDescription } = api.botManagement.saveBotContent.useMutation();
     const { changeTransformDescription } = useFlowDesignerStore((state) => ({ changeTransformDescription: state.changeTransformDescription }));
 
@@ -330,30 +335,42 @@ export default function EditBotContent() {
             <ConfirmProvider>
                 <Box sx={{ padding: (theme) => theme.spacing(2), height: '100%', display: 'flex', flexDirection: 'column', position: 'relative' }} onContextMenu={(e) => e.preventDefault()}>
                     <SnackbarProvider />
-                    <Box sx={{ display: 'flex', paddingBottom: 1 }}>
+                    <Box sx={{ display: 'flex', paddingBottom: 1, position: 'relative' }}>
                         <Box>
+                            <Button sx={{ textTransform: 'none' }} endIcon={<SaveIcon />} variant="outlined" color="success" onClick={handleSaveBot}>
+                                Save
+                            </Button>
+
                             {platform === BotPlatform.Telegram &&
-                                <Button variant="outlined" startIcon={<RouterIcon />} onClick={toggleRuntimeEditor}>
+                                <Button variant="outlined" sx={{ ml: 1, textTransform: 'none' }} startIcon={<RouterIcon />} onClick={toggleRuntimeEditor}>
                                     start&stop your bots
                                 </Button>
                             }
                             {platform === BotPlatform.WEB &&
-                                <Button variant="outlined" sx={{ textTransform: 'none' }} startIcon={<ShareIcon />} onClick={handleShowShareWebBotWindow}>
-                                    Publish
-                                </Button>
+                                <>
+                                    <Button variant="outlined" sx={{ ml: 1, textTransform: 'none' }} startIcon={<ShareIcon />} onClick={handleShowShareWebBotWindow}>
+                                        Share your bot
+                                    </Button>
+                                </>
                             }
                         </Box>
                         <Box sx={{ display: 'flex', justifyContent: 'flex-end', flex: 1 }}>
-                            {platform === BotPlatform.WEB && <Button variant='contained' color="info" onClick={handleTestBot}>Test bot</Button>}
-                            <Button sx={{ marginLeft: 2 }} variant="contained" color="success" onClick={handleSaveBot}>
-                                Save
-                            </Button>
-                            <Checkbox sx={{ marginLeft: 2 }} icon={<AbcRounded />} checkedIcon={<AbcIcon />} onChange={handleToggleVariables} />
+                            {platform === BotPlatform.WEB &&
+                                <Button variant='outlined' sx={{
+                                    textTransform: 'none',
+                                    ...(showWebBotDemo ? { color: () => 'primary.contrastText', backgroundColor: () => 'primary.main', '&:hover': { backgroundColor: () => 'primary.dark' } } : {})
+                                }} startIcon={<BiotechIcon />} color="info" onClick={handleTestBot}>Test current bot</Button>
+                            }
+                            <Button variant='outlined' sx={{
+                                ml: 1, textTransform: 'none',
+                                ...(showProjectItemsViewer ? { color: () => 'primary.contrastText', backgroundColor: () => 'primary.main', '&:hover': { backgroundColor: () => 'primary.dark' } } : {})
+                            }} color="info" startIcon={<AbcIcon />} onClick={handleToggleVariables}>Variables</Button>
                         </Box>
-                        {isLoadingSaveBotDescription || isLoadingProjectBotDescription ?
-                            <Box sx={{ display: 'flex', justifyContent: 'center' }}><LoadingIndicator size={20} /></Box>
-                            : null}
+                        {(isLoadingSaveBotDescription || isLoadingProjectBotDescription) && <Box sx={{ position: 'absolute', bottom: 0, width: '100%' }}>
+                            <LinearProgress/>
+                        </Box>}
                     </Box>
+
 
 
 
@@ -391,6 +408,6 @@ export default function EditBotContent() {
 
                 </Box>
             </ConfirmProvider>
-        </AppDialogProvider>
+        </AppDialogProvider >
     )
 }
