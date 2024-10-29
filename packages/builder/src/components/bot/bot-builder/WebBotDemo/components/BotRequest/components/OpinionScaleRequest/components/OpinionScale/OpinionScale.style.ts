@@ -40,5 +40,8 @@ export const useOpinionScaleStyles = makeStyles()(
         paddingLeft: paddingLeftRight3,
       },
     },
+    eachOptionLabels:{
+      paddingLeft: spacing(1),
+    }
   })
 );

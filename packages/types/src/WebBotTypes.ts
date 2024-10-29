@@ -144,6 +144,22 @@ export interface WebLogicRemoveMessagesUIElement extends UIElement {
   messageIds?: string[];
 }
 
+export enum WebRatingView {
+  Star = "star",
+  Heart = "heart",
+  Smile = "smile",
+}
+
+export interface WebRatingUIElement extends UIElement {
+  variableId?: string;
+  elementCount: number;
+  defaultAnswer?: number;
+  showLabels: boolean;
+  eachOptionLabel?: Record<number, string>;
+  precision: number;
+  view: WebRatingView;
+}
+
 export enum ChatItemTypeWebRuntime {
   BOT_MESSAGE = "bot-message",
   BOT_REQUEST = "bot-request",
@@ -213,8 +229,20 @@ export interface OpinionScaleRequestElement extends RequestElementBase {
 
   minLabel?: string;
   maxLabel?: string;
-  
+
   eachOptionLabel?: Record<number, string>;
+}
+
+export interface RatingRequestElement extends RequestElementBase {
+  elementCount: number;
+
+  defaultAnswer?: number;
+
+  showLabels: boolean;
+  eachOptionLabel?: Record<number, string>;
+
+  precision: number;
+  view: WebRatingView;
 }
 
 export interface NumberRequestElement extends RequestElementBase {

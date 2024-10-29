@@ -436,6 +436,80 @@
   {
     "content": {
       "type": "message-and-attachments",
+      "content": { "message": "<p>User Input, Rating</p>", "attachments": [] }
+    },
+    "uiElementId": "web-content-message-fe857423-110e-4e46-a951-f1c3e931fc50",
+    "id": "a089a084-d342-455a-9fbf-d4f3b10d9a2c",
+    "itemType": "bot-message"
+  },
+  {
+    "content": {
+      "element": {
+        "elementType": "web-rating",
+        "elementCount": 5,
+        "defaultAnswer": 1.5,
+        "showLabels": true,
+        "eachOptionLabel": {
+          "1": "Poor 😞",
+          "2": "Average 🙂",
+          "3": "Very Good 😄",
+          "4": "Outstanding 😃",
+          "5": "Perfect 🌟",
+          "1.5": "Fair 😐",
+          "0.5": "Terrible 😡",
+          "2.5": "Good 🙂",
+          "3.5": "Excellent 😁",
+          "4.5": "Exceptional 🤩"
+        },
+        "precision": 0.5,
+        "view": "star"
+      }
+    },
+    "uiElementId": "web-rating-d0f9ded9-1261-4346-a0bd-f209ddb0d5c8",
+    "id": "d1637ea1-96c5-4f56-a145-191acc930fb4",
+    "itemType": "bot-request"
+  },
+  {
+    "content": {
+      "element": {
+        "elementType": "web-rating",
+        "elementCount": 10,
+        "defaultAnswer": 4,
+        "showLabels": false,
+        "eachOptionLabel": {},
+        "precision": 1,
+        "view": "heart"
+      }
+    },
+    "uiElementId": "web-rating-c6a30e6f-1522-43b6-a968-53cead82769f",
+    "id": "efa1b722-2705-4b38-b0d1-c347bf40f35a",
+    "itemType": "bot-request"
+  },
+  {
+    "content": {
+      "element": {
+        "elementType": "web-rating",
+        "elementCount": 5,
+        "defaultAnswer": 2,
+        "showLabels": true,
+        "eachOptionLabel": {
+          "1": "Very Unsatisfied 😡",
+          "2": "Unsatisfied 😞",
+          "3": "Neutral 😐",
+          "4": "Satisfied 🙂",
+          "5": "Very Satisfied 😄"
+        },
+        "precision": 1,
+        "view": "smile"
+      }
+    },
+    "uiElementId": "web-rating-7bb4df9c-c190-4fdf-9297-a1871d49c596",
+    "id": "650b5a01-e212-4feb-8c9f-847c2f6d5931",
+    "itemType": "bot-request"
+  },
+  {
+    "content": {
+      "type": "message-and-attachments",
       "content": {
         "message": "<p>Weather, much like life, has its ups and downs! ☀️ Whether you’re basking in the warm sunshine, dancing in the rain, or marveling at fluffy snowflakes, each type of weather brings its own kind of joy. 🌈 Just imagine the thrill of splashing in puddles on a rainy day or the pure bliss of a cozy evening during a snowstorm! ❄️ So, let's embrace every forecast with a smile, finding beauty in the sunshine and the clouds alike! 😊</p>",
         "attachments": []

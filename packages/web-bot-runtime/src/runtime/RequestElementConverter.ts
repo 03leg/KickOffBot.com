@@ -7,6 +7,7 @@ import {
   NumberRequestElement,
   OpinionScaleRequestElement,
   PhoneRequestElement,
+  RatingRequestElement,
   RequestElementBase,
   TextRequestElement,
   UIElement,
@@ -17,6 +18,7 @@ import {
   WebInputPhoneUIElement,
   WebInputTextUIElement,
   WebOpinionScaleUIElement,
+  WebRatingUIElement,
 } from '@kickoffbot.com/types';
 import { WebBotRuntimeUtils } from './WebBotRuntimeUtils';
 import { WebUserContext } from './WebUserContext';
@@ -64,6 +66,9 @@ export class RequestElementConverter {
         return this.getOpinionScaleInputElement(
           typedElement as WebOpinionScaleUIElement,
         );
+      }
+      case ElementType.WEB_RATING: {
+        return this.getRatingInputElement(typedElement as WebRatingUIElement);
       }
       default:
         throw new Error('Unsupported element type');
@@ -181,6 +186,23 @@ export class RequestElementConverter {
 
       showLabelsMode: element.showLabelsMode,
       eachOptionLabel: element.eachOptionLabel,
+    };
+
+    return result;
+  }
+
+  getRatingInputElement(element: WebRatingUIElement): RequestElementBase {
+    const result: RatingRequestElement = {
+      elementType: ElementType.WEB_RATING,
+
+      elementCount: element.elementCount,
+      defaultAnswer: element.defaultAnswer,
+
+      showLabels: element.showLabels,
+      eachOptionLabel: element.eachOptionLabel,
+
+      precision: element.precision,
+      view: element.view,
     };
 
     return result;

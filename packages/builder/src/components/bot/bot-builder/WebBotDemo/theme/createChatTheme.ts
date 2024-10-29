@@ -185,6 +185,14 @@ export const createChatTheme = (
           container: shadowRootElement,
         },
       },
+
+      MuiRating:{
+        styleOverrides: {
+          root: {
+            color: mainColor
+          }
+        }
+      }
     },
   });
 };

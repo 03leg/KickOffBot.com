@@ -21,7 +21,7 @@ export const EditThemeToolbarButton = ({ botProjectId }: Props) => {
     }, [botProjectId, confirm]);
 
     return (
-        <Button variant="outlined" sx={{ textTransform: 'none', ml: 1 }} startIcon={<PaletteIcon />} onClick={handleEditBotTheme}>
+        <Button variant="outlined" sx={{ textTransform: 'none', mr: 1 }} startIcon={<PaletteIcon />} onClick={handleEditBotTheme}>
             Chat theme
         </Button>
     )
