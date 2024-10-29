@@ -54,8 +54,8 @@ export const OpinionScale = ({ min, max, value, onValueChange, showLabels, minLa
             return null;
         }
 
-        if (eachOptionLabel && hoverOption && eachOptionLabel[hoverOption]) {
-            return <Typography color='primary'>{eachOptionLabel[hoverOption]}</Typography>;
+        if (eachOptionLabel && hoverOption) {
+            return <Typography color='primary'>{eachOptionLabel[hoverOption] ?? ""}</Typography>;
         }
 
         if (eachOptionLabel && value && eachOptionLabel[value]) {
@@ -89,7 +89,7 @@ export const OpinionScale = ({ min, max, value, onValueChange, showLabels, minLa
                 </>}
             </Box>}
 
-            {showLabels && showLabelsMode === OpinionScaleShowLabelsMode.EachOption && <Box className={classes.maxMinLabels}>
+            {showLabels && showLabelsMode === OpinionScaleShowLabelsMode.EachOption && <Box className={classes.eachOptionLabels}>
                 {eachOptionLabelString}
             </Box>}
         </Box>

@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { Box } from '@mui/material';
+import { Box, Rating } from '@mui/material';
 import { ElementType, RequestDescriptionWebRuntime } from '@kickoffbot.com/types';
 import { TextBotRequest } from './components/TextBotRequest';
 import { useBotRequestStyles } from './BotRequest.style';
@@ -10,6 +10,7 @@ import { EmailBoxRequest } from './components/EmailBoxRequest';
 import { ButtonsBoxRequest } from './components/ButtonsBoxRequest';
 import { CardsBoxRequest } from './components/CardsBoxRequest';
 import { OpinionScaleRequest } from './components/OpinionScaleRequest';
+import { RatingBoxRequest } from './components/RatingBoxRequest';
 
 interface Props {
     request: RequestDescriptionWebRuntime;
@@ -46,6 +47,9 @@ export const BotRequest = ({ request, onContentHeightChange }: Props) => {
             }
             case ElementType.WEB_OPINION_SCALE: {
                 return <OpinionScaleRequest request={request} />
+            }
+            case ElementType.WEB_RATING:{
+                return <RatingBoxRequest request={request} />
             }
             default: {
                 throw new Error('NotImplementedError');

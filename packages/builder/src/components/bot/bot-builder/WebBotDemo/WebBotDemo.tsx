@@ -95,7 +95,7 @@ export const WebBotDemo = () => {
                 <EditThemeToolbarButton botProjectId={projectIdFromQuery} />
             </Box>
 
-            <Box sx={{ padding: (theme) => theme.spacing(1), height: 'calc(100% - 48px)' }}>
+            <Box sx={{ height: 'calc(100% - 48px)' }}>
                 <Box id='chat-box-root' ref={containerRef} sx={{ height: '100%' }}></Box>
             </Box>
 

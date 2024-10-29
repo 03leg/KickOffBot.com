@@ -9,7 +9,7 @@ import { useConfirm } from 'material-ui-confirm';
 import { TextContentEditor } from '../elements/TextContent/Editor';
 import { ButtonsEditor } from '../elements/ButtonsInput/Editor';
 import { TextInputEditor } from '../elements/TextInput/Editor';
-import { ChangeVariableUIElement, ConditionUIElement, ContentTextUIElement, EditMessageUIElement, ElementType, GoogleSheetsIntegrationUIElement, HTTPRequestIntegrationUIElement, InputButtonsUIElement, InputTextUIElement, OutputPortDescription, RemoveMessageUIElement, SendTelegramMessageIntegrationUIElement, UIElement, WebContentMediaUIElement, WebContentTextUIElement, WebInputButtonsUIElement, WebInputCardsUIElement, WebInputDateTimeUIElement, WebInputEmailUIElement, WebInputNumberUIElement, WebInputPhoneUIElement, WebInputTextUIElement, WebLogicRemoveMessagesUIElement, WebMediaType, WebOpinionScaleUIElement } from '@kickoffbot.com/types';
+import { ChangeVariableUIElement, ConditionUIElement, ContentTextUIElement, EditMessageUIElement, ElementType, GoogleSheetsIntegrationUIElement, HTTPRequestIntegrationUIElement, InputButtonsUIElement, InputTextUIElement, OutputPortDescription, RemoveMessageUIElement, SendTelegramMessageIntegrationUIElement, UIElement, WebContentMediaUIElement, WebContentTextUIElement, WebInputButtonsUIElement, WebInputCardsUIElement, WebInputDateTimeUIElement, WebInputEmailUIElement, WebInputNumberUIElement, WebInputPhoneUIElement, WebInputTextUIElement, WebLogicRemoveMessagesUIElement, WebMediaType, WebOpinionScaleUIElement, WebRatingUIElement } from '@kickoffbot.com/types';
 import { ChangeVariableEditor } from '../elements/ChangeVariable/Editor';
 import { ConditionEditor } from '../elements/Condition/Editor';
 import { EditMessageEditor } from '../elements/EditMessage/Editor';
@@ -29,6 +29,7 @@ import { WebLogicRemoveMessagesEditor } from '../elements/WEB/WebLogicRemoveMess
 import { WebInputCardsEditor } from '../elements/WEB/WebInputCards/editor';
 import { WebContentMediaEditor } from '../elements/WEB/WebContentMedia';
 import { WebOpinionScaleEditor } from '../elements/WEB/WebOpinionScale';
+import { WebRatingEditor } from '../elements/WEB/WebRating/editor/WebRatingEditor';
 
 
 
@@ -232,6 +233,11 @@ export const ElementMenu = ({ element }: Props) => {
                 const initialElement = elementArg as WebOpinionScaleUIElement;
                 const newElement: WebOpinionScaleUIElement = JSON.parse(JSON.stringify(initialElement));
                 return { content: (<WebOpinionScaleEditor element={newElement} />), title: 'Opinion Scale Editor', newElement, dialogMaxWidth: "md" as Breakpoint };
+            }
+            case ElementType.WEB_RATING:{
+                const initialElement = elementArg as WebRatingUIElement;
+                const newElement: WebRatingUIElement = JSON.parse(JSON.stringify(initialElement));
+                return { content: (<WebRatingEditor element={newElement} />), title: 'Rating Editor', newElement };
             }
             default: {
                 throw new Error('NotImplementedError');

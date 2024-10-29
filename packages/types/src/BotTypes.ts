@@ -32,6 +32,7 @@ export enum ElementType {
   WEB_LOGIC_REMOVE_MESSAGES = "web-logic-remove-messages",
   WEB_INPUT_CARDS = "web-input-cards",
   WEB_OPINION_SCALE = "web-opinion-scale",
+  WEB_RATING = "web-rating",
 }
 
 export interface UIElement {
