@@ -18,7 +18,7 @@ interface Props {
 }
 
 //eslint-disable-next-line @typescript-eslint/no-explicit-any
-let handler: any = undefined;
+// let handler: any = undefined;
 
 export const ChatViewer = ({ project, height, projectId, webViewOptions }: Props) => {
     const { classes, cx } = useChatViewerStyles({ height, webViewOptions });
@@ -53,15 +53,15 @@ export const ChatViewer = ({ project, height, projectId, webViewOptions }: Props
         goToBottom();
     }, [storeState.chatItems, storeState.botIsTyping, goToBottom]);
 
-    useEffect(() => {
+    // useEffect(() => {
 
-        clearTimeout(handler);
+    //     clearTimeout(handler);
 
-        handler = setTimeout(() => {
-            console.log(JSON.stringify(storeState.chatItems));
-        }, 10000);
+    //     handler = setTimeout(() => {
+    //         console.log(JSON.stringify(storeState.chatItems));
+    //     }, 10000);
 
-    }, [storeState.chatItems]);
+    // }, [storeState.chatItems]);
 
     return (
         <Box className={classes.viewPort}>
