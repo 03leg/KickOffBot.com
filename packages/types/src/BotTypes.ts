@@ -33,6 +33,8 @@ export enum ElementType {
   WEB_INPUT_CARDS = "web-input-cards",
   WEB_OPINION_SCALE = "web-opinion-scale",
   WEB_RATING = "web-rating",
+
+  WEB_MULTIPLE_CHOICE ='web-multiple-choice',
 }
 
 export interface UIElement {

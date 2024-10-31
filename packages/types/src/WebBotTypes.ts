@@ -160,6 +160,30 @@ export interface WebRatingUIElement extends UIElement {
   view: WebRatingView;
 }
 
+export enum DataSourceType {
+  Static = "static",
+  Dynamic = "dynamic",
+}
+
+export interface WebMultipleChoiceUIElement extends UIElement {
+  variableId?: string;
+
+  dataSourceType: DataSourceType;
+
+  // static
+  optionsText?: string;
+  defaultOptions?: string[];
+
+  //dynamic
+  dataSourceVariableId?: BotVariable["id"];
+  optionValue?: string;
+  optionTitle?: string;
+
+  defaultOptionsVariableId?: BotVariable["id"];
+
+  shuffleOptions: boolean;
+}
+
 export enum ChatItemTypeWebRuntime {
   BOT_MESSAGE = "bot-message",
   BOT_REQUEST = "bot-request",
@@ -174,6 +198,7 @@ export interface MessageDescriptionWebRuntime {
 }
 
 export interface UserResponseDescriptionWebRuntime {
+  message?: string;
   data: unknown;
 }
 
@@ -243,6 +268,17 @@ export interface RatingRequestElement extends RequestElementBase {
 
   precision: number;
   view: WebRatingView;
+}
+
+export interface MultipleChoiceOptionDescription {
+  title: string;
+  value: string;
+  autoId: string;
+}
+
+export interface MultipleChoiceRequestElement extends RequestElementBase {
+  options: MultipleChoiceOptionDescription[];
+  selectedOptions?: string[];
 }
 
 export interface NumberRequestElement extends RequestElementBase {
