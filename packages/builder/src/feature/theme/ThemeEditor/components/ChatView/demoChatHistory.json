@@ -510,6 +510,33 @@
   {
     "content": {
       "type": "message-and-attachments",
+      "content": { "message": "User Input, Multiple choice", "attachments": [] }
+    },
+    "uiElementId": "web-content-message-ec8840d3-c77f-4e6c-8304-db288132afe5",
+    "id": "83435baf-4ace-4ded-bc77-c480b7228c4b",
+    "itemType": "bot-message"
+  },
+  {
+    "content": {
+      "element": {
+        "elementType": "web-multiple-choice",
+        "options": [
+          { "title": "option #1", "value": "option #1", "autoId": "option #1" },
+          { "title": "option #2", "value": "option #2", "autoId": "option #2" },
+          { "title": "option #3", "value": "option #3", "autoId": "option #3" },
+          { "title": "option #4", "value": "option #4", "autoId": "option #4" },
+          { "title": "option #5", "value": "option #5", "autoId": "option #5" }
+        ],
+        "selectedOptions": ["option #3", "option #5"]
+      }
+    },
+    "uiElementId": "web-multiple-choice-3f3babdd-4a82-43c4-a107-3719309bc7e2",
+    "id": "21b85d12-8901-4a3d-894f-7a14565effa2",
+    "itemType": "bot-request"
+  },
+  {
+    "content": {
+      "type": "message-and-attachments",
       "content": {
         "message": "<p>Weather, much like life, has its ups and downs! ☀️ Whether you’re basking in the warm sunshine, dancing in the rain, or marveling at fluffy snowflakes, each type of weather brings its own kind of joy. 🌈 Just imagine the thrill of splashing in puddles on a rainy day or the pure bliss of a cozy evening during a snowstorm! ❄️ So, let's embrace every forecast with a smile, finding beauty in the sunshine and the clouds alike! 😊</p>",
         "attachments": []
