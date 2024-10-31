@@ -118,6 +118,10 @@ export class WebRuntimeConnector {
       return responseText;
     }
 
+    if (userData.message) {
+      return userData.message;
+    }
+
     return userData.data as string;
   }
 

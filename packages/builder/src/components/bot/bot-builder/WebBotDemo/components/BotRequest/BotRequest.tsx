@@ -11,6 +11,7 @@ import { ButtonsBoxRequest } from './components/ButtonsBoxRequest';
 import { CardsBoxRequest } from './components/CardsBoxRequest';
 import { OpinionScaleRequest } from './components/OpinionScaleRequest';
 import { RatingBoxRequest } from './components/RatingBoxRequest';
+import { MultipleChoiceRequest } from './components/MultipleChoiceRequest';
 
 interface Props {
     request: RequestDescriptionWebRuntime;
@@ -33,13 +34,13 @@ export const BotRequest = ({ request, onContentHeightChange }: Props) => {
             case ElementType.WEB_INPUT_DATE_TIME: {
                 return <DateTimeBoxRequest request={request} />
             }
-            case ElementType.WEB_INPUT_PHONE:{
+            case ElementType.WEB_INPUT_PHONE: {
                 return <PhoneBoxRequest request={request} />
             }
             case ElementType.WEB_INPUT_EMAIL: {
                 return <EmailBoxRequest request={request} />
             }
-            case ElementType.WEB_INPUT_BUTTONS:{
+            case ElementType.WEB_INPUT_BUTTONS: {
                 return <ButtonsBoxRequest request={request} />
             }
             case ElementType.WEB_INPUT_CARDS: {
@@ -48,8 +49,11 @@ export const BotRequest = ({ request, onContentHeightChange }: Props) => {
             case ElementType.WEB_OPINION_SCALE: {
                 return <OpinionScaleRequest request={request} />
             }
-            case ElementType.WEB_RATING:{
+            case ElementType.WEB_RATING: {
                 return <RatingBoxRequest request={request} />
+            }
+            case ElementType.WEB_MULTIPLE_CHOICE: {
+                return <MultipleChoiceRequest request={request} />
             }
             default: {
                 throw new Error('NotImplementedError');

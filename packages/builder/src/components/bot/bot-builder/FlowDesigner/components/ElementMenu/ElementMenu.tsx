@@ -9,7 +9,7 @@ import { useConfirm } from 'material-ui-confirm';
 import { TextContentEditor } from '../elements/TextContent/Editor';
 import { ButtonsEditor } from '../elements/ButtonsInput/Editor';
 import { TextInputEditor } from '../elements/TextInput/Editor';
-import { ChangeVariableUIElement, ConditionUIElement, ContentTextUIElement, EditMessageUIElement, ElementType, GoogleSheetsIntegrationUIElement, HTTPRequestIntegrationUIElement, InputButtonsUIElement, InputTextUIElement, OutputPortDescription, RemoveMessageUIElement, SendTelegramMessageIntegrationUIElement, UIElement, WebContentMediaUIElement, WebContentTextUIElement, WebInputButtonsUIElement, WebInputCardsUIElement, WebInputDateTimeUIElement, WebInputEmailUIElement, WebInputNumberUIElement, WebInputPhoneUIElement, WebInputTextUIElement, WebLogicRemoveMessagesUIElement, WebMediaType, WebOpinionScaleUIElement, WebRatingUIElement } from '@kickoffbot.com/types';
+import { ChangeVariableUIElement, ConditionUIElement, ContentTextUIElement, EditMessageUIElement, ElementType, GoogleSheetsIntegrationUIElement, HTTPRequestIntegrationUIElement, InputButtonsUIElement, InputTextUIElement, OutputPortDescription, RemoveMessageUIElement, SendTelegramMessageIntegrationUIElement, UIElement, WebContentMediaUIElement, WebContentTextUIElement, WebInputButtonsUIElement, WebInputCardsUIElement, WebInputDateTimeUIElement, WebInputEmailUIElement, WebInputNumberUIElement, WebInputPhoneUIElement, WebInputTextUIElement, WebLogicRemoveMessagesUIElement, WebMediaType, WebMultipleChoiceUIElement, WebOpinionScaleUIElement, WebRatingUIElement } from '@kickoffbot.com/types';
 import { ChangeVariableEditor } from '../elements/ChangeVariable/Editor';
 import { ConditionEditor } from '../elements/Condition/Editor';
 import { EditMessageEditor } from '../elements/EditMessage/Editor';
@@ -30,6 +30,7 @@ import { WebInputCardsEditor } from '../elements/WEB/WebInputCards/editor';
 import { WebContentMediaEditor } from '../elements/WEB/WebContentMedia';
 import { WebOpinionScaleEditor } from '../elements/WEB/WebOpinionScale';
 import { WebRatingEditor } from '../elements/WEB/WebRating/editor/WebRatingEditor';
+import { WebMultipleChoiceEditor } from '../elements/WEB/WebMultipleChoice';
 
 
 
@@ -219,25 +220,31 @@ export const ElementMenu = ({ element }: Props) => {
 
                 return { content: (<WebInputCardsEditor element={newElement} />), title: 'Cards Input Editor', newElement, dialogMaxWidth: "lg" as Breakpoint };
             }
-            case ElementType.WEB_CONTENT_IMAGES:{
+            case ElementType.WEB_CONTENT_IMAGES: {
                 const initialElement = elementArg as WebContentMediaUIElement;
                 const newElement: WebContentMediaUIElement = JSON.parse(JSON.stringify(initialElement));
                 return { content: (<WebContentMediaEditor mediaType={WebMediaType.IMAGE} element={newElement} />), title: 'Image(s) Editor', newElement, dialogMaxWidth: "md" as Breakpoint };
             }
-            case ElementType.WEB_CONTENT_VIDEOS:{
+            case ElementType.WEB_CONTENT_VIDEOS: {
                 const initialElement = elementArg as WebContentMediaUIElement;
                 const newElement: WebContentMediaUIElement = JSON.parse(JSON.stringify(initialElement));
                 return { content: (<WebContentMediaEditor mediaType={WebMediaType.VIDEO} element={newElement} />), title: 'Video(s) Editor', newElement, dialogMaxWidth: "md" as Breakpoint };
             }
-            case ElementType.WEB_OPINION_SCALE:{
+            case ElementType.WEB_OPINION_SCALE: {
                 const initialElement = elementArg as WebOpinionScaleUIElement;
                 const newElement: WebOpinionScaleUIElement = JSON.parse(JSON.stringify(initialElement));
                 return { content: (<WebOpinionScaleEditor element={newElement} />), title: 'Opinion Scale Editor', newElement, dialogMaxWidth: "md" as Breakpoint };
             }
-            case ElementType.WEB_RATING:{
+            case ElementType.WEB_RATING: {
                 const initialElement = elementArg as WebRatingUIElement;
                 const newElement: WebRatingUIElement = JSON.parse(JSON.stringify(initialElement));
                 return { content: (<WebRatingEditor element={newElement} />), title: 'Rating Editor', newElement };
+            }
+            case ElementType.WEB_MULTIPLE_CHOICE: {
+                const initialElement = elementArg as WebMultipleChoiceUIElement;
+                const newElement: WebMultipleChoiceUIElement = JSON.parse(JSON.stringify(initialElement));
+
+                return { content: (<WebMultipleChoiceEditor element={newElement} />), title: 'Multiple Choice Editor', newElement };
             }
             default: {
                 throw new Error('NotImplementedError');

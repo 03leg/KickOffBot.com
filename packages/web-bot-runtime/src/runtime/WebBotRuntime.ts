@@ -36,6 +36,8 @@ import {
   MediaMessageDescription,
   WebOpinionScaleUIElement,
   WebRatingUIElement,
+  WebMultipleChoiceUIElement,
+  MultipleChoiceOptionDescription,
 } from '@kickoffbot.com/types';
 import { WebBotRuntimeUtils } from './WebBotRuntimeUtils';
 import { WebUserContext } from './WebUserContext';
@@ -52,6 +54,7 @@ import { SendReceiveHttpRequest } from './SendReceiveHttpRequest';
 import { Telegraf } from 'telegraf';
 import { CardsElementHelper } from './CardsElementHelper';
 import { MediaMessageHelper } from './MediaMessageHelper';
+import { MultipleChoiceElementHelper } from './helper/MultipleChoiceElementHelper';
 
 export class WebBotRuntime {
   private _utils: WebBotRuntimeUtils;
@@ -140,6 +143,7 @@ export class WebBotRuntime {
       case ElementType.WEB_INPUT_BUTTONS:
       case ElementType.WEB_OPINION_SCALE:
       case ElementType.WEB_RATING:
+      case ElementType.WEB_MULTIPLE_CHOICE:
       case ElementType.WEB_INPUT_TEXT: {
         const typedElement = element as
           | WebInputTextUIElement
@@ -148,6 +152,7 @@ export class WebBotRuntime {
           | WebInputEmailUIElement
           | WebInputButtonsUIElement
           | WebOpinionScaleUIElement
+          | WebMultipleChoiceUIElement
           | WebInputDateTimeUIElement;
 
         const request: ChatItemWebRuntime = {
@@ -338,6 +343,7 @@ export class WebBotRuntime {
       case ElementType.WEB_CONTENT_VIDEOS:
       case ElementType.WEB_OPINION_SCALE:
       case ElementType.WEB_RATING:
+      case ElementType.WEB_MULTIPLE_CHOICE:
       case ElementType.WEB_CONTENT_MESSAGE: {
         result = await this.handleElement(block, nextElement);
         break;
@@ -415,10 +421,32 @@ export class WebBotRuntime {
       );
     }
 
+    if (typedElement.type === ElementType.WEB_MULTIPLE_CHOICE) {
+      return await this.handleUserMultipleChoiceResponse(
+        typedElement as WebMultipleChoiceUIElement,
+        value as MultipleChoiceOptionDescription[],
+      );
+    }
+
     if (typedElement.variableId) {
       const variable = this._utils.getVariableById(typedElement.variableId);
       this._userContext.updateVariable(variable.name, value);
     }
+
+    return await this.checkNextElement();
+  }
+
+  private async handleUserMultipleChoiceResponse(
+    element: WebMultipleChoiceUIElement,
+    value: MultipleChoiceOptionDescription[],
+  ) {
+    const helper = new MultipleChoiceElementHelper(
+      element,
+      this._utils,
+      this._userContext,
+    );
+
+    helper.handleUserResponse(value);
 
     return await this.checkNextElement();
   }

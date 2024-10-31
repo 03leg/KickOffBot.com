@@ -9,7 +9,9 @@ import {
     WebContentMediaUIElement, MediaViewMode, WebOpinionScaleUIElement,
     OpinionScaleShowLabelsMode,
     WebRatingUIElement,
-    WebRatingView
+    WebRatingView,
+    WebMultipleChoiceUIElement,
+    DataSourceType
 } from "@kickoffbot.com/types";
 import MessageIcon from '@mui/icons-material/Message';
 import TextFieldsIcon from '@mui/icons-material/TextFields';
@@ -38,6 +40,7 @@ import ImageIcon from '@mui/icons-material/Image';
 import VideoCameraBackIcon from '@mui/icons-material/VideoCameraBack';
 import SentimentNeutralIcon from '@mui/icons-material/SentimentNeutral';
 import GradeIcon from '@mui/icons-material/Grade';
+import CheckBoxIcon from '@mui/icons-material/CheckBox';
 
 export const TELEGRAM_DEFAULT_PROJECT_STATE: BotProject = {
     blocks: [...getTelegramDefaultBlocks()],
@@ -145,6 +148,7 @@ export function getWebInputElements() {
         { type: ElementType.WEB_INPUT_CARDS, title: 'Cards', icon: <BadgeIcon /> },
         { type: ElementType.WEB_RATING, title: 'Rating', icon: <GradeIcon />},
         { type: ElementType.WEB_OPINION_SCALE, title: 'Opinion scale', icon: <SentimentNeutralIcon />, size: 12 },
+        { type: ElementType.WEB_MULTIPLE_CHOICE, title: 'Multiple choice', icon: <CheckBoxIcon />, size: 12 },
     ];
 }
 
@@ -413,6 +417,15 @@ export function getNewUIElementTemplate(id: string, data: DraggableElementData):
                 showLabels: false,
                 precision: 1,
                 view: WebRatingView.Star
+            }
+            return result;
+        }
+        case ElementType.WEB_MULTIPLE_CHOICE:{
+            const result: WebMultipleChoiceUIElement = {
+                id,
+                type: ElementType.WEB_MULTIPLE_CHOICE,
+                shuffleOptions: false,
+                dataSourceType: DataSourceType.Static
             }
             return result;
         }

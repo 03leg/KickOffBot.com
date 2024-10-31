@@ -1,9 +1,12 @@
 import {
   AvailableDateTimes,
   ButtonsRequestElement,
+  DataSourceType,
   DateTimeRequestElement,
   ElementType,
   EmailRequestElement,
+  MultipleChoiceOptionDescription,
+  MultipleChoiceRequestElement,
   NumberRequestElement,
   OpinionScaleRequestElement,
   PhoneRequestElement,
@@ -17,6 +20,7 @@ import {
   WebInputNumberUIElement,
   WebInputPhoneUIElement,
   WebInputTextUIElement,
+  WebMultipleChoiceUIElement,
   WebOpinionScaleUIElement,
   WebRatingUIElement,
 } from '@kickoffbot.com/types';
@@ -69,6 +73,11 @@ export class RequestElementConverter {
       }
       case ElementType.WEB_RATING: {
         return this.getRatingInputElement(typedElement as WebRatingUIElement);
+      }
+      case ElementType.WEB_MULTIPLE_CHOICE: {
+        return this.getMultipleChoiceInputElement(
+          typedElement as WebMultipleChoiceUIElement,
+        );
       }
       default:
         throw new Error('Unsupported element type');
@@ -203,6 +212,115 @@ export class RequestElementConverter {
 
       precision: element.precision,
       view: element.view,
+    };
+
+    return result;
+  }
+
+  getMultipleChoiceInputElement(
+    element: WebMultipleChoiceUIElement,
+  ): RequestElementBase {
+    let result: MultipleChoiceRequestElement | null = null;
+
+    let options: MultipleChoiceOptionDescription[] = [];
+    let selectedOptions: string[] = [];
+
+    if (element.dataSourceType === DataSourceType.Static) {
+      options = this._utils
+        .getParsedText(element.optionsText, this._userContext)
+        .split('\n')
+        .filter((option) => option !== '')
+        .map((option) => ({
+          title: option,
+          value: option,
+          autoId: option,
+        }));
+
+      if (element.defaultOptionsVariableId) {
+        const variable = this._utils.getVariableById(
+          element.defaultOptionsVariableId,
+        );
+        const defaultOptionsVariableValue =
+          this._userContext.getVariableValueByName(variable.name) as string[];
+        if (Array.isArray(defaultOptionsVariableValue)) {
+          selectedOptions = defaultOptionsVariableValue;
+        }
+      } else if (Array.isArray(element.defaultOptions)) {
+        selectedOptions = element.defaultOptions;
+      }
+    } else if (element.dataSourceType === DataSourceType.Dynamic) {
+      const dataSourceVariable = this._utils.getVariableById(
+        element.dataSourceVariableId,
+      );
+
+      const dataSourceVariableValue = this._userContext.getVariableValueByName(
+        dataSourceVariable.name,
+      );
+
+      if (Array.isArray(dataSourceVariableValue)) {
+        for (let i = 0; i < dataSourceVariableValue.length; i++) {
+          const optionValue = this._utils.getTextForContextObject(
+            dataSourceVariableValue[i],
+            element.optionValue,
+            i,
+          );
+
+          let optionTitle = optionValue;
+
+          if (element.optionTitle) {
+            optionTitle = this._utils.getTextForContextObject(
+              dataSourceVariableValue[i],
+              element.optionTitle,
+              i,
+            );
+          }
+
+          options.push({
+            title: optionTitle,
+            value: optionValue,
+            autoId: i.toString(),
+          });
+        }
+      }
+
+      if (element.defaultOptionsVariableId) {
+        const variable = this._utils.getVariableById(
+          element.defaultOptionsVariableId,
+        );
+        const defaultOptionsVariableValue =
+          this._userContext.getVariableValueByName(variable.name) as string[];
+        if (Array.isArray(defaultOptionsVariableValue)) {
+          if (
+            defaultOptionsVariableValue.length > 0 &&
+            typeof defaultOptionsVariableValue[0] === 'object'
+          ) {
+            selectedOptions = defaultOptionsVariableValue.map((o, index) => {
+              const optionValue = this._utils.getTextForContextObject(
+                o,
+                element.optionValue,
+                index,
+              );
+              return optionValue;
+            });
+          } else {
+            selectedOptions = defaultOptionsVariableValue;
+          }
+        }
+      }
+    }
+
+    if (element.shuffleOptions) {
+      options = options.sort(() => Math.random() - 0.5);
+    }
+
+    selectedOptions = selectedOptions
+      .map((option) => option.toString())
+      .filter((option) => options.some((o) => o.value.toString() === option));
+
+    result = {
+      elementType: ElementType.WEB_MULTIPLE_CHOICE,
+      options,
+      selectedOptions,
     };
 
     return result;
