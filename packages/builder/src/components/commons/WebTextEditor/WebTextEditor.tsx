@@ -97,7 +97,7 @@ export const WebTextEditor = ({ onContentChange, jsonState, contextObjectPropert
             },
         };
 
-        const htmlContent = plainText === '' ? '' : stateToHTML(newState.getCurrentContent(), options);
+        const htmlContent = plainText === '' ? '' : stateToHTML(newState.getCurrentContent(), options).replaceAll('<p>', '').replaceAll('</p>', '');
 
         onContentChange(jsonContent, htmlContent);
     }, [onContentChange]);
