@@ -14,8 +14,11 @@ import '@fontsource/roboto/300.css';
 import '@fontsource/roboto/400.css';
 import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
+import { getChatTheme } from './utils/getChatTheme';
+import { customScrollbarStyle } from './chat-bot/theme/customScrollbarStyle';
+import { WEB_RUNTIME_URL } from './constants';
 
-export function renderKickOffBot(initOptions: InitOptions) {
+export async function renderKickOffBot(initOptions: InitOptions) {
   const container = document.querySelector('#' + initOptions.containerId);
   if (!container) {
     throw new Error('Failed to find container with id: ' + initOptions.containerId);
@@ -30,10 +33,15 @@ export function renderKickOffBot(initOptions: InitOptions) {
   const cache = createCache({
     key: "kickoffbot-theme-css",
     prepend: true,
-    container: shadowContainer
+    container: shadowContainer,
   });
 
-  const shadowTheme = createChatTheme(shadowRootElement, defaultThemeObject);
+  let chatTheme = await getChatTheme(initOptions.botId);
+  if (!chatTheme) {
+    chatTheme = defaultThemeObject;
+  }
+
+  const shadowTheme = createChatTheme(shadowRootElement, chatTheme);
 
   const root = ReactDOM.createRoot(shadowRootElement);
 
@@ -41,8 +49,11 @@ export function renderKickOffBot(initOptions: InitOptions) {
     <React.StrictMode>
       <CacheProvider value={cache}>
         <ThemeProvider theme={shadowTheme}>
+          <style type="text/css" data-csp="kickoffbot-theme-css">
+            {customScrollbarStyle}
+          </style>
           <CssBaseline />
-          <ChatViewer height={'100%'} projectId={initOptions.botId} webViewOptions={defaultThemeObject} runtimeUrl={''} />
+          <ChatViewer height={'100%'} projectId={initOptions.botId} webViewOptions={chatTheme} runtimeUrl={WEB_RUNTIME_URL} />
         </ThemeProvider>
       </CacheProvider>
     </React.StrictMode>
