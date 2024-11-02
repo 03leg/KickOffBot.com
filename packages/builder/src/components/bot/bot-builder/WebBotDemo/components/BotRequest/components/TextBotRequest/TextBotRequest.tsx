@@ -2,8 +2,8 @@ import React, { useCallback, useState } from 'react';
 import { Box, TextField } from '@mui/material';
 import { useTextBoxRequestStyles } from './TextBotRequest.style';
 import { RequestDescriptionWebRuntime, TextRequestElement } from '@kickoffbot.com/types';
-import { throwIfNil } from '~/utils/guard';
 import { SendResponseButton } from '../SendResponseButton';
+import { throwIfNil } from '../../../../utils/guard';
 
 interface Props {
     request: RequestDescriptionWebRuntime;

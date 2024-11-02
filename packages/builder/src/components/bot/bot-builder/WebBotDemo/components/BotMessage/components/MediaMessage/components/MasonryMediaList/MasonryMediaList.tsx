@@ -1,5 +1,4 @@
 /* eslint-disable jsx-a11y/alt-text */
-/* eslint-disable @next/next/no-img-element */
 import { WebImageMediaDescription, WebMediaDescription, WebMediaType } from '@kickoffbot.com/types';
 import { ImageList, ImageListItem } from '@mui/material'
 import React, { useCallback } from 'react'

@@ -1,6 +1,5 @@
 import { create } from "zustand";
 import { ChatStoreState } from "./store.types";
-import { delay } from "../../utils";
 import {
   BotMessageBodyType,
   ChatItemTypeWebRuntime,
@@ -9,6 +8,7 @@ import {
   UIElement,
 } from "@kickoffbot.com/types";
 import { v4 } from "uuid";
+import { delay } from "../utils/delay";
 
 export const useUserChatStore = create<ChatStoreState>()((set, get) => ({
   chatItems: [],
@@ -67,5 +67,6 @@ export const useUserChatStore = create<ChatStoreState>()((set, get) => ({
       ],
     })),
 
-    setChatItems: (items: ChatItemWebRuntime[]) => set(() => ({ chatItems: items }))
+  setChatItems: (items: ChatItemWebRuntime[]) =>
+    set(() => ({ chatItems: items })),
 }));

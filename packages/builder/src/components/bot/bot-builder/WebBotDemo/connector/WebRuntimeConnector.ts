@@ -12,23 +12,25 @@ import {
 } from "@kickoffbot.com/types";
 import { ChatStoreState } from "../store/store.types";
 import { WebRuntimeService } from "./WebRuntimeService";
-import { throwIfNil } from "~/utils/guard";
+import { throwIfNil } from "../utils/guard";
 
 export class WebRuntimeConnector {
   private _storeApi: ChatStoreState;
   private _botProject?: BotProject;
-  private _httpService = new WebRuntimeService();
+  private _httpService: WebRuntimeService;
   private _projectId: string;
   private _runtimeProjectId: string | null = null;
 
   constructor(
     project: BotProject | undefined,
     projectId: string,
+    runtimeUrl: string,
     storeApi: ChatStoreState
   ) {
     this._storeApi = storeApi;
     this._botProject = project;
     this._projectId = projectId;
+    this._httpService = new WebRuntimeService(runtimeUrl);
   }
 
   // TODO: Add error handling

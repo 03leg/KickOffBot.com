@@ -2,12 +2,10 @@
 import { ButtonsSourceStrategy, DynamicSourceDescription, StaticSourceDescription, WebCardsSourceStrategy, WebInputCardsUIElement } from '@kickoffbot.com/types';
 import { Alert, Box, Typography } from '@mui/material';
 import React, { useMemo } from 'react';
-import { Card1 } from '../../editor/components/StaticCardsEditor/CardDemoView/Card1';
+import { Card1 } from '../../../../../../../WebBotDemo/components/BotRequest/components/CardsBoxRequest/components/Card1';
 import { ButtonsInput } from '../../../../ButtonsInput/ButtonsInput';
 import { useVariableInTextStyles } from '../../../../ChangeVariable/useContentWithVariable';
 import { useFlowDesignerStore } from '~/components/bot/bot-builder/store';
-import { getImageSrc } from '../../editor/getImageSrc';
-import { button } from 'telegraf/typings/markup';
 
 interface Props {
     element: WebInputCardsUIElement;

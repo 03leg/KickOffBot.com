@@ -4,6 +4,7 @@ import {
   getBackgroundColor,
   getBackgroundImage,
 } from "../../theme/createChatTheme.utils";
+import { getFontFamily } from "../../theme/FontFamily";
 
 export const useChatViewerStyles = makeStyles<
   { height?: number | string; webViewOptions?: WebChatTheme } | undefined
@@ -16,6 +17,7 @@ export const useChatViewerStyles = makeStyles<
     backgroundImage: getBackgroundImage(options?.webViewOptions?.background),
     display: "flex",
     justifyContent: "center",
+    fontFamily: getFontFamily(),
   },
   root: {
     height: options?.height,

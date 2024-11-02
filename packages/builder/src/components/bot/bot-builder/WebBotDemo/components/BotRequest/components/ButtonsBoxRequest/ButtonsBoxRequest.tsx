@@ -2,7 +2,7 @@ import React, { useCallback, useMemo } from 'react';
 import { ButtonsRequestElement, RequestButtonDescription, RequestDescriptionWebRuntime } from '@kickoffbot.com/types';
 import { Box, Button } from '@mui/material';
 import { useButtonsBoxRequestStyles } from './ButtonsBoxRequest.style';
-import { throwIfNil } from '~/utils/guard';
+import { throwIfNil } from '../../../../utils/guard';
 
 interface Props {
     request: RequestDescriptionWebRuntime;

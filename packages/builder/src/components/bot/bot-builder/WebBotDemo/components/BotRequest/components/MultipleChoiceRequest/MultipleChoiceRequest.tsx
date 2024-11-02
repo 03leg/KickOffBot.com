@@ -4,7 +4,7 @@ import { MultipleChoiceButton } from './MultipleChoiceButton';
 import { useMultipleChoiceRequestStyles } from './MultipleChoiceRequest.style';
 import { Box } from '@mui/material';
 import { SendResponseButton } from '../SendResponseButton';
-import { throwIfNil } from '~/utils/guard';
+import { throwIfNil } from '../../../../utils/guard';
 
 interface Props {
     request: RequestDescriptionWebRuntime;

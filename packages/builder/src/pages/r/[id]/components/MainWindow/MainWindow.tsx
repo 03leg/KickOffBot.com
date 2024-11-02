@@ -3,6 +3,7 @@ import { useRouter } from 'next/router';
 import React from 'react'
 import { ChatViewer } from '~/components/bot/bot-builder/WebBotDemo/components/ChatViewer';
 import { createChatTheme } from '~/components/bot/bot-builder/WebBotDemo/theme/createChatTheme';
+import { env } from '~/env.mjs';
 import { api } from '~/utils/api';
 
 export default function MainWindow() {
@@ -21,7 +22,7 @@ export default function MainWindow() {
     return (
         <Box sx={{ height: '100%', width: '100%' }} data-testid="main-window">
             <ThemeProvider theme={theme}>
-                <ChatViewer height={'100%'} projectId={projectId} webViewOptions={themeObject} />
+                <ChatViewer height={'100%'} projectId={projectId} webViewOptions={themeObject} runtimeUrl={env.NEXT_PUBLIC_WEB_BOT_RUNTIME_HOST ?? ''}/>
             </ThemeProvider>
         </Box>
     )
