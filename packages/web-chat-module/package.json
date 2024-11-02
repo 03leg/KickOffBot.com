@@ -1,7 +1,7 @@
 {
   "name": "web-chat-module",
   "version": "0.1.0",
-  "type" : "module",
+  "type": "module",
   "private": true,
   "dependencies": {
     "react": "18.2.0",
@@ -27,7 +27,8 @@
     "zustand": "^4.4.4",
     "tss-react": "^4.8.8",
     "@mui/x-date-pickers": "^7.13.0",
-    "react-international-phone": "4.3.0"
+    "react-international-phone": "4.3.0",
+    "axios": "^1.7.2"
   },
   "devDependencies": {
     "@types/lodash": "^4.14.196",

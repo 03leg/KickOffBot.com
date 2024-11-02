@@ -1,14 +1,15 @@
 import React from 'react';
 import dynamic from 'next/dynamic'
+import { customScrollbarStyle } from '~/components/bot/bot-builder/WebBotDemo/theme/customScrollbarStyle';
 
 const MainWindowComponent = dynamic(() => import('./components/MainWindow/MainWindow').then(mod => mod.default), {
-    ssr: false,
+  ssr: false,
 });
 
 
 export default function RuntimeBotPage() {
-    return <>
-        <style jsx global>{`
+  return <>
+    <style jsx global>{`
         #__next{
          height: 100%;
         }
@@ -18,29 +19,9 @@ export default function RuntimeBotPage() {
       body {
         height: 100%;
       }
-
-.chat-box-root::-webkit-scrollbar {
-  width: 5px;
-  height: 5px;
-}
-
-.chat-box-root::-webkit-scrollbar-track {
-  background: transparent; 
-}
-
-.chat-box-root::-webkit-scrollbar-track:hover {
-  background: #f1f1f1; 
-}
- 
-.chat-box-root::-webkit-scrollbar-thumb {
-  background: #8080807a; 
-}
-
-.chat-box-root::-webkit-scrollbar-thumb:hover {
-  background: #808080c9; 
-}
-
-    `}</style>
-        <MainWindowComponent />
-    </>
+    `}
+      {customScrollbarStyle}
+    </style>
+    <MainWindowComponent />
+  </>
 }
