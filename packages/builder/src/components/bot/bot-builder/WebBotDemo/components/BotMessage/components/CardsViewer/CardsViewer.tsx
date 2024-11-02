@@ -1,7 +1,8 @@
 import { CardsViewerElement } from '@kickoffbot.com/types';
 import { Box } from '@mui/material';
 import React from 'react';
-import { Card1 } from '~/components/bot/bot-builder/FlowDesigner/components/elements/WEB/WebInputCards/editor/components/StaticCardsEditor/CardDemoView/Card1';
+import { Card1 } from '../../../BotRequest/components/CardsBoxRequest/components/Card1';
+
 
 interface Props {
     cardsDescription: CardsViewerElement;

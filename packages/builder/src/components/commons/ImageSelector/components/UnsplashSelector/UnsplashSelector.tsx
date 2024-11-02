@@ -4,6 +4,7 @@ import { useUnsplash } from './useUnsplash';
 import { UnsplashGrid } from './UnsplashGrid';
 import { Random } from 'unsplash-js/dist/methods/photos/types';
 import { UnsplashPhoto } from '@kickoffbot.com/types';
+import { env } from '~/env.mjs';
 
 interface Props {
     onValueChange: (value: UnsplashPhoto) => void
@@ -43,6 +44,7 @@ export const UnsplashSelector = ({ onValueChange }: Props) => {
             source: 'unsplash',
             authorName: photo.user.name,
             authorNickname: photo.user.username,
+            appName: env.NEXT_PUBLIC_UNSPLASH_APP_NAME,
         }
 
         trackPhotoDownload(photo);

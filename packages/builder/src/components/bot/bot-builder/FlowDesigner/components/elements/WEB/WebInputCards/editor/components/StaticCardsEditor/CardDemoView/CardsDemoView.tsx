@@ -2,7 +2,7 @@ import { DynamicSourceDescription, StaticSourceDescription, WebCardDescriptionCl
 import { Box, Button } from '@mui/material';
 import React, { useCallback, useMemo } from 'react';
 import { isEmpty } from 'lodash';
-import { Card1 } from './Card1';
+import { Card1 } from '../../../../../../../../../WebBotDemo/components/BotRequest/components/CardsBoxRequest/components/Card1';
 import { useFlowDesignerStore } from '~/components/bot/bot-builder/store';
 import { v4 } from 'uuid';
 import { getTextForContextObject } from './CardsDemoView.utils';

@@ -1,7 +1,7 @@
 import { VideoSource, WebVideoMediaDescription } from '@kickoffbot.com/types';
 import React, { useMemo } from 'react';
 import { useVideoMediaItemStyles } from './VideoMediaItem.style';
-import { getYoutubeIdFromUrl } from '~/components/bot/bot-builder/FlowDesigner/components/elements/WEB/WebContentMedia/editor/components/VideoMedia/VideoMedia.utils';
+import { getYoutubeIdFromUrl } from './VideoMediaItem.utils';
 
 interface Props {
     video: WebVideoMediaDescription;

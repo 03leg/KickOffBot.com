@@ -5,7 +5,8 @@ import {
   PaletteColor,
   PaletteColorOptions,
 } from "@mui/material/styles";
-import { defaultThemeObject } from "~/feature/theme/ThemeEditor/components/ThemeSelector/store/defaultThemeObject";
+import { defaultThemeObject } from "./defaultThemeObject";
+import { getFontFamily } from "./FontFamily";
 
 // declare module "@mui/material/styles" {
 //   interface Theme {
@@ -41,6 +42,9 @@ export const createChatTheme = (
   const contrastText = viewOptions.primaryColors.contrastText;
 
   return createTheme({
+    typography: {
+      fontFamily: getFontFamily(),
+    },
     palette: {
       action: {
         disabled: alpha(mainColor, 0.3),
@@ -186,13 +190,13 @@ export const createChatTheme = (
         },
       },
 
-      MuiRating:{
+      MuiRating: {
         styleOverrides: {
           root: {
-            color: mainColor
-          }
-        }
-      }
+            color: mainColor,
+          },
+        },
+      },
     },
   });
 };

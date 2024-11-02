@@ -2,8 +2,9 @@ import { ButtonElement, CardsRequestElement, CardsUserResponse, RequestDescripti
 import { Box, Button } from '@mui/material';
 import { isEmpty } from 'lodash';
 import React, { useCallback, useMemo } from 'react';
-import { Card1 } from '~/components/bot/bot-builder/FlowDesigner/components/elements/WEB/WebInputCards/editor/components/StaticCardsEditor/CardDemoView/Card1';
-import { throwIfNil } from '~/utils/guard';
+
+import { Card1 } from './components/Card1';
+import { throwIfNil } from '../../../../utils/guard';
 
 interface Props {
     request: RequestDescriptionWebRuntime;

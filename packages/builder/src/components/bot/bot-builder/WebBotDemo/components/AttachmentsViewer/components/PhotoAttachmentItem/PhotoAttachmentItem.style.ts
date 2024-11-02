@@ -1,5 +1,4 @@
 import { makeStyles } from "tss-react/mui";
-import { Colors } from "~/themes/Colors";
 
 export const usePhotoAttachmentItemStyles = makeStyles()((theme) => ({
   img: {
@@ -7,10 +6,5 @@ export const usePhotoAttachmentItemStyles = makeStyles()((theme) => ({
     width: "100%",
     borderRadius: theme.shape.borderRadius,
     objectFit: "cover",
-  },
-  action: {
-    backgroundColor: Colors.WHITE,
-    "& :hover": {
-    },
   },
 }));

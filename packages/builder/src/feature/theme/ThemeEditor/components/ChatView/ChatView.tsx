@@ -9,6 +9,7 @@ import chatHistory from './demoChatHistory.json';
 import { useThemeDesignerStore } from '../ThemeSelector/store/useThemeDesignerStore';
 import { api } from '~/utils/api';
 import { useRouter } from 'next/router';
+import { env } from '~/env.mjs';
 
 export default function ChatView() {
   const router = useRouter();
@@ -74,7 +75,8 @@ export default function ChatView() {
     `}</style>
       <Box className={classes.root}>
         <ThemeProvider theme={chatTheme}>
-          <ChatViewer height={'100%'} projectId='' webViewOptions={{ background, botMessageAppearance, userMessageAppearance, primaryColors }} />
+          <ChatViewer height={'100%'} projectId='' webViewOptions={{ background, botMessageAppearance, userMessageAppearance, primaryColors }}
+            runtimeUrl={env.NEXT_PUBLIC_WEB_BOT_RUNTIME_HOST ?? ''} />
         </ThemeProvider>
       </Box>
     </>

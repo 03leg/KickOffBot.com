@@ -44,3 +44,6 @@ yarn-error.log*
 *.tsbuildinfo
 
 /packages/web-bot-runtime/publish.md
+/packages/web-chat-module/src/chat-bot/*
+
+

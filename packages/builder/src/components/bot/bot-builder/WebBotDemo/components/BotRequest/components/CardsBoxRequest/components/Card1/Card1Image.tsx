@@ -1,10 +1,9 @@
-/* eslint-disable @next/next/no-img-element */
 import { UnsplashPhoto } from "@kickoffbot.com/types";
 import { isNil } from "lodash";
 import React from "react";
 import { useCard1Styles } from "./Card1.style";
 import { Box } from "@mui/material";
-import { UnsplashAuthorBox } from "~/components/bot/bot-builder/WebBotDemo/components/BotMessage/components/MediaMessage/components/UnsplashAuthorBox";
+import { UnsplashAuthorBox } from "../../../../../BotMessage/components/MediaMessage/components/UnsplashAuthorBox";
 
 interface Props {
   image?: string | UnsplashPhoto;

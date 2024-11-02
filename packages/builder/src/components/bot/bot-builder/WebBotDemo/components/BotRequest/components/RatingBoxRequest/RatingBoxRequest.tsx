@@ -2,12 +2,12 @@ import { RatingRequestElement, RequestDescriptionWebRuntime, WebRatingView } fro
 import React, { useCallback, useMemo } from 'react'
 import { useRatingBoxRequestStyles } from './RatingBoxRequest.style';
 import { Box, Rating, Typography } from '@mui/material';
-import { throwIfNil } from '~/utils/guard';
 import { SendResponseButton } from '../SendResponseButton';
 import { isNil } from 'lodash';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import SentimentSatisfiedAltIcon from '@mui/icons-material/SentimentSatisfiedAltOutlined';
+import { throwIfNil } from '../../../../utils/guard';
 
 interface Props {
     request: RequestDescriptionWebRuntime;

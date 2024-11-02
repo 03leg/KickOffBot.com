@@ -7,7 +7,7 @@ import {
   WebChatBackgroundDescription,
   WebChatTheme,
 } from "@kickoffbot.com/types";
-import { defaultThemeObject } from "./defaultThemeObject";
+import { defaultThemeObject } from "../../../../../../components/bot/bot-builder/WebBotDemo/theme/defaultThemeObject";
 
 export const useThemeDesignerStore = create<ThemeDesignerState>()(
   (set, get) => ({

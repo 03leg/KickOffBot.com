@@ -14,6 +14,7 @@ import { api } from '~/utils/api';
 import { Colors } from '~/themes/Colors';
 import { EditThemeToolbarButton } from '../FlowDesigner/components/EditThemeToolbarButton';
 import RestartAltIcon from '@mui/icons-material/RestartAlt';
+import { env } from '~/env.mjs';
 
 
 export const WebBotDemo = () => {
@@ -57,7 +58,11 @@ export const WebBotDemo = () => {
             <React.StrictMode>
                 <CacheProvider value={cache}>
                     <ThemeProvider theme={shadowTheme}>
-                        <ChatViewer height={containerRef.current?.clientHeight} project={project} projectId={projectIdFromQuery} webViewOptions={themeObject} />
+                        <ChatViewer height={containerRef.current?.clientHeight}
+                            project={project} projectId={projectIdFromQuery}
+                            webViewOptions={themeObject}
+                            runtimeUrl={env.NEXT_PUBLIC_WEB_BOT_RUNTIME_HOST ?? ''}
+                        />
                     </ThemeProvider>
                 </CacheProvider>
             </React.StrictMode>

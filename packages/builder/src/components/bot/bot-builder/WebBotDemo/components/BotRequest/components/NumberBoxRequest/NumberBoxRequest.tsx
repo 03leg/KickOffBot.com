@@ -2,8 +2,8 @@ import { Box, TextField } from '@mui/material';
 import React, { useCallback, useMemo, useState } from 'react';
 import { useNumberBoxRequestStyles } from './NumberBoxRequest.style';
 import { NumberRequestElement, RequestDescriptionWebRuntime } from '@kickoffbot.com/types';
-import { throwIfNil } from '~/utils/guard';
 import { SendResponseButton } from '../SendResponseButton';
+import { throwIfNil } from '../../../../utils/guard';
 
 interface Props {
     request: RequestDescriptionWebRuntime;

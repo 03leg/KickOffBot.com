@@ -431,4 +431,5 @@ export interface UnsplashPhoto extends ExportedImage {
   id: string;
   authorName: string;
   authorNickname: string;
+  appName: string;
 }

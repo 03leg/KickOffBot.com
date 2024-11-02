@@ -2,8 +2,8 @@ import React, { useCallback, useState } from 'react'
 import { EmailRequestElement, RequestDescriptionWebRuntime } from '@kickoffbot.com/types';
 import { Box, TextField } from '@mui/material';
 import { useEmailBoxRequestStyles } from './EmailBoxRequest.style';
-import { throwIfNil } from '~/utils/guard';
 import { SendResponseButton } from '../SendResponseButton';
+import { throwIfNil } from '../../../../utils/guard';
 
 
 interface Props {

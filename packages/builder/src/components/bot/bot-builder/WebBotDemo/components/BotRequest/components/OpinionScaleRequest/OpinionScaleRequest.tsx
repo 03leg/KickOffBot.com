@@ -3,9 +3,9 @@ import { Box } from '@mui/material';
 import React, { useCallback, useState } from 'react';
 import { OpinionScale } from './components/OpinionScale';
 import { SendResponseButton } from '../SendResponseButton';
-import { throwIfNil } from '~/utils/guard';
 import { isNil } from 'lodash';
 import { useOpinionScaleRequestStyles } from './OpinionScaleRequest.style';
+import { throwIfNil } from '../../../../utils/guard';
 
 interface Props {
     request: RequestDescriptionWebRuntime;

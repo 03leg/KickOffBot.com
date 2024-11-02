@@ -1,9 +1,9 @@
 import { FileDescription } from '@kickoffbot.com/types';
 import { Box, Typography } from '@mui/material';
 import React from 'react';
-import { getSizeString } from '~/components/PostCreator/components/AttachEditor/utility';
 import AttachmentIcon from '@mui/icons-material/Attachment';
 import { useFileAttachmentItemStyles } from './FileAttachmentItem.style';
+import { getSizeString } from './FileAttachmentItem.utils';
 
 interface Props {
     file: FileDescription;
