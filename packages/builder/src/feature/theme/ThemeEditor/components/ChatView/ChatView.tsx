@@ -2,14 +2,13 @@
 import React, { useEffect } from 'react'
 import { useChatViewStyles } from './ChatView.style';
 import { Box, LinearProgress, ThemeProvider } from '@mui/material';
-import { ChatViewer } from '~/components/bot/bot-builder/WebBotDemo/components/ChatViewer';
-import { useUserChatStore } from '~/components/bot/bot-builder/WebBotDemo/store/useUserChatStore';
-import { createChatTheme } from '~/components/bot/bot-builder/WebBotDemo/theme/createChatTheme';
+
 import chatHistory from './demoChatHistory.json';
 import { useThemeDesignerStore } from '../ThemeSelector/store/useThemeDesignerStore';
 import { api } from '~/utils/api';
 import { useRouter } from 'next/router';
 import { env } from '~/env.mjs';
+import { ChatViewer, createChatTheme, useUserChatStore } from '@kickoffbot.com/web-chat';
 
 export default function ChatView() {
   const router = useRouter();

@@ -42,7 +42,8 @@
     "react-dom": "^18.0.0"
   },
   "scripts": {
-    "build": "microbundle build --entry src/index.ts --tsconfig tsconfig.json"
+    "build": "microbundle build --entry src/index.ts --tsconfig tsconfig.json",
+    "dev": "microbundle watch --entry src/index.ts --tsconfig tsconfig.json"
   },
   "eslintConfig": {
     "extends": [

@@ -7,14 +7,13 @@ import {
 } from "@mui/material/styles";
 import createCache from "@emotion/cache";
 import { CacheProvider } from "@emotion/react";
-import { ChatViewer } from './components/ChatViewer';
 import { useRouter } from 'next/router';
-import { createChatTheme } from './theme/createChatTheme';
 import { api } from '~/utils/api';
 import { Colors } from '~/themes/Colors';
 import { EditThemeToolbarButton } from '../FlowDesigner/components/EditThemeToolbarButton';
 import RestartAltIcon from '@mui/icons-material/RestartAlt';
 import { env } from '~/env.mjs';
+import { ChatViewer, createChatTheme } from '@kickoffbot.com/web-chat';
 
 
 export const WebBotDemo = () => {

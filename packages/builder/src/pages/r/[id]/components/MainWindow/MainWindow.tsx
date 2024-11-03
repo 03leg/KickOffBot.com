@@ -1,8 +1,7 @@
+import { ChatViewer, createChatTheme } from '@kickoffbot.com/web-chat';
 import { Box, LinearProgress, ThemeProvider } from '@mui/material';
 import { useRouter } from 'next/router';
 import React from 'react'
-import { ChatViewer } from '~/components/bot/bot-builder/WebBotDemo/components/ChatViewer';
-import { createChatTheme } from '~/components/bot/bot-builder/WebBotDemo/theme/createChatTheme';
 import { env } from '~/env.mjs';
 import { api } from '~/utils/api';
 
