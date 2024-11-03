@@ -2,21 +2,18 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { ChatViewType, InitOptions } from './InitOptions';
 import createCache from "@emotion/cache";
-import { createChatTheme } from './chat-bot/theme/createChatTheme';
-import { defaultThemeObject } from './chat-bot/theme/defaultThemeObject';
 import { CacheProvider } from '@emotion/react';
 import {
   ThemeProvider
 } from "@mui/material/styles";
-import { ChatViewer } from './chat-bot/components/ChatViewer';
 import { CssBaseline } from '@mui/material';
 import '@fontsource/roboto/300.css';
 import '@fontsource/roboto/400.css';
 import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
 import { getChatTheme } from './utils/getChatTheme';
-import { customScrollbarStyle } from './chat-bot/theme/customScrollbarStyle';
-import { WEB_RUNTIME_URL } from './constants';
+import { TEST_BOT_ID, WEB_RUNTIME_URL } from './constants';
+import { ChatViewer, createChatTheme, customScrollbarStyle, defaultThemeObject } from '@kickoffbot.com/web-chat'
 
 export async function renderKickOffBot(initOptions: InitOptions) {
   const container = document.querySelector('#' + initOptions.containerId);
@@ -64,6 +61,6 @@ export async function renderKickOffBot(initOptions: InitOptions) {
 
 renderKickOffBot({
   containerId: 'root',
-  botId: '',
+  botId: TEST_BOT_ID,
   chatViewType: ChatViewType.Default,
 });
