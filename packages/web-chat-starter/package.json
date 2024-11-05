@@ -1,12 +1,11 @@
 {
-  "name": "@kickoffbot.com/web-chat-starter2",
+  "name": "@kickoffbot.com/web-chat-starter",
   "version": "1.0.0",
   "private": true,
   "main": "dist/kickoffbot-web-starter.js",
   "files": [
     "dist"
   ],
-  "types": "dist/index.d.ts",
   "dependencies": {
     "@babel/core": "^7.26.0",
     "@babel/preset-env": "^7.26.0",
