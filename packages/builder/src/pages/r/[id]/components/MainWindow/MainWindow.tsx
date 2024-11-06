@@ -12,6 +12,10 @@ export default function MainWindow() {
     const [getThemesLoading, setGetThemesLoading] = useState(true);
 
     useEffect(() => {
+        if (projectId === undefined) {
+            return;
+        }
+        
         getChatTheme(env.NEXT_PUBLIC_APP_URL, projectId).then((theme) => {
             setChatTheme(theme);
         }).finally(() => {
@@ -20,7 +24,7 @@ export default function MainWindow() {
             console.error(e);
             alert('Error loading chat theme. Please try again later.');
         });
-    }, [])
+    }, [projectId])
 
     if (getThemesLoading) {
         return <LinearProgress />
