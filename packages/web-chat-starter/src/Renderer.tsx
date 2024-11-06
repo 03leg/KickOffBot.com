@@ -8,7 +8,6 @@ import {
   ThemeProvider
 } from "@mui/material/styles";
 import { CssBaseline } from "@mui/material";
-import { WEB_APP_URL, WEB_RUNTIME_URL } from "./constants";
 import '@fontsource/roboto/300.css';
 import '@fontsource/roboto/400.css';
 import '@fontsource/roboto/500.css';
@@ -33,7 +32,7 @@ export class WebChatRenderer {
       container: shadowContainer,
     });
 
-    let chatTheme = await getChatTheme(WEB_APP_URL, initOptions.botId);
+    let chatTheme = await getChatTheme(process.env.NEXT_PUBLIC_APP_URL!, initOptions.botId);
     if (!chatTheme) {
       chatTheme = defaultThemeObject;
     }
@@ -50,7 +49,7 @@ export class WebChatRenderer {
               {customScrollbarStyle}
             </style>
             <CssBaseline />
-            <ChatViewer height={"100%"} projectId={initOptions.botId} webViewOptions={chatTheme} runtimeUrl={WEB_RUNTIME_URL} />
+            <ChatViewer height={"100%"} projectId={initOptions.botId} webViewOptions={chatTheme} runtimeUrl={process.env.NEXT_PUBLIC_WEB_BOT_RUNTIME_HOST!} />
           </ThemeProvider>
         </CacheProvider>
       </React.StrictMode>
