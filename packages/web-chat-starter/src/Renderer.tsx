@@ -1,15 +1,14 @@
 import { EmbedInitOptions } from "./initOptions";
 import createCache from "@emotion/cache";
-import { ChatViewer, createChatTheme, customScrollbarStyle, defaultThemeObject } from '@kickoffbot.com/web-chat'
+import { ChatViewer, createChatTheme, customScrollbarStyle, defaultThemeObject, getChatTheme } from '@kickoffbot.com/web-chat'
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import { getChatTheme } from "./utils/getChatTheme";
 import { CacheProvider } from "@emotion/react";
 import {
   ThemeProvider
 } from "@mui/material/styles";
 import { CssBaseline } from "@mui/material";
-import { WEB_RUNTIME_URL } from "./constants";
+import { WEB_APP_URL, WEB_RUNTIME_URL } from "./constants";
 import '@fontsource/roboto/300.css';
 import '@fontsource/roboto/400.css';
 import '@fontsource/roboto/500.css';
@@ -34,7 +33,7 @@ export class WebChatRenderer {
       container: shadowContainer,
     });
 
-    let chatTheme = await getChatTheme(initOptions.botId);
+    let chatTheme = await getChatTheme(WEB_APP_URL, initOptions.botId);
     if (!chatTheme) {
       chatTheme = defaultThemeObject;
     }
