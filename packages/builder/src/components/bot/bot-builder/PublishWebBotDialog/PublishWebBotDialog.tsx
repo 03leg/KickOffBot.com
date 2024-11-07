@@ -73,7 +73,7 @@ export const PublishWebBotDialog = ({ projectId }: Props) => {
             open={true} title={'Share your bot'}>
             <Box className={classes.root} >
                 <Typography variant='h5'>This is your saved bot link:</Typography>
-                <UrlViewer text={appUrl} />
+                <UrlViewer text={appUrl} showOpenButton />
 
                 <Box className={classes.info}>
                     <Typography variant='h5'>Bot integration:</Typography>
