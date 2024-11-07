@@ -80,17 +80,17 @@ export const PublishWebBotDialog = ({ projectId }: Props) => {
                     <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
                         <Tabs value={value} onChange={handleChange}>
                             <Tab label="iFrame" className={classes.integrationTab} {...a11yProps(0)} />
-                            {/* <Tab label="Wordpress" className={classes.integrationTab} {...a11yProps(1)} /> */}
-                            <Tab label="Notion" className={classes.integrationTab} {...a11yProps(2)} />
+                            {/* <Tab label="Wordpress" className={classes.integrationTab} {...a11yProps(2)} /> */}
+                            <Tab label="Notion" className={classes.integrationTab} {...a11yProps(1)} />
                         </Tabs>
                     </Box>
                     <CustomTabPanel value={value} index={0}>
                         <IframeInfo src={appUrl} />
                     </CustomTabPanel>
-                    <CustomTabPanel value={value} index={1}>
+                    <CustomTabPanel value={value} index={2}>
                         <WordpressInfo botId={projectId} />
                     </CustomTabPanel>
-                    <CustomTabPanel value={value} index={2}>
+                    <CustomTabPanel value={value} index={1}>
                         <NotionInfo url={appUrl} />
                     </CustomTabPanel>
                 </Box>
