@@ -5,7 +5,10 @@ export const useUrlViewerStyles = makeStyles()(({ spacing }) => ({
     display: "flex",
     marginTop: spacing(1),
   },
-  copyButton: {
+  actionButton: {
     marginLeft: spacing(0.5),
+  },
+  buttonContainer: {
+    display: "flex",
   },
 }));

@@ -5,9 +5,10 @@ import CheckBoxIcon from '@mui/icons-material/CheckBox';
 
 interface Props {
     text: string;
+    showOpenButton?: boolean
 }
 
-export const UrlViewer = ({ text }: Props) => {
+export const UrlViewer = ({ text, showOpenButton = false }: Props) => {
     const { classes } = useUrlViewerStyles();
     const [showSuccessCopy, setShowSuccessCopy] = React.useState(false);
 
@@ -22,14 +23,22 @@ export const UrlViewer = ({ text }: Props) => {
 
     }, [text]);
 
+    const handleOpenUrlClick = useCallback(() => {
+        window.open(text);
+    }, [text])
 
     return (
         <Box className={classes.link}>
             <TextField value={text} fullWidth />
-            <Button className={classes.copyButton} onClick={handleCopyButtonClick}>
-                {showSuccessCopy && <CheckBoxIcon />}
-                {!showSuccessCopy && 'Copy'}
-            </Button>
+            <Box className={classes.buttonContainer}>
+                {showOpenButton && <Button className={classes.actionButton} onClick={handleOpenUrlClick}>
+                    Open
+                </Button>}
+                <Button className={classes.actionButton} onClick={handleCopyButtonClick}>
+                    {showSuccessCopy && <CheckBoxIcon />}
+                    {!showSuccessCopy && 'Copy'}
+                </Button>
+            </Box>
         </Box>
     )
 }
