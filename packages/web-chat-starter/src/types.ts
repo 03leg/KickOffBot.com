@@ -3,6 +3,6 @@ export interface ButtonDescription {
     botId: string;
   }
   
-  export type ButtonStyle = "text" | "contained" | "outlined";
+  export type ButtonStyle = "text" | "contained" | "outlined" | "default";
   
   export type ButtonsOrientation = "horizontal" | "vertical";

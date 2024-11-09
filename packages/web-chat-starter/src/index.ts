@@ -8,6 +8,7 @@ declare global {
 }
 
 window.KickOffBot = window.KickOffBot ?? {
-  renderEmbedChatBot: EmbeddedChatRenderer.render,
-  renderButtons: ButtonsChatRenderer.render,
+  renderEmbeddedChat: EmbeddedChatRenderer.render,
+  renderButtons: ButtonsChatRenderer.renderButtons,
+  renderChatPopup: ButtonsChatRenderer.renderChatPopup
 };

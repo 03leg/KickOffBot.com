@@ -1,6 +1,6 @@
 import ReactDOM from "react-dom/client";
 import React, { useCallback } from 'react';
-import { EmbeddedChatButtonsOptions } from "./initOptions";
+import { EmbeddedChatButtonsOptions, PopupChatInitOptions } from "./initOptions";
 import createCache from "@emotion/cache";
 import { CacheProvider } from "@emotion/react";
 import { Box, Button, createTheme, CssBaseline, Portal, ThemeProvider } from "@mui/material";
@@ -34,21 +34,19 @@ export class ButtonsChatRenderer {
         return { shadowContainer, shadowRootElement };
     }
 
-    private static async openChatPopup(botId: string, rootContainerId: string) {
+    public static async renderChatPopup({ botId }: PopupChatInitOptions) {
         const bodyElement = document.querySelector('body');
         if (!bodyElement) {
             throw new Error("Failed to find body element");
         }
 
         const popupElement = document.createElement('div');
-        popupElement.id = `${rootContainerId}-chat-popup`;
+        popupElement.id = `kickoffbot-chat-popup`;
         bodyElement.appendChild(popupElement);
 
         const shadowContainer = popupElement.attachShadow({ mode: 'open' });
         const shadowRootElement = document.createElement('div');
         shadowContainer.appendChild(shadowRootElement);
-
-        // const { shadowContainer, shadowRootElement } = ButtonsChatRenderer.getButtonsContainer(rootContainerId, "-chat-popup");
 
         const cache = createCache({
             key: "kickoffbot-chat-theme-css",
@@ -67,7 +65,7 @@ export class ButtonsChatRenderer {
 
         const handleClosePopup = () => {
             root.unmount();
-            const parent = document.querySelector('#' + rootContainerId + "-chat-popup");
+            const parent = document.querySelector("#kickoffbot-chat-popup");
 
             if (parent) {
                 parent.innerHTML = '';
@@ -90,7 +88,13 @@ export class ButtonsChatRenderer {
         );
     }
 
-    public static render({ containerId, buttonColor, buttonsOrientation, buttons, buttonStyle, buttonWidth }: EmbeddedChatButtonsOptions) {
+    public static renderButtons({ containerId, buttonColor, buttonsOrientation, buttons, buttonStyle, buttonWidth, buttonCssClasses }: EmbeddedChatButtonsOptions) {
+
+        if (buttonStyle === "default") {
+            ButtonsChatRenderer.renderDefaultButtons(containerId, buttonsOrientation, buttons, buttonWidth, buttonCssClasses);
+            return;
+        }
+
         const { shadowContainer, shadowRootElement } = ButtonsChatRenderer.getButtonsContainer(containerId, "-buttons-container");
 
         const cache = createCache({
@@ -108,7 +112,7 @@ export class ButtonsChatRenderer {
         });
 
         const handleButtonClick = (button: ButtonDescription) => {
-            ButtonsChatRenderer.openChatPopup(button.botId, containerId);
+            ButtonsChatRenderer.renderChatPopup({ botId: button.botId });
         };
 
         ReactDOM.createRoot(shadowRootElement).render(
@@ -139,6 +143,57 @@ export class ButtonsChatRenderer {
                     </Box>
                 </ThemeProvider>
             </CacheProvider>,
+        );
+    }
+
+    static renderDefaultButtons(containerId: string, buttonsOrientation: string, buttons: ButtonDescription[], buttonWidth: string | undefined, buttonCssClasses: string | undefined) {
+        const rootContainer = document.querySelector('#' + containerId);
+        if (!rootContainer) {
+            throw new Error("Failed to find container with id: " + containerId);
+        }
+
+        const childContainerId = `${containerId}-buttons-container`;
+        const existedChildContainer = document.querySelector('#' + childContainerId);
+        if (existedChildContainer) {
+            existedChildContainer.innerHTML = '';
+            existedChildContainer.remove();
+        }
+
+        const newChildContainer = document.createElement('div');
+        newChildContainer.id = childContainerId;
+        rootContainer.appendChild(newChildContainer);
+
+        const handleButtonClick = (button: ButtonDescription) => {
+            ButtonsChatRenderer.renderChatPopup({ botId: button.botId });
+        };
+
+        ReactDOM.createRoot(newChildContainer).render(
+            <Box sx={{
+                display: "flex",
+                flexDirection:
+                    buttonsOrientation === "horizontal" ? "row" : "column",
+            }}>
+                {buttons.length === 0 && <Box sx={{ color: "red" }}>No buttons found. Please check your button(s) configuration may be your JSON is not valid...</Box>}
+                {buttons.map((button, index) => {
+
+                    return <button
+                        onClick={() => handleButtonClick(button)}
+                        style={{
+                            marginRight:
+                                buttonsOrientation === "horizontal" && buttons.length > 0
+                                    ? '8px'
+                                    : undefined,
+                            marginTop:
+                                buttonsOrientation === "vertical" && buttons.length > 0
+                                    ? "8px"
+                                    : undefined,
+                            width: buttonWidth ? buttonWidth : "fit-content",
+                        }}
+                        {...(buttonCssClasses && { class: buttonCssClasses })}
+                        key={button.text}>{button.text}</button>
+                }
+                )}
+            </Box>,
         );
     }
 }

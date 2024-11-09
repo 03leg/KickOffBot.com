@@ -11,6 +11,11 @@ export interface EmbeddedChatButtonsOptions {
   buttonStyle: ButtonStyle;
   buttonColor: string;
   buttonWidth?: string;
+  buttonCssClasses?: string;
 
   containerId: string;
+}
+
+export interface PopupChatInitOptions {
+  botId: string;
 }
