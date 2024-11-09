@@ -1,4 +1,4 @@
-import { EmbedInitOptions } from "./initOptions";
+import { EmbeddedChatInitOptions } from "./initOptions";
 import createCache from "@emotion/cache";
 import { ChatViewer, createChatTheme, customScrollbarStyle, defaultThemeObject, getChatTheme } from '@kickoffbot.com/web-chat'
 import React from 'react';
@@ -13,8 +13,8 @@ import '@fontsource/roboto/400.css';
 import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
 
-export class WebChatRenderer {
-  public static async renderEmbedChatBot(initOptions: EmbedInitOptions) {
+export class EmbeddedChatRenderer {
+  public static async render(initOptions: EmbeddedChatInitOptions) {
     const container = document.querySelector("#" + initOptions.containerId);
     if (!container) {
       throw new Error("Failed to find container with id: " + initOptions.containerId);
