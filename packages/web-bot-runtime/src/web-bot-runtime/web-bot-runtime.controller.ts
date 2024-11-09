@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, Query } from '@nestjs/common';
+import { Body, Controller, Post, Query } from '@nestjs/common';
 import { WebBotRuntimeService } from './web-bot-runtime.service';
 import { BotProject } from '@kickoffbot.com/types';
 
@@ -16,15 +16,27 @@ export class WebBotRuntimeController {
     );
   }
 
-  @Get('start-demo-bot')
-  async startDemoBot(@Query('demoProjectId') demoProjectId: string) {
-    const result = await this.botRuntimeService.startDemoBot(demoProjectId);
+  @Post('start-demo-bot')
+  async startDemoBot(
+    @Query('demoProjectId') demoProjectId: string,
+    @Body() body: { externalVariables: Record<string, unknown> },
+  ) {
+    const result = await this.botRuntimeService.startDemoBot(
+      demoProjectId,
+      body.externalVariables,
+    );
     return result;
   }
 
-  @Get('start-bot')
-  async startBot(@Query('projectId') projectId: string) {
-    const result = await this.botRuntimeService.startBot(projectId);
+  @Post('start-bot')
+  async startBot(
+    @Query('projectId') projectId: string,
+    @Body() body: { externalVariables: Record<string, unknown> },
+  ) {
+    const result = await this.botRuntimeService.startBot(
+      projectId,
+      body.externalVariables,
+    );
     return result;
   }
 

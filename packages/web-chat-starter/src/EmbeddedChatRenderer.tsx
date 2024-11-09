@@ -49,7 +49,8 @@ export class EmbeddedChatRenderer {
               {customScrollbarStyle}
             </style>
             <CssBaseline />
-            <ChatViewer height={"100%"} projectId={initOptions.botId} webViewOptions={chatTheme} runtimeUrl={process.env.NEXT_PUBLIC_WEB_BOT_RUNTIME_HOST!} />
+            <ChatViewer height={"100%"} projectId={initOptions.botId} webViewOptions={chatTheme} runtimeUrl={process.env.NEXT_PUBLIC_WEB_BOT_RUNTIME_HOST!}
+              externalVariables={initOptions.externalVariables} />
           </ThemeProvider>
         </CacheProvider>
       </React.StrictMode>

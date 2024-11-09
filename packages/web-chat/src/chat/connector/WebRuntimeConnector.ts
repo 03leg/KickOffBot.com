@@ -25,7 +25,8 @@ export class WebRuntimeConnector {
     project: BotProject | undefined,
     projectId: string,
     runtimeUrl: string,
-    storeApi: ChatStoreState
+    storeApi: ChatStoreState,
+    private _externalVariables?: Record<string, unknown>
   ) {
     this._storeApi = storeApi;
     this._botProject = project;
@@ -43,16 +44,11 @@ export class WebRuntimeConnector {
 
     try {
       if (this._botProject) {
-        this._runtimeProjectId = await this._httpService.uploadDemoProject(
-          this._projectId,
-          this._botProject
-        );
+        this._runtimeProjectId = await this._httpService.uploadDemoProject(this._projectId, this._botProject);
 
-        response = await this._httpService.startDemoBot(this._runtimeProjectId);
+        response = await this._httpService.startDemoBot(this._runtimeProjectId, this._externalVariables);
       } else {
-        const startSavedBotResponse = await this._httpService.startSavedBot(
-          this._projectId
-        );
+        const startSavedBotResponse = await this._httpService.startSavedBot(this._projectId, this._externalVariables);
         throwIfNil(startSavedBotResponse?.runtimeProjectId);
 
         this._runtimeProjectId = startSavedBotResponse.runtimeProjectId;
@@ -60,7 +56,7 @@ export class WebRuntimeConnector {
       }
 
       await this.toStore(response);
-    } catch(e) {
+    } catch (e) {
       console.error(e);
       this._storeApi.showError("Failed to start the bot. Please try again.");
     } finally {
@@ -77,26 +73,18 @@ export class WebRuntimeConnector {
         requestContent.onResponse = this.handleResponse.bind(this, item);
         this._storeApi.sendBotRequest(item);
       } else if (item.itemType === ChatItemTypeWebRuntime.DELETE_MESSAGES) {
-        const requestContent =
-          item.content as DeleteMessagesDescriptionWebRuntime;
+        const requestContent = item.content as DeleteMessagesDescriptionWebRuntime;
         if (requestContent.deleteAllMessages) {
           this._storeApi.clearHistory();
-        } else if (
-          requestContent.elementIds &&
-          requestContent.elementIds.length > 0
-        ) {
+        } else if (requestContent.elementIds && requestContent.elementIds.length > 0) {
           this._storeApi.removeChatItemByUIElementId(requestContent.elementIds);
         }
       }
     }
   }
 
-  private static getUserResponseContent(
-    chatItemRequest: ChatItemWebRuntime,
-    userData: UserResponseDescriptionWebRuntime
-  ) {
-    const requestElement =
-      chatItemRequest.content as RequestDescriptionWebRuntime;
+  private static getUserResponseContent(chatItemRequest: ChatItemWebRuntime, userData: UserResponseDescriptionWebRuntime) {
+    const requestElement = chatItemRequest.content as RequestDescriptionWebRuntime;
 
     if (requestElement.element.elementType === ElementType.WEB_INPUT_BUTTONS) {
       const button = userData.data as RequestButtonDescription;
@@ -105,13 +93,10 @@ export class WebRuntimeConnector {
 
     if (requestElement.element.elementType === ElementType.WEB_INPUT_CARDS) {
       const cardResponseData = userData.data as CardsUserResponse;
-      let responseText = cardResponseData.selectedCards
-        .map((c) => c.value)
-        .join(", ");
+      let responseText = cardResponseData.selectedCards.map((c) => c.value).join(", ");
 
       if (cardResponseData.clickedCardButton) {
-        responseText =
-          cardResponseData.clickedCardButton.content + ", " + responseText;
+        responseText = cardResponseData.clickedCardButton.content + ", " + responseText;
       }
 
       if (cardResponseData.actionName) {
@@ -128,34 +113,22 @@ export class WebRuntimeConnector {
     return userData.data as string;
   }
 
-  private async handleResponse(
-    chatItemRequest: ChatItemWebRuntime,
-    userData: UserResponseDescriptionWebRuntime
-  ) {
+  private async handleResponse(chatItemRequest: ChatItemWebRuntime, userData: UserResponseDescriptionWebRuntime) {
     throwIfNil(this._runtimeProjectId);
 
     this._storeApi.removeChatItem(chatItemRequest.id);
     this._storeApi.sendUserResponse(chatItemRequest.uiElementId, {
-      message: WebRuntimeConnector.getUserResponseContent(
-        chatItemRequest,
-        userData
-      ),
+      message: WebRuntimeConnector.getUserResponseContent(chatItemRequest, userData),
     });
 
     this._storeApi.setLoadingValue(true);
 
     try {
-      const response = await this._httpService.sendUserResponse(
-        this._runtimeProjectId,
-        chatItemRequest,
-        userData.data
-      );
+      const response = await this._httpService.sendUserResponse(this._runtimeProjectId, chatItemRequest, userData.data);
 
       await this.toStore(response);
     } catch {
-      this._storeApi.showError(
-        "Failed to send your response. Please try to use bot later."
-      );
+      this._storeApi.showError("Failed to send your response. Please try to use bot later.");
     } finally {
       this._storeApi.setLoadingValue(false);
     }

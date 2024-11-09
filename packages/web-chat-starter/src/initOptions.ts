@@ -1,11 +1,15 @@
 import { ButtonDescription, ButtonsOrientation, ButtonStyle } from "./types";
 
-export interface EmbeddedChatInitOptions {
+export interface InitOptionsBase {
+  externalVariables?: Record<string, unknown>;
+}
+
+export interface EmbeddedChatInitOptions extends InitOptionsBase {
   containerId: string;
   botId: string;
 }
 
-export interface EmbeddedChatButtonsOptions {
+export interface EmbeddedChatButtonsInitOptions extends InitOptionsBase {
   buttons: ButtonDescription[];
   buttonsOrientation: ButtonsOrientation;
   buttonStyle: ButtonStyle;
@@ -16,6 +20,6 @@ export interface EmbeddedChatButtonsOptions {
   containerId: string;
 }
 
-export interface PopupChatInitOptions {
+export interface PopupChatInitOptions extends InitOptionsBase {
   botId: string;
 }

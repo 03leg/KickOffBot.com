@@ -16,12 +16,13 @@ interface Props {
     projectId: string;
     webViewOptions?: WebChatTheme;
     runtimeUrl: string;
+    externalVariables?: Record<string, unknown>;
 }
 
 //eslint-disable-next-line @typescript-eslint/no-explicit-any
 // let handler: any = undefined;
 
-export const ChatViewer = ({ project, height, projectId, webViewOptions, runtimeUrl }: Props) => {
+export const ChatViewer = ({ project, height, projectId, webViewOptions, runtimeUrl, externalVariables }: Props) => {
     const { classes, cx } = useChatViewerStyles({ height, webViewOptions });
     const runtimeConnector = useRef<WebRuntimeConnector | null>(null);
     const messageListRef = useRef<HTMLDivElement>(null);
@@ -31,7 +32,7 @@ export const ChatViewer = ({ project, height, projectId, webViewOptions, runtime
 
     useLayoutEffect(() => {
         if (!runtimeConnector.current && (projectId || project)) {
-            runtimeConnector.current = new WebRuntimeConnector(project, projectId, runtimeUrl, { ...storeState });
+            runtimeConnector.current = new WebRuntimeConnector(project, projectId, runtimeUrl, { ...storeState }, externalVariables);
 
             void runtimeConnector.current.connect();
         }

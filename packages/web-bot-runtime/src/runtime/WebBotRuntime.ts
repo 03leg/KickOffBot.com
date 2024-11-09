@@ -61,9 +61,12 @@ export class WebBotRuntime {
   private _userContext: WebUserContext;
   private _requestElementConverter: RequestElementConverter;
 
-  constructor(private _project: BotProject) {
+  constructor(
+    private _project: BotProject,
+    externalVariables?: Record<string, unknown>,
+  ) {
     this._utils = new WebBotRuntimeUtils(_project);
-    this._userContext = new WebUserContext(_project);
+    this._userContext = new WebUserContext(_project, externalVariables);
     this._requestElementConverter = new RequestElementConverter(
       this._utils,
       this._userContext,
