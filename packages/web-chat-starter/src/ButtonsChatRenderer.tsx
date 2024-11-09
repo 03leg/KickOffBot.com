@@ -35,7 +35,20 @@ export class ButtonsChatRenderer {
     }
 
     private static async openChatPopup(botId: string, rootContainerId: string) {
-        const { shadowContainer, shadowRootElement } = ButtonsChatRenderer.getButtonsContainer(rootContainerId, "-chat-popup");
+        const bodyElement = document.querySelector('body');
+        if (!bodyElement) {
+            throw new Error("Failed to find body element");
+        }
+
+        const popupElement = document.createElement('div');
+        popupElement.id = `${rootContainerId}-chat-popup`;
+        bodyElement.appendChild(popupElement);
+
+        const shadowContainer = popupElement.attachShadow({ mode: 'open' });
+        const shadowRootElement = document.createElement('div');
+        shadowContainer.appendChild(shadowRootElement);
+
+        // const { shadowContainer, shadowRootElement } = ButtonsChatRenderer.getButtonsContainer(rootContainerId, "-chat-popup");
 
         const cache = createCache({
             key: "kickoffbot-chat-theme-css",
