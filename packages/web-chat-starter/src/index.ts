@@ -1,4 +1,5 @@
-import { WebChatRenderer } from "./Renderer";
+import { ButtonsChatRenderer } from "./ButtonsChatRenderer";
+import { EmbeddedChatRenderer } from "./EmbeddedChatRenderer";
 
 declare global {
   interface Window {
@@ -7,5 +8,6 @@ declare global {
 }
 
 window.KickOffBot = window.KickOffBot ?? {
-  renderEmbedChatBot: WebChatRenderer.renderEmbedChatBot,
+  renderEmbedChatBot: EmbeddedChatRenderer.render,
+  renderButtons: ButtonsChatRenderer.render,
 };

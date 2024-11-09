@@ -1,10 +1,5 @@
 import { BackgroundColorSchema, WebChatTheme } from "@kickoffbot.com/types";
-import {
-  alpha,
-  createTheme,
-  PaletteColor,
-  PaletteColorOptions,
-} from "@mui/material/styles";
+import { alpha, createTheme, PaletteColor, PaletteColorOptions } from "@mui/material/styles";
 import { defaultThemeObject } from "./defaultThemeObject";
 import { getFontFamily } from "./FontFamily";
 
@@ -34,10 +29,7 @@ declare module "@mui/material/styles" {
   }
 }
 
-export const createChatTheme = (
-  shadowRootElement: HTMLElement | undefined = undefined,
-  viewOptions: WebChatTheme = defaultThemeObject
-) => {
+export const createChatTheme = (shadowRootElement: HTMLElement | undefined = undefined, viewOptions: WebChatTheme = defaultThemeObject) => {
   const mainColor = viewOptions.primaryColors.main;
   const contrastText = viewOptions.primaryColors.contrastText;
 
@@ -67,10 +59,7 @@ export const createChatTheme = (
         contrastText: viewOptions.userMessageAppearance.textColor,
       },
       background: {
-        default:
-          viewOptions.background.schema === BackgroundColorSchema.OneColor
-            ? viewOptions.background.color1
-            : "#ffffff",
+        default: viewOptions.background.schema === BackgroundColorSchema.OneColor ? viewOptions.background.color1 : "#ffffff",
 
         paper: viewOptions.background.paperColor,
       },
@@ -189,7 +178,11 @@ export const createChatTheme = (
           container: shadowRootElement,
         },
       },
-
+      MuiDialog: {
+        defaultProps: {
+          container: shadowRootElement,
+        },
+      },
       MuiRating: {
         styleOverrides: {
           root: {
@@ -197,6 +190,16 @@ export const createChatTheme = (
           },
         },
       },
+    },
+    zIndex: {
+      mobileStepper: 10001,
+      fab: 10500,
+      speedDial: 10500,
+      appBar: 11000,
+      drawer: 12000,
+      modal: 13000,
+      snackbar: 14000,
+      tooltip: 15000,
     },
   });
 };
