@@ -10,9 +10,10 @@ interface Props {
     botId: string;
     chatTheme: WebChatTheme;
     onClose: () => void;
+    externalVariables?: Record<string, unknown>;
 }
 
-export const ChatPopup = ({ botId, chatTheme, onClose }: Props) => {
+export const ChatPopup = ({ botId, chatTheme, onClose, externalVariables }: Props) => {
     const { classes } = useChatPopupStyles();
 
     return (
@@ -28,7 +29,8 @@ export const ChatPopup = ({ botId, chatTheme, onClose }: Props) => {
                     </IconButton>
                 </Box>
                 <Box className={classes.content}>
-                    <ChatViewer height={"100%"} projectId={botId} webViewOptions={chatTheme} runtimeUrl={process.env.NEXT_PUBLIC_WEB_BOT_RUNTIME_HOST!} />
+                    <ChatViewer height={"100%"} projectId={botId} webViewOptions={chatTheme} runtimeUrl={process.env.NEXT_PUBLIC_WEB_BOT_RUNTIME_HOST!}
+                        externalVariables={externalVariables} />
                 </Box>
             </Box>
         </Box>

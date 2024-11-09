@@ -1,6 +1,6 @@
 import ReactDOM from "react-dom/client";
 import React, { useCallback } from 'react';
-import { EmbeddedChatButtonsOptions, PopupChatInitOptions } from "./initOptions";
+import { EmbeddedChatButtonsInitOptions, PopupChatInitOptions } from "./initOptions";
 import createCache from "@emotion/cache";
 import { CacheProvider } from "@emotion/react";
 import { Box, Button, createTheme, CssBaseline, Portal, ThemeProvider } from "@mui/material";
@@ -34,7 +34,7 @@ export class ButtonsChatRenderer {
         return { shadowContainer, shadowRootElement };
     }
 
-    public static async renderChatPopup({ botId }: PopupChatInitOptions) {
+    public static async renderChatPopup({ botId, externalVariables }: PopupChatInitOptions) {
         const bodyElement = document.querySelector('body');
         if (!bodyElement) {
             throw new Error("Failed to find body element");
@@ -81,17 +81,17 @@ export class ButtonsChatRenderer {
                             {customScrollbarStyle}
                         </style>
                         <CssBaseline />
-                        <ChatPopup botId={botId} chatTheme={chatTheme} onClose={handleClosePopup} />
+                        <ChatPopup botId={botId} chatTheme={chatTheme} onClose={handleClosePopup} externalVariables={externalVariables} />
                     </ThemeProvider>
                 </CacheProvider>
             </React.StrictMode>
         );
     }
 
-    public static renderButtons({ containerId, buttonColor, buttonsOrientation, buttons, buttonStyle, buttonWidth, buttonCssClasses }: EmbeddedChatButtonsOptions) {
+    public static renderButtons({ containerId, buttonColor, buttonsOrientation, buttons, buttonStyle, buttonWidth, buttonCssClasses, externalVariables }: EmbeddedChatButtonsInitOptions) {
 
         if (buttonStyle === "default") {
-            ButtonsChatRenderer.renderDefaultButtons(containerId, buttonsOrientation, buttons, buttonWidth, buttonCssClasses);
+            ButtonsChatRenderer.renderDefaultButtons(containerId, buttonsOrientation, buttons, buttonWidth, buttonCssClasses, externalVariables);
             return;
         }
 
@@ -112,7 +112,7 @@ export class ButtonsChatRenderer {
         });
 
         const handleButtonClick = (button: ButtonDescription) => {
-            ButtonsChatRenderer.renderChatPopup({ botId: button.botId });
+            ButtonsChatRenderer.renderChatPopup({ botId: button.botId, externalVariables: externalVariables });
         };
 
         ReactDOM.createRoot(shadowRootElement).render(
@@ -146,7 +146,8 @@ export class ButtonsChatRenderer {
         );
     }
 
-    static renderDefaultButtons(containerId: string, buttonsOrientation: string, buttons: ButtonDescription[], buttonWidth: string | undefined, buttonCssClasses: string | undefined) {
+    static renderDefaultButtons(containerId: string, buttonsOrientation: string, buttons: ButtonDescription[], buttonWidth: string | undefined, 
+        buttonCssClasses: string | undefined, externalVariables?: Record<string, unknown>) {
         const rootContainer = document.querySelector('#' + containerId);
         if (!rootContainer) {
             throw new Error("Failed to find container with id: " + containerId);
@@ -164,7 +165,7 @@ export class ButtonsChatRenderer {
         rootContainer.appendChild(newChildContainer);
 
         const handleButtonClick = (button: ButtonDescription) => {
-            ButtonsChatRenderer.renderChatPopup({ botId: button.botId });
+            ButtonsChatRenderer.renderChatPopup({ botId: button.botId, externalVariables });
         };
 
         ReactDOM.createRoot(newChildContainer).render(

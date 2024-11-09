@@ -21,13 +21,16 @@ export class WebBotRuntimeService {
     return demoProjectId;
   }
 
-  async startDemoBot(demoProjectId: string) {
+  async startDemoBot(
+    demoProjectId: string,
+    externalVariables?: Record<string, unknown>,
+  ) {
     const demoProject = this._metadataBotProjectMap.get(demoProjectId);
     if (!demoProject) {
       throw new Error('InvalidOperationError: demoProject is null');
     }
 
-    const runtime = new WebBotRuntime(demoProject);
+    const runtime = new WebBotRuntime(demoProject, externalVariables);
 
     const newChatItems = await runtime.startBot();
 
@@ -40,7 +43,10 @@ export class WebBotRuntimeService {
     return response;
   }
 
-  async startBot(projectId: string) {
+  async startBot(
+    projectId: string,
+    externalVariables?: Record<string, unknown>,
+  ) {
     if (!projectId) {
       throw new Error('InvalidOperationError: projectId is null');
     }
@@ -54,7 +60,7 @@ export class WebBotRuntimeService {
       );
     }
 
-    const runtime = new WebBotRuntime(projectFromDb);
+    const runtime = new WebBotRuntime(projectFromDb, externalVariables);
 
     const newChatItems = await runtime.startBot();
     const runtimeProjectId = v4();

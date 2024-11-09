@@ -14,8 +14,29 @@ export class WebUserContext {
     return this._nextStep;
   }
 
-  constructor(project: BotProject) {
+  constructor(
+    project: BotProject,
+    externalVariables?: Record<string, unknown>,
+  ) {
     this.initVariables(project.variables);
+
+    if (externalVariables) {
+      this.setExternalVariables(externalVariables);
+    }
+  }
+
+  private setExternalVariables(externalVariables: Record<string, unknown>) {
+    for (const [key, value] of Object.entries(externalVariables)) {
+      let typedValue: unknown;
+
+      try {
+        typedValue = JSON.parse(value as string);
+      } catch {
+        typedValue = value;
+      }
+
+      this._variables.set(key, typedValue);
+    }
   }
 
   private initVariables(botVariables: BotVariable[]) {
