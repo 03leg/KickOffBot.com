@@ -13,6 +13,7 @@ export const useChatPopupStyles = makeStyles()(({ spacing, palette, breakpoints 
     justifyContent: "center",
     alignItems: "center",
     zIndex: 10000,
+    mouseEvents: "none",
   },
   popup: {
     height: "99vh",
