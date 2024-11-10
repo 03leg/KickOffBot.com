@@ -1,6 +1,6 @@
 import { EmbeddedChatInitOptions } from "./initOptions";
 import createCache from "@emotion/cache";
-import { ChatViewer, createChatTheme, customScrollbarStyle, defaultThemeObject, getChatTheme } from '@kickoffbot.com/web-chat'
+import { ChatViewer, createChatTheme, customScrollbarStyle, defaultThemeObject, getChatTheme, KickoffbotChatStoreProvider } from '@kickoffbot.com/web-chat'
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { CacheProvider } from "@emotion/react";
@@ -49,8 +49,10 @@ export class EmbeddedChatRenderer {
               {customScrollbarStyle}
             </style>
             <CssBaseline />
-            <ChatViewer height={"100%"} projectId={initOptions.botId} webViewOptions={chatTheme} runtimeUrl={process.env.NEXT_PUBLIC_WEB_BOT_RUNTIME_HOST!}
-              externalVariables={initOptions.externalVariables} />
+            <KickoffbotChatStoreProvider>
+              <ChatViewer height={"100%"} projectId={initOptions.botId} webViewOptions={chatTheme} runtimeUrl={process.env.NEXT_PUBLIC_WEB_BOT_RUNTIME_HOST!}
+                externalVariables={initOptions.externalVariables} />
+            </KickoffbotChatStoreProvider>
           </ThemeProvider>
         </CacheProvider>
       </React.StrictMode>
