@@ -74,10 +74,8 @@ export default function ChatView() {
     `}</style>
       <Box className={classes.root}>
         <ThemeProvider theme={chatTheme}>
-          <KickoffbotChatStoreProvider>
             <ChatViewer height={'100%'} projectId='' webViewOptions={{ background, botMessageAppearance, userMessageAppearance, primaryColors }}
               runtimeUrl={env.NEXT_PUBLIC_WEB_BOT_RUNTIME_HOST ?? ''} />
-          </KickoffbotChatStoreProvider>
         </ThemeProvider>
       </Box>
     </>
