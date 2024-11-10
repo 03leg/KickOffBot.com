@@ -1,5 +1,5 @@
 import { WebChatTheme } from '@kickoffbot.com/types';
-import { ChatViewer, createChatTheme, getChatTheme } from '@kickoffbot.com/web-chat';
+import { ChatViewer, createChatTheme, getChatTheme, KickoffbotChatStoreProvider } from '@kickoffbot.com/web-chat';
 import { Box, LinearProgress, ThemeProvider } from '@mui/material';
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react'
@@ -15,7 +15,7 @@ export default function MainWindow() {
         if (projectId === undefined) {
             return;
         }
-        
+
         getChatTheme(env.NEXT_PUBLIC_APP_URL, projectId).then((theme) => {
             setChatTheme(theme);
         }).finally(() => {
@@ -35,7 +35,9 @@ export default function MainWindow() {
     return (
         <Box sx={{ height: '100%', width: '100%' }} data-testid="main-window">
             <ThemeProvider theme={theme}>
-                <ChatViewer height={'100%'} projectId={projectId} webViewOptions={chatTheme} runtimeUrl={env.NEXT_PUBLIC_WEB_BOT_RUNTIME_HOST ?? ''} />
+                <KickoffbotChatStoreProvider>
+                    <ChatViewer height={'100%'} projectId={projectId} webViewOptions={chatTheme} runtimeUrl={env.NEXT_PUBLIC_WEB_BOT_RUNTIME_HOST ?? ''} />
+                </KickoffbotChatStoreProvider>
             </ThemeProvider>
         </Box>
     )

@@ -8,7 +8,7 @@ import { useThemeDesignerStore } from '../ThemeSelector/store/useThemeDesignerSt
 import { api } from '~/utils/api';
 import { useRouter } from 'next/router';
 import { env } from '~/env.mjs';
-import { ChatViewer, createChatTheme, useUserChatStore } from '@kickoffbot.com/web-chat';
+import { ChatViewer, createChatTheme, KickoffbotChatStoreProvider, useUserChatStore } from '@kickoffbot.com/web-chat';
 
 export default function ChatView() {
   const router = useRouter();
@@ -74,8 +74,10 @@ export default function ChatView() {
     `}</style>
       <Box className={classes.root}>
         <ThemeProvider theme={chatTheme}>
-          <ChatViewer height={'100%'} projectId='' webViewOptions={{ background, botMessageAppearance, userMessageAppearance, primaryColors }}
-            runtimeUrl={env.NEXT_PUBLIC_WEB_BOT_RUNTIME_HOST ?? ''} />
+          <KickoffbotChatStoreProvider>
+            <ChatViewer height={'100%'} projectId='' webViewOptions={{ background, botMessageAppearance, userMessageAppearance, primaryColors }}
+              runtimeUrl={env.NEXT_PUBLIC_WEB_BOT_RUNTIME_HOST ?? ''} />
+          </KickoffbotChatStoreProvider>
         </ThemeProvider>
       </Box>
     </>

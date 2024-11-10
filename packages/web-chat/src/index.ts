@@ -6,3 +6,4 @@ export * from './chat/components/BotRequest/components/CardsBoxRequest/component
 export * from './chat/store/useUserChatStore';
 export * from './chat/theme/customScrollbarStyle';
 export * from './chat/utils/getChatTheme';
+export * from './chat/store/storeContext';

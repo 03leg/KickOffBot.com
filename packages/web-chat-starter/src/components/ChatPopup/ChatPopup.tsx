@@ -1,9 +1,7 @@
-import React from 'react'
 import { useChatPopupStyles } from './ChatPopup.style';
-import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, Typography } from '@mui/material';
-import { styled } from '@mui/material/styles';
+import { Box, IconButton } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
-import { ChatViewer } from '@kickoffbot.com/web-chat';
+import { ChatViewer, KickoffbotChatStoreProvider } from '@kickoffbot.com/web-chat';
 import { WebChatTheme } from '@kickoffbot.com/types';
 
 interface Props {
@@ -29,8 +27,10 @@ export const ChatPopup = ({ botId, chatTheme, onClose, externalVariables }: Prop
                     </IconButton>
                 </Box>
                 <Box className={classes.content}>
-                    <ChatViewer height={"100%"} projectId={botId} webViewOptions={chatTheme} runtimeUrl={process.env.NEXT_PUBLIC_WEB_BOT_RUNTIME_HOST!}
-                        externalVariables={externalVariables} />
+                    <KickoffbotChatStoreProvider>
+                        <ChatViewer height={"100%"} projectId={botId} webViewOptions={chatTheme} runtimeUrl={process.env.NEXT_PUBLIC_WEB_BOT_RUNTIME_HOST!}
+                            externalVariables={externalVariables} />
+                    </KickoffbotChatStoreProvider>
                 </Box>
             </Box>
         </Box>
