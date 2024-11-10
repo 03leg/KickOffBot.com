@@ -6,6 +6,7 @@ import ThemeSelector from './components/ThemeSelector'
 import ChatView from './components/ChatView'
 import { ConfirmProvider } from 'material-ui-confirm'
 import { AppDialogProvider } from '~/components/bot/bot-builder/Dialog/AppDialogProvider'
+import { KickoffbotChatStoreProvider } from '@kickoffbot.com/web-chat'
 
 
 export default function ThemeEditor() {
@@ -19,7 +20,9 @@ export default function ThemeEditor() {
                             <ThemeSelector />
                         </Box>
                         <Box className={classes.chatContainer}>
-                            <ChatView />
+                            <KickoffbotChatStoreProvider>
+                                <ChatView />
+                            </KickoffbotChatStoreProvider>
                         </Box>
                     </Box>
                 </Layout>
