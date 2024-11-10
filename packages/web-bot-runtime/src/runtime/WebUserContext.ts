@@ -1,5 +1,6 @@
 import { isNil } from 'lodash';
 import { BotProject, BotVariable } from '@kickoffbot.com/types';
+import { WordpressVariableChecker } from './helper/WordpressVariableChecker';
 
 export interface NextBotStep {
   blockId: string;
@@ -80,6 +81,10 @@ export class WebUserContext {
     const result = this._variables.get(name);
 
     if (isNil(result)) {
+      if (WordpressVariableChecker.isWordpressVariable(name)) {
+        return 'N/A';
+      }
+
       return `Variable '${name}' not found`;
     }
 
