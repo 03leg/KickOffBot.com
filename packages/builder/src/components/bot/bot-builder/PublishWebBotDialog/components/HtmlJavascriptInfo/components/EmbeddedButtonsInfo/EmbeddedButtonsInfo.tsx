@@ -13,7 +13,7 @@ interface Props {
 export const EmbeddedButtonsInfo = ({ webStarterUrl, currentBotId, uniqueId }: Props) => {
 
     const { classes } = useEmbeddedButtonsInfoStyles();
-    const [value] = useState<string>(`<div id="kickoffbot-buttons-${uniqueId}" style="height: 500px; width: 100%"></div>
+    const [value] = useState<string>(`<div id="kickoffbot-buttons-${uniqueId}"></div>
 <script>
   const kickoffbotWebStarter = document.createElement("script");
   kickoffbotWebStarter.async = true;
