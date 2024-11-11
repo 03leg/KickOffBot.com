@@ -44,7 +44,7 @@
   },
   "devDependencies": {},
   "scripts": {
-    "build": "webpack --mode production"
+    "build": "webpack --mode production && mv 'dist' '../builder/public/'"
   },
   "eslintConfig": {
     "extends": [
