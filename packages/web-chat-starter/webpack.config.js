@@ -23,7 +23,7 @@ module.exports = {
         test: /\.(woff(2)?|ttf|eot|svg)(\?v=\d+\.\d+\.\d+)?$/,
         type: "asset/resource",
         generator: {
-          filename: "css/[name][ext][query]",
+          filename: "css-web-chat-starter/[name][ext][query]",
         },
       },
       {
