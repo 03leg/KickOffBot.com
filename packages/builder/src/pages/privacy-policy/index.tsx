@@ -129,10 +129,10 @@ export default function PrivacyPolicy() {
                     Data from Google Sheets
                 </Typography>
                 <Typography variant="body1" paragraph>
-                    We want to assure our users that any data collected from Google Sheets through our application is handled with the utmost care and confidentiality. We do not share, sell, or disclose any information obtained from users' Google Sheets with third parties (such as AI models). All data is used solely for the purpose of enhancing your experience within our platform and remains securely stored without external access. Your privacy is our priority, and we are committed to ensuring that your information stays private and protected.
+                    We want to assure our users that any data collected from Google Sheets through our application is handled with the utmost care and confidentiality. We do not share, sell, or disclose any information obtained from users&apos; Google Sheets with third parties (such as AI models). All data is used solely for the purpose of enhancing your experience within our platform and remains securely stored without external access. Your privacy is our priority, and we are committed to ensuring that your information stays private and protected.
                 </Typography>
                 <Typography variant="body1" paragraph>
-                    Kickoffbot.com's use and transfer of information received from Google APIs to any other app will adhere to <Link href="https://developers.google.com/terms/api-services-user-data-policy#additional_requirements_for_specific_api_scopes">Google API Services User Data Policy</Link>, including the Limited Use requirements.
+                    Kickoffbot.com&apos;s use and transfer of information received from Google APIs to any other app will adhere to <Link href="https://developers.google.com/terms/api-services-user-data-policy#additional_requirements_for_specific_api_scopes">Google API Services User Data Policy</Link>, including the Limited Use requirements.
                 </Typography>
                 <Typography variant="h6" gutterBottom>
                     GDPR Data Protection Rights
