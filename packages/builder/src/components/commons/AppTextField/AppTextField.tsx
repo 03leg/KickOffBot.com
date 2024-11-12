@@ -29,7 +29,7 @@ export const AppTextField = (props: Props) => {
             <TextField fullWidth {...props} value={props.value} onChange={(e) => props.onValueChange(e.target.value)} inputRef={inputRef}
                 onSelect={updateSelectionStart} />
             <Box className={classes.buttons}>
-                {(props.showVariableSelector ?? true) && <VariableSelectorDialog onInsertVariable={handleInsertVariable} supportPathForObject={false} />}
+                {(props.showVariableSelector ?? true) && <VariableSelectorDialog onInsertVariable={handleInsertVariable} supportPathForObject={true} />}
                 {!isNil(contextObjectProperties) && <StringItemsMenu values={contextObjectProperties} onInsertItem={handleInsertContextPropertyInText} buttonIcon={<ControlPointIcon />} />}
             </Box>
         </Box>
