@@ -1,3 +1,4 @@
+import React from 'react';
 import { useChatPopupStyles } from './ChatPopup.style';
 import { Box, IconButton } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
