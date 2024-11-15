@@ -1,5 +1,5 @@
 const path = require("path");
-const webpack = require("webpack"); 
+const webpack = require("webpack");
 
 require("dotenv").config({ path: "./.env" });
 
@@ -9,6 +9,7 @@ module.exports = {
     filename: "kickoffbot-web-starter.js",
     path: path.resolve(__dirname, "dist"),
   },
+  // optimization: { minimize: false },
   resolve: {
     extensions: [".tsx", ".ts", ".js"],
   },
