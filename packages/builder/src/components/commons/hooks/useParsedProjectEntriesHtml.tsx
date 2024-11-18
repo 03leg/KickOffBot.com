@@ -11,8 +11,9 @@ const parseVariables = (html: string, regex: RegExp, getVariableByName: (variabl
   for (const m of variableMatches) {
     const value = m[1];
 
-    const variableRefItems = value?.split('.');
-    const variableName = variableRefItems?.[0];
+    const parsedArray = value?.split('|') as [string, string];
+    const variablePathArray = parsedArray[0].split('.') as [string, string];
+    const variableName = variablePathArray[0];
 
     if (!isNil(variableName) && isNil(getVariableByName(variableName))) {
       html = isNil(value)

@@ -355,6 +355,8 @@ export interface BotTemplate extends MessageDescription {
   contextVariableId?: BotVariable["id"];
   showContentWhenArrayIsEmpty: boolean;
 
+  isPlainText?: boolean;
+
   emptyArrayJson?: string;
   emptyArrayHtmlContent?: string;
   emptyArrayTelegramContent?: string;
@@ -369,6 +371,8 @@ export enum VariableConverter {
 
   RANDOM = "random",
   CONCAT = "concat",
+
+  FORMAT = "format",
 }
 
 export interface SendTelegramMessageIntegrationUIElement extends UIElement, MessageDescription {

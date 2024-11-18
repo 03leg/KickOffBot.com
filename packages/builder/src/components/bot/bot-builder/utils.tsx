@@ -11,7 +11,8 @@ import {
     WebRatingUIElement,
     WebRatingView,
     WebMultipleChoiceUIElement,
-    DataSourceType
+    DataSourceType,
+    NOW_DATE_TIME_VARIABLE_NAME
 } from "@kickoffbot.com/types";
 import MessageIcon from '@mui/icons-material/Message';
 import TextFieldsIcon from '@mui/icons-material/TextFields';
@@ -98,6 +99,13 @@ const WEB_DEFAULT_PROJECT_STATE: BotProject = {
     blocks: [...getWebDefaultBlocks()],
     links: [],
     variables: [
+        {
+            id: NOW_DATE_TIME_VARIABLE_NAME,
+            type: VariableType.STRING,
+            name: NOW_DATE_TIME_VARIABLE_NAME,
+            value: "It will be the current date and(or) time when this variable is used",
+            isPlatformVariable: true,
+        },
     ],
     transformDescription: { scale: 1, x: 0, y: 0 },
     templates: [],
@@ -146,7 +154,7 @@ export function getWebInputElements() {
         { type: ElementType.WEB_INPUT_EMAIL, title: 'E-mail', icon: <AlternateEmailIcon /> },
         { type: ElementType.WEB_INPUT_BUTTONS, title: 'Buttons', icon: <SmartButtonIcon /> },
         { type: ElementType.WEB_INPUT_CARDS, title: 'Cards', icon: <BadgeIcon /> },
-        { type: ElementType.WEB_RATING, title: 'Rating', icon: <GradeIcon />},
+        { type: ElementType.WEB_RATING, title: 'Rating', icon: <GradeIcon /> },
         { type: ElementType.WEB_OPINION_SCALE, title: 'Opinion scale', icon: <SentimentNeutralIcon />, size: 12 },
         { type: ElementType.WEB_MULTIPLE_CHOICE, title: 'Multiple choice', icon: <CheckBoxIcon />, size: 12 },
     ];
@@ -408,7 +416,7 @@ export function getNewUIElementTemplate(id: string, data: DraggableElementData):
             }
             return result;
         }
-        case ElementType.WEB_RATING:{
+        case ElementType.WEB_RATING: {
             const result: WebRatingUIElement = {
                 id,
                 type: ElementType.WEB_RATING,
@@ -420,7 +428,7 @@ export function getNewUIElementTemplate(id: string, data: DraggableElementData):
             }
             return result;
         }
-        case ElementType.WEB_MULTIPLE_CHOICE:{
+        case ElementType.WEB_MULTIPLE_CHOICE: {
             const result: WebMultipleChoiceUIElement = {
                 id,
                 type: ElementType.WEB_MULTIPLE_CHOICE,

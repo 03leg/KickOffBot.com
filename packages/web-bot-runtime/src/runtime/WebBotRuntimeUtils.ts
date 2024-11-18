@@ -4,6 +4,7 @@ import {
   ChangeBooleanVariableWorkflowStrategy,
   FlowDesignerLink,
   FlowDesignerUIBlockDescription,
+  NOW_DATE_TIME_VARIABLE_NAME,
   PortType,
   UIElement,
   VariableConverter,
@@ -13,6 +14,7 @@ import { isNil, isPlainObject } from 'lodash';
 import { Parser } from 'expr-eval';
 import { WebUserContext } from './WebUserContext';
 import { throwIfNil } from 'src/utils/guard';
+import * as moment from 'moment';
 
 export class WebBotRuntimeUtils {
   private _botProject: BotProject;
@@ -102,6 +104,10 @@ export class WebBotRuntimeUtils {
     const variableName = variablePathArray[0];
     const path = variablePathArray[1];
 
+    if (variableName === NOW_DATE_TIME_VARIABLE_NAME) {
+      return this.getCurrentDateTime(converter, converterParams);
+    }
+
     if (path ?? converter) {
       const variableValue = userContext.getVariableValueByName(variableName);
 
@@ -162,6 +168,18 @@ export class WebBotRuntimeUtils {
     }
 
     return userContext.getVariableValueByName(text) as string;
+  }
+
+  private getCurrentDateTime(
+    converter: VariableConverter,
+    converterParams: (string | number)[],
+  ): string {
+    if (converter === 'format' && converterParams.length === 1) {
+      const format = converterParams[0] as string;
+      return moment().format(format);
+    }
+
+    return moment().format();
   }
 
   private static getValueForArrayOfNumbersOrString(
