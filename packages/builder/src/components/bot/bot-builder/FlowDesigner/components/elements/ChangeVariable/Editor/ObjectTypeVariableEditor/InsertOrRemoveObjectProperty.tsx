@@ -31,7 +31,7 @@ export const InsertOrRemoveObjectProperty = ({ operation, propertyName, property
             <AppTextField label="Property Name" showVariableSelector={false} value={propertyName ?? ''} onValueChange={onPropertyChange} contextObjectProperties={targetObjectProps} />
             {operation === ChangeObjectVariableDataSource.INSERT_PROPERTY &&
                 <Box sx={{ mt: 2 }}>
-                    <AppTextField label="Property Value" value={propertyValue ?? ''} onValueChange={onPropertyValueChange} />
+                    <AppTextField label="Property Value" value={propertyValue ?? ''} onValueChange={onPropertyValueChange} showTemplateSelector={true}  />
                 </Box>
             }
         </Box>

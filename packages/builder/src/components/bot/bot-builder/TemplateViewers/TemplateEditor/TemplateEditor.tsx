@@ -7,6 +7,7 @@ import { isNil } from 'lodash';
 import { EditorState, convertFromRaw } from 'draft-js';
 import { useFlowDesignerStore } from '../../store';
 import { WebTextEditor } from '~/components/commons/WebTextEditor';
+import { getTemplateContent } from './TemplateEditor.utils';
 
 interface Props {
     template: BotTemplate;
@@ -23,6 +24,7 @@ export const TemplateEditor = ({ template, onTemplateChange }: Props) => {
         platform: state.platform
     }));
     const [showContentWhenArrayIsEmpty, setShowContentWhenArrayIsEmpty] = useState<boolean>(template.showContentWhenArrayIsEmpty ?? false);
+    const [isPlainText, setIsPlainText] = useState<boolean>(template.isPlainText ?? false);
 
     const itemContent = isNil(template.json) ? void 0 : EditorState.createWithContent(convertFromRaw(JSON.parse(template.json)));
     const emptyArrayContent = isNil(template.emptyArrayJson) ? void 0 : EditorState.createWithContent(convertFromRaw(JSON.parse(template.emptyArrayJson)));
@@ -35,17 +37,17 @@ export const TemplateEditor = ({ template, onTemplateChange }: Props) => {
 
     const handleContentChange = useCallback((jsonState: string, htmlContent: string, telegramContent?: string) => {
         template.json = jsonState;
-        template.htmlContent = htmlContent;
+        template.htmlContent = getTemplateContent(htmlContent, isPlainText);
         template.telegramContent = telegramContent;
         onTemplateChange(template); //?
-    }, [onTemplateChange, template]);
+    }, [isPlainText, onTemplateChange, template]);
 
     const handleEmptyArrayContentChange = useCallback((jsonState: string, htmlContent: string, telegramContent?: string) => {
         template.emptyArrayJson = jsonState;
-        template.emptyArrayHtmlContent = htmlContent;
+        template.emptyArrayHtmlContent = getTemplateContent(htmlContent, isPlainText);
         template.emptyArrayTelegramContent = telegramContent;
         onTemplateChange(template); //?
-    }, [onTemplateChange, template]);
+    }, [isPlainText, onTemplateChange, template]);
 
     const handleVariableChange = useCallback((newVariable: BotVariable) => {
         template.contextVariableId = newVariable.id;
@@ -85,15 +87,32 @@ export const TemplateEditor = ({ template, onTemplateChange }: Props) => {
         onTemplateChange(template);
     }, [onTemplateChange, template]);
 
+
+    const handleIsPlainTextChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
+        setIsPlainText(event.target.checked);
+        template.isPlainText = event.target.checked;
+
+        if (event.target.checked && template.htmlContent) {
+            template.htmlContent = getTemplateContent(template.htmlContent, true);
+
+            if (template.emptyArrayHtmlContent && showContentWhenArrayIsEmpty) {
+                template.emptyArrayHtmlContent = getTemplateContent(template.emptyArrayHtmlContent, true);
+            }
+        }
+
+        onTemplateChange(template);
+    }, [onTemplateChange, showContentWhenArrayIsEmpty, template]);
+
     return (
         <Box sx={{ display: 'flex', flexDirection: 'column', padding: 1 }}>
             <TextField fullWidth label='Name' variant="outlined" value={name} onChange={handleNameChange} />
-            <Box sx={{ mt: 2, mb: 2 }}>
+            <Box sx={{ mt: 2, mb: 1 }}>
                 <VariableSelector variableTypes={[VariableType.ARRAY]} valueId={contextVariableId ?? ''} onVariableChange={handleVariableChange} />
             </Box>
 
             {!isNil(contextVariableId) &&
                 <>
+                    <FormControlLabel sx={{ marginTop: 0 }} control={<Checkbox checked={isPlainText} onChange={handleIsPlainTextChange} />} label="Without HTML tags" />
                     <InputLabel sx={{ marginBottom: 1, fontSize: '0.75rem' }}>Content for each array item</InputLabel>
                     {platform === BotPlatform.Telegram && <TextEditor showInsertTemplateButton={false} onContentChange={handleContentChange} initialState={itemContent} contextObjectProperties={contextObjectProperties} />}
                     {platform === BotPlatform.WEB && <WebTextEditor showInsertTemplateButton={false} onContentChange={handleContentChange} jsonState={template.json} contextObjectProperties={contextObjectProperties} />}

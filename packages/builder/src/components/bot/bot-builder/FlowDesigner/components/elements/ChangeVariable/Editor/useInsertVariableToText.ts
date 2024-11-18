@@ -2,6 +2,7 @@ import { BotVariable, VariableConverter } from "@kickoffbot.com/types";
 import { isNil } from "lodash";
 import React, { useCallback } from "react";
 import {
+  getTemplateReference,
   getTextPropertyReference,
   getTextVariableReference,
 } from "~/components/bot/bot-builder/utils";
@@ -65,10 +66,33 @@ export function useInsertVariableToText(
     [onChangeValue, selectionStart, value]
   );
 
+  const handleInsertTemplateInText = useCallback(
+    (templateName: string) => {
+      let position = selectionStart;
+      const content = value ?? "";
+
+      if (isNil(position)) {
+        position = content.length;
+      }
+
+      const output = [
+        content.slice(0, position),
+        getTemplateReference(templateName),
+        content.slice(position),
+      ].join("");
+
+      onChangeValue(output);
+    },
+    [onChangeValue, selectionStart, value]
+  );
+
+  
+
   return {
     handleInsertVariable,
     inputRef,
     updateSelectionStart,
     handleInsertContextPropertyInText,
+    handleInsertTemplateInText
   };
 }

@@ -3,6 +3,7 @@ import {
   ChangeObjectVariableDataSource,
   ArrayFilterType,
   ChangeVariableUIElement,
+  NOW_DATE_TIME_VARIABLE_NAME,
 } from '@kickoffbot.com/types';
 import { throwIfNil } from 'src/utils/guard';
 import { ChangeArrayVariableHelper } from './ChangeArrayVariableHelper';
@@ -97,7 +98,11 @@ export class ChangeObjectVariableHelper {
 
     let parsedValue: unknown;
     const variableRefText = (workflow.propertyValue as string).trim();
-    if (/<%variables.(.*?)%>/g.test(variableRefText)) {
+    // doesn't support converters
+    if (
+      /<%variables.(.*?)%>/g.test(variableRefText) &&
+      !variableRefText.startsWith(`<%variables.${NOW_DATE_TIME_VARIABLE_NAME}`)
+    ) {
       const matches = variableRefText.matchAll(/<%variables.(.*?)%>/g);
       const match = matches.next();
       const variableName = match.value[1];

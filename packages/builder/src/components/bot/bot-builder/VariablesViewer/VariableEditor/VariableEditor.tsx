@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from 'react';
-import { VariableType, type BotVariable } from '@kickoffbot.com/types';
+import { NOW_DATE_TIME_VARIABLE_NAME, VariableType, type BotVariable } from '@kickoffbot.com/types';
 import { Box, FormControl, InputLabel, MenuItem, Select, type SelectChangeEvent, TextField, FormLabel, RadioGroup, FormControlLabel, Radio, Link } from '@mui/material';
 import { Editor } from '@monaco-editor/react';
 
@@ -31,6 +31,11 @@ export const VariableEditor = ({ variable, onVariableChange }: Props) => {
     }, [setValue, variable])
 
     const handleValueChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
+
+        if (variable.id === NOW_DATE_TIME_VARIABLE_NAME) {
+            return;
+        }
+
         setVariableValue(event.target.value);
         onVariableChange(variable);
     }, [onVariableChange, setVariableValue, variable]);
