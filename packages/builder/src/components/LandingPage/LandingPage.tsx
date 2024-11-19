@@ -7,6 +7,7 @@ import Footer from './components/Footer';
 import Head from 'next/head';
 import { GoogleAnalytics } from '@next/third-parties/google';
 import { env } from '~/env.mjs';
+import { Samples } from './components/Samples';
 
 export function LandingPage() {
 
@@ -17,6 +18,7 @@ export function LandingPage() {
       </Head>
       <AppAppBar />
       <Hero />
+      <Samples />
       <Box sx={{ bgcolor: 'background.default' }}>
         {/* <LogoCollection />
         <Features />

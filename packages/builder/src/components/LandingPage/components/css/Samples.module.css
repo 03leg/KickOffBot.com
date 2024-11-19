@@ -1,0 +1,36 @@
+.header {
+  font-size: 2rem; /* Equivalent to text-5xl */
+  font-weight: 800; /* Equivalent to font-extrabold */
+  line-height: 1.2; /* Equivalent to leading-tighter */
+  letter-spacing: -0.025em; /* Equivalent to tracking-tighter */
+  margin-bottom: 1rem; /* Equivalent to mb-4 */
+  text-align: center;
+}
+
+@media (min-width: 768px) {
+  .header {
+    font-size: 3rem; /* Equivalent to md:text-6xl */
+  }
+}
+
+.gradientText {
+  background: linear-gradient(
+    to right,
+    #3b82f6,
+    #14b8a6
+  ); /* Equivalent to bg-gradient-to-r from-blue-500 to-teal-400 */
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.description {
+  text-align: center;
+  font-size: 1.2rem;
+  color: #4b5563;
+}
+
+@media (min-width: 768px) {
+  .description {
+    font-size: 1.7rem; /* Equivalent to md:text-6xl */
+  }
+}
