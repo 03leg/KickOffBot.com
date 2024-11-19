@@ -101,6 +101,8 @@ export class ChangeObjectVariableHelper {
     // doesn't support converters
     if (
       /<%variables.(.*?)%>/g.test(variableRefText) &&
+      (variableRefText.match(/./g) || []).length === 1 &&
+      variableRefText.includes('|') === false &&
       !variableRefText.startsWith(`<%variables.${NOW_DATE_TIME_VARIABLE_NAME}`)
     ) {
       const matches = variableRefText.matchAll(/<%variables.(.*?)%>/g);
