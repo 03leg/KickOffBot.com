@@ -515,7 +515,7 @@ export class WebBotRuntime {
 
   private handleChangeVariableElement(element: ChangeVariableUIElement) {
     if (!element.selectedVariableId) {
-      throw new Error('InvalidOperationError: variable is null');
+      return;
     }
 
     const userContext = this._userContext;

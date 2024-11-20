@@ -96,6 +96,10 @@ export class RequestElementConverter {
       minutesStep: element.minutesStep,
       useAmPm: element.useAmPm,
       availableDateTimes: element.availableDateTimes,
+      maxDate: element.maxDate,
+      minDate: element.minDate,
+      disableDaysOfWeek: element.disableDaysOfWeek,
+      disabledDaysOfWeek: element.disabledDaysOfWeek,
     };
 
     if (
@@ -110,6 +114,76 @@ export class RequestElementConverter {
 
       if (Array.isArray(availableDatesVariableValue)) {
         result.variableAvailableDateTimes = availableDatesVariableValue;
+      }
+    }
+
+    if (
+      element.disabledDatesVariableId &&
+      result.availableDateTimes !== AvailableDateTimes.DatesFromVariable
+    ) {
+      const variable = this._utils.getVariableById(
+        element.disabledDatesVariableId,
+      );
+      const disabledDatesVariableValue =
+        this._userContext.getVariableValueByName(variable.name) as string[];
+
+      if (Array.isArray(disabledDatesVariableValue)) {
+        result.disabledDates = disabledDatesVariableValue;
+      }
+    }
+
+    if (
+      element.disabledTimesVariableId &&
+      result.availableDateTimes !== AvailableDateTimes.DatesFromVariable
+    ) {
+      const variable = this._utils.getVariableById(
+        element.disabledTimesVariableId,
+      );
+      const disabledTimesVariableValue =
+        this._userContext.getVariableValueByName(variable.name) as string[];
+
+      if (Array.isArray(disabledTimesVariableValue)) {
+        result.disabledTimes = disabledTimesVariableValue;
+      }
+    }
+
+    if (
+      element.disabledDateAndTimesVariableId &&
+      result.availableDateTimes !== AvailableDateTimes.DatesFromVariable
+    ) {
+      const variable = this._utils.getVariableById(
+        element.disabledDateAndTimesVariableId,
+      );
+      const disabledDateAndTimesVariableValue =
+        this._userContext.getVariableValueByName(variable.name) as string[];
+
+      if (Array.isArray(disabledDateAndTimesVariableValue)) {
+        result.disabledDateAndTimes = disabledDateAndTimesVariableValue;
+      }
+    }
+
+    if (
+      element.parkTimeVariableId &&
+      (element.maxDate ||
+        (element.maxTime && element.useTime) ||
+        element.availableDateTimes === AvailableDateTimes.FutureDates ||
+        element.availableDateTimes === AvailableDateTimes.FutureDatesAndToday)
+    ) {
+      const variable = this._utils.getVariableById(element.parkTimeVariableId);
+      let parkTimeVariableValue = this._userContext.getVariableValueByName(
+        variable.name,
+      ) as number;
+
+      if (typeof parkTimeVariableValue === 'string') {
+        parkTimeVariableValue = Number(parkTimeVariableValue);
+      }
+
+      if (
+        typeof parkTimeVariableValue === 'number' &&
+        !isNaN(parkTimeVariableValue)
+      ) {
+        result.parkTime = parkTimeVariableValue;
+        result.parkTimeType = element.parkTimeType;
       }
     }
 

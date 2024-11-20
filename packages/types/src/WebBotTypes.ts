@@ -103,6 +103,12 @@ export interface WebInputNumberUIElement extends UIElement {
   step?: number;
 }
 
+export enum ParkTimeType {
+  Mins = "mins",
+  Hours = "hours",
+  Days = "days",
+}
+
 export interface WebInputDateTimeUIElement extends UIElement {
   variableId?: string;
   dateTimeFormat?: string;
@@ -115,6 +121,19 @@ export interface WebInputDateTimeUIElement extends UIElement {
   maxTime?: string;
   minTime?: string;
   minutesStep?: number;
+
+  disabledDatesVariableId?: BotVariable["id"];
+  disabledTimesVariableId?: BotVariable["id"];
+  disabledDateAndTimesVariableId?: BotVariable["id"];
+
+  disableDaysOfWeek: boolean;
+  disabledDaysOfWeek?: number[];
+
+  maxDate?: string;
+  minDate?: string;
+
+  parkTimeVariableId?: BotVariable["id"];
+  parkTimeType: ParkTimeType;
 }
 
 export interface WebInputPhoneUIElement extends UIElement {
@@ -297,6 +316,18 @@ export interface DateTimeRequestElement extends RequestElementBase {
   minTime?: string;
   minutesStep?: number;
   variableAvailableDateTimes?: string[];
+
+  disabledDates?: string[];
+  disabledTimes?: string[];
+  disabledDateAndTimes?: string[];
+  maxDate?: string;
+  minDate?: string;
+
+  parkTime?: number;
+  parkTimeType?: ParkTimeType;
+
+  disableDaysOfWeek: boolean;
+  disabledDaysOfWeek?: number[];
 }
 
 export interface WebCardChatItem {
