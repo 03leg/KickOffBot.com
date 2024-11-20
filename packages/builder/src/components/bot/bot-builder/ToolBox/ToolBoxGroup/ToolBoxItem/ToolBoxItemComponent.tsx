@@ -35,7 +35,7 @@ export const ToolBoxItemComponent = ({ item }: Props) => {
 
     return (
         <Box ref={setNodeRef} {...listeners} {...attributes} sx={{
-            margin: 1, display: 'flex',
+            margin: 0.5, display: 'flex',
             backgroundColor: ({ palette }) => palette.grey[100], borderRadius: 1, padding: 1,
             "&:hover": {
                 boxShadow: '0 2px 8px #c7c7c7fa',

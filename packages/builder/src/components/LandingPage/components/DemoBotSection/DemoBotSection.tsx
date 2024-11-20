@@ -73,7 +73,7 @@ export default function DemoBotSection({ header, botUrl, googleSpreadsheetUrl, b
                     })}>
                         <iframe
                             src={botUrl}
-                            style={{ width: "100%", height: "calc(100% - 1px)", border: "none" }}
+                            style={{ width: "100%", height: "100%", border: "none" }}
                         ></iframe>
                     </Box>
                 </Box>
