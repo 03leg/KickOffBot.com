@@ -10,7 +10,7 @@ interface Props {
 export const ToolBoxGroupComp = ({ group }: Props) => {
     return (
         <Stack>
-            <Typography variant="h6" component="div" sx={{ flexGrow: 1, margin: 1 }}>
+            <Typography variant="h6" component="div" sx={{ flexGrow: 1, margin: 1, marginBottom: 0 }}>
                 {group.title}
             </Typography>
             <Grid container>
