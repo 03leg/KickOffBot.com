@@ -7,4 +7,12 @@ export const useWebDateTimeInputEditorStyles = makeStyles()(({ spacing }) => ({
   variableSelector: {
     marginTop: spacing(1),
   },
+  parkTimeContainer: {
+    marginTop: spacing(1),
+    display: "flex",
+  },
+  parkTimeTypeSelector: {
+    marginLeft: spacing(1),
+    width: "auto",
+  },
 }));

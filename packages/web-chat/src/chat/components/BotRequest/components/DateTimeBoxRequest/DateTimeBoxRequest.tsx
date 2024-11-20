@@ -1,7 +1,7 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { Box } from '@mui/material';
 import { useDateTimeBoxRequestStyles } from './DateTimeBoxRequest.style';
-import { AvailableDateTimes, DateTimeRequestElement, RequestDescriptionWebRuntime } from '@kickoffbot.com/types';
+import { AvailableDateTimes, DateTimeRequestElement, ParkTimeType, RequestDescriptionWebRuntime } from '@kickoffbot.com/types';
 import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
 import dayjs, { Dayjs } from 'dayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
@@ -9,7 +9,11 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DateTimePicker, DateTimeValidationError, TimeView } from '@mui/x-date-pickers';
 import { SendResponseButton } from '../SendResponseButton';
 import { throwIfNil } from '../../../../utils/guard';
+import { isNil } from 'lodash';
+import customParseFormat from 'dayjs/plugin/customParseFormat';
 
+
+dayjs.extend(customParseFormat);
 
 interface Props {
     request: RequestDescriptionWebRuntime;
@@ -18,7 +22,7 @@ interface Props {
 export const DateTimeBoxRequest = ({ request }: Props) => {
     const dateTimeElement = request.element as DateTimeRequestElement;
     const { classes } = useDateTimeBoxRequestStyles();
-    const [dateValue, setDateValue] = useState<Dayjs | null>(null);
+    const [dateValue, setDateValue] = useState<Dayjs | null>(null); 
     const [error, setError] = useState<DateTimeValidationError | null>(null);
 
     const handleSendResponse = useCallback(() => {
@@ -45,6 +49,10 @@ export const DateTimeBoxRequest = ({ request }: Props) => {
             return dayjs(new Date()).add(1, 'day');
         }
 
+        if (dateTimeElement.minDate) {
+            return dayjs(dateTimeElement.minDate);
+        }
+
         return undefined;
 
     }, [dateTimeElement.availableDateTimes]);
@@ -58,11 +66,25 @@ export const DateTimeBoxRequest = ({ request }: Props) => {
             return dayjs(new Date()).add(-1, 'day');
         }
 
+        if (dateTimeElement.maxDate) {
+
+            if (dateTimeElement.parkTime && dateTimeElement.parkTimeType === ParkTimeType.Days) {
+                return dayjs(dateTimeElement.maxDate).add(-dateTimeElement.parkTime, 'day');
+            }
+
+            return dayjs(dateTimeElement.maxDate);
+        }
+
         return undefined;
 
     }, [dateTimeElement.availableDateTimes]);
 
     const handleShouldDisableDate = useCallback((date: Dayjs): boolean => {
+
+        if (dateTimeElement.disableDaysOfWeek && Array.isArray(dateTimeElement.disabledDaysOfWeek)) {
+            return dateTimeElement.disabledDaysOfWeek.includes(date.day());
+        }
+
         if (dateTimeElement.availableDateTimes === AvailableDateTimes.DatesFromVariable && dateTimeElement.variableAvailableDateTimes) {
             const variableValue = dateTimeElement.variableAvailableDateTimes;
             const datesFromVariable = variableValue.map(d => dayjs(d, dateTimeElement.dateTimeFormat, false).format('YYYY-MM-DD'));
@@ -71,13 +93,23 @@ export const DateTimeBoxRequest = ({ request }: Props) => {
             return !datesFromVariable.includes(currentDate);
         }
 
+        if (!isNil(dateTimeElement.disabledDates)) {
+            return dateTimeElement.disabledDates.map(d => dayjs(d, dateTimeElement.dateTimeFormat, false).format('YYYY-MM-DD')).includes(date.format('YYYY-MM-DD'));
+        }
+
         return false;
     }, [dateTimeElement.availableDateTimes, dateTimeElement.variableAvailableDateTimes, dateTimeElement.dateTimeFormat]);
 
     const handleShouldDisableTime = useCallback((date: Dayjs, view: TimeView): boolean => {
+
+        if ([AvailableDateTimes.FutureDates, AvailableDateTimes.PastDates].includes(dateTimeElement.availableDateTimes)
+            && date.format('YYYY-MM-DD') === dayjs(new Date()).format('YYYY-MM-DD')) {
+            return true;
+        }
+
+
         if (dateTimeElement.availableDateTimes === AvailableDateTimes.DatesFromVariable && dateTimeElement.variableAvailableDateTimes) {
             const variableValue = dateTimeElement.variableAvailableDateTimes;
-
             const actualFormat = view === 'hours' ? 'YYYY-MM-DD HH' : 'YYYY-MM-DD HH:mm';
 
             const datesFromVariable = variableValue.map(d => dayjs(d, dateTimeElement.dateTimeFormat, false).format(actualFormat));
@@ -86,7 +118,22 @@ export const DateTimeBoxRequest = ({ request }: Props) => {
             return !datesFromVariable.includes(currentDate);
         }
 
-        return false;
+        let result = false;
+
+        if (!isNil(dateTimeElement.disabledTimes) && view === 'minutes') {
+            const format = 'HH:mm';
+            result = dateTimeElement.disabledTimes.map(d => dayjs(getMinMaxValue(d), dateTimeElement.dateTimeFormat, false).format(format)).includes(date.format(format));
+        }
+
+        if (!result && !isNil(dateTimeElement.disabledDateAndTimes) && view === 'minutes') {
+            const dateAndTimeFormat = 'YYYY-MM-DD HH:mm';
+
+            result = dateTimeElement.disabledDateAndTimes.map(d => {
+                return dayjs(d, dateTimeElement.dateTimeFormat, false).format(dateAndTimeFormat);
+            }).includes(date.format(dateAndTimeFormat));
+        }
+
+        return result;
     }, [dateTimeElement.availableDateTimes, dateTimeElement.variableAvailableDateTimes, dateTimeElement.dateTimeFormat]);
 
     const getMinMaxValue = useCallback((value: string) => {
@@ -107,6 +154,10 @@ export const DateTimeBoxRequest = ({ request }: Props) => {
     const maxTime = useMemo(() => {
         if (dateTimeElement.maxTime) {
             const maxValue = getMinMaxValue(dateTimeElement.maxTime);
+
+            if (dateTimeElement.parkTime && dateTimeElement.parkTimeType !== ParkTimeType.Days) {
+                return maxValue.add(-dateTimeElement.parkTime, dateTimeElement.parkTimeType === ParkTimeType.Hours ? 'hour' : 'minute');
+            }
 
             return maxValue;
         }
