@@ -76,7 +76,6 @@ export const ChangeVariableEditor = ({ element }: Props) => {
     // eslint-disable-next-line @typescript-eslint/no-redundant-type-constituents
     const handleWorkflowChange = useCallback((workflow: ChangeNumberStringVariableWorkflow | ChangeDateTimeVariableWorkflow | ChangeBooleanVariableWorkflow | ChangeObjectVariableWorkflow | ChangeArrayVariableWorkflow) => {
         element.workflowDescription = workflow;
-        console.log(workflow);
     }, [element]);
 
     const handleRestoreInitialValueChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {

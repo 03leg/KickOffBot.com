@@ -1,7 +1,7 @@
 import { useCallback, useMemo, useState } from 'react';
 import { Box } from '@mui/material';
 import { useDateTimeBoxRequestStyles } from './DateTimeBoxRequest.style';
-import { AvailableDateTimes, DateTimeRequestElement, ParkTimeType, RequestDescriptionWebRuntime } from '@kickoffbot.com/types';
+import { AvailableDateTimes, DateTimeRequestElement, RequestDescriptionWebRuntime, TimeDurationUnit } from '@kickoffbot.com/types';
 import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
 import dayjs, { Dayjs } from 'dayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
@@ -68,7 +68,7 @@ export const DateTimeBoxRequest = ({ request }: Props) => {
 
         if (dateTimeElement.maxDate) {
 
-            if (dateTimeElement.parkTime && dateTimeElement.parkTimeType === ParkTimeType.Days) {
+            if (dateTimeElement.parkTime && dateTimeElement.parkTimeType === TimeDurationUnit.DAYS) {
                 return dayjs(dateTimeElement.maxDate).add(-dateTimeElement.parkTime, 'day');
             }
 
@@ -155,8 +155,8 @@ export const DateTimeBoxRequest = ({ request }: Props) => {
         if (dateTimeElement.maxTime) {
             const maxValue = getMinMaxValue(dateTimeElement.maxTime);
 
-            if (dateTimeElement.parkTime && dateTimeElement.parkTimeType !== ParkTimeType.Days) {
-                return maxValue.add(-dateTimeElement.parkTime, dateTimeElement.parkTimeType === ParkTimeType.Hours ? 'hour' : 'minute');
+            if (dateTimeElement.parkTime && dateTimeElement.parkTimeType !== TimeDurationUnit.DAYS) {
+                return maxValue.add(-dateTimeElement.parkTime, dateTimeElement.parkTimeType === TimeDurationUnit.HOURS ? 'hour' : 'minute');
             }
 
             return maxValue;

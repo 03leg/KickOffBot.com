@@ -13,8 +13,8 @@ import {
     WebMultipleChoiceUIElement,
     DataSourceType,
     NOW_DATE_TIME_VARIABLE_NAME,
-    ParkTimeType,
-    WebLogicBrowserCodeUIElement
+    WebLogicBrowserCodeUIElement,
+    TimeDurationUnit
 } from "@kickoffbot.com/types";
 import MessageIcon from '@mui/icons-material/Message';
 import TextFieldsIcon from '@mui/icons-material/TextFields';
@@ -341,7 +341,7 @@ export function getNewUIElementTemplate(id: string, data: DraggableElementData):
                 dateTimeFormat: 'DD/MM/YYYY',
                 useTime: false,
                 disableDaysOfWeek: false,
-                parkTimeType: ParkTimeType.Mins
+                parkTimeType: TimeDurationUnit.MINUTES
             };
             return result;
         }
