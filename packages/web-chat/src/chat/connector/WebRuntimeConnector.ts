@@ -93,7 +93,7 @@ export class WebRuntimeConnector {
           const clientCodeDescription = item.content as ClientCodeDescriptionRuntime;
           const result = await ClientCodeExecutor.execute(clientCodeDescription);
 
-          this.handleClientCodeExecuted(item, result);
+          await this.handleClientCodeExecuted(item, result);
           break;
         }
       }
