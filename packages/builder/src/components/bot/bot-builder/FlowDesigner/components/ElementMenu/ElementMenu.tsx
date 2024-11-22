@@ -9,7 +9,7 @@ import { useConfirm } from 'material-ui-confirm';
 import { TextContentEditor } from '../elements/TextContent/Editor';
 import { ButtonsEditor } from '../elements/ButtonsInput/Editor';
 import { TextInputEditor } from '../elements/TextInput/Editor';
-import { ChangeVariableUIElement, ConditionUIElement, ContentTextUIElement, EditMessageUIElement, ElementType, GoogleSheetsIntegrationUIElement, HTTPRequestIntegrationUIElement, InputButtonsUIElement, InputTextUIElement, OutputPortDescription, RemoveMessageUIElement, SendTelegramMessageIntegrationUIElement, UIElement, WebContentMediaUIElement, WebContentTextUIElement, WebInputButtonsUIElement, WebInputCardsUIElement, WebInputDateTimeUIElement, WebInputEmailUIElement, WebInputNumberUIElement, WebInputPhoneUIElement, WebInputTextUIElement, WebLogicRemoveMessagesUIElement, WebMediaType, WebMultipleChoiceUIElement, WebOpinionScaleUIElement, WebRatingUIElement } from '@kickoffbot.com/types';
+import { ChangeVariableUIElement, ConditionUIElement, ContentTextUIElement, EditMessageUIElement, ElementType, GoogleSheetsIntegrationUIElement, HTTPRequestIntegrationUIElement, InputButtonsUIElement, InputTextUIElement, OutputPortDescription, RemoveMessageUIElement, SendTelegramMessageIntegrationUIElement, UIElement, WebContentMediaUIElement, WebContentTextUIElement, WebInputButtonsUIElement, WebInputCardsUIElement, WebInputDateTimeUIElement, WebInputEmailUIElement, WebInputNumberUIElement, WebInputPhoneUIElement, WebInputTextUIElement, WebLogicBrowserCodeUIElement, WebLogicRemoveMessagesUIElement, WebMediaType, WebMultipleChoiceUIElement, WebOpinionScaleUIElement, WebRatingUIElement } from '@kickoffbot.com/types';
 import { ChangeVariableEditor } from '../elements/ChangeVariable/Editor';
 import { ConditionEditor } from '../elements/Condition/Editor';
 import { EditMessageEditor } from '../elements/EditMessage/Editor';
@@ -31,6 +31,7 @@ import { WebContentMediaEditor } from '../elements/WEB/WebContentMedia';
 import { WebOpinionScaleEditor } from '../elements/WEB/WebOpinionScale';
 import { WebRatingEditor } from '../elements/WEB/WebRating/editor/WebRatingEditor';
 import { WebMultipleChoiceEditor } from '../elements/WEB/WebMultipleChoice';
+import { WebLogicBrowserCodeEditor } from '../elements/WEB/WebLogicBrowserCode';
 
 
 
@@ -245,6 +246,12 @@ export const ElementMenu = ({ element }: Props) => {
                 const newElement: WebMultipleChoiceUIElement = JSON.parse(JSON.stringify(initialElement));
 
                 return { content: (<WebMultipleChoiceEditor element={newElement} />), title: 'Multiple Choice Editor', newElement };
+            }
+            case ElementType.WEB_LOGIC_BROWSER_CODE:{
+                const initialElement = elementArg as WebLogicBrowserCodeUIElement;
+                const newElement: WebLogicBrowserCodeUIElement = JSON.parse(JSON.stringify(initialElement));
+
+                return { content: (<WebLogicBrowserCodeEditor element={newElement} />), title: 'Browser Code Editor', newElement, dialogMaxWidth: "md" as Breakpoint };
             }
             default: {
                 throw new Error('NotImplementedError');
