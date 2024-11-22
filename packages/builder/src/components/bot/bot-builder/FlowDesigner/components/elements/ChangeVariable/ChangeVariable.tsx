@@ -1,4 +1,4 @@
-import { ChangeArrayVariableWorkflow, ChangeBooleanVariableWorkflow, ChangeBooleanVariableWorkflowStrategy, ChangeNumberStringVariableWorkflow, ChangeObjectVariableDataSource, ChangeObjectVariableWorkflow, ChangeVariableUIElement, UIElement, VariableType } from '@kickoffbot.com/types';
+import { ChangeArrayVariableWorkflow, ChangeBooleanVariableWorkflow, ChangeBooleanVariableWorkflowStrategy, ChangeDateTimeVariableOperation, ChangeDateTimeVariableWorkflow, ChangeNumberStringVariableWorkflow, ChangeObjectVariableDataSource, ChangeObjectVariableWorkflow, ChangeVariableUIElement, UIElement, VariableType } from '@kickoffbot.com/types';
 import React, { useMemo } from 'react'
 import { useContentWithVariable, useVariableInTextStyles } from './useContentWithVariable';
 import { useFlowDesignerStore } from '~/components/bot/bot-builder/store';
@@ -15,7 +15,7 @@ export const useStyles = makeStyles()(() => ({
     numberExpression: {
         display: 'inline-block'
     },
-    initialValue:{
+    initialValue: {
         fontWeight: 'bold',
     }
 }));
@@ -39,6 +39,24 @@ export const ChangeVariable = ({ element }: Props) => {
     const text = useMemo(() => {
 
         switch (variable?.type) {
+            case VariableType.DATE_TIME: {
+                const wd = uiElement.workflowDescription as ChangeDateTimeVariableWorkflow;
+                switch (wd.operation) {
+                    case ChangeDateTimeVariableOperation.ADD_DURATION: {
+                        return `Current value + duration`;
+                    }
+                    case ChangeDateTimeVariableOperation.REMOVE_DURATION: {
+                        return `Current value - duration`;
+                    }
+                    case ChangeDateTimeVariableOperation.SET_NEW_VALUE: {
+                        return 'New value';
+                    }
+                    default:
+                        {
+                            throw new Error('NotImplementedError');
+                        }
+                }
+            }
             case VariableType.STRING:
             case VariableType.NUMBER: {
                 const wd = uiElement.workflowDescription as ChangeNumberStringVariableWorkflow;

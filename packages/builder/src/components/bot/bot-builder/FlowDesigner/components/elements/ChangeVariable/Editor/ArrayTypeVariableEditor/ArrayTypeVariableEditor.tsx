@@ -1,4 +1,4 @@
-import { AddValueToArrayDescription, ChangeArrayOperation, ChangeArrayVariableWorkflow, RemoveItemsFromArrayDescription, VariableType } from '@kickoffbot.com/types';
+import { AddValueToArrayDescription, AddValueToArraySource, ChangeArrayOperation, ChangeArrayVariableWorkflow, RemoveItemsFromArrayDescription, VariableType } from '@kickoffbot.com/types';
 import { Box, RadioGroup, FormControlLabel, Radio } from '@mui/material';
 import React, { useCallback, useEffect } from 'react'
 import { AddNewToArray } from './AddNewToArray';
@@ -15,12 +15,16 @@ export const ArrayTypeVariableEditor = ({ workflow, onWorkflowChange, jsonTypeOf
     const [workflowValue, setWorkFlowValue] = React.useState<ChangeArrayVariableWorkflow>(workflow ?? {} as ChangeArrayVariableWorkflow);
 
     const handleArrayOperationChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setWorkFlowValue({ operation: event.target.value as ChangeArrayOperation });
+        setWorkFlowValue({
+            operation: event.target.value as ChangeArrayOperation,
+            addDescription: { source: AddValueToArraySource.Variable },
+            setDescription: { source: AddValueToArraySource.Variable }
+        });
     }
 
     useEffect(() => {
         onWorkflowChange(workflowValue);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [workflowValue]);
 
 

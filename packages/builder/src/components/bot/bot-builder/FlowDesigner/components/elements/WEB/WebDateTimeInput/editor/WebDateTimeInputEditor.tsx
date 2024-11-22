@@ -278,7 +278,7 @@ export const WebDateTimeInputEditor = ({ element }: Props) => {
 
             <Typography className={classes.editorTitle}>Select variable to save user input:</Typography>
             <Box className={classes.variableSelector}>
-                <VariableSelector valueId={selectedVariableId} variableTypes={[VariableType.STRING]} onVariableChange={handleVariableChange} />
+                <VariableSelector valueId={selectedVariableId} variableTypes={[VariableType.STRING, VariableType.DATE_TIME]} onVariableChange={handleVariableChange} />
             </Box>
         </Box>
     )

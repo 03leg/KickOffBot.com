@@ -55,6 +55,7 @@ import { Telegraf } from 'telegraf';
 import { CardsElementHelper } from './CardsElementHelper';
 import { MediaMessageHelper } from './MediaMessageHelper';
 import { MultipleChoiceElementHelper } from './helper/MultipleChoiceElementHelper';
+import { ChangeDateTimeVariableHelper } from './helper/ChangeDateTimeVariableHelper';
 
 export class WebBotRuntime {
   private _utils: WebBotRuntimeUtils;
@@ -611,6 +612,19 @@ export class WebBotRuntime {
           userContext,
           this._utils,
         ) as object;
+        break;
+      }
+
+      case VariableType.DATE_TIME: {
+        if (isNil(element.workflowDescription)) {
+          break;
+        }
+
+        newValue = ChangeDateTimeVariableHelper.getDateTimeValue(
+          element,
+          userContext,
+          this._utils,
+        );
         break;
       }
 

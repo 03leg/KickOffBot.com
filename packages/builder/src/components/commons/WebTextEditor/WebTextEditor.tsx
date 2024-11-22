@@ -260,7 +260,7 @@ export const WebTextEditor = ({ onContentChange, jsonState, contextObjectPropert
 
                     <EmojiButton onInsertEmoji={handleInsertEmoji} />
 
-                    <VariableSelectorDialog onInsertVariable={handleInsertVariable} supportPathForObject={true} availableVariableTypes={[VariableType.STRING, VariableType.NUMBER, VariableType.BOOLEAN, VariableType.OBJECT]} />
+                    <VariableSelectorDialog onInsertVariable={handleInsertVariable} supportPathForObject={true} availableVariableTypes={[VariableType.STRING, VariableType.DATE_TIME, VariableType.NUMBER, VariableType.BOOLEAN, VariableType.OBJECT]} />
                     {!isNil(contextObjectProperties) && <StringItemsMenu values={contextObjectProperties} onInsertItem={handleInsertContextPropertyInText} buttonIcon={<ControlPointIcon />} />}
                     {showInsertTemplateButton && templates.length > 0 && <StringItemsMenu values={templates.map(t => t.name)} onInsertItem={handleInsertTemplateInText} buttonIcon={<AssignmentIcon />} />}
                 </Box>
