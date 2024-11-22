@@ -12,7 +12,8 @@ import {
     WebRatingView,
     WebMultipleChoiceUIElement,
     DataSourceType,
-    NOW_DATE_TIME_VARIABLE_NAME
+    NOW_DATE_TIME_VARIABLE_NAME,
+    ParkTimeType
 } from "@kickoffbot.com/types";
 import MessageIcon from '@mui/icons-material/Message';
 import TextFieldsIcon from '@mui/icons-material/TextFields';
@@ -101,7 +102,7 @@ const WEB_DEFAULT_PROJECT_STATE: BotProject = {
     variables: [
         {
             id: NOW_DATE_TIME_VARIABLE_NAME,
-            type: VariableType.STRING,
+            type: VariableType.DATE_TIME,
             name: NOW_DATE_TIME_VARIABLE_NAME,
             value: "It will be the current date and(or) time when this variable is used",
             isPlatformVariable: true,
@@ -336,6 +337,8 @@ export function getNewUIElementTemplate(id: string, data: DraggableElementData):
                 availableDateTimes: AvailableDateTimes.All,
                 dateTimeFormat: 'DD/MM/YYYY',
                 useTime: false,
+                disableDaysOfWeek: false,
+                parkTimeType: ParkTimeType.Mins
             };
             return result;
         }

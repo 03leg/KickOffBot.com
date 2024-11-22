@@ -8,12 +8,17 @@ import {
   PropertyConditionItem,
   ConditionOperator,
   ValuePathDescription,
+  AddValueToArraySource,
+  ArrayItemsGenerator,
+  TimeSlotsGeneratorDescription,
+  TimeDurationUnit,
 } from '@kickoffbot.com/types';
 import { isEmpty, isNil, isPlainObject } from 'lodash';
 import { throwIfNil } from 'src/utils/guard';
 import { WebUserContext } from './WebUserContext';
 import { WebBotRuntimeUtils } from './WebBotRuntimeUtils';
 import { ConditionChecker } from './ConditionChecker';
+import * as moment from 'moment';
 
 export class ChangeArrayVariableHelper {
   public static getArrayValue(
@@ -52,22 +57,41 @@ export class ChangeArrayVariableHelper {
         return [...sourceVariableValue, ...values];
       }
       case ChangeArrayOperation.Set: {
-        throwIfNil(workflow.setDescription?.variableSourceDescription?.path);
+        switch (workflow.setDescription.source) {
+          case AddValueToArraySource.Function: {
+            if (
+              workflow.setDescription.functionSourceDescription.functionName ===
+              ArrayItemsGenerator.TIME_SLOTS_GENERATOR
+            ) {
+              return this.getTimeSlots(
+                workflow.setDescription.functionSourceDescription.description,
+                variable,
+                userContext,
+                utils,
+              );
+            }
+          }
+          default: {
+            throwIfNil(
+              workflow.setDescription?.variableSourceDescription?.path,
+            );
 
-        let values = this.getArrayValueByPath(
-          workflow.setDescription.variableSourceDescription.path,
-          userContext,
-          utils,
-        );
+            let values = this.getArrayValueByPath(
+              workflow.setDescription.variableSourceDescription.path,
+              userContext,
+              utils,
+            );
 
-        values = this.applyFilter(
-          userContext,
-          utils,
-          values,
-          workflow.setDescription.variableSourceDescription.extraFilter,
-        );
+            values = this.applyFilter(
+              userContext,
+              utils,
+              values,
+              workflow.setDescription.variableSourceDescription.extraFilter,
+            );
 
-        return [...values];
+            return [...values];
+          }
+        }
       }
       case ChangeArrayOperation.Remove: {
         throwIfNil(workflow.removeDescription);
@@ -142,6 +166,73 @@ export class ChangeArrayVariableHelper {
         throw new Error('NotImplementedError. Not supported operation.');
       }
     }
+  }
+  static getTimeSlots(
+    description: TimeSlotsGeneratorDescription,
+    sourceVariable: BotVariable,
+    userContext: WebUserContext,
+    utils: WebBotRuntimeUtils,
+  ) {
+    if (
+      description.endTimeRef?.variableId === undefined ||
+      description.startTimeRef?.variableId === undefined ||
+      description.slotDuration === undefined
+    ) {
+      console.warn('Invalid TimeSlotsGeneratorDescription');
+      return [];
+    }
+
+    const getVariableTime = (variableId: BotVariable['id']) => {
+      const varTime = utils.getVariableById(variableId);
+      const timeValue = moment(
+        userContext.getVariableValueByName(varTime.name) as string,
+        varTime.dateTimeFormat,
+      );
+      return timeValue;
+    };
+
+    const startTimeValue = getVariableTime(description.startTimeRef.variableId);
+    const endTimeValue = getVariableTime(description.endTimeRef.variableId);
+
+    if (
+      !startTimeValue.isValid() ||
+      !endTimeValue.isValid() ||
+      startTimeValue.isAfter(endTimeValue)
+    ) {
+      console.warn(
+        'Start time is after end time or start time is invalid or end time is invalid',
+      );
+      return [];
+    }
+
+    // console.log('Start time', startTimeValue.format());
+    // console.log('End time', endTimeValue.format());
+
+    const result: string[] = [];
+
+    while (startTimeValue.isBefore(endTimeValue)) {
+      result.push(startTimeValue.format(sourceVariable.dateTimeFormat));
+
+      switch (description.slotDurationUnit) {
+        case undefined:
+        case TimeDurationUnit.MINUTES:
+          startTimeValue.add(description.slotDuration, 'minutes');
+          break;
+        case TimeDurationUnit.HOURS:
+          startTimeValue.add(description.slotDuration, 'hours');
+          break;
+        case TimeDurationUnit.DAYS:
+          startTimeValue.add(description.slotDuration, 'days');
+          break;
+        default: {
+          throw new Error(
+            'NotImplementedError: ' + description.slotDurationUnit,
+          );
+        }
+      }
+    }
+
+    return result;
   }
 
   private static applyFilter(

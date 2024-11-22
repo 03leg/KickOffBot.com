@@ -1,7 +1,8 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { NOW_DATE_TIME_VARIABLE_NAME, VariableType, type BotVariable } from '@kickoffbot.com/types';
-import { Box, FormControl, InputLabel, MenuItem, Select, type SelectChangeEvent, TextField, FormLabel, RadioGroup, FormControlLabel, Radio, Link } from '@mui/material';
+import { Box, FormControl, InputLabel, MenuItem, Select, type SelectChangeEvent, TextField, FormLabel, RadioGroup, FormControlLabel, Radio, Link, Typography } from '@mui/material';
 import { Editor } from '@monaco-editor/react';
+import { MenuTextField } from '~/components/commons/MenuTextField';
 
 interface Props {
     variable: BotVariable;
@@ -10,6 +11,27 @@ interface Props {
 
 const JSON_ARRAY_OBJECT_VALUE = '[\n    {\n        \"productId\": 123,\n        \"productName\": \"Product #123\",\n        \"price\": 123\n    },\n    {\n        \"productId\": 2,\n        \"productName\": \"Product #321\",\n        \"price\": 321\n    }\n]' as const;
 const JSON_OBJECT_VALUE = '{\n    \"productId\": 1,\n    \"productName\": \"Product #123\",\n    \"price\": 123\n}' as const;
+const formats = [
+    { "label": "YYYY-MM-DD HH:MM:SS, Example: 2024-08-20 14:30:00", "value": "YYYY-MM-DD HH:mm:ss" },
+    { "label": "MM/DD/YYYY HH:MM AM/PM, Example: 08/20/2024 2:30 PM", "value": "MM/DD/YYYY h:mm A" },
+    { "label": "DD/MM/YYYY HH:mm, Example: 20/08/2024 14:30", "value": "DD/MM/YYYY HH:mm" },
+    { "label": "YYYY/MM/DD HH:mm, Example: 2024/08/20 14:30", "value": "YYYY/MM/DD HH:mm" },
+    { "label": "YYYY.MM.DD HH:mm, Example: 2024.08.20 14:30", "value": "YYYY.MM.DD HH:mm" },
+    { "label": "Month DD, YYYY HH:MM AM/PM, Example: August 20, 2024 2:30 PM", "value": "MMMM DD, YYYY h:mm A" },
+    { "label": "DD-MM-YYYY HH:MM, Example: 20-08-2024 14:30", "value": "DD-MM-YYYY HH:mm" },
+    { "label": "YYYY Month DD HH:MM AM/PM, Example: 2024 August 20 2:30 PM", "value": "YYYY MMMM DD h:mm A" },
+    { "label": "Day Month YYYY HH:MM AM/PM, Example: 20 August 2024 2:30 PM", "value": "DD MMMM YYYY h:mm A" },
+    { "label": "YYYY-MM-DD, Example: 2024-08-20", "value": "YYYY-MM-DD" },
+    { "label": "MM/DD/YYYY, Example: 08/20/2024", "value": "MM/DD/YYYY" },
+    { "label": "DD/MM/YYYY, Example: 20/08/2024", "value": "DD/MM/YYYY" },
+    { "label": "YYYY/MM/DD, Example: 2024/08/20", "value": "YYYY/MM/DD" },
+    { "label": "YYYY.MM.DD, Example: 2024.08.20", "value": "YYYY.MM.DD" },
+    { "label": "Month DD, YYYY, Example: August 20, 2024", "value": "MMMM DD, YYYY" },
+    { "label": "DD-MM-YYYY, Example: 20-08-2024", "value": "DD-MM-YYYY" },
+    { "label": "YYYY Month DD, Example: 2024 August 20", "value": "YYYY MMMM DD" },
+    { "label": "Day Month YYYY, Example: 20 August 2024", "value": "DD MMMM YYYY" },
+];
+
 
 export const VariableEditor = ({ variable, onVariableChange }: Props) => {
 
@@ -17,6 +39,7 @@ export const VariableEditor = ({ variable, onVariableChange }: Props) => {
     const [type, setType] = useState<string>(variable.type);
     const [value, setValue] = useState<string | number | boolean>(variable.value as never);
     const [arrayItemtype, setArrayItemType] = useState<string | undefined>(variable.type === VariableType.ARRAY ? variable.arrayItemType?.toString() : undefined);
+    const [dateTimeFormat, setDateTimeFormat] = React.useState(variable.dateTimeFormat ?? '');
 
 
     const handleNameChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
@@ -46,6 +69,10 @@ export const VariableEditor = ({ variable, onVariableChange }: Props) => {
 
 
         switch (variable.type) {
+            case VariableType.DATE_TIME: {
+                setVariableValue('');
+                break;
+            }
             case VariableType.STRING: {
                 setVariableValue('')
                 break;
@@ -80,6 +107,10 @@ export const VariableEditor = ({ variable, onVariableChange }: Props) => {
 
 
         switch (variable.arrayItemType) {
+            case VariableType.DATE_TIME: {
+                setVariableValue('[]')
+                break;
+            }
             case VariableType.STRING: {
                 setVariableValue('["item1", "item2", "item3"]')
                 break;
@@ -108,6 +139,12 @@ export const VariableEditor = ({ variable, onVariableChange }: Props) => {
         onVariableChange(variable);
     }, [onVariableChange, setVariableValue, variable]);
 
+    const handleDateTimeFormatChange = useCallback((value: string) => {
+        setDateTimeFormat(value);
+        variable.dateTimeFormat = value;
+        onVariableChange(variable);
+    }, [onVariableChange, variable])
+
     return (
         <Box sx={{ display: 'flex', flexDirection: 'column', padding: 1 }}>
             <TextField disabled={variable.isPlatformVariable} fullWidth label='Name' variant="outlined" value={name} onChange={handleNameChange} />
@@ -124,6 +161,8 @@ export const VariableEditor = ({ variable, onVariableChange }: Props) => {
                     <MenuItem value={VariableType.BOOLEAN.toString()}>boolean</MenuItem>
                     <MenuItem value={VariableType.OBJECT.toString()}>object</MenuItem>
                     <MenuItem value={VariableType.ARRAY.toString()}>array</MenuItem>
+                    <MenuItem value={VariableType.DATE_TIME.toString()}>date+time</MenuItem>
+
                 </Select>
             </FormControl>
 
@@ -139,6 +178,8 @@ export const VariableEditor = ({ variable, onVariableChange }: Props) => {
                     <MenuItem value={VariableType.NUMBER.toString()}>number</MenuItem>
                     <MenuItem value={VariableType.BOOLEAN.toString()}>boolean</MenuItem>
                     <MenuItem value={VariableType.OBJECT.toString()}>object</MenuItem>
+                    <MenuItem value={VariableType.DATE_TIME.toString()}>date+time</MenuItem>
+
                 </Select>
             </FormControl>}
 
@@ -149,8 +190,16 @@ export const VariableEditor = ({ variable, onVariableChange }: Props) => {
                 </Box>
             }
 
+            {((type === VariableType.DATE_TIME.toString() && variable.name !== NOW_DATE_TIME_VARIABLE_NAME) ||
+                (type === VariableType.ARRAY.toString() && arrayItemtype === VariableType.DATE_TIME)) &&
+                <Box>
+                    <Typography sx={{ marginTop: 1 }}>Format:</Typography>
+                    <MenuTextField value={dateTimeFormat} onChange={handleDateTimeFormatChange} dataSource={formats} />
+                </Box>
+            }
 
-            {(type === VariableType.STRING.toString()) &&
+
+            {(type === VariableType.STRING.toString() || type === VariableType.DATE_TIME.toString()) &&
                 (<TextField
                     sx={{ marginTop: 2 }}
                     id="string-value"

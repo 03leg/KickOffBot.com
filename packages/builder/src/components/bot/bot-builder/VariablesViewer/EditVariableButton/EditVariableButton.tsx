@@ -2,12 +2,13 @@ import React, { useCallback, useState } from 'react'
 import AppDialog from '~/components/commons/Dialog/AppDialog'
 import AddIcon from '@mui/icons-material/Add';
 import { Button, IconButton } from '@mui/material';
-import { type BotVariable, VariableType } from '@kickoffbot.com/types';
+import { type BotVariable, NOW_DATE_TIME_VARIABLE_NAME, VariableType } from '@kickoffbot.com/types';
 import { VariableEditor } from '../VariableEditor/VariableEditor';
 import { isNil } from 'lodash';
 import EditIcon from '@mui/icons-material/Edit';
 import { useFlowDesignerStore } from '../../store';
 import { v4 } from 'uuid';
+import dayjs from 'dayjs';
 
 
 interface Props {
@@ -102,6 +103,14 @@ export const EditVariableButton = ({ variable }: Props) => {
                 disabled = true;
             }
 
+        }
+
+        if (variable.type === VariableType.DATE_TIME && variable.name !== NOW_DATE_TIME_VARIABLE_NAME) {
+            if (!variable.dateTimeFormat) {
+                disabled = true;
+            } else if ((!isNil(variable.value) && variable.value !== "") && dayjs(variable.value as string, variable.dateTimeFormat, true).isValid() === false) {
+                disabled = true;
+            }
         }
 
         setDisabledConfirmationButton(disabled);

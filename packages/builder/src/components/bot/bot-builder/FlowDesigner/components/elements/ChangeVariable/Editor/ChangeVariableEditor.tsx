@@ -1,4 +1,4 @@
-import { BotVariable, ChangeArrayVariableWorkflow, ChangeBooleanVariableWorkflow, ChangeNumberStringVariableWorkflow, ChangeObjectVariableWorkflow, ChangeVariableUIElement, VariableType } from '@kickoffbot.com/types';
+import { BotVariable, ChangeArrayVariableWorkflow, ChangeBooleanVariableWorkflow, ChangeDateTimeVariableWorkflow, ChangeNumberStringVariableWorkflow, ChangeObjectVariableWorkflow, ChangeVariableUIElement, VariableType } from '@kickoffbot.com/types';
 import { Box, Checkbox, FormControlLabel } from '@mui/material';
 import React, { useCallback, useMemo, useState } from 'react'
 import { VariableSelector } from '../../../VariableSelector';
@@ -8,6 +8,7 @@ import { BooleanTypeVariableEditor } from './BooleanTypeVariableEditor';
 import { ObjectTypeVariableEditor } from './ObjectTypeVariableEditor';
 import { ArrayTypeVariableEditor } from './ArrayTypeVariableEditor';
 import { makeStyles } from 'tss-react/mui';
+import { DateTimeTypeVariableEditor } from './DateTimeTypeVariableEditor';
 
 interface Props {
     element: ChangeVariableUIElement;
@@ -73,8 +74,9 @@ export const ChangeVariableEditor = ({ element }: Props) => {
 
 
     // eslint-disable-next-line @typescript-eslint/no-redundant-type-constituents
-    const handleWorkflowChange = useCallback((workflow: ChangeNumberStringVariableWorkflow | ChangeBooleanVariableWorkflow | ChangeObjectVariableWorkflow | ChangeArrayVariableWorkflow) => {
+    const handleWorkflowChange = useCallback((workflow: ChangeNumberStringVariableWorkflow | ChangeDateTimeVariableWorkflow | ChangeBooleanVariableWorkflow | ChangeObjectVariableWorkflow | ChangeArrayVariableWorkflow) => {
         element.workflowDescription = workflow;
+        console.log(workflow);
     }, [element]);
 
     const handleRestoreInitialValueChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
@@ -97,6 +99,9 @@ export const ChangeVariableEditor = ({ element }: Props) => {
             <Box className={restoreInitialValue ? classes.disabled : ''}>
                 {(variableType !== null && (variableType === VariableType.NUMBER || variableType === VariableType.STRING) &&
                     <NumberStringTypeVariableEditor targetVariableType={variableType} workflow={element.workflowDescription as ChangeNumberStringVariableWorkflow} onWorkflowChange={handleWorkflowChange} />
+                )}
+                {(variableType !== null && (variableType === VariableType.DATE_TIME) &&
+                    <DateTimeTypeVariableEditor workflow={element.workflowDescription as ChangeDateTimeVariableWorkflow} onWorkflowChange={handleWorkflowChange} />
                 )}
                 {(variableType !== null && (variableType === VariableType.BOOLEAN) &&
                     <BooleanTypeVariableEditor workflow={element.workflowDescription as ChangeBooleanVariableWorkflow} onWorkflowChange={handleWorkflowChange} />
