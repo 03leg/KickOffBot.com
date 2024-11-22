@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/prefer-nullish-coalescing */
-import { AvailableDateTimes, BotVariable, ParkTimeType, VariableType, WebInputDateTimeUIElement } from '@kickoffbot.com/types';
+import { AvailableDateTimes, BotVariable, TimeDurationUnit, VariableType, WebInputDateTimeUIElement } from '@kickoffbot.com/types';
 import { Box, Checkbox, FormControlLabel, Grid, MenuItem, Select, SelectChangeEvent, TextField, Typography } from '@mui/material';
 import React, { useCallback, useMemo, useState } from 'react';
 import { VariableSelector } from '../../../../VariableSelector';
@@ -22,7 +22,7 @@ export const WebDateTimeInputEditor = ({ element }: Props) => {
     const [disabledTimesVariableId, setDisabledTimesVariableId] = useState<string>(element.disabledTimesVariableId ?? '');
     const [disabledDateAndTimesVariableId, setDisabledDateAndTimesVariableId] = useState<string>(element.disabledDateAndTimesVariableId ?? '');
     const { classes } = useWebDateTimeInputEditorStyles();
-    const [parkTimeType, setParkTimeType] = React.useState<ParkTimeType>(element.parkTimeType ?? ParkTimeType.Mins);
+    const [parkTimeType, setParkTimeType] = React.useState<TimeDurationUnit>(element.parkTimeType ?? TimeDurationUnit.MINUTES);
     const [maxTime, setMaxTime] = React.useState<undefined | string>(element.maxTime ?? '');
     const [minTime, setMinTime] = React.useState<undefined | string>(element.minTime ?? '');
     const [maxDate, setMaxDate] = React.useState<undefined | string>(element.maxDate ?? '');
@@ -42,8 +42,8 @@ export const WebDateTimeInputEditor = ({ element }: Props) => {
     }, [element]);
 
     const handleParkTimeTypeChange = useCallback((event: SelectChangeEvent) => {
-        setParkTimeType(event.target.value as ParkTimeType);
-        element.parkTimeType = event.target.value as ParkTimeType;
+        setParkTimeType(event.target.value as TimeDurationUnit);
+        element.parkTimeType = event.target.value as TimeDurationUnit;
     }, [element]);
 
     const handleVariableChange = useCallback((newVariable: BotVariable) => {
@@ -202,9 +202,9 @@ export const WebDateTimeInputEditor = ({ element }: Props) => {
                         onChange={handleParkTimeTypeChange}
                         className={classes.parkTimeTypeSelector}
                     >
-                        <MenuItem value={ParkTimeType.Mins}>Minutes</MenuItem>
-                        <MenuItem value={ParkTimeType.Hours}>Hours</MenuItem>
-                        <MenuItem value={ParkTimeType.Days}>Days</MenuItem>
+                        <MenuItem value={TimeDurationUnit.MINUTES}>Minutes</MenuItem>
+                        <MenuItem value={TimeDurationUnit.HOURS}>Hours</MenuItem>
+                        <MenuItem value={TimeDurationUnit.DAYS}>Days</MenuItem>
                     </Select>
                 </Box>
             </>}

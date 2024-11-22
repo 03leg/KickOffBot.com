@@ -7,6 +7,7 @@ import {
   InputButtonsUIElement,
   LogicalOperator,
   MessageDescription,
+  TimeDurationUnit,
   UIElement,
 } from "./BotTypes";
 
@@ -103,11 +104,6 @@ export interface WebInputNumberUIElement extends UIElement {
   step?: number;
 }
 
-export enum ParkTimeType {
-  Mins = "mins",
-  Hours = "hours",
-  Days = "days",
-}
 
 export interface WebInputDateTimeUIElement extends UIElement {
   variableId?: string;
@@ -133,7 +129,7 @@ export interface WebInputDateTimeUIElement extends UIElement {
   minDate?: string;
 
   parkTimeVariableId?: BotVariable["id"];
-  parkTimeType: ParkTimeType;
+  parkTimeType: TimeDurationUnit;
 }
 
 export interface WebInputPhoneUIElement extends UIElement {
@@ -341,7 +337,7 @@ export interface DateTimeRequestElement extends RequestElementBase {
   minDate?: string;
 
   parkTime?: number;
-  parkTimeType?: ParkTimeType;
+  parkTimeType?: TimeDurationUnit;
 
   disableDaysOfWeek: boolean;
   disabledDaysOfWeek?: number[];

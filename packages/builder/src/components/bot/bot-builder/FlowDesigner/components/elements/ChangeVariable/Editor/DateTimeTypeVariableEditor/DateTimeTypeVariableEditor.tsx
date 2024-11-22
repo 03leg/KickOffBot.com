@@ -1,4 +1,4 @@
-import { ChangeDateTimeDurationType, ChangeDateTimeVariableOperation, ChangeDateTimeVariableWorkflow } from '@kickoffbot.com/types';
+import { ChangeDateTimeVariableOperation, ChangeDateTimeVariableWorkflow, TimeDurationUnit } from '@kickoffbot.com/types';
 import { Box, FormControlLabel, MenuItem, Radio, RadioGroup, Select, SelectChangeEvent } from '@mui/material';
 import React, { useCallback, useEffect } from 'react'
 import { useDateTimeTypeVariableEditorStyles } from './DateTimeTypeVariableEditor.style';
@@ -15,7 +15,7 @@ export const DateTimeTypeVariableEditor = ({ onWorkflowChange, workflow }: Props
     const [operation, setOperation] = React.useState(workflow?.operation ?? ChangeDateTimeVariableOperation.SET_NEW_VALUE);
     const [newValue, setNewValue] = React.useState(workflow?.newValue ?? '');
     const [duration, setDuration] = React.useState(workflow?.duration ?? '');
-    const [durationType, setDurationType] = React.useState(workflow?.durationType ?? ChangeDateTimeDurationType.Mins);
+    const [durationType, setDurationType] = React.useState(workflow?.durationType ?? TimeDurationUnit.MINUTES);
 
     useEffect(() => {
         onWorkflowChange({ operation, newValue, duration, durationType });
@@ -34,7 +34,7 @@ export const DateTimeTypeVariableEditor = ({ onWorkflowChange, workflow }: Props
     }, []);
 
     const handleDurationTypeChange = useCallback((event: SelectChangeEvent) => {
-        setDurationType(event.target.value as ChangeDateTimeDurationType);
+        setDurationType(event.target.value as TimeDurationUnit);
     }, []);
 
     return (
@@ -59,9 +59,9 @@ export const DateTimeTypeVariableEditor = ({ onWorkflowChange, workflow }: Props
                             onChange={handleDurationTypeChange}
                             className={classes.durationTypeSelect}
                         >
-                            <MenuItem value={ChangeDateTimeDurationType.Mins}>Minutes</MenuItem>
-                            <MenuItem value={ChangeDateTimeDurationType.Hours}>Hours</MenuItem>
-                            <MenuItem value={ChangeDateTimeDurationType.Days}>Days</MenuItem>
+                            <MenuItem value={TimeDurationUnit.MINUTES}>Minutes</MenuItem>
+                            <MenuItem value={TimeDurationUnit.HOURS}>Hours</MenuItem>
+                            <MenuItem value={TimeDurationUnit.DAYS}>Days</MenuItem>
                         </Select>
                     </Box>
                 }

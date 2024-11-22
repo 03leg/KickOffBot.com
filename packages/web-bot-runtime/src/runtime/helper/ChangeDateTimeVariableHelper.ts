@@ -2,20 +2,20 @@ import {
   ChangeVariableUIElement,
   ChangeDateTimeVariableWorkflow,
   ChangeDateTimeVariableOperation,
-  ChangeDateTimeDurationType,
+  TimeDurationUnit,
 } from '@kickoffbot.com/types';
 import { WebBotRuntimeUtils } from '../WebBotRuntimeUtils';
 import { WebUserContext } from '../WebUserContext';
 import * as moment from 'moment';
 
 export class ChangeDateTimeVariableHelper {
-  private static getDurationType(durationType: ChangeDateTimeDurationType) {
+  private static getDurationType(durationType: TimeDurationUnit) {
     switch (durationType) {
-      case 'days':
+      case TimeDurationUnit.DAYS:
         return 'days';
-      case 'mins':
+      case TimeDurationUnit.MINUTES:
         return 'minutes';
-      case 'hours':
+      case TimeDurationUnit.HOURS:
         return 'hours';
 
       default:
@@ -64,7 +64,7 @@ export class ChangeDateTimeVariableHelper {
               ? durationNumber
               : -durationNumber,
             this.getDurationType(
-              workflow.durationType ?? ChangeDateTimeDurationType.Mins,
+              workflow.durationType ?? TimeDurationUnit.MINUTES,
             ),
           )
           .format(sourceVariable.dateTimeFormat);
