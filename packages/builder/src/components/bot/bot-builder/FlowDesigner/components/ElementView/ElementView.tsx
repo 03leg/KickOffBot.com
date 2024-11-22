@@ -2,7 +2,7 @@ import { Box } from '@mui/material'
 import React, { useCallback, useContext, useMemo } from 'react'
 import { TextContent } from '../elements/TextContent';
 import { Colors } from '~/themes/Colors';
-import { ContentTextUIElement, ElementType, GoogleSheetsIntegrationUIElement, HTTPRequestIntegrationUIElement, SendTelegramMessageIntegrationUIElement, WebContentMediaUIElement, WebContentTextUIElement, WebInputButtonsUIElement, WebInputCardsUIElement, WebInputDateTimeUIElement, WebInputEmailUIElement, WebInputNumberUIElement, WebInputPhoneUIElement, WebInputTextUIElement, WebLogicRemoveMessagesUIElement, WebMultipleChoiceUIElement, WebOpinionScaleUIElement, WebRatingUIElement, type UIElement } from '@kickoffbot.com/types';
+import { ContentTextUIElement, ElementType, GoogleSheetsIntegrationUIElement, HTTPRequestIntegrationUIElement, SendTelegramMessageIntegrationUIElement, WebContentMediaUIElement, WebContentTextUIElement, WebInputButtonsUIElement, WebInputCardsUIElement, WebInputDateTimeUIElement, WebInputEmailUIElement, WebInputNumberUIElement, WebInputPhoneUIElement, WebInputTextUIElement, WebLogicBrowserCodeUIElement, WebLogicRemoveMessagesUIElement, WebMultipleChoiceUIElement, WebOpinionScaleUIElement, WebRatingUIElement, type UIElement } from '@kickoffbot.com/types';
 import { getIconByType } from '../../../utils';
 import { CSS } from '@dnd-kit/utilities';
 import { useSortable } from '@dnd-kit/sortable';
@@ -31,6 +31,7 @@ import { WebContentMedia } from '../elements/WEB/WebContentMedia';
 import { WebOpinionScale } from '../elements/WEB/WebOpinionScale';
 import { WebRating } from '../elements/WEB/WebRating';
 import { WebMultipleChoice } from '../elements/WEB/WebMultipleChoice';
+import { WebLogicBrowserCode } from '../elements/WEB/WebLogicBrowserCode/WebLogicBrowserCode';
 
 interface Props {
     element: UIElement;
@@ -136,6 +137,10 @@ export const ElementView = ({ element, scale }: Props) => {
             }
             case ElementType.WEB_MULTIPLE_CHOICE:{
                 result = <WebMultipleChoice element={element as WebMultipleChoiceUIElement} />
+                return result;
+            }
+            case ElementType.WEB_LOGIC_BROWSER_CODE:{
+                result = <WebLogicBrowserCode element={element as WebLogicBrowserCodeUIElement} />
                 return result;
             }
             default: {

@@ -13,7 +13,8 @@ import {
     WebMultipleChoiceUIElement,
     DataSourceType,
     NOW_DATE_TIME_VARIABLE_NAME,
-    ParkTimeType
+    ParkTimeType,
+    WebLogicBrowserCodeUIElement
 } from "@kickoffbot.com/types";
 import MessageIcon from '@mui/icons-material/Message';
 import TextFieldsIcon from '@mui/icons-material/TextFields';
@@ -43,6 +44,7 @@ import VideoCameraBackIcon from '@mui/icons-material/VideoCameraBack';
 import SentimentNeutralIcon from '@mui/icons-material/SentimentNeutral';
 import GradeIcon from '@mui/icons-material/Grade';
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
+import DeveloperModeIcon from '@mui/icons-material/DeveloperMode';
 
 export const TELEGRAM_DEFAULT_PROJECT_STATE: BotProject = {
     blocks: [...getTelegramDefaultBlocks()],
@@ -166,6 +168,7 @@ export function getWebLogicElements() {
         { type: ElementType.LOGIC_CHANGE_VARIABLE, title: 'Change variable', icon: <EditNoteIcon />, size: 12 },
         { type: ElementType.WEB_LOGIC_REMOVE_MESSAGES, title: 'Remove messages', icon: <DeleteIcon />, size: 12 },
         { type: ElementType.LOGIC_CONDITION, title: 'Condition', icon: <ForkLeftIcon /> },
+        { type: ElementType.WEB_LOGIC_BROWSER_CODE, title: 'Client code', icon: <DeveloperModeIcon /> },
         // { type: ElementType.LOGIC_EDIT_MESSAGE, title: 'Edit message', icon: <EditIcon /> },
         // { type: ElementType.LOGIC_REMOVE_MESSAGE, title: 'Remove message', icon: <DeleteIcon /> },
     ];
@@ -437,6 +440,16 @@ export function getNewUIElementTemplate(id: string, data: DraggableElementData):
                 type: ElementType.WEB_MULTIPLE_CHOICE,
                 shuffleOptions: false,
                 dataSourceType: DataSourceType.Static
+            }
+            return result;
+        }
+        case ElementType.WEB_LOGIC_BROWSER_CODE: {
+            const result: WebLogicBrowserCodeUIElement = {
+                id,
+                type: ElementType.WEB_LOGIC_BROWSER_CODE,
+                code: '',
+                requiredVariableIds: [],
+                modifiedVariableIds: []
             }
             return result;
         }

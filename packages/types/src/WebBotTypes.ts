@@ -184,6 +184,12 @@ export enum DataSourceType {
   Dynamic = "dynamic",
 }
 
+export interface WebLogicBrowserCodeUIElement extends UIElement {
+  code: string;
+  requiredVariableIds: string[];
+  modifiedVariableIds: string[];
+}
+
 export interface WebMultipleChoiceUIElement extends UIElement {
   variableId?: string;
 
@@ -209,6 +215,7 @@ export enum ChatItemTypeWebRuntime {
   USER_MESSAGE = "user-message",
   SYSTEM_MESSAGE = "system-message",
   DELETE_MESSAGES = "delete-messages",
+  CLIENT_CODE = "client-code",
 }
 
 export interface MessageDescriptionWebRuntime {
@@ -221,6 +228,10 @@ export interface UserResponseDescriptionWebRuntime {
   data: unknown;
 }
 
+export interface CodeResultDescription {
+  updatedVariables: Record<BotVariable["name"], unknown>;
+}
+
 export interface RequestDescriptionWebRuntime {
   element: RequestElementBase;
   onResponse?: (response: UserResponseDescriptionWebRuntime) => void;
@@ -229,6 +240,12 @@ export interface RequestDescriptionWebRuntime {
 export interface DeleteMessagesDescriptionWebRuntime {
   deleteAllMessages?: boolean;
   elementIds?: string[];
+}
+
+export interface ClientCodeDescriptionRuntime {
+  code: string;
+
+  requestedVariables: Record<BotVariable["name"], unknown>;
 }
 
 export enum BotMessageBodyType {
@@ -250,7 +267,7 @@ export interface BotMessageBody {
 export interface ChatItemWebRuntime {
   id: string;
   itemType: ChatItemTypeWebRuntime;
-  content: BotMessageBody | RequestDescriptionWebRuntime | DeleteMessagesDescriptionWebRuntime;
+  content: BotMessageBody | RequestDescriptionWebRuntime | DeleteMessagesDescriptionWebRuntime | ClientCodeDescriptionRuntime;
   uiElementId: UIElement["id"];
 }
 

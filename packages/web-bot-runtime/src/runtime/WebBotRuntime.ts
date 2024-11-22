@@ -38,6 +38,10 @@ import {
   WebRatingUIElement,
   WebMultipleChoiceUIElement,
   MultipleChoiceOptionDescription,
+  WebLogicBrowserCodeUIElement,
+  ClientCodeDescriptionRuntime,
+  CodeResultDescription,
+  NOW_DATE_TIME_VARIABLE_NAME,
 } from '@kickoffbot.com/types';
 import { WebBotRuntimeUtils } from './WebBotRuntimeUtils';
 import { WebUserContext } from './WebUserContext';
@@ -185,6 +189,15 @@ export class WebBotRuntime {
         );
         break;
       }
+      case ElementType.WEB_LOGIC_BROWSER_CODE: {
+        const chatItem = this.handleWebLogicBrowserCodeElement(
+          element as WebLogicBrowserCodeUIElement,
+        );
+
+        shouldHandleNextElement = false;
+        chatItems.push(chatItem);
+        break;
+      }
       case ElementType.WEB_LOGIC_REMOVE_MESSAGES: {
         const chatItem = this.handleLogicRemoveMessagesElement(
           element as WebLogicRemoveMessagesUIElement,
@@ -263,6 +276,37 @@ export class WebBotRuntime {
     }
 
     return chatItems;
+  }
+
+  private handleWebLogicBrowserCodeElement(
+    element: WebLogicBrowserCodeUIElement,
+  ): ChatItemWebRuntime {
+    const getRequestedVariables = () => {
+      const result: Record<string, unknown> = {};
+      for (const variableId of element.requiredVariableIds) {
+        const variable = this._utils.getVariableById(variableId);
+        let value = this._userContext.getVariableValueByName(variable.name);
+        if (variable.name === NOW_DATE_TIME_VARIABLE_NAME) {
+          value = new Date().toISOString();
+        }
+
+        result[variable.name] = value;
+      }
+
+      return result;
+    };
+
+    const result: ChatItemWebRuntime = {
+      id: v4(),
+      itemType: ChatItemTypeWebRuntime.CLIENT_CODE,
+      content: {
+        code: element.code,
+        requestedVariables: getRequestedVariables(),
+      },
+      uiElementId: element.id,
+    };
+
+    return result;
   }
 
   private handleCardsElement(
@@ -348,6 +392,7 @@ export class WebBotRuntime {
       case ElementType.WEB_OPINION_SCALE:
       case ElementType.WEB_RATING:
       case ElementType.WEB_MULTIPLE_CHOICE:
+      case ElementType.WEB_LOGIC_BROWSER_CODE:
       case ElementType.WEB_CONTENT_MESSAGE: {
         result = await this.handleElement(block, nextElement);
         break;
@@ -404,7 +449,17 @@ export class WebBotRuntime {
       | WebInputCardsUIElement
       | WebOpinionScaleUIElement
       | WebRatingUIElement
+      // todo: fix this
+      // | WebLogicBrowserCodeUIElement
       | WebInputDateTimeUIElement;
+
+    if (typedElement.type === ElementType.WEB_LOGIC_BROWSER_CODE) {
+      await this.handleUserBrowserCodeResponse(
+        typedElement as WebLogicBrowserCodeUIElement,
+        value as CodeResultDescription,
+      );
+      return await this.checkNextElement();
+    }
 
     if (typedElement.type === ElementType.WEB_INPUT_BUTTONS) {
       const localResult = await this.handleUserButtonsResponse(
@@ -438,6 +493,29 @@ export class WebBotRuntime {
     }
 
     return await this.checkNextElement();
+  }
+
+  private handleUserBrowserCodeResponse(
+    typedElement: WebLogicBrowserCodeUIElement,
+    result: CodeResultDescription,
+  ) {
+    if (
+      isNil(result.updatedVariables) ||
+      typeof result.updatedVariables !== 'object' ||
+      Object.keys(result.updatedVariables).length === 0
+    ) {
+      return;
+    }
+
+    const modifiedVariableNames = typedElement.modifiedVariableIds.map(
+      (v) => this._utils.getVariableById(v).name,
+    );
+
+    for (const [key, value] of Object.entries(result.updatedVariables)) {
+      if (!modifiedVariableNames.includes(key)) continue;
+
+      this._userContext.updateVariable(key, value);
+    }
   }
 
   private async handleUserMultipleChoiceResponse(

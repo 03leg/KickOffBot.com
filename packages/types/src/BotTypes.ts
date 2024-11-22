@@ -35,6 +35,8 @@ export enum ElementType {
   WEB_RATING = "web-rating",
 
   WEB_MULTIPLE_CHOICE = "web-multiple-choice",
+
+  WEB_LOGIC_BROWSER_CODE = "web-logic-browser-code",
 }
 
 export interface UIElement {

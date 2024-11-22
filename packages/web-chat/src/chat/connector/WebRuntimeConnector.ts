@@ -3,6 +3,8 @@ import {
   CardsUserResponse,
   ChatItemTypeWebRuntime,
   ChatItemWebRuntime,
+  ClientCodeDescriptionRuntime,
+  CodeResultDescription,
   DeleteMessagesDescriptionWebRuntime,
   ElementType,
   RequestButtonDescription,
@@ -13,6 +15,7 @@ import {
 import { ChatStoreState } from "../store/store.types";
 import { WebRuntimeService } from "./WebRuntimeService";
 import { throwIfNil } from "../utils/guard";
+import { ClientCodeExecutor } from "./ClientCodeExecutor";
 
 export class WebRuntimeConnector {
   private _storeApi: ChatStoreState;
@@ -66,18 +69,32 @@ export class WebRuntimeConnector {
 
   private async toStore(response: WebBotResponse) {
     for (const item of response.newItems) {
-      if (item.itemType === ChatItemTypeWebRuntime.BOT_MESSAGE) {
-        await this._storeApi.sendBotMessage(item);
-      } else if (item.itemType === ChatItemTypeWebRuntime.BOT_REQUEST) {
-        const requestContent = item.content as RequestDescriptionWebRuntime;
-        requestContent.onResponse = this.handleResponse.bind(this, item);
-        this._storeApi.sendBotRequest(item);
-      } else if (item.itemType === ChatItemTypeWebRuntime.DELETE_MESSAGES) {
-        const requestContent = item.content as DeleteMessagesDescriptionWebRuntime;
-        if (requestContent.deleteAllMessages) {
-          this._storeApi.clearHistory();
-        } else if (requestContent.elementIds && requestContent.elementIds.length > 0) {
-          this._storeApi.removeChatItemByUIElementId(requestContent.elementIds);
+      switch (item.itemType) {
+        case ChatItemTypeWebRuntime.BOT_MESSAGE: {
+          await this._storeApi.sendBotMessage(item);
+          break;
+        }
+        case ChatItemTypeWebRuntime.BOT_REQUEST: {
+          const request = item.content as RequestDescriptionWebRuntime;
+          request.onResponse = this.handleResponse.bind(this, item);
+          this._storeApi.sendBotRequest(item);
+          break;
+        }
+        case ChatItemTypeWebRuntime.DELETE_MESSAGES: {
+          const deleteRequest = item.content as DeleteMessagesDescriptionWebRuntime;
+          if (deleteRequest.deleteAllMessages) {
+            this._storeApi.clearHistory();
+          } else if (deleteRequest.elementIds) {
+            this._storeApi.removeChatItemByUIElementId(deleteRequest.elementIds);
+          }
+          break;
+        }
+        case ChatItemTypeWebRuntime.CLIENT_CODE: {
+          const clientCodeDescription = item.content as ClientCodeDescriptionRuntime;
+          const result = await ClientCodeExecutor.execute(clientCodeDescription);
+
+          this.handleClientCodeExecuted(item, result);
+          break;
         }
       }
     }
@@ -129,6 +146,22 @@ export class WebRuntimeConnector {
       await this.toStore(response);
     } catch {
       this._storeApi.showError("Failed to send your response. Please try to use bot later.");
+    } finally {
+      this._storeApi.setLoadingValue(false);
+    }
+  }
+
+  private async handleClientCodeExecuted(chatItemRequest: ChatItemWebRuntime, codeResult: CodeResultDescription) {
+    throwIfNil(this._runtimeProjectId);
+
+    this._storeApi.setLoadingValue(true);
+
+    try {
+      const response = await this._httpService.sendUserResponse(this._runtimeProjectId, chatItemRequest, codeResult);
+
+      await this.toStore(response);
+    } catch {
+      this._storeApi.showError("Failed to send client code result. Please try to use bot later.");
     } finally {
       this._storeApi.setLoadingValue(false);
     }
