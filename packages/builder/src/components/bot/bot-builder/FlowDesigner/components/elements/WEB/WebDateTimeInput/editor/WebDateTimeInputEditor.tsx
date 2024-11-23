@@ -192,10 +192,12 @@ export const WebDateTimeInputEditor = ({ element }: Props) => {
                 </Grid>
             </>
 
-            {(maxTime || maxDate || availableDateTimes === AvailableDateTimes.FutureDates || availableDateTimes === AvailableDateTimes.FutureDatesAndToday) && <>
-                <Typography className={classes.editorTitle}>The time required to fit without exceeding the maximum allowable time:</Typography>
+            {([AvailableDateTimes.FutureDates, AvailableDateTimes.FutureDatesAndToday, AvailableDateTimes.DatesFromVariable].includes(availableDateTimes)) && <>
+                <Typography className={classes.editorTitle}>The time required to fit without interfering with unavailable time:</Typography>
                 <Box className={classes.parkTimeContainer}>
-                    <VariableSelector valueId={parkTimeVariableId} variableTypes={[VariableType.NUMBER]} onVariableChange={handleParkTimeVariableChange} />
+                    <Box className={classes.variableSelectorContainer}>
+                        <VariableSelector valueId={parkTimeVariableId} variableTypes={[VariableType.NUMBER]} onVariableChange={handleParkTimeVariableChange} />
+                    </Box>
                     <Select
                         fullWidth
                         value={parkTimeType}
