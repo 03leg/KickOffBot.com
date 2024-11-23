@@ -15,4 +15,10 @@ export const useWebDateTimeInputEditorStyles = makeStyles()(({ spacing }) => ({
     marginLeft: spacing(1),
     width: "auto",
   },
+  variableSelectorContainer: {
+    width: "100%",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+  },
 }));

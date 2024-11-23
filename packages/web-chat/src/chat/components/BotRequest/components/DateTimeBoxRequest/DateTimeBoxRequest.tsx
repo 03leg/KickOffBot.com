@@ -11,6 +11,7 @@ import { SendResponseButton } from '../SendResponseButton';
 import { throwIfNil } from '../../../../utils/guard';
 import { isNil } from 'lodash';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
+import { getParkTimeInMinutes } from './DateTimeBoxRequest.utils';
 
 
 dayjs.extend(customParseFormat);
@@ -22,7 +23,7 @@ interface Props {
 export const DateTimeBoxRequest = ({ request }: Props) => {
     const dateTimeElement = request.element as DateTimeRequestElement;
     const { classes } = useDateTimeBoxRequestStyles();
-    const [dateValue, setDateValue] = useState<Dayjs | null>(null); 
+    const [dateValue, setDateValue] = useState<Dayjs | null>(null);
     const [error, setError] = useState<DateTimeValidationError | null>(null);
 
     const handleSendResponse = useCallback(() => {
@@ -41,6 +42,11 @@ export const DateTimeBoxRequest = ({ request }: Props) => {
     }, []);
 
     const minDate = useMemo(() => {
+        if (dateTimeElement.minDate) {
+            const result = dayjs(dateTimeElement.minDate, dateTimeElement.dateTimeFormat, false);
+            return result;
+        }
+
         if (dateTimeElement.availableDateTimes === AvailableDateTimes.FutureDatesAndToday) {
             return dayjs(new Date());
         }
@@ -49,15 +55,18 @@ export const DateTimeBoxRequest = ({ request }: Props) => {
             return dayjs(new Date()).add(1, 'day');
         }
 
-        if (dateTimeElement.minDate) {
-            return dayjs(dateTimeElement.minDate);
-        }
-
         return undefined;
-
     }, [dateTimeElement.availableDateTimes]);
 
     const maxDate = useMemo(() => {
+        if (dateTimeElement.maxDate) {
+            if (dateTimeElement.parkTime && dateTimeElement.parkTimeType === TimeDurationUnit.DAYS) {
+                return dayjs(dateTimeElement.maxDate, dateTimeElement.dateTimeFormat, false).add(-dateTimeElement.parkTime, 'day');
+            }
+
+            return dayjs(dateTimeElement.maxDate, dateTimeElement.dateTimeFormat, false);
+        }
+
         if (dateTimeElement.availableDateTimes === AvailableDateTimes.PastDatesAndToday) {
             return dayjs(new Date());
         }
@@ -66,71 +75,119 @@ export const DateTimeBoxRequest = ({ request }: Props) => {
             return dayjs(new Date()).add(-1, 'day');
         }
 
-        if (dateTimeElement.maxDate) {
-
-            if (dateTimeElement.parkTime && dateTimeElement.parkTimeType === TimeDurationUnit.DAYS) {
-                return dayjs(dateTimeElement.maxDate).add(-dateTimeElement.parkTime, 'day');
-            }
-
-            return dayjs(dateTimeElement.maxDate);
-        }
-
         return undefined;
 
     }, [dateTimeElement.availableDateTimes]);
 
-    const handleShouldDisableDate = useCallback((date: Dayjs): boolean => {
+    const handleShouldDisableDate = useCallback((dateArgument: Dayjs): boolean => {
+        let result = false;
 
         if (dateTimeElement.disableDaysOfWeek && Array.isArray(dateTimeElement.disabledDaysOfWeek)) {
-            return dateTimeElement.disabledDaysOfWeek.includes(date.day());
+            result = dateTimeElement.disabledDaysOfWeek.includes(dateArgument.day());
         }
 
-        if (dateTimeElement.availableDateTimes === AvailableDateTimes.DatesFromVariable && dateTimeElement.variableAvailableDateTimes) {
+        if (result === false && dateTimeElement.availableDateTimes === AvailableDateTimes.DatesFromVariable && dateTimeElement.variableAvailableDateTimes) {
             const variableValue = dateTimeElement.variableAvailableDateTimes;
             const datesFromVariable = variableValue.map(d => dayjs(d, dateTimeElement.dateTimeFormat, false).format('YYYY-MM-DD'));
-            const currentDate = date.format('YYYY-MM-DD');
+            const currentDate = dateArgument.format('YYYY-MM-DD');
 
-            return !datesFromVariable.includes(currentDate);
+            result = !datesFromVariable.includes(currentDate);
         }
 
-        if (!isNil(dateTimeElement.disabledDates)) {
-            return dateTimeElement.disabledDates.map(d => dayjs(d, dateTimeElement.dateTimeFormat, false).format('YYYY-MM-DD')).includes(date.format('YYYY-MM-DD'));
+        if (result === false && !isNil(dateTimeElement.disabledDates)) {
+            result = dateTimeElement.disabledDates.map(d => dayjs(d, dateTimeElement.dateTimeFormat, false).format('YYYY-MM-DD')).includes(dateArgument.format('YYYY-MM-DD'));
         }
 
-        return false;
+        if (result === false && !isNil(dateTimeElement.disabledDates) && dateTimeElement.parkTime && dateTimeElement.parkTimeType === TimeDurationUnit.DAYS) {
+            const formatDate = 'YYYY-MM-DD' as const;
+            let startDateTime = dateArgument;
+            const timeStep = 1;
+
+            while (dateTimeElement.parkTime > timeStep) {
+                const currentSlotTime = startDateTime.add(timeStep, 'day');
+                const formattedCurrentSlotDate = currentSlotTime.format(formatDate);
+
+                const hasInDisabledDays = dateTimeElement.disabledDates.map(d => dayjs(d, dateTimeElement.dateTimeFormat, false).format('YYYY-MM-DD')).includes(formattedCurrentSlotDate);
+                if (hasInDisabledDays) {
+                    result = true;
+                    break;
+                }
+            }
+        }
+
+        return result;
     }, [dateTimeElement.availableDateTimes, dateTimeElement.variableAvailableDateTimes, dateTimeElement.dateTimeFormat]);
 
-    const handleShouldDisableTime = useCallback((date: Dayjs, view: TimeView): boolean => {
+    const handleShouldDisableTime = useCallback((dateTimeArgument: Dayjs, view: TimeView): boolean => {
 
         if ([AvailableDateTimes.FutureDates, AvailableDateTimes.PastDates].includes(dateTimeElement.availableDateTimes)
-            && date.format('YYYY-MM-DD') === dayjs(new Date()).format('YYYY-MM-DD')) {
+            && dateTimeArgument.format('YYYY-MM-DD') === dayjs(new Date()).format('YYYY-MM-DD')) {
             return true;
         }
 
+        let result = false;
 
         if (dateTimeElement.availableDateTimes === AvailableDateTimes.DatesFromVariable && dateTimeElement.variableAvailableDateTimes) {
             const variableValue = dateTimeElement.variableAvailableDateTimes;
             const actualFormat = view === 'hours' ? 'YYYY-MM-DD HH' : 'YYYY-MM-DD HH:mm';
 
             const datesFromVariable = variableValue.map(d => dayjs(d, dateTimeElement.dateTimeFormat, false).format(actualFormat));
-            const currentDate = date.format(actualFormat);
+            const currentDate = dateTimeArgument.format(actualFormat);
 
-            return !datesFromVariable.includes(currentDate);
+            result = !datesFromVariable.includes(currentDate);
         }
 
-        let result = false;
-
-        if (!isNil(dateTimeElement.disabledTimes) && view === 'minutes') {
+        if (result === false && !isNil(dateTimeElement.disabledTimes) && view === 'minutes') {
             const format = 'HH:mm';
-            result = dateTimeElement.disabledTimes.map(d => dayjs(getMinMaxValue(d), dateTimeElement.dateTimeFormat, false).format(format)).includes(date.format(format));
+            result = dateTimeElement.disabledTimes.map(d => dayjs(getMinMaxValue(d), dateTimeElement.dateTimeFormat, false).format(format)).includes(dateTimeArgument.format(format));
         }
 
-        if (!result && !isNil(dateTimeElement.disabledDateAndTimes) && view === 'minutes') {
+        if (result === false && !isNil(dateTimeElement.disabledDateAndTimes) && view === 'minutes') {
             const dateAndTimeFormat = 'YYYY-MM-DD HH:mm';
 
             result = dateTimeElement.disabledDateAndTimes.map(d => {
                 return dayjs(d, dateTimeElement.dateTimeFormat, false).format(dateAndTimeFormat);
-            }).includes(date.format(dateAndTimeFormat));
+            }).includes(dateTimeArgument.format(dateAndTimeFormat));
+        }
+
+        if (result === false && dateTimeElement.parkTime && view === 'minutes') {
+            let startDateTime = dateTimeArgument;
+            const timeStep = dateTimeElement.minutesStep || 5;
+
+            let durationInMinutes = getParkTimeInMinutes(dateTimeElement.parkTime, dateTimeElement.parkTimeType ?? TimeDurationUnit.MINUTES);
+
+            while (durationInMinutes > timeStep) {
+                const formatDateTime = 'YYYY-MM-DD HH:mm' as const;
+                const formatTime = 'HH:mm' as const;
+                const currentSlotTime = startDateTime.add(timeStep, 'minute');
+                const formattedCurrentSlotDateTime = currentSlotTime.format(formatDateTime);
+                const formattedCurrentSlotTime = currentSlotTime.format(formatTime);
+
+                if (!isNil(dateTimeElement.disabledTimes)) {
+                    const hasInDisabledTimes = dateTimeElement.disabledTimes.map(d => dayjs(getMinMaxValue(d), dateTimeElement.dateTimeFormat, false).format(formatTime)).includes(formattedCurrentSlotTime)
+
+                    if (hasInDisabledTimes) {
+                        result = true;
+                        break;
+                    }
+                }
+
+                if (!isNil(dateTimeElement.disabledDateAndTimes)) {
+                    const hasInDisabledDateAndTimes = dateTimeElement.disabledDateAndTimes.map(d => {
+                        return dayjs(d, dateTimeElement.dateTimeFormat, false).format(formatDateTime);
+                    }).includes(formattedCurrentSlotDateTime);
+
+                    if (hasInDisabledDateAndTimes) {
+                        result = true;
+                        break;
+                    }
+                }
+
+                startDateTime = currentSlotTime;
+                durationInMinutes -= timeStep;
+            }
+
+
         }
 
         return result;

@@ -113,6 +113,12 @@ export const EditVariableButton = ({ variable }: Props) => {
             }
         }
 
+        if (variable.type === VariableType.ARRAY && variable.arrayItemType === VariableType.DATE_TIME) {
+            if (!variable.dateTimeFormat) {
+                disabled = true;
+            }
+        }
+
         setDisabledConfirmationButton(disabled);
     }, [variables]);
 
