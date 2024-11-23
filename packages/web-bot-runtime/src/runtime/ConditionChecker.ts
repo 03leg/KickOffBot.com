@@ -3,11 +3,13 @@ import {
   ConditionItem,
   VariableType,
   ConditionOperator,
+  NOW_DATE_TIME_VARIABLE_NAME,
 } from '@kickoffbot.com/types';
 import { isEmpty, isNil } from 'lodash';
 import { throwIfNil } from 'src/utils/guard';
 import { WebUserContext } from './WebUserContext';
 import { WebBotRuntimeUtils } from './WebBotRuntimeUtils';
+import * as moment from 'moment';
 
 export class ConditionChecker {
   public static check(
@@ -63,11 +65,16 @@ export class ConditionChecker {
     if (isNil(item.variableIdValue)) {
       conditionValue = item.value;
     } else {
-      const variableValue = utils.getVariableById(item.variableIdValue);
-      const currentValue = userContext.getVariableValueByName(
-        variableValue.name,
-      );
-      conditionValue = currentValue;
+      const valueVariable = utils.getVariableById(item.variableIdValue);
+
+      if (valueVariable.name === NOW_DATE_TIME_VARIABLE_NAME) {
+        conditionValue = moment(new Date()).format(variable.dateTimeFormat);
+      } else {
+        const currentValue = userContext.getVariableValueByName(
+          valueVariable.name,
+        );
+        conditionValue = currentValue;
+      }
     }
 
     switch (variable.type) {
@@ -100,10 +107,58 @@ export class ConditionChecker {
           item.operator,
         );
       }
+      case VariableType.DATE_TIME: {
+        return this.checkDateTimeItem(
+          currentVariableValue as string,
+          variable.dateTimeFormat,
+          conditionValue as string,
+          item.operator,
+        );
+      }
       default: {
         throw new Error('NotImplementedError');
       }
     }
+  }
+  static checkDateTimeItem(
+    currentValue: string,
+    dateTimeFormat: string,
+    conditionValue: string,
+    operator: ConditionOperator,
+  ): boolean {
+    if (
+      moment(currentValue, dateTimeFormat).isValid() === false ||
+      moment(conditionValue, dateTimeFormat).isValid() === false
+    ) {
+      return false;
+    }
+
+    switch (operator) {
+      case ConditionOperator.EQUAL_TO: {
+        return (
+          moment(currentValue, dateTimeFormat).format(dateTimeFormat) ===
+          moment(conditionValue, dateTimeFormat).format(dateTimeFormat)
+        );
+      }
+      case ConditionOperator.NOT_EQUAL_TO: {
+        return (
+          moment(currentValue, dateTimeFormat).format(dateTimeFormat) !==
+          moment(conditionValue, dateTimeFormat).format(dateTimeFormat)
+        );
+      }
+      case ConditionOperator.GREATER_THAN: {
+        return moment(currentValue, dateTimeFormat).isAfter(
+          moment(conditionValue, dateTimeFormat),
+        );
+      }
+      case ConditionOperator.LESS_THAN: {
+        return moment(currentValue, dateTimeFormat).isBefore(
+          moment(conditionValue, dateTimeFormat),
+        );
+      }
+    }
+
+    throw new Error('Method not implemented.');
   }
 
   static checkObjectItem(
