@@ -1,4 +1,4 @@
-import { ChangeDateTimeVariableOperation, ChangeDateTimeVariableWorkflow, TimeDurationUnit } from '@kickoffbot.com/types';
+import { BotVariable, ChangeDateTimeVariableOperation, ChangeDateTimeVariableWorkflow, TimeDurationUnit, VariableType } from '@kickoffbot.com/types';
 import { Box, FormControlLabel, MenuItem, Radio, RadioGroup, Select, SelectChangeEvent } from '@mui/material';
 import React, { useCallback, useEffect } from 'react'
 import { useDateTimeTypeVariableEditorStyles } from './DateTimeTypeVariableEditor.style';
@@ -37,6 +37,14 @@ export const DateTimeTypeVariableEditor = ({ onWorkflowChange, workflow }: Props
         setDurationType(event.target.value as TimeDurationUnit);
     }, []);
 
+    const handleNewValueVariableFilter = useCallback((variable: BotVariable) => {
+        return [VariableType.DATE_TIME, VariableType.STRING].includes(variable.type);
+    }, []);
+
+    const handleDurationVariableFilter = useCallback((variable: BotVariable) => {
+        return [VariableType.NUMBER, VariableType.STRING].includes(variable.type);
+    }, []);
+
     return (
         <Box className={classes.root}>
 
@@ -48,11 +56,11 @@ export const DateTimeTypeVariableEditor = ({ onWorkflowChange, workflow }: Props
 
             <Box className={classes.valueEditors}>
                 {operation === ChangeDateTimeVariableOperation.SET_NEW_VALUE &&
-                    <AppTextField label="New value" value={newValue} onValueChange={handleNewValueChange} />
+                    <AppTextField label="New value" value={newValue} onValueChange={handleNewValueChange} onVariableFilter={handleNewValueVariableFilter} />
                 }
                 {(operation === ChangeDateTimeVariableOperation.ADD_DURATION || operation === ChangeDateTimeVariableOperation.REMOVE_DURATION) &&
                     <Box className={classes.durationContainer}>
-                        <AppTextField label="Duration" value={duration} onValueChange={handleDurationChange} />
+                        <AppTextField label="Duration" value={duration} onValueChange={handleDurationChange} onVariableFilter={handleDurationVariableFilter} />
                         <Select
                             fullWidth
                             value={durationType}

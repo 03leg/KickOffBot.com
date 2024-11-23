@@ -43,13 +43,13 @@ export const ChangeVariable = ({ element }: Props) => {
                 const wd = uiElement.workflowDescription as ChangeDateTimeVariableWorkflow;
                 switch (wd.operation) {
                     case ChangeDateTimeVariableOperation.ADD_DURATION: {
-                        return `Current value + duration`;
+                        return `current value + ${wd.duration} ${wd.durationType?.toLowerCase()}`;
                     }
                     case ChangeDateTimeVariableOperation.REMOVE_DURATION: {
-                        return `Current value - duration`;
+                        return `current value - ${wd.duration} ${wd.durationType?.toLowerCase()}`;
                     }
                     case ChangeDateTimeVariableOperation.SET_NEW_VALUE: {
-                        return 'New value';
+                        return `${wd.newValue}`;
                     }
                     default:
                         {
