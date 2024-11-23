@@ -136,7 +136,7 @@ export const ConditionItemComponent = ({ item, showLogicalOperatorSelector, next
     }, [selectedVariable]);
 
     const sourceType = useMemo(() => {
-        if (variableType === VariableType.BOOLEAN || variableType === VariableType.STRING || variableType === VariableType.NUMBER) {
+        if (variableType === VariableType.BOOLEAN || variableType === VariableType.STRING || variableType === VariableType.NUMBER || variableType === VariableType.DATE_TIME) {
             return variableType;
         }
 

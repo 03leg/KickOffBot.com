@@ -53,6 +53,10 @@ export const OperatorSelector = ({ variableType, onOperatorChange, operator }: P
             case VariableType.BOOLEAN: {
                 break;
             }
+            case VariableType.DATE_TIME:{
+                result.push(...numberOperators);
+                break
+            }
             default:
                 {
                     throw new Error('NotImplementedError');

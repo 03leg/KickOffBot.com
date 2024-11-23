@@ -17,7 +17,6 @@ interface Props {
 
 export const ConditionValueEditor = ({ value, onConditionValueChange, variableType, variableIdValue, pathVariableIdValue }: Props) => {
     const { classes: variableClasses } = useVariableInTextStyles();
-    //   console.log('rerender condition value editor', value);kv
 
     const handleValueChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
         let newValue: boolean | number | string | undefined = undefined;
@@ -31,6 +30,7 @@ export const ConditionValueEditor = ({ value, onConditionValueChange, variableTy
                 newValue = Number(event.target.value);
                 break;
             }
+            case VariableType.DATE_TIME:
             case VariableType.STRING: {
                 newValue = event.target.value;
                 break;
@@ -62,11 +62,22 @@ export const ConditionValueEditor = ({ value, onConditionValueChange, variableTy
         return getVariableById(variableIdValue);
     }, [getVariableById, variableIdValue]);
 
+
+    const availableTypesForVariable = useMemo(() => {
+        const result = [variableType];
+
+        if (variableType === VariableType.DATE_TIME) {
+            result.push(VariableType.STRING);
+        }
+
+        return result;
+    }, [variableType]);
+
     return (
         <Box sx={{ marginTop: 2, display: 'flex', alignItems: 'center' }}>
             {isNil(variableIdValue) &&
                 <>
-                    {variableType === VariableType.STRING && <TextField label='Value' sx={{ marginRight: 1 }} fullWidth variant="outlined" value={value} onChange={handleValueChange} />}
+                    {(variableType === VariableType.STRING || variableType === VariableType.DATE_TIME) && <TextField label='Value' sx={{ marginRight: 1 }} fullWidth variant="outlined" value={value} onChange={handleValueChange} />}
                     {variableType === VariableType.NUMBER && <TextField label='Value' type="number" sx={{ marginRight: 1 }} fullWidth variant="outlined" value={value} onChange={handleValueChange} />}
 
                     {variableType === VariableType.BOOLEAN &&
@@ -85,7 +96,7 @@ export const ConditionValueEditor = ({ value, onConditionValueChange, variableTy
                 </IconButton>
             </Box>}
 
-            <VariableSelectorDialog onInsertVariable={handleInsertVariable} supportPathForObject={true} availableVariableTypes={[variableType]} />
+            <VariableSelectorDialog onInsertVariable={handleInsertVariable} supportPathForObject={true} availableVariableTypes={availableTypesForVariable} />
         </Box >
     )
 }

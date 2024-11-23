@@ -162,6 +162,16 @@ export class WebBotRuntimeUtils {
         }
 
         return text;
+      } else if (
+        typeof variableValue === 'string' &&
+        !isNil(variableMetaData.dateTimeFormat) &&
+        variableMetaData.type === VariableType.DATE_TIME &&
+        converter === VariableConverter.FORMAT &&
+        converterParams.length === 1
+      ) {
+        return moment(variableValue, variableMetaData.dateTimeFormat).format(
+          converterParams[0] as string,
+        );
       } else {
         return variableValue as string;
       }
