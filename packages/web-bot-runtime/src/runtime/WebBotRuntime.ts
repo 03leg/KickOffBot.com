@@ -42,6 +42,7 @@ import {
   ClientCodeDescriptionRuntime,
   CodeResultDescription,
   NOW_DATE_TIME_VARIABLE_NAME,
+  BotVariable,
 } from '@kickoffbot.com/types';
 import { WebBotRuntimeUtils } from './WebBotRuntimeUtils';
 import { WebUserContext } from './WebUserContext';
@@ -284,7 +285,20 @@ export class WebBotRuntime {
     const getRequestedVariables = () => {
       const result: Record<string, unknown> = {};
       for (const variableId of element.requiredVariableIds) {
-        const variable = this._utils.getVariableById(variableId);
+        let variable: BotVariable | null = null;
+        try {
+          variable = this._utils.getVariableById(variableId);
+        } catch (error) {
+          console.error(
+            "Requested variable doesn't exist: " + variableId,
+            error,
+          );
+        }
+
+        if (isNil(variable)) {
+          continue;
+        }
+
         let value = this._userContext.getVariableValueByName(variable.name);
         if (variable.name === NOW_DATE_TIME_VARIABLE_NAME) {
           value = new Date().toISOString();

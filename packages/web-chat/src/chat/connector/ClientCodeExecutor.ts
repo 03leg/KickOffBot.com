@@ -1,5 +1,5 @@
 import { BotVariable, ClientCodeDescriptionRuntime, CodeResultDescription } from "@kickoffbot.com/types";
-import dayjs from 'dayjs';
+import dayjs from "dayjs";
 
 export class VariablesManager {
   public newValues: Record<BotVariable["name"], unknown> = {};
@@ -22,7 +22,12 @@ export class ClientCodeExecutor {
     const variablesManager = new VariablesManager(codeDescription.requestedVariables);
     const fn = new AsyncFunction("VariablesManager", "libs", codeDescription.code);
 
-    await fn(variablesManager, { dayjs: dayjs });
+    try {
+      await fn(variablesManager, { dayjs: dayjs });
+    } catch (error) {
+      console.error(error);
+      throw error;
+    }
 
     const result: CodeResultDescription = {
       updatedVariables: variablesManager.newValues,
