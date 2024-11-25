@@ -91,9 +91,15 @@ export class WebRuntimeConnector {
         }
         case ChatItemTypeWebRuntime.CLIENT_CODE: {
           const clientCodeDescription = item.content as ClientCodeDescriptionRuntime;
-          const result = await ClientCodeExecutor.execute(clientCodeDescription);
+          try {
+            const result = await ClientCodeExecutor.execute(clientCodeDescription);
 
-          await this.handleClientCodeExecuted(item, result);
+            await this.handleClientCodeExecuted(item, result);
+          } catch (error) {
+            this._storeApi.showError("Failed to execute client code. Please contact with bot developer.");
+          } finally {
+            this._storeApi.setLoadingValue(false);
+          }
           break;
         }
       }
