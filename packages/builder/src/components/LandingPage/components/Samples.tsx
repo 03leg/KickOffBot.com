@@ -6,7 +6,7 @@ import LocalPizzaIcon from '@mui/icons-material/LocalPizza';
 import PublicIcon from '@mui/icons-material/Public';
 import Script from 'next/script';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
-import DemoBotSectionShadowDom from './DemoBotSectionShadowDom/DemobotSectionShadowDom';
+import DemoBotSectionShadowDom from './DemoBotSectionShadowDom/DemoBotSectionShadowDom';
 
 type CurrentBotDemo = 'pizza-market' | 'country-history-quiz' | 'barber-shop';
 
