@@ -31,7 +31,7 @@ export default function CreatePage() {
     return (
         <ConfirmProvider>
             <Layout>
-                <Box sx={{ padding: (theme) => theme.spacing(2), height: '100%', display: 'flex', flexDirection: 'column', }}>
+                <Box data-testid="CreatePage" sx={{ padding: (theme) => theme.spacing(2), height: '100%', display: 'flex', flexDirection: 'column', }}>
                     <SnackbarProvider />
                     {isLoading && <LoadingIndicator />}
                     {!isLoading && bots.length > 0 && <>
@@ -39,7 +39,7 @@ export default function CreatePage() {
                             <h1>My bots</h1>
                             <SettingsWindow onUpdate={refetch} botNames={bots.map((botDescription) => botDescription.name)} />
                         </Box>
-                        <Stack direction="row" spacing={2} padding={({ spacing }) => spacing(1, 0, 1, 0)} flexWrap="wrap" useFlexGap={true} overflow={'auto'}>
+                        <Stack direction="row" spacing={2} padding={({ spacing }) => spacing(2, 0, 1, 0)} flexWrap="wrap" useFlexGap={true} overflow={'auto'}>
                             {bots.map((botDescription) => (<BotDescriptionCard description={botDescription} key={botDescription.id} onEdit={handleEdit} onRemove={handleRemove} />))}
                         </Stack>
                     </>

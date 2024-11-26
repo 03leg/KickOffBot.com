@@ -56,7 +56,7 @@ export const BotDescriptionCard = ({ description, onEdit, onRemove }: Props) => 
         throw new Error('InvalidOperationError');
     }, [description.botType]);
 
-    const cardContent = (<Card sx={{
+    const cardContent = (<Card data-testid="BotDescriptionCard" sx={{
         width: 275,
         display: "flex",
         flexDirection: "column",
