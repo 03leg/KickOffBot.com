@@ -5,16 +5,19 @@ import DemoBotSection from './DemoBotSection/DemoBotSection';
 import LocalPizzaIcon from '@mui/icons-material/LocalPizza';
 import PublicIcon from '@mui/icons-material/Public';
 import Script from 'next/script';
-import { env } from '~/env.mjs';
+import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
+import DemoBotSectionShadowDom from './DemoBotSectionShadowDom/DemobotSectionShadowDom';
 
-type CurrentBotDemo = 'pizza-market' | 'country-history-quiz';
+type CurrentBotDemo = 'pizza-market' | 'country-history-quiz' | 'barber-shop';
 
 export const Samples = () => {
     const [currentBot, setCurrentBot] = React.useState<CurrentBotDemo>('pizza-market');
 
+    console.log(currentBot);
+
     return <>
-        <Script src={`${env.NEXT_PUBLIC_APP_URL}/dist/kickoffbot-web-starter.js`} />
-        {/* <Script src={`https://www.kickoffbot.com/dist/kickoffbot-web-starter.js`} /> */}
+        {/* <Script src={`${env.NEXT_PUBLIC_APP_URL}/dist/kickoffbot-web-starter.js`} /> */}
+        <Script src={`https://www.kickoffbot.com/dist/kickoffbot-web-starter.js`} />
         <Box
             sx={(theme) => ({
                 width: '100%',
@@ -42,10 +45,10 @@ export const Samples = () => {
                     Bring your bot ideas to life! Check out these demo bots that reflect the endless possibilities of our bot builder.
                 </div>
 
-                <Box sx={{ mt: 4, mb: 5 }}>
+                <Box sx={{ mt: 4, mb: 5, textAlign: 'center' }}>
                     <Chip variant={currentBot === 'pizza-market' ? 'filled' : 'outlined'}
                         color="warning"
-                        sx={{ fontSize: '1rem' }}
+                        sx={{ fontSize: '1rem', mt: 1 }}
                         onClick={() => { setCurrentBot('pizza-market') }}
                         clickable
                         icon={<LocalPizzaIcon />}
@@ -53,11 +56,19 @@ export const Samples = () => {
                     </Chip>
                     <Chip variant={currentBot === 'country-history-quiz' ? 'filled' : 'outlined'}
                         color="default"
-                        sx={{ fontSize: '1rem', ml: 1 }}
+                        sx={{ fontSize: '1rem', ml: 1, mt: 1 }}
                         onClick={() => { setCurrentBot('country-history-quiz') }}
                         clickable
                         icon={<PublicIcon />}
                         label="Country History Quiz" >
+                    </Chip>
+                    <Chip variant={currentBot === 'barber-shop' ? 'filled' : 'outlined'}
+                        color="info"
+                        sx={{ fontSize: '1rem', ml: 1, mt: 1 }}
+                        onClick={() => { setCurrentBot('barber-shop') }}
+                        clickable
+                        icon={<CalendarMonthIcon />}
+                        label="Schedule Your Trim" >
                     </Chip>
                 </Box>
 
@@ -75,6 +86,11 @@ export const Samples = () => {
                     botUrl='https://www.kickoffbot.com/r/cm1qksete0001spc2voeaj28v'
                     header='Highly interactive quiz that tests your knowledge about world history and save your progress in a Google Spreadsheet. Try it now and see how it works!😊'
                 />}
+                {currentBot === 'barber-shop' && <DemoBotSectionShadowDom header={"In this bot, you'll find a demo for booking appointments at a barbershop. The booking results are displayed in a Google Spreadsheet. Please note that already booked time slots will not be available for reservation."}
+                    googleSpreadsheetUrl={'https://docs.google.com/spreadsheets/d/e/2PACX-1vTlgrIz9FiMHpsWuXyY2-5I0dwbiLo3n_zPHxdjSk90HDM1BGhfoV20P2FXBq86bKvZE2sLGIaqYvpJ/pubhtml?gid=13501546&single=true&widget=true&headers=false'}
+                    botId={'cm3x2eh6k00019n5e0718tyng'}
+                    botUrl={'https://www.kickoffbot.com/r/cm3x2eh6k00019n5e0718tyng'} />}
+
             </Container>
 
         </Box>
