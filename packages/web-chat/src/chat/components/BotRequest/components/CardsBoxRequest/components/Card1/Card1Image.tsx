@@ -7,7 +7,7 @@ import { UnsplashAuthorBox } from "../../../../../BotMessage/components/MediaMes
 
 interface Props {
   image?: string | UnsplashPhoto;
-  onImageLoaded: () => void; 
+  onImageLoaded: () => void;
 }
 
 export const Card1Image = ({ image, onImageLoaded }: Props) => {
@@ -21,6 +21,7 @@ export const Card1Image = ({ image, onImageLoaded }: Props) => {
   return <>
     {typeof image === "string" &&
       <img
+        data-testid="Card1Image"
         className={classes.img}
         src={image}
         srcSet={image}
@@ -31,6 +32,7 @@ export const Card1Image = ({ image, onImageLoaded }: Props) => {
     {typeof image === "object" && image.source === "unsplash" && <Box sx={{ position: 'relative' }} onMouseEnter={() => setShowPhotoInfo(true)}
       onMouseLeave={() => setShowPhotoInfo(false)}>
       <img
+        data-testid="Card1Image"
         className={classes.img}
         src={image.regularSrc}
         srcSet={image.regularSrc}

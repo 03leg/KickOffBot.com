@@ -2,10 +2,12 @@ import { makeStyles } from "tss-react/mui";
 
 export const useSingleMediaViewStyles = makeStyles()(({ spacing, shape }) => ({
   root: {
-    // marginTop: 5,
+    height: 200,
+    display: "flex",
+    justifyContent: "center",
   },
   img: {
-    width: "100%",
+    height: "100%",
     borderRadius: shape.borderRadius,
     objectFit: "contain",
   },
