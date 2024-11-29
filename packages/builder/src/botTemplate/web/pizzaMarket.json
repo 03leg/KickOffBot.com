@@ -1,0 +1,1457 @@
+{
+  "blocks": [
+    {
+      "id": "/start",
+      "blockType": 2,
+      "title": "/start",
+      "position": {
+        "x": 363,
+        "y": 175
+      },
+      "elements": [
+        {
+          "type": "web-start-commands",
+          "commands": [
+            {
+              "id": "start",
+              "title": "Start the bot",
+              "description": "Point where your bot will start"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "fb96a701-fa28-40a1-8afe-c7b1a0f195f6",
+      "blockType": 0,
+      "title": "Block #1",
+      "position": {
+        "x": 843.6000366210938,
+        "y": -146.59999084472656
+      },
+      "elements": [
+        {
+          "id": "web-content-message-c15fc27b-b627-403e-b7df-31e9c118b442",
+          "type": "web-content-message",
+          "attachments": [],
+          "json": "{\"blocks\":[{\"key\":\"d2gb\",\"text\":\"Hey there! Welcome to Pizza Market!\",\"type\":\"unstyled\",\"depth\":0,\"inlineStyleRanges\":[],\"entityRanges\":[],\"data\":{}}],\"entityMap\":{}}",
+          "htmlContent": "<p>Hey there! Welcome to Pizza Market!</p>"
+        },
+        {
+          "id": "web-content-images-62f03f31-82a1-428c-a421-67cf09f79852",
+          "type": "web-content-images",
+          "medias": [
+            {
+              "image": "https://media1.giphy.com/media/1108D2tVaUN3eo/giphy.gif?cid=42e3a184ix2d476udajsnrr0jh75jdymcwyeny2t4q1ybey4&ep=v1_gifs_search&rid=giphy.gif&ct=g",
+              "type": "image",
+              "id": "42d842e2-f1e5-48c0-ad70-c184941a48d5"
+            }
+          ],
+          "viewMode": "horizontalMediaList"
+        },
+        {
+          "id": "logic-change-variable-17059e2d-fc40-41bd-aeb4-d7e99985e983",
+          "type": "logic-change-variable",
+          "selectedVariableId": "d994c214-7842-4dcb-ab47-7aef73aeeba8",
+          "workflowDescription": {
+            "operation": "Remove",
+            "removeDescription": {
+              "conditions": [],
+              "mode": "ALL",
+              "logicalOperator": "AND"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "27acd714-1795-491b-96a1-0e98a7dfde70",
+      "blockType": 0,
+      "title": "Block #2",
+      "position": {
+        "x": 1729,
+        "y": 138
+      },
+      "elements": [
+        {
+          "id": "logic-change-variable-3af49e37-468f-4884-8fa1-ded27f1b153e",
+          "type": "logic-change-variable",
+          "selectedVariableId": "7f10bc8b-4880-48ce-8c0a-6bba808aeb2b",
+          "workflowDescription": {
+            "expression": "Pizza 🍕"
+          }
+        },
+        {
+          "id": "logic-change-variable-d15eb8a7-b757-43b6-afef-603fe3518f0b",
+          "type": "logic-change-variable",
+          "selectedVariableId": "20bba294-890e-4ff6-b3e3-1841760d10d2",
+          "workflowDescription": {
+            "operation": "Set",
+            "setDescription": {
+              "source": "Variable",
+              "variableSourceDescription": {
+                "path": {
+                  "variableId": "2c15a4c0-00b2-4283-a77d-ea1dff1b0155"
+                },
+                "extraFilter": {
+                  "logicalOperator": "AND"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "98e457cb-b20c-495a-a3e7-743900a1f9cd",
+      "blockType": 0,
+      "title": "Block #3",
+      "position": {
+        "x": 1603.2000122070312,
+        "y": -872.7999877929688
+      },
+      "elements": [
+        {
+          "id": "web-content-message-9e005263-a579-4f71-8ddc-f32ccc93820a",
+          "type": "web-content-message",
+          "attachments": [],
+          "json": "{\"blocks\":[{\"key\":\"67tgc\",\"text\":\"Here’s the tasty lineup we’ve got for you today! 🍕🍕🍕\",\"type\":\"unstyled\",\"depth\":0,\"inlineStyleRanges\":[],\"entityRanges\":[],\"data\":{}}],\"entityMap\":{}}",
+          "htmlContent": "<p>Here’s the tasty lineup we’ve got for you today! 🍕🍕🍕</p>"
+        },
+        {
+          "id": "web-input-cards-d7070463-91c3-4414-b97b-647ff2ebac2b",
+          "type": "web-input-cards",
+          "multipleChoice": false,
+          "strategy": 1,
+          "sourceDescription": {
+            "cardDescription": {
+              "value": "<%itemName%>",
+              "imgUrl": "<%itemUrl%>",
+              "htmlDescription": "<p><span style=\"color: unset; font-size: 20px; background-color: unset\">&lt;%itemName%&gt;</span></p>\n<p><span style=\"color: #5c6370; font-size: 14px; background-color: unset\">&lt;%description%&gt;</span></p>",
+              "jsonDescription": "{\"blocks\":[{\"key\":\"efh4t\",\"text\":\"<%itemName%>\",\"type\":\"unstyled\",\"depth\":0,\"inlineStyleRanges\":[{\"offset\":0,\"length\":12,\"style\":\"font_size_20\"}],\"entityRanges\":[],\"data\":{}},{\"key\":\"fr67c\",\"text\":\"<%description%>\",\"type\":\"unstyled\",\"depth\":0,\"inlineStyleRanges\":[{\"offset\":0,\"length\":15,\"style\":\"color_#5c6370\"},{\"offset\":0,\"length\":15,\"style\":\"font_size_14\"}],\"entityRanges\":[],\"data\":{}}],\"entityMap\":{}}"
+            },
+            "cardsVariableId": "20bba294-890e-4ff6-b3e3-1841760d10d2"
+          },
+          "selectableCards": false,
+          "sendResponseOnSelect": true,
+          "variableId": "398c24d1-83b5-450f-a1de-c5645b3188a9",
+          "generalButtons": [
+            {
+              "content": "🔙 Back",
+              "id": "button-8ed13f94-4873-46d1-b50b-6f46acbaa8df"
+            }
+          ],
+          "useGeneralButtons": true,
+          "cardButtons": [
+            {
+              "content": "🍕 Small, <%sPrice%>$",
+              "id": "button-3c1da508-e7b1-4d87-b63d-b993dcc67569"
+            },
+            {
+              "content": "🍕🍕 Medium, <%mPrice%>$",
+              "id": "1a54c15b-7d62-4ec9-a878-c6717c3e56fd"
+            },
+            {
+              "content": "🍕🍕🍕 Large, <%lPrice%>$",
+              "id": "82cef700-c9cd-4bc3-b59d-80fdac3d820a"
+            }
+          ],
+          "useCardButtons": true
+        }
+      ]
+    },
+    {
+      "id": "cd85bbf3-6a12-4020-a501-01740a9e6b79",
+      "blockType": 0,
+      "title": "Block #4",
+      "position": {
+        "x": 2741.7999877929688,
+        "y": -1139.6000061035156
+      },
+      "elements": [
+        {
+          "id": "web-content-message-50d57ec9-14b4-494d-b68b-31df6ee8ea42",
+          "type": "web-content-message",
+          "attachments": [],
+          "json": "{\"blocks\":[{\"key\":\"ccf6a\",\"text\":\"What size of pizza are you craving today? 🍕😊\",\"type\":\"unstyled\",\"depth\":0,\"inlineStyleRanges\":[],\"entityRanges\":[],\"data\":{}}],\"entityMap\":{}}",
+          "htmlContent": "<p>What size of pizza are you craving today? 🍕😊</p>"
+        },
+        {
+          "id": "web-input-buttons-5a63cf2f-9067-4737-ab65-19d1cb58d6eb",
+          "type": "web-input-buttons",
+          "strategy": "manual",
+          "buttons": [
+            {
+              "content": "🍕Small, <%variables.selected_item.sPrice%>$",
+              "id": "0c402c40-fe98-4830-96bc-11c1c0143d99"
+            },
+            {
+              "content": "🍕🍕Medium, <%variables.selected_item.mPrice%>$",
+              "id": "8dc96632-8303-4f1d-91d0-1474a1ea8d21"
+            },
+            {
+              "content": "🍕🍕🍕Large, <%variables.selected_item.lPrice%>$",
+              "id": "eeb2b04c-5086-4350-9945-f1fff6b96eb8"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "f8d75d5d-37cc-44a0-995b-c5bc57f99959",
+      "blockType": 0,
+      "title": "Block #5",
+      "position": {
+        "x": 3262.7204432333665,
+        "y": -716.4300878381218
+      },
+      "elements": [
+        {
+          "id": "logic-change-variable-95d3fd8b-8cb2-4aa4-a763-c97546173ebf",
+          "type": "logic-change-variable",
+          "selectedVariableId": "2c00703a-aa9f-4b4a-bb4a-7989c6c322a7",
+          "workflowDescription": {
+            "expression": "<%variables.selected_item.sPrice%>"
+          }
+        },
+        {
+          "id": "logic-change-variable-846c4f5e-e126-4d32-b3ee-adc63186ac86",
+          "type": "logic-change-variable",
+          "selectedVariableId": "7edd4b4a-0201-4390-8c67-6a221376b51b",
+          "workflowDescription": {
+            "expression": "small"
+          }
+        }
+      ]
+    },
+    {
+      "id": "97da8e90-8da0-4ec8-9681-1206839f9b17",
+      "blockType": 0,
+      "title": "Block #6",
+      "position": {
+        "x": 3262.1505507602483,
+        "y": -492.1505376344087
+      },
+      "elements": [
+        {
+          "id": "logic-change-variable-b5bda9ad-346f-4e45-a4d9-5ebac1a4e1c3",
+          "type": "logic-change-variable",
+          "selectedVariableId": "2c00703a-aa9f-4b4a-bb4a-7989c6c322a7",
+          "workflowDescription": {
+            "expression": "<%variables.selected_item.mPrice%>"
+          }
+        },
+        {
+          "id": "logic-change-variable-81d1d143-5354-4dcd-895b-10258996593f",
+          "type": "logic-change-variable",
+          "selectedVariableId": "7edd4b4a-0201-4390-8c67-6a221376b51b",
+          "workflowDescription": {
+            "expression": "medium"
+          }
+        }
+      ]
+    },
+    {
+      "id": "9c04820e-13c4-4ef4-b2e6-47023bddb6d2",
+      "blockType": 0,
+      "title": "Block #7",
+      "position": {
+        "x": 3257.1505507602483,
+        "y": -273.1182795698926
+      },
+      "elements": [
+        {
+          "id": "logic-change-variable-c26f51e4-9026-407d-a5eb-def04042e364",
+          "type": "logic-change-variable",
+          "selectedVariableId": "2c00703a-aa9f-4b4a-bb4a-7989c6c322a7",
+          "workflowDescription": {
+            "expression": "<%variables.selected_item.lPrice%>"
+          }
+        },
+        {
+          "id": "logic-change-variable-2d690f06-c914-470b-8cc0-6abc99b8fa2c",
+          "type": "logic-change-variable",
+          "selectedVariableId": "7edd4b4a-0201-4390-8c67-6a221376b51b",
+          "workflowDescription": {
+            "expression": "large"
+          }
+        }
+      ]
+    },
+    {
+      "id": "a72cb6ac-a024-44d2-8211-762bd659cf51",
+      "blockType": 0,
+      "title": "Block #8",
+      "position": {
+        "x": 4268.602189915155,
+        "y": 0.6129097887264834
+      },
+      "elements": [
+        {
+          "id": "logic-change-variable-adfe8ab2-10b0-4b4b-abe6-d8f55668235a",
+          "type": "logic-change-variable",
+          "selectedVariableId": "d994c214-7842-4dcb-ab47-7aef73aeeba8",
+          "workflowDescription": {
+            "operation": "Add",
+            "addDescription": {
+              "source": "Variable",
+              "variableSourceDescription": {
+                "path": {
+                  "variableId": "398c24d1-83b5-450f-a1de-c5645b3188a9"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": "logic-change-variable-46ab3bc8-8a3b-480d-9e38-c82daa68d564",
+          "type": "logic-change-variable",
+          "selectedVariableId": "11e30c86-6cd2-4190-ac4f-2a9485ef1caa",
+          "workflowDescription": {
+            "expression": "<%variables.great_choice_gifs|random%>"
+          }
+        },
+        {
+          "id": "web-content-images-77d23a0a-4d5b-4a8a-92b1-f4104aa96e44",
+          "type": "web-content-images",
+          "medias": [
+            {
+              "image": "<%variables.great_choice_gif%>",
+              "type": "image",
+              "id": "10a9b57c-e33c-44ac-8eb0-e4ca4f350c2c",
+              "maxImageHeight": "250px"
+            }
+          ],
+          "viewMode": "horizontalMediaList"
+        },
+        {
+          "id": "web-content-message-b097113e-1a26-4385-ab8c-47be0631501f",
+          "type": "web-content-message",
+          "attachments": [],
+          "json": "{\"blocks\":[{\"key\":\"8590o\",\"text\":\"🎉Great choice! We’ve just added a <%variables.selected_item.size%> <%variables.selected_item.itemName%> to your basket!\",\"type\":\"unstyled\",\"depth\":0,\"inlineStyleRanges\":[{\"offset\":34,\"length\":69,\"style\":\"BOLD\"},{\"offset\":67,\"length\":36,\"style\":\"font_size_18\"}],\"entityRanges\":[],\"data\":{}}],\"entityMap\":{}}",
+          "htmlContent": "<p>🎉Great choice! We’ve just added a <strong>&lt;%variables.selected_item.size%&gt; </strong><span style=\"color: unset; font-size: 18px; background-color: unset\"><strong>&lt;%variables.selected_item.itemName%&gt;</strong></span> to your basket!</p>"
+        },
+        {
+          "id": "web-content-message-8585923b-8ff5-49fb-92f5-01fcc8b8ed28",
+          "type": "web-content-message",
+          "attachments": [],
+          "json": "{\"blocks\":[{\"key\":\"ji49\",\"text\":\"What's next?\",\"type\":\"unstyled\",\"depth\":0,\"inlineStyleRanges\":[],\"entityRanges\":[],\"data\":{}}],\"entityMap\":{}}",
+          "htmlContent": "<p>What's next?</p>"
+        },
+        {
+          "id": "web-input-buttons-84f12afd-351e-4828-b572-5df69e5cccc4",
+          "type": "web-input-buttons",
+          "strategy": "manual",
+          "buttons": [
+            {
+              "content": "Add more <%variables.current_category_name%>",
+              "id": "9dd78b42-2b39-4a66-a1f0-00f002655eb6"
+            },
+            {
+              "content": "📋 Menu",
+              "id": "aa59279c-80e5-4427-b4f8-85d562c29ee0"
+            },
+            {
+              "content": "🛒Cart",
+              "id": "1f6a7f48-baa5-4e5b-a27e-8bbb6c0d8666"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "2a4cf3e6-5ede-425d-9b80-00f75b42fa70",
+      "blockType": 0,
+      "title": "Block #9",
+      "position": {
+        "x": 1119.7778116861978,
+        "y": 434.00003390842016
+      },
+      "elements": [
+        {
+          "id": "web-content-message-875e01a3-d955-46c6-a27a-ec9912f422fb",
+          "type": "web-content-message",
+          "attachments": [],
+          "json": "{\"blocks\":[{\"key\":\"8t41e\",\"text\":\"What tasty meal can we make for you today? 🍕😊\",\"type\":\"unstyled\",\"depth\":0,\"inlineStyleRanges\":[],\"entityRanges\":[],\"data\":{}}],\"entityMap\":{}}",
+          "htmlContent": "<p>What tasty meal can we make for you today? 🍕😊</p>"
+        },
+        {
+          "id": "web-input-buttons-aed7f592-14ef-457f-90d8-d239ed1f1dfd",
+          "type": "web-input-buttons",
+          "strategy": "manual",
+          "buttons": [
+            {
+              "content": "🍕 Pizza",
+              "id": "6bb4bfab-b04c-4e13-802b-9c2c84c6d73c"
+            },
+            {
+              "content": "🍟 Snacks",
+              "id": "2023d70d-0bd1-4300-9a66-aaf451e08b7d"
+            },
+            {
+              "content": "🍰 Dessert",
+              "id": "0b437a0e-d423-49e7-93bf-5b8bff9fc44e"
+            },
+            {
+              "content": "☕ Drinks",
+              "id": "5b5222df-4337-4233-99f2-752310f61417"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "4a122991-b86c-434f-8361-ca1bb9205b60",
+      "blockType": 0,
+      "title": "Block #10",
+      "position": {
+        "x": 3517.6842426500825,
+        "y": 1624.2631418328538
+      },
+      "elements": [
+        {
+          "id": "logic-change-variable-3a5b85ea-23bb-405e-9395-eca4c299f7ee",
+          "type": "logic-change-variable",
+          "selectedVariableId": "ba2d8c61-94fe-4db8-b860-102df212dc15",
+          "workflowDescription": {
+            "expression": "<%variables.cart.price|sum%>"
+          }
+        },
+        {
+          "id": "logic-condition-31a5bf6f-88c6-49aa-bd31-5866c35c8cea",
+          "type": "logic-condition",
+          "logicalOperator": "AND",
+          "items": [
+            {
+              "id": "0e03f70f-eb17-493d-ae98-71c3b777db9e",
+              "variableId": "ba2d8c61-94fe-4db8-b860-102df212dc15",
+              "value": 0,
+              "operator": "EQUAL_TO"
+            }
+          ]
+        },
+        {
+          "id": "web-content-message-efa73a6f-24f6-481e-ab8b-caec48bac809",
+          "type": "web-content-message",
+          "attachments": [],
+          "json": "{\"blocks\":[{\"key\":\"5t6af\",\"text\":\"Total Price: <%variables.total_price%>$! 🛒✨\",\"type\":\"unstyled\",\"depth\":0,\"inlineStyleRanges\":[{\"offset\":13,\"length\":26,\"style\":\"font_size_24\"},{\"offset\":13,\"length\":26,\"style\":\"BOLD\"}],\"entityRanges\":[],\"data\":{}}],\"entityMap\":{}}",
+          "htmlContent": "<p>Total Price: <span style=\"color: unset; font-size: 24px; background-color: unset\"><strong>&lt;%variables.total_price%&gt;$</strong></span>! 🛒✨</p>"
+        },
+        {
+          "id": "web-input-cards-0354d2c6-3377-4e3d-8785-0339d73faa47",
+          "type": "web-input-cards",
+          "multipleChoice": false,
+          "strategy": 1,
+          "sourceDescription": {
+            "cardDescription": {
+              "value": "<%itemName%>",
+              "imgUrl": "<%itemUrl%>",
+              "htmlDescription": "<p><span style=\"color: unset; font-size: 20px; background-color: unset\">&lt;%itemName%&gt; </span><strong>&lt;%size%&gt;</strong></p>\n<p><span style=\"color: #5c6370; font-size: 14px; background-color: unset\">&lt;%description%&gt;</span></p>\n<p><span style=\"color: unset; font-size: 18px; background-color: unset\"><strong>&lt;%price%&gt;$</strong></span></p>",
+              "jsonDescription": "{\"blocks\":[{\"key\":\"5evlm\",\"text\":\"<%itemName%> <%size%>\",\"type\":\"unstyled\",\"depth\":0,\"inlineStyleRanges\":[{\"offset\":0,\"length\":13,\"style\":\"font_size_20\"},{\"offset\":13,\"length\":8,\"style\":\"BOLD\"}],\"entityRanges\":[],\"data\":{}},{\"key\":\"7li61\",\"text\":\"<%description%>\",\"type\":\"unstyled\",\"depth\":0,\"inlineStyleRanges\":[{\"offset\":0,\"length\":15,\"style\":\"color_#5c6370\"},{\"offset\":0,\"length\":15,\"style\":\"font_size_14\"}],\"entityRanges\":[],\"data\":{}},{\"key\":\"all40\",\"text\":\"<%price%>$\",\"type\":\"unstyled\",\"depth\":0,\"inlineStyleRanges\":[{\"offset\":0,\"length\":10,\"style\":\"BOLD\"},{\"offset\":0,\"length\":10,\"style\":\"font_size_18\"}],\"entityRanges\":[],\"data\":{}}],\"entityMap\":{}}"
+            },
+            "cardsVariableId": "d994c214-7842-4dcb-ab47-7aef73aeeba8"
+          },
+          "selectableCards": false,
+          "buttons": [
+            {
+              "content": "❌ Remove",
+              "id": "button-c1fada68-a264-4dab-bc07-8a579f474b4e"
+            }
+          ],
+          "useCardButtons": true,
+          "showSendButton": true,
+          "sendButtonText": "✅ Order",
+          "variableId": "071f4edd-4ddf-4413-b7c6-5303d63d1a8b",
+          "cardButtons": [
+            {
+              "content": "❌ Delete",
+              "id": "e43946fe-1a16-49c7-9d3e-a4c43dcb5c52"
+            }
+          ],
+          "generalButtons": [
+            {
+              "content": "✅ Order",
+              "id": "button-001715c7-aa8d-44cf-95ec-7ae1d025e9e3"
+            },
+            {
+              "content": "📋 Add something else...",
+              "id": "f553e0ac-bc65-4347-a513-c9067d6f273c"
+            }
+          ],
+          "useGeneralButtons": true
+        }
+      ]
+    },
+    {
+      "id": "a42997e7-3a7c-4589-8421-ff43e1206d36",
+      "blockType": 0,
+      "title": "Block #11",
+      "position": {
+        "x": 4401.823565314798,
+        "y": 1638.5294656192555
+      },
+      "elements": [
+        {
+          "id": "logic-change-variable-9481167e-dbd7-4757-9628-e070a11c1ad1",
+          "type": "logic-change-variable",
+          "selectedVariableId": "d994c214-7842-4dcb-ab47-7aef73aeeba8",
+          "workflowDescription": {
+            "operation": "Remove",
+            "removeDescription": {
+              "conditions": [
+                {
+                  "id": "c4b9234f-c372-48d6-9244-5224bf209732",
+                  "propertyName": "itemId",
+                  "value": "",
+                  "operator": "EQUAL_TO",
+                  "variableIdValue": "071f4edd-4ddf-4413-b7c6-5303d63d1a8b",
+                  "pathVariableIdValue": "itemId"
+                },
+                {
+                  "id": "ca012dfb-e19f-4ec4-a63e-98eb711c3ea8",
+                  "propertyName": "size",
+                  "value": "",
+                  "operator": "EQUAL_TO",
+                  "variableIdValue": "071f4edd-4ddf-4413-b7c6-5303d63d1a8b",
+                  "pathVariableIdValue": "size"
+                }
+              ],
+              "mode": "FIRST",
+              "logicalOperator": "AND"
+            }
+          }
+        },
+        {
+          "id": "web-content-message-53b6a4f3-ab82-44a7-8596-c7f6280c6ad6",
+          "type": "web-content-message",
+          "attachments": [],
+          "json": "{\"blocks\":[{\"key\":\"95v10\",\"text\":\"We've removed <%variables.delete_from_cart_item.size%> <%variables.delete_from_cart_item.itemName%>  from your cart!\",\"type\":\"unstyled\",\"depth\":0,\"inlineStyleRanges\":[{\"offset\":14,\"length\":40,\"style\":\"BOLD\"},{\"offset\":55,\"length\":44,\"style\":\"font_size_20\"}],\"entityRanges\":[],\"data\":{}}],\"entityMap\":{}}",
+          "htmlContent": "<p>We've removed <strong>&lt;%variables.delete_from_cart_item.size%&gt;</strong> <span style=\"color: unset; font-size: 20px; background-color: unset\">&lt;%variables.delete_from_cart_item.itemName%&gt;</span> &nbsp;from your cart!</p>"
+        }
+      ]
+    },
+    {
+      "id": "85aa7543-8bc8-4a7a-8319-9f1bf991d6b0",
+      "blockType": 0,
+      "title": "Block #12",
+      "position": {
+        "x": 4173.2258458291335,
+        "y": 2111.2903225806454
+      },
+      "elements": [
+        {
+          "id": "web-content-message-d83c82b0-39c3-4b98-944a-0be1070b187a",
+          "type": "web-content-message",
+          "attachments": [],
+          "json": "{\"blocks\":[{\"key\":\"4d7qk\",\"text\":\"What is your name? 🙃\",\"type\":\"unstyled\",\"depth\":0,\"inlineStyleRanges\":[],\"entityRanges\":[],\"data\":{}}],\"entityMap\":{}}",
+          "htmlContent": "<p>What is your name? 🙃</p>"
+        },
+        {
+          "id": "web-input-text-96bec746-678f-4e68-8ffe-ce3cfc5acad9",
+          "type": "web-input-text",
+          "label": "User input (text)...",
+          "placeholder": "Write your answer...",
+          "variableId": "d6a577a9-d266-4c79-84fd-1b1b0b714e4f"
+        }
+      ]
+    },
+    {
+      "id": "f5eea18b-3580-44d0-85fb-2cb2804d5c4a",
+      "blockType": 0,
+      "title": "Block #13",
+      "position": {
+        "x": 4603.871007119456,
+        "y": 2493.8709874306955
+      },
+      "elements": [
+        {
+          "id": "logic-change-variable-c4198415-3824-4631-a1c1-066dd2828dcc",
+          "type": "logic-change-variable",
+          "selectedVariableId": "ffda2ada-868b-48a6-b3c4-34744b4bebae",
+          "workflowDescription": {
+            "source": 2,
+            "propertyName": "total",
+            "propertyValue": "<%variables.total_price%>"
+          }
+        },
+        {
+          "id": "logic-change-variable-0745ba15-a865-4148-9dfe-af091a188e48",
+          "type": "logic-change-variable",
+          "selectedVariableId": "ffda2ada-868b-48a6-b3c4-34744b4bebae",
+          "workflowDescription": {
+            "source": 2,
+            "propertyName": "name",
+            "propertyValue": "<%variables.customer_name%>"
+          }
+        },
+        {
+          "id": "logic-change-variable-9f6d0313-2bd6-411c-b188-0089dec85138",
+          "type": "logic-change-variable",
+          "selectedVariableId": "ffda2ada-868b-48a6-b3c4-34744b4bebae",
+          "workflowDescription": {
+            "source": 2,
+            "propertyName": "time",
+            "propertyValue": "<%variables.now_date_time|format(MM/DD/YYYY h:mm A)%>"
+          }
+        },
+        {
+          "id": "logic-change-variable-d62b63e2-0744-4c19-bfa8-bbd08a294336",
+          "type": "logic-change-variable",
+          "selectedVariableId": "ffda2ada-868b-48a6-b3c4-34744b4bebae",
+          "workflowDescription": {
+            "source": 2,
+            "propertyName": "cart",
+            "propertyValue": "<%templates.google_cart_template%>"
+          }
+        },
+        {
+          "id": "integration-google-sheets-2729747e-452d-41c0-9032-2b7ffda87c44",
+          "type": "integration-google-sheets",
+          "dataOperation": "INSERT_ROWS_FROM_VARIABLE",
+          "dataOperationDescription": {
+            "variableId": "ffda2ada-868b-48a6-b3c4-34744b4bebae"
+          }
+        },
+        {
+          "id": "web-content-images-3445217b-ef67-474c-aedf-9d68e9fd0584",
+          "type": "web-content-images",
+          "medias": [
+            {
+              "image": "https://media1.giphy.com/media/79ZFYdMsStRYI/giphy.gif?cid=42e3a184rqo0e6s8qkj3io6l5fjcdoqkgleo6iqbzonlgzok&ep=v1_gifs_search&rid=giphy.gif&ct=g",
+              "type": "image",
+              "id": "3faa50dd-4b01-460e-80f5-f5d30e7d7124"
+            }
+          ],
+          "viewMode": "horizontalMediaList"
+        },
+        {
+          "id": "web-content-message-f52ef597-ee29-404e-9755-9bafaae80350",
+          "type": "web-content-message",
+          "attachments": [],
+          "json": "{\"blocks\":[{\"key\":\"aapu9\",\"text\":\"<%variables.customer_name%>, please wait for your order! It will be delivered within an hour to the address \\\"<%variables.deliver_address%>\\\"\",\"type\":\"unstyled\",\"depth\":0,\"inlineStyleRanges\":[{\"offset\":0,\"length\":27,\"style\":\"BOLD\"},{\"offset\":109,\"length\":29,\"style\":\"BOLD\"}],\"entityRanges\":[],\"data\":{}}],\"entityMap\":{}}",
+          "htmlContent": "<p><strong>&lt;%variables.customer_name%&gt;</strong>, please wait for your order! It will be delivered within an hour to the address \"<strong>&lt;%variables.deliver_address%&gt;</strong>\"</p>"
+        },
+        {
+          "id": "logic-change-variable-332dce0e-7990-443a-808b-d1802e80e4ae",
+          "type": "logic-change-variable",
+          "selectedVariableId": "d994c214-7842-4dcb-ab47-7aef73aeeba8",
+          "workflowDescription": {
+            "operation": "Remove",
+            "removeDescription": {
+              "conditions": [],
+              "mode": "ALL",
+              "logicalOperator": "AND"
+            }
+          }
+        },
+        {
+          "id": "web-input-buttons-e26d8421-9a01-4a98-9d4c-5c4ee0299b94",
+          "type": "web-input-buttons",
+          "strategy": "manual",
+          "buttons": [
+            {
+              "content": "New order 📋",
+              "id": "2ecc6eb1-6464-4c0e-a88f-8b3e6ec88092"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "505a0cbe-9c02-4bd7-bb5d-1fc7a809ed03",
+      "blockType": 0,
+      "title": "Block #14",
+      "position": {
+        "x": 3761.60009765625,
+        "y": -447.20001220703125
+      },
+      "elements": [
+        {
+          "id": "logic-change-variable-0e84d1fd-1506-4076-9bed-32535ceb2761",
+          "type": "logic-change-variable",
+          "selectedVariableId": "398c24d1-83b5-450f-a1de-c5645b3188a9",
+          "workflowDescription": {
+            "source": 2,
+            "propertyName": "price",
+            "propertyValue": "<%variables.actual_pizza_price%>"
+          }
+        },
+        {
+          "id": "logic-change-variable-935dcc9a-e7ff-4589-852c-8d5d136fff82",
+          "type": "logic-change-variable",
+          "selectedVariableId": "398c24d1-83b5-450f-a1de-c5645b3188a9",
+          "workflowDescription": {
+            "source": 2,
+            "propertyName": "size",
+            "propertyValue": "<%variables.item_size%>"
+          }
+        }
+      ]
+    },
+    {
+      "id": "0ad0c95c-f993-45fd-b79e-ab764db24f7f",
+      "blockType": 0,
+      "title": "Block #15",
+      "position": {
+        "x": 1744.2000732421875,
+        "y": 450.2000732421875
+      },
+      "elements": [
+        {
+          "id": "logic-change-variable-260f309b-1389-4383-a0ac-6a73169a4ab7",
+          "type": "logic-change-variable",
+          "selectedVariableId": "7f10bc8b-4880-48ce-8c0a-6bba808aeb2b",
+          "workflowDescription": {
+            "expression": "Snacks 🍟"
+          }
+        },
+        {
+          "id": "logic-change-variable-f986d28b-76fc-4371-9415-8886b2fd4955",
+          "type": "logic-change-variable",
+          "selectedVariableId": "20bba294-890e-4ff6-b3e3-1841760d10d2",
+          "workflowDescription": {
+            "operation": "Set",
+            "setDescription": {
+              "source": "Variable",
+              "variableSourceDescription": {
+                "path": {
+                  "variableId": "e9ced8cb-2a23-4716-83b3-33bcb2f5d107"
+                },
+                "extraFilter": {
+                  "logicalOperator": "AND"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "9245d1f0-046b-4bae-86d0-235204385b0e",
+      "blockType": 0,
+      "title": "Block #17",
+      "position": {
+        "x": 1736.5573570376537,
+        "y": 688.4098160540472
+      },
+      "elements": [
+        {
+          "id": "logic-change-variable-38a46a44-d05d-4909-b567-4cc931477496",
+          "type": "logic-change-variable",
+          "selectedVariableId": "7f10bc8b-4880-48ce-8c0a-6bba808aeb2b",
+          "workflowDescription": {
+            "expression": "Dessert 🍰"
+          }
+        },
+        {
+          "id": "logic-change-variable-3b07256f-d747-48a2-a93c-4b429d9566e8",
+          "type": "logic-change-variable",
+          "selectedVariableId": "20bba294-890e-4ff6-b3e3-1841760d10d2",
+          "workflowDescription": {
+            "operation": "Set",
+            "setDescription": {
+              "source": "Variable",
+              "variableSourceDescription": {
+                "path": {
+                  "variableId": "5cf7a842-1a95-4461-b96a-4a324620660e"
+                },
+                "extraFilter": {
+                  "logicalOperator": "AND"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "df9d082b-32bd-44e1-82b9-856d5719e794",
+      "blockType": 0,
+      "title": "Block #18",
+      "position": {
+        "x": 1741.9535309547603,
+        "y": 963.4186046511629
+      },
+      "elements": [
+        {
+          "id": "logic-change-variable-d57034a7-31c2-464d-85b0-0d5931c1b2b8",
+          "type": "logic-change-variable",
+          "selectedVariableId": "7f10bc8b-4880-48ce-8c0a-6bba808aeb2b",
+          "workflowDescription": {
+            "expression": "Drinks ☕"
+          }
+        },
+        {
+          "id": "logic-change-variable-dd8479c9-c8d1-48bd-b1fa-359cc1f32ade",
+          "type": "logic-change-variable",
+          "selectedVariableId": "20bba294-890e-4ff6-b3e3-1841760d10d2",
+          "workflowDescription": {
+            "operation": "Set",
+            "setDescription": {
+              "source": "Variable",
+              "variableSourceDescription": {
+                "path": {
+                  "variableId": "aaaff44a-a07a-4c29-8399-9a3b0155b6d6"
+                },
+                "extraFilter": {
+                  "logicalOperator": "AND"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "96285685-c907-42b4-8ec4-04a7bf8f0f23",
+      "blockType": 0,
+      "title": "Block #18",
+      "position": {
+        "x": 2502.6316271330184,
+        "y": 722.7368421052631
+      },
+      "elements": [
+        {
+          "id": "web-content-message-a58aeb86-a89f-4ed0-8fe9-767825f26a1a",
+          "type": "web-content-message",
+          "attachments": [],
+          "json": "{\"blocks\":[{\"key\":\"4dvtv\",\"text\":\"Here’s the tasty lineup we’ve got for you today!\",\"type\":\"unstyled\",\"depth\":0,\"inlineStyleRanges\":[],\"entityRanges\":[],\"data\":{}}],\"entityMap\":{}}",
+          "htmlContent": "<p>Here’s the tasty lineup we’ve got for you today!</p>"
+        },
+        {
+          "id": "web-input-cards-17f19a57-332a-4b2b-9415-55a48fdf9b0b",
+          "type": "web-input-cards",
+          "multipleChoice": false,
+          "strategy": 1,
+          "sourceDescription": {
+            "cardDescription": {
+              "value": "<%itemName%>",
+              "imgUrl": "<%itemUrl%>",
+              "htmlDescription": "<p><span style=\"color: unset; font-size: 20px; background-color: unset\">&lt;%itemName%&gt;</span></p>\n<p><span style=\"color: #5c6370; font-size: 14px; background-color: unset\">&lt;%description%&gt;</span></p>\n<p><span style=\"color: unset; font-size: 18px; background-color: unset\"><strong>&lt;%price%&gt;$</strong></span></p>\n<p><br></p>",
+              "jsonDescription": "{\"blocks\":[{\"key\":\"fsu4p\",\"text\":\"<%itemName%>\",\"type\":\"unstyled\",\"depth\":0,\"inlineStyleRanges\":[{\"offset\":0,\"length\":12,\"style\":\"font_size_20\"}],\"entityRanges\":[],\"data\":{}},{\"key\":\"es5vu\",\"text\":\"<%description%>\",\"type\":\"unstyled\",\"depth\":0,\"inlineStyleRanges\":[{\"offset\":0,\"length\":15,\"style\":\"color_#5c6370\"},{\"offset\":0,\"length\":15,\"style\":\"font_size_14\"}],\"entityRanges\":[],\"data\":{}},{\"key\":\"6ijir\",\"text\":\"<%price%>$\",\"type\":\"unstyled\",\"depth\":0,\"inlineStyleRanges\":[{\"offset\":0,\"length\":10,\"style\":\"BOLD\"},{\"offset\":0,\"length\":10,\"style\":\"font_size_18\"}],\"entityRanges\":[],\"data\":{}},{\"key\":\"7rptf\",\"text\":\"\",\"type\":\"unstyled\",\"depth\":0,\"inlineStyleRanges\":[],\"entityRanges\":[],\"data\":{}}],\"entityMap\":{}}"
+            },
+            "cardsVariableId": "20bba294-890e-4ff6-b3e3-1841760d10d2"
+          },
+          "selectableCards": true,
+          "sendResponseOnSelect": true,
+          "variableId": "398c24d1-83b5-450f-a1de-c5645b3188a9",
+          "generalButtons": [
+            {
+              "content": "🔙 Back",
+              "id": "button-111c94fd-ca94-425c-bbaf-be76202b7c7a"
+            }
+          ],
+          "useGeneralButtons": true
+        }
+      ]
+    },
+    {
+      "id": "7238e5cc-e5e9-4510-97d8-6a33eab428f8",
+      "blockType": 0,
+      "title": "Block #19",
+      "position": {
+        "x": 3219.5555284288193,
+        "y": 210.22237141927076
+      },
+      "elements": [
+        {
+          "id": "logic-condition-43d0895b-2e19-483c-b69b-6931777d4277",
+          "type": "logic-condition",
+          "logicalOperator": "AND",
+          "items": [
+            {
+              "id": "03c8629f-3566-429d-8960-74493b8a42ad",
+              "variableId": "7f10bc8b-4880-48ce-8c0a-6bba808aeb2b",
+              "value": "Pizza",
+              "operator": "CONTAINS"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "links": [
+    {
+      "id": "59ce3ddb-b1a3-48b5-a846-6bbf9721b67f",
+      "input": {
+        "blockId": "fb96a701-fa28-40a1-8afe-c7b1a0f195f6",
+        "type": 0
+      },
+      "output": {
+        "blockId": "/start",
+        "buttonId": "start",
+        "type": 2
+      }
+    },
+    {
+      "id": "417bc94c-9681-47c6-b342-12938e4e4338",
+      "input": {
+        "blockId": "27acd714-1795-491b-96a1-0e98a7dfde70",
+        "type": 0
+      },
+      "output": {
+        "blockId": "fb96a701-fa28-40a1-8afe-c7b1a0f195f6",
+        "buttonId": "6bb4bfab-b04c-4e13-802b-9c2c84c6d73c",
+        "elementId": "web-input-buttons-aed7f592-14ef-457f-90d8-d239ed1f1dfd",
+        "type": 2
+      }
+    },
+    {
+      "id": "8291c77e-8f59-4ab5-9594-ba0b5fac588e",
+      "input": {
+        "blockId": "98e457cb-b20c-495a-a3e7-743900a1f9cd",
+        "type": 0
+      },
+      "output": {
+        "blockId": "27acd714-1795-491b-96a1-0e98a7dfde70",
+        "type": 0
+      }
+    },
+    {
+      "id": "a7c1b1d2-0da4-43fb-8099-8aa68e10c306",
+      "input": {
+        "blockId": "f8d75d5d-37cc-44a0-995b-c5bc57f99959",
+        "type": 0
+      },
+      "output": {
+        "blockId": "cd85bbf3-6a12-4020-a501-01740a9e6b79",
+        "buttonId": "0c402c40-fe98-4830-96bc-11c1c0143d99",
+        "elementId": "web-input-buttons-5a63cf2f-9067-4737-ab65-19d1cb58d6eb",
+        "type": 2
+      }
+    },
+    {
+      "id": "ddac5b6d-015f-43ff-862d-dbe817f7bd8c",
+      "input": {
+        "blockId": "97da8e90-8da0-4ec8-9681-1206839f9b17",
+        "type": 0
+      },
+      "output": {
+        "blockId": "cd85bbf3-6a12-4020-a501-01740a9e6b79",
+        "buttonId": "8dc96632-8303-4f1d-91d0-1474a1ea8d21",
+        "elementId": "web-input-buttons-5a63cf2f-9067-4737-ab65-19d1cb58d6eb",
+        "type": 2
+      }
+    },
+    {
+      "id": "0e46f42f-5134-449b-8d92-86fad1b634ee",
+      "input": {
+        "blockId": "9c04820e-13c4-4ef4-b2e6-47023bddb6d2",
+        "type": 0
+      },
+      "output": {
+        "blockId": "cd85bbf3-6a12-4020-a501-01740a9e6b79",
+        "buttonId": "eeb2b04c-5086-4350-9945-f1fff6b96eb8",
+        "elementId": "web-input-buttons-5a63cf2f-9067-4737-ab65-19d1cb58d6eb",
+        "type": 2
+      }
+    },
+    {
+      "id": "8f03f71f-adfb-4f82-9ccd-d9696ae502cb",
+      "input": {
+        "blockId": "2a4cf3e6-5ede-425d-9b80-00f75b42fa70",
+        "type": 0
+      },
+      "output": {
+        "blockId": "fb96a701-fa28-40a1-8afe-c7b1a0f195f6",
+        "type": 0
+      }
+    },
+    {
+      "id": "7509a213-97d1-47cd-bf64-2f2cb59f6555",
+      "input": {
+        "blockId": "2a4cf3e6-5ede-425d-9b80-00f75b42fa70",
+        "type": 0
+      },
+      "output": {
+        "blockId": "a72cb6ac-a024-44d2-8211-762bd659cf51",
+        "buttonId": "aa59279c-80e5-4427-b4f8-85d562c29ee0",
+        "elementId": "web-input-buttons-84f12afd-351e-4828-b572-5df69e5cccc4",
+        "type": 2
+      }
+    },
+    {
+      "id": "44a15c95-3eb1-468d-b1d3-57c968fbc000",
+      "input": {
+        "blockId": "4a122991-b86c-434f-8361-ca1bb9205b60",
+        "type": 0
+      },
+      "output": {
+        "blockId": "a72cb6ac-a024-44d2-8211-762bd659cf51",
+        "buttonId": "1f6a7f48-baa5-4e5b-a27e-8bbb6c0d8666",
+        "elementId": "web-input-buttons-84f12afd-351e-4828-b572-5df69e5cccc4",
+        "type": 2
+      }
+    },
+    {
+      "id": "4b979f24-1290-4733-b670-749429234a8e",
+      "input": {
+        "blockId": "a42997e7-3a7c-4589-8421-ff43e1206d36",
+        "type": 0
+      },
+      "output": {
+        "blockId": "4a122991-b86c-434f-8361-ca1bb9205b60",
+        "buttonId": "e43946fe-1a16-49c7-9d3e-a4c43dcb5c52",
+        "elementId": "web-input-cards-0354d2c6-3377-4e3d-8785-0339d73faa47",
+        "type": 2
+      }
+    },
+    {
+      "id": "40bf4cc3-ba66-4f95-9be2-34c553328b38",
+      "input": {
+        "blockId": "85aa7543-8bc8-4a7a-8319-9f1bf991d6b0",
+        "type": 0
+      },
+      "output": {
+        "blockId": "4a122991-b86c-434f-8361-ca1bb9205b60",
+        "buttonId": "button-001715c7-aa8d-44cf-95ec-7ae1d025e9e3",
+        "elementId": "web-input-cards-0354d2c6-3377-4e3d-8785-0339d73faa47",
+        "type": 2
+      }
+    },
+    {
+      "id": "40c42e8d-d74e-49a3-aed4-0558b1f4047c",
+      "input": {
+        "blockId": "f5eea18b-3580-44d0-85fb-2cb2804d5c4a",
+        "type": 0
+      },
+      "output": {
+        "blockId": "85aa7543-8bc8-4a7a-8319-9f1bf991d6b0",
+        "type": 0
+      }
+    },
+    {
+      "id": "68dd580e-1e99-49a0-b93c-d8adcfa00e1e",
+      "input": {
+        "blockId": "2a4cf3e6-5ede-425d-9b80-00f75b42fa70",
+        "type": 0
+      },
+      "output": {
+        "blockId": "f5eea18b-3580-44d0-85fb-2cb2804d5c4a",
+        "buttonId": "2ecc6eb1-6464-4c0e-a88f-8b3e6ec88092",
+        "elementId": "web-input-buttons-e26d8421-9a01-4a98-9d4c-5c4ee0299b94",
+        "type": 2
+      }
+    },
+    {
+      "id": "a0a758f3-0af9-469f-a22c-7aec31bffd28",
+      "input": {
+        "blockId": "2a4cf3e6-5ede-425d-9b80-00f75b42fa70",
+        "type": 0
+      },
+      "output": {
+        "blockId": "4a122991-b86c-434f-8361-ca1bb9205b60",
+        "buttonId": "f553e0ac-bc65-4347-a513-c9067d6f273c",
+        "elementId": "web-input-cards-0354d2c6-3377-4e3d-8785-0339d73faa47",
+        "type": 2
+      }
+    },
+    {
+      "id": "2fb0daee-9bd4-4605-acc6-50e1af9fb89e",
+      "input": {
+        "blockId": "505a0cbe-9c02-4bd7-bb5d-1fc7a809ed03",
+        "type": 0
+      },
+      "output": {
+        "blockId": "f8d75d5d-37cc-44a0-995b-c5bc57f99959",
+        "type": 0
+      }
+    },
+    {
+      "id": "bb5464d0-7198-4080-a4f5-7883c29cfe9e",
+      "input": {
+        "blockId": "505a0cbe-9c02-4bd7-bb5d-1fc7a809ed03",
+        "type": 0
+      },
+      "output": {
+        "blockId": "97da8e90-8da0-4ec8-9681-1206839f9b17",
+        "type": 0
+      }
+    },
+    {
+      "id": "25fd955b-c90e-47bb-9854-720284c3fe0f",
+      "input": {
+        "blockId": "505a0cbe-9c02-4bd7-bb5d-1fc7a809ed03",
+        "type": 0
+      },
+      "output": {
+        "blockId": "9c04820e-13c4-4ef4-b2e6-47023bddb6d2",
+        "type": 0
+      }
+    },
+    {
+      "id": "b033d043-db37-48c7-b473-3dd819d3bc1f",
+      "input": {
+        "blockId": "a72cb6ac-a024-44d2-8211-762bd659cf51",
+        "type": 0
+      },
+      "output": {
+        "blockId": "505a0cbe-9c02-4bd7-bb5d-1fc7a809ed03",
+        "type": 0
+      }
+    },
+    {
+      "id": "bf6926b9-7909-4b18-8716-579de7e2ae87",
+      "input": {
+        "blockId": "0ad0c95c-f993-45fd-b79e-ab764db24f7f",
+        "type": 0
+      },
+      "output": {
+        "blockId": "2a4cf3e6-5ede-425d-9b80-00f75b42fa70",
+        "buttonId": "2023d70d-0bd1-4300-9a66-aaf451e08b7d",
+        "elementId": "web-input-buttons-aed7f592-14ef-457f-90d8-d239ed1f1dfd",
+        "type": 2
+      }
+    },
+    {
+      "id": "51f9470b-3edb-4fa4-8009-201b9183caf1",
+      "input": {
+        "blockId": "9245d1f0-046b-4bae-86d0-235204385b0e",
+        "type": 0
+      },
+      "output": {
+        "blockId": "2a4cf3e6-5ede-425d-9b80-00f75b42fa70",
+        "buttonId": "0b437a0e-d423-49e7-93bf-5b8bff9fc44e",
+        "elementId": "web-input-buttons-aed7f592-14ef-457f-90d8-d239ed1f1dfd",
+        "type": 2
+      }
+    },
+    {
+      "id": "7242bbe8-5a90-402e-86dd-2c0541085b3b",
+      "input": {
+        "blockId": "df9d082b-32bd-44e1-82b9-856d5719e794",
+        "type": 0
+      },
+      "output": {
+        "blockId": "2a4cf3e6-5ede-425d-9b80-00f75b42fa70",
+        "buttonId": "5b5222df-4337-4233-99f2-752310f61417",
+        "elementId": "web-input-buttons-aed7f592-14ef-457f-90d8-d239ed1f1dfd",
+        "type": 2
+      }
+    },
+    {
+      "id": "21981010-10b5-4d27-ac4d-5a137914d439",
+      "input": {
+        "blockId": "96285685-c907-42b4-8ec4-04a7bf8f0f23",
+        "type": 0
+      },
+      "output": {
+        "blockId": "0ad0c95c-f993-45fd-b79e-ab764db24f7f",
+        "type": 0
+      }
+    },
+    {
+      "id": "48e84348-2e2e-41bf-ab75-3dc6b66332d0",
+      "input": {
+        "blockId": "96285685-c907-42b4-8ec4-04a7bf8f0f23",
+        "type": 0
+      },
+      "output": {
+        "blockId": "9245d1f0-046b-4bae-86d0-235204385b0e",
+        "type": 0
+      }
+    },
+    {
+      "id": "eb965887-5025-4cf9-83a0-e1ffa041f91f",
+      "input": {
+        "blockId": "96285685-c907-42b4-8ec4-04a7bf8f0f23",
+        "type": 0
+      },
+      "output": {
+        "blockId": "df9d082b-32bd-44e1-82b9-856d5719e794",
+        "type": 0
+      }
+    },
+    {
+      "id": "26a322e7-3b67-4614-844f-d7651cd0e0a4",
+      "input": {
+        "blockId": "a72cb6ac-a024-44d2-8211-762bd659cf51",
+        "type": 0
+      },
+      "output": {
+        "blockId": "96285685-c907-42b4-8ec4-04a7bf8f0f23",
+        "type": 0
+      }
+    },
+    {
+      "id": "82673c30-c94a-4d38-bb6b-b8dd9aafe3c9",
+      "input": {
+        "blockId": "98e457cb-b20c-495a-a3e7-743900a1f9cd",
+        "type": 0
+      },
+      "output": {
+        "blockId": "7238e5cc-e5e9-4510-97d8-6a33eab428f8",
+        "buttonId": "logic-condition-43d0895b-2e19-483c-b69b-6931777d4277",
+        "elementId": "logic-condition-43d0895b-2e19-483c-b69b-6931777d4277",
+        "type": 2
+      }
+    },
+    {
+      "id": "35d108c4-b028-47db-9bb6-86c304984adf",
+      "input": {
+        "blockId": "96285685-c907-42b4-8ec4-04a7bf8f0f23",
+        "type": 0
+      },
+      "output": {
+        "blockId": "7238e5cc-e5e9-4510-97d8-6a33eab428f8",
+        "type": 0
+      }
+    },
+    {
+      "id": "2ebb97bc-5a61-4e45-a153-fa530839f817",
+      "input": {
+        "blockId": "7238e5cc-e5e9-4510-97d8-6a33eab428f8",
+        "type": 0
+      },
+      "output": {
+        "blockId": "a72cb6ac-a024-44d2-8211-762bd659cf51",
+        "buttonId": "9dd78b42-2b39-4a66-a1f0-00f002655eb6",
+        "elementId": "web-input-buttons-84f12afd-351e-4828-b572-5df69e5cccc4",
+        "type": 2
+      }
+    },
+    {
+      "id": "724b6ab1-1ba9-495a-9945-37d3dde63523",
+      "input": {
+        "blockId": "2a4cf3e6-5ede-425d-9b80-00f75b42fa70",
+        "type": 0
+      },
+      "output": {
+        "blockId": "98e457cb-b20c-495a-a3e7-743900a1f9cd",
+        "buttonId": "button-8ed13f94-4873-46d1-b50b-6f46acbaa8df",
+        "elementId": "web-input-cards-d7070463-91c3-4414-b97b-647ff2ebac2b",
+        "type": 2
+      }
+    },
+    {
+      "id": "45b9455d-3521-4366-9879-24f568e16b67",
+      "input": {
+        "blockId": "2a4cf3e6-5ede-425d-9b80-00f75b42fa70",
+        "type": 0
+      },
+      "output": {
+        "blockId": "96285685-c907-42b4-8ec4-04a7bf8f0f23",
+        "buttonId": "button-111c94fd-ca94-425c-bbaf-be76202b7c7a",
+        "elementId": "web-input-cards-17f19a57-332a-4b2b-9415-55a48fdf9b0b",
+        "type": 2
+      }
+    },
+    {
+      "id": "09a63222-2bb3-4f1a-b3b0-86b1f8d6f848",
+      "input": {
+        "blockId": "f8d75d5d-37cc-44a0-995b-c5bc57f99959",
+        "type": 0
+      },
+      "output": {
+        "blockId": "98e457cb-b20c-495a-a3e7-743900a1f9cd",
+        "buttonId": "button-3c1da508-e7b1-4d87-b63d-b993dcc67569",
+        "elementId": "web-input-cards-d7070463-91c3-4414-b97b-647ff2ebac2b",
+        "type": 2
+      }
+    },
+    {
+      "id": "94511ff7-95ac-4e61-99d5-eb3bee860219",
+      "input": {
+        "blockId": "97da8e90-8da0-4ec8-9681-1206839f9b17",
+        "type": 0
+      },
+      "output": {
+        "blockId": "98e457cb-b20c-495a-a3e7-743900a1f9cd",
+        "buttonId": "1a54c15b-7d62-4ec9-a878-c6717c3e56fd",
+        "elementId": "web-input-cards-d7070463-91c3-4414-b97b-647ff2ebac2b",
+        "type": 2
+      }
+    },
+    {
+      "id": "6a3e8d69-2d71-4c89-b267-2d284e805216",
+      "input": {
+        "blockId": "9c04820e-13c4-4ef4-b2e6-47023bddb6d2",
+        "type": 0
+      },
+      "output": {
+        "blockId": "98e457cb-b20c-495a-a3e7-743900a1f9cd",
+        "buttonId": "82cef700-c9cd-4bc3-b59d-80fdac3d820a",
+        "elementId": "web-input-cards-d7070463-91c3-4414-b97b-647ff2ebac2b",
+        "type": 2
+      }
+    },
+    {
+      "id": "eedeefa6-c833-48d5-ae49-bf90fa8d4bd5",
+      "input": {
+        "blockId": "4a122991-b86c-434f-8361-ca1bb9205b60",
+        "type": 0
+      },
+      "output": {
+        "blockId": "a42997e7-3a7c-4589-8421-ff43e1206d36",
+        "type": 0
+      }
+    },
+    {
+      "id": "11c05348-4a6a-4a5b-a17b-9eb25afe042e",
+      "input": {
+        "blockId": "2a4cf3e6-5ede-425d-9b80-00f75b42fa70",
+        "type": 0
+      },
+      "output": {
+        "blockId": "4a122991-b86c-434f-8361-ca1bb9205b60",
+        "buttonId": "logic-condition-31a5bf6f-88c6-49aa-bd31-5866c35c8cea",
+        "elementId": "logic-condition-31a5bf6f-88c6-49aa-bd31-5866c35c8cea",
+        "type": 2
+      }
+    }
+  ],
+  "variables": [
+    {
+      "id": "2c15a4c0-00b2-4283-a77d-ea1dff1b0155",
+      "name": "pizza_items",
+      "type": "array",
+      "value": "[\n    {\n        \"itemId\": \"Hunting\",\n        \"itemName\": \"Hunting Pizza\",\n        \"itemUrl\": \"https://hjzvmehimumkehfknjlw.supabase.co/storage/v1/object/public/plz-post-bucket/static/demo-bot-pizza-store/pizza/1.jpg\",\n        \"description\": \"Smoked meats, mushrooms, onion, cheese\",\n        \"sPrice\": 3.49,\n        \"mPrice\": 5.99,\n        \"lPrice\": 8.99\n    },\n    {\n        \"itemId\": \"Adgika\",\n        \"itemName\": \"Meat Pizza with Adzhika\",\n        \"itemUrl\": \"https://hjzvmehimumkehfknjlw.supabase.co/storage/v1/object/public/plz-post-bucket/static/demo-bot-pizza-store/pizza/2.jpg\",\n        \"description\": \"Meat ingredients, adzhika, cheese, vegetables\",\n        \"sPrice\": 7.99,\n        \"mPrice\": 10.99,\n        \"lPrice\": 14.99\n    },\n    {\n        \"itemId\": \"bavarian\",\n        \"itemName\": \"Bavarian Pizza\",\n        \"itemUrl\": \"https://hjzvmehimumkehfknjlw.supabase.co/storage/v1/object/public/plz-post-bucket/static/demo-bot-pizza-store/pizza/3.jpg\",\n        \"description\": \"Sausages, cheese, sauce, vegetables\",\n        \"sPrice\": 6.99,\n        \"mPrice\": 9.49,\n        \"lPrice\": 12.99\n    },\n    {\n        \"itemId\": \"pizza_julien\",\n        \"itemName\": \"Julienne Pizza\",\n        \"itemUrl\": \"https://hjzvmehimumkehfknjlw.supabase.co/storage/v1/object/public/plz-post-bucket/static/demo-bot-pizza-store/pizza/4.jpg\",\n        \"description\": \"Chicken, mushrooms, creamy sauce, cheese\",\n        \"sPrice\": 8.49,\n        \"mPrice\": 11.99,\n        \"lPrice\": 15.49\n    },\n    {\n        \"itemId\": \"carbonara\",\n        \"itemName\": \"Carbonara\",\n        \"itemUrl\": \"https://hjzvmehimumkehfknjlw.supabase.co/storage/v1/object/public/plz-post-bucket/static/demo-bot-pizza-store/pizza/5.jpg\",\n        \"description\": \"Ham, mushrooms, creamy sauce, cheese\",\n        \"sPrice\": 9.99,\n        \"mPrice\": 12.49,\n        \"lPrice\": 16.99\n    },\n    {\n        \"itemId\": \"sweet-chilli-shrimp\",\n        \"itemName\": \"Sweet Chili Shrimp\",\n        \"itemUrl\": \"https://hjzvmehimumkehfknjlw.supabase.co/storage/v1/object/public/plz-post-bucket/static/demo-bot-pizza-store/pizza/6.jpg\",\n        \"description\": \"Shrimp, sweet chili sauce, vegetables\",\n        \"sPrice\": 10.99,\n        \"mPrice\": 13.99,\n        \"lPrice\": 18.99\n    },\n    {\n        \"itemId\": \"country-pizza\",\n        \"itemName\": \"Country Pizza\",\n        \"itemUrl\": \"https://hjzvmehimumkehfknjlw.supabase.co/storage/v1/object/public/plz-post-bucket/static/demo-bot-pizza-store/pizza/7.jpg\",\n        \"description\": \"Sausages, ham, cheese, vegetables\",\n        \"sPrice\": 7.49,\n        \"mPrice\": 10.49,\n        \"lPrice\": 13.49\n    },\n    {\n        \"itemId\": \"chiken-bomboni\",\n        \"itemName\": \"Chicken Bomboni\",\n        \"itemUrl\": \"https://hjzvmehimumkehfknjlw.supabase.co/storage/v1/object/public/plz-post-bucket/static/demo-bot-pizza-store/pizza/1.jpg\",\n        \"description\": \"Chicken, cheese, sauce, vegetables\",\n        \"sPrice\": 8.99,\n        \"mPrice\": 11.49,\n        \"lPrice\": 14.99\n    },\n    {\n        \"itemId\": \"fresh-chorizo\",\n        \"itemName\": \"Fresh Chorizo\",\n        \"itemUrl\": \"https://hjzvmehimumkehfknjlw.supabase.co/storage/v1/object/public/plz-post-bucket/static/demo-bot-pizza-store/pizza/2.jpg\",\n        \"description\": \"Chorizo, cheese, sauce, vegetables\",\n        \"sPrice\": 4.99,\n        \"mPrice\": 7.49,\n        \"lPrice\": 9.99\n    },\n    {\n        \"itemId\": \"vetchina-syr\",\n        \"itemName\": \"Ham and Cheese\",\n        \"itemUrl\": \"https://hjzvmehimumkehfknjlw.supabase.co/storage/v1/object/public/plz-post-bucket/static/demo-bot-pizza-store/pizza/3.jpg\",\n        \"description\": \"Ham, cheese, sauce\",\n        \"sPrice\": 5.49,\n        \"mPrice\": 8.49,\n        \"lPrice\": 10.99\n    },\n    {\n        \"itemId\": \"double-chicken\",\n        \"itemName\": \"Double Chicken\",\n        \"itemUrl\": \"https://hjzvmehimumkehfknjlw.supabase.co/storage/v1/object/public/plz-post-bucket/static/demo-bot-pizza-store/pizza/4.jpg\",\n        \"description\": \"Chicken, cheese, sauce, vegetables\",\n        \"sPrice\": 6.49,\n        \"mPrice\": 9.49,\n        \"lPrice\": 12.99\n    }\n]",
+      "isPlatformVariable": false,
+      "arrayItemType": "object"
+    },
+    {
+      "id": "20bba294-890e-4ff6-b3e3-1841760d10d2",
+      "name": "current_view_items",
+      "type": "array",
+      "value": "[\n     {\n        \"itemId\": \"unknown\",\n        \"itemName\": \"unknown\",\n        \"itemUrl\": \"unknown\",\n        \"price\": 0,\n        \"description\": \"unknown\",\n        \"sPrice\": 0,\n        \"mPrice\": 0,\n        \"lPrice\": 0\n    }\n]",
+      "isPlatformVariable": false,
+      "arrayItemType": "object"
+    },
+    {
+      "id": "398c24d1-83b5-450f-a1de-c5645b3188a9",
+      "name": "selected_item",
+      "type": "object",
+      "value": "{\n    \"itemId\": \"unknown\",\n    \"itemName\": \"unknown\",\n    \"itemUrl\": \"unknown\",\n    \"price\": \"unknown\",\n    \"description\": \"unknown\",\n    \"size\": \"unknown\"\n}",
+      "isPlatformVariable": false,
+      "arrayItemType": "object"
+    },
+    {
+      "id": "7edd4b4a-0201-4390-8c67-6a221376b51b",
+      "name": "item_size",
+      "type": "string",
+      "value": "unknown",
+      "isPlatformVariable": false
+    },
+    {
+      "id": "d994c214-7842-4dcb-ab47-7aef73aeeba8",
+      "name": "cart",
+      "type": "array",
+      "value": "[\n    {\n        \"itemId\": \"unknown\",\n        \"itemName\": \"unknown\",\n        \"itemUrl\": \"unknown\",\n        \"price\": 1.99,\n        \"description\": \"unknown\",\n        \"size\": \"unknown\"\n    }\n]",
+      "isPlatformVariable": false,
+      "arrayItemType": "object"
+    },
+    {
+      "id": "071f4edd-4ddf-4413-b7c6-5303d63d1a8b",
+      "name": "delete_from_cart_item",
+      "type": "object",
+      "value": "{\n    \"itemId\": \"unknown\",\n    \"itemName\": \"unknown\",\n    \"itemUrl\": \"unknown\",\n    \"price\": \"unknown\",\n    \"description\": \"unknown\",\n    \"size\": \"unknown\"\n}",
+      "isPlatformVariable": false
+    },
+    {
+      "id": "9b5ec4e1-90ef-4c5d-aa72-20272a55592c",
+      "name": "deliver_address",
+      "type": "string",
+      "value": "your address",
+      "isPlatformVariable": false
+    },
+    {
+      "id": "e9ced8cb-2a23-4716-83b3-33bcb2f5d107",
+      "name": "snacks_items",
+      "type": "array",
+      "value": "[\n    {\n        \"itemId\": \"sandwich-1\",\n        \"itemName\": \"Spicy Sandwich\",\n        \"itemUrl\": \"https://hjzvmehimumkehfknjlw.supabase.co/storage/v1/object/public/plz-post-bucket/static/demo-bot-pizza-store/snacks/1.jpg\",\n        \"price\": 7.99,\n        \"description\": \"Hot snack with chicken, jalapeño peppers, pickles, tomatoes, mozzarella, and barbecue sauce in a thin wheat flatbread.\"\n    },\n    {\n        \"itemId\": \"supermeat_sandwich\",\n        \"itemName\": \"Super Meat Sandwich\",\n        \"itemUrl\": \"https://hjzvmehimumkehfknjlw.supabase.co/storage/v1/object/public/plz-post-bucket/static/demo-bot-pizza-store/snacks/2.jpg\",\n        \"price\": 7.99,\n        \"description\": \"Hot snack with chicken, mozzarella, meatballs, spicy chorizo sausages, and burger sauce in a thin wheat flatbread.\"\n    },\n    {\n        \"itemId\": \"chicken_wings\",\n        \"itemName\": \"Chicken Wings\",\n        \"itemUrl\": \"https://hjzvmehimumkehfknjlw.supabase.co/storage/v1/object/public/plz-post-bucket/static/demo-bot-pizza-store/snacks/3.jpg\",\n        \"price\": 9.99,\n        \"description\": \"Chicken wings with spices and a smoky flavor.\"\n    },\n    {\n        \"itemId\": \"pasta_shrimps\",\n        \"itemName\": \"Pasta with Shrimp\",\n        \"itemUrl\": \"https://hjzvmehimumkehfknjlw.supabase.co/storage/v1/object/public/plz-post-bucket/static/demo-bot-pizza-store/snacks/4.jpg\",\n        \"price\": 16.99,\n        \"description\": \"Oven-baked pasta with shrimp, tomatoes, mozzarella, Alfredo sauce, and garlic.\"\n    },\n    {\n        \"itemId\": \"pasta-pesto\",\n        \"itemName\": \"Pesto Pasta\",\n        \"itemUrl\": \"https://hjzvmehimumkehfknjlw.supabase.co/storage/v1/object/public/plz-post-bucket/static/demo-bot-pizza-store/snacks/5.jpg\",\n        \"price\": 14.99,\n        \"description\": \"Oven-baked pasta with pesto sauce, chicken, tomatoes, mozzarella, and a signature tomato sauce.\"\n    },\n    {\n        \"itemId\": \"denvich-vetchina-sir\",\n        \"itemName\": \"Ham and Cheese Denvich\",\n        \"itemUrl\": \"https://hjzvmehimumkehfknjlw.supabase.co/storage/v1/object/public/plz-post-bucket/static/demo-bot-pizza-store/snacks/6.jpg\",\n        \"price\": 9.99,\n        \"description\": \"Toasted ciabatta with a familiar combination of ham, chicken, mozzarella, fresh tomatoes, and ranch sauce.\"\n    },\n    {\n        \"itemId\": \"denvich-chorisso-bbq\",\n        \"itemName\": \"Chorizo BBQ Denvich\",\n        \"itemUrl\": \"https://hjzvmehimumkehfknjlw.supabase.co/storage/v1/object/public/plz-post-bucket/static/demo-bot-pizza-store/snacks/7.jpg\",\n        \"price\": 9.99,\n        \"description\": \"Chorizo and pepperoni sausages with burger and barbecue sauces, tomatoes, pickles, mozzarella, and onions in a toasted ciabatta.\"\n    },\n    {\n        \"itemId\": \"chicken-bytes\",\n        \"itemName\": \"Chicken Bites\",\n        \"itemUrl\": \"https://hjzvmehimumkehfknjlw.supabase.co/storage/v1/object/public/plz-post-bucket/static/demo-bot-pizza-store/snacks/8.jpg\",\n        \"price\": 8.99,\n        \"description\": \"Juicy pieces of whole chicken fillet with a golden crust.\"\n    },\n    {\n        \"itemId\": \"kartoshkamini\",\n        \"itemName\": \"Baked Potatoes\",\n        \"itemUrl\": \"https://hjzvmehimumkehfknjlw.supabase.co/storage/v1/object/public/plz-post-bucket/static/demo-bot-pizza-store/snacks/9.jpg\",\n        \"price\": 5.99,\n        \"description\": \"Baked potatoes with spicy seasonings and minimal oil.\"\n    },\n    {\n        \"itemId\": \"bavarian-lunch\",\n        \"itemName\": \"Bavarian Lunchbox\",\n        \"itemUrl\": \"https://hjzvmehimumkehfknjlw.supabase.co/storage/v1/object/public/plz-post-bucket/static/demo-bot-pizza-store/snacks/10.jpg\",\n        \"price\": 12.99,\n        \"description\": \"Hearty hot lunch with Bavarian sausages, baked potatoes, and mustard sauce.\"\n    },\n    {\n        \"itemId\": \"lunch-box-cheese\",\n        \"itemName\": \"Lunchbox with Chicken Bites\",\n        \"itemUrl\": \"https://hjzvmehimumkehfknjlw.supabase.co/storage/v1/object/public/plz-post-bucket/static/demo-bot-pizza-store/snacks/11.jpg\",\n        \"price\": 11.99,\n        \"description\": \"Hearty hot lunch with tender chicken bites, baked potatoes, and cheese sauce.\"\n    },\n    {\n        \"itemId\": \"gribnoy-starter\",\n        \"itemName\": \"Mushroom Starter\",\n        \"itemUrl\": \"https://hjzvmehimumkehfknjlw.supabase.co/storage/v1/object/public/plz-post-bucket/static/demo-bot-pizza-store/snacks/12.jpg\",\n        \"price\": 7.99,\n        \"description\": \"Hot snack with mushrooms, mozzarella, and ranch sauce in a thin wheat flatbread.\"\n    },\n    {\n        \"itemId\": \"syrnyy-starter\",\n        \"itemName\": \"Cheese Starter\",\n        \"itemUrl\": \"https://hjzvmehimumkehfknjlw.supabase.co/storage/v1/object/public/plz-post-bucket/static/demo-bot-pizza-store/snacks/12.jpg\",\n        \"price\": 7.99,\n        \"description\": \"Hot snack with a very cheesy filling: mozzarella, parmesan, cheddar, and ranch sauce in a thin wheat flatbread.\"\n    },\n    {\n        \"itemId\": \"greek-bals\",\n        \"itemName\": \"Greek Salad with Balsamic Sauce\",\n        \"itemUrl\": \"https://hjzvmehimumkehfknjlw.supabase.co/storage/v1/object/public/plz-post-bucket/static/demo-bot-pizza-store/snacks/14.jpg\",\n        \"price\": 11.99,\n        \"description\": \"Iceberg lettuce, cherry tomatoes, olives, fresh cucumber, feta cheese cubes, and balsamic sauce.\"\n    },\n    {\n        \"itemId\": \"Salat-Caesar\",\n        \"itemName\": \"Caesar Salad\",\n        \"itemUrl\": \"https://hjzvmehimumkehfknjlw.supabase.co/storage/v1/object/public/plz-post-bucket/static/demo-bot-pizza-store/snacks/14.jpg\",\n        \"price\": 10.99,\n        \"description\": \"Chicken, fresh iceberg lettuce, cherry tomatoes, cheddar and parmesan cheese, Caesar sauce, wheat croutons, Italian herbs.\"\n    }\n]",
+      "isPlatformVariable": false,
+      "arrayItemType": "object"
+    },
+    {
+      "id": "7f10bc8b-4880-48ce-8c0a-6bba808aeb2b",
+      "name": "current_category_name",
+      "type": "string",
+      "value": "default value",
+      "isPlatformVariable": false
+    },
+    {
+      "id": "5cf7a842-1a95-4461-b96a-4a324620660e",
+      "name": "dessert_items",
+      "type": "array",
+      "value": "[\n    {\n        \"itemId\": \"sorbet-klubnichnii\",\n        \"itemName\": \"Strawberry Pomegranate Sorbet\",\n        \"itemUrl\": \"https://hjzvmehimumkehfknjlw.supabase.co/storage/v1/object/public/plz-post-bucket/static/demo-bot-pizza-store/dessert/1.jpg\",\n        \"price\": 4.99,\n        \"description\": \"A refreshing duo of juicy berries and ripe fruits.\"\n    },\n    {\n        \"itemId\": \"lemon-sorbet\",\n        \"itemName\": \"Fresh Lemon Sorbet\",\n        \"itemUrl\": \"https://hjzvmehimumkehfknjlw.supabase.co/storage/v1/object/public/plz-post-bucket/static/demo-bot-pizza-store/dessert/2.jpg\",\n        \"price\": 4.99,\n        \"description\": \"Citrus freshness in a cup. Sweet flavor with a pleasant tartness.\"\n    },\n    {\n        \"itemId\": \"cheesecake-new-york-with-coconut\",\n        \"itemName\": \"New York Cheesecake with Coconut\",\n        \"itemUrl\": \"https://hjzvmehimumkehfknjlw.supabase.co/storage/v1/object/public/plz-post-bucket/static/demo-bot-pizza-store/dessert/3.jpg\",\n        \"price\": 6.99,\n        \"description\": \"A new variation of the beloved cheesecake: a creamy base, crumbly crust, and bright coconut notes.\"\n    },\n    {\n        \"itemId\": \"chizkeik-nyu-iork\",\n        \"itemName\": \"New York Cheesecake\",\n        \"itemUrl\": \"https://hjzvmehimumkehfknjlw.supabase.co/storage/v1/object/public/plz-post-bucket/static/demo-bot-pizza-store/dessert/4.jpg\",\n        \"price\": 6.99,\n        \"description\": \"The softest cheese base, a thin crumbly crust, and no additives. A classic in the world of cheesecake.\"\n    },\n    {\n        \"itemId\": \"banan_chizkeyk\",\n        \"itemName\": \"Banana Cheesecake with Chocolate Cookies\",\n        \"itemUrl\": \"https://hjzvmehimumkehfknjlw.supabase.co/storage/v1/object/public/plz-post-bucket/static/demo-bot-pizza-store/dessert/5.jpg\",\n        \"price\": 6.99,\n        \"description\": \"Sunny on the outside and vibrant in taste: a tender cheesecake with banana and chocolate cookies.\"\n    },\n    {\n        \"itemId\": \"Red Velvet\",\n        \"itemName\": \"Red Velvet\",\n        \"itemUrl\": \"https://hjzvmehimumkehfknjlw.supabase.co/storage/v1/object/public/plz-post-bucket/static/demo-bot-pizza-store/dessert/6.jpg\",\n        \"price\": 7.49,\n        \"description\": \"Bright in appearance and taste: a multilayered airy cake with a chocolate-vanilla base.\"\n    },\n    {\n        \"itemId\": \"sticks-w-cowberry-n-pineapple\",\n        \"itemName\": \"Layered Sticks with Pineapple and Cowberry\",\n        \"itemUrl\": \"https://hjzvmehimumkehfknjlw.supabase.co/storage/v1/object/public/plz-post-bucket/static/demo-bot-pizza-store/dessert/7.jpg\",\n        \"price\": 9.99,\n        \"description\": \"Everything in one: cowberry and pineapple.\"\n    },\n    {\n        \"itemId\": \"fondant-2\",\n        \"itemName\": \"Fondant\",\n        \"itemUrl\": \"https://hjzvmehimumkehfknjlw.supabase.co/storage/v1/object/public/plz-post-bucket/static/demo-bot-pizza-store/dessert/8.jpg\",\n        \"price\": 14.90,\n        \"description\": \"Crispy on the outside, with the most delicious liquid chocolate filling inside.\"\n    },\n    {\n        \"itemId\": \"brusletiki\",\n        \"itemName\": \"Brusletiki\",\n        \"itemUrl\": \"https://hjzvmehimumkehfknjlw.supabase.co/storage/v1/object/public/plz-post-bucket/static/demo-bot-pizza-store/dessert/9.jpg\",\n        \"price\": 9.59,\n        \"description\": \"These are fun sweet rolls filled with a mix of natural cowberry and creamy sauce.\"\n    },\n    {\n        \"itemId\": \"bons-123\",\n        \"itemName\": \"Bons #123\",\n        \"itemUrl\": \"https://hjzvmehimumkehfknjlw.supabase.co/storage/v1/object/public/plz-post-bucket/static/demo-bot-pizza-store/dessert/10.jpg\",\n        \"price\": 8.99,\n        \"description\": \"When cream meets spice, you get hot cinnamon rolls in creamy sauce.\"\n    }\n]\n",
+      "isPlatformVariable": false,
+      "arrayItemType": "object"
+    },
+    {
+      "id": "aaaff44a-a07a-4c29-8399-9a3b0155b6d6",
+      "name": "drink_items",
+      "type": "array",
+      "value": "[\n    {\n        \"itemId\": \"raspberry-pomergranate-lemonade\",\n        \"itemName\": \"Raspberry-Pomegranate Lemonade\",\n        \"itemUrl\": \"https://hjzvmehimumkehfknjlw.supabase.co/storage/v1/object/public/plz-post-bucket/static/demo-bot-pizza-store/drinks/1.jpg\",\n        \"price\": 5.49,\n        \"description\": \"A refreshing carbonated drink revealing the duet of sweet raspberry and the special tartness of pomegranate.\"\n    },\n    {\n        \"itemId\": \"11ef3d2a86c189bd7b1b113430a64ae0\",\n        \"itemName\": \"Mango-Passionfruit Lemonade\",\n        \"itemUrl\": \"https://hjzvmehimumkehfknjlw.supabase.co/storage/v1/object/public/plz-post-bucket/static/demo-bot-pizza-store/drinks/2.jpg\",\n        \"price\": 5.49,\n        \"description\": \"A refreshing lemonade with the taste of bright summer! Caution: it boosts your mood!\"\n    },\n    {\n        \"itemId\": \"klubnichnyy-mokhito\",\n        \"itemName\": \"Strawberry Mojito Lemonade\",\n        \"itemUrl\": \"https://hjzvmehimumkehfknjlw.supabase.co/storage/v1/object/public/plz-post-bucket/static/demo-bot-pizza-store/drinks/3.jpg\",\n        \"price\": 5.49,\n        \"description\": \"What you need for a hot summer. A cool carbonated mojito with strawberry flavor.\"\n    },\n    {\n        \"itemId\": \"11ed7060bde4dbfd6cb4f6455166db20\",\n        \"itemName\": \"Pepsi 0.5 Draft\",\n        \"itemUrl\": \"https://hjzvmehimumkehfknjlw.supabase.co/storage/v1/object/public/plz-post-bucket/static/demo-bot-pizza-store/drinks/4.jpg\",\n        \"price\": 4.29,\n        \"description\": \"Pepsi syrup.\"\n    },\n    {\n        \"itemId\": \"11ed7061bde4dbfd6cb4f64564159cb0\",\n        \"itemName\": \"Mirinda 0.5 Draft\",\n        \"itemUrl\": \"https://hjzvmehimumkehfknjlw.supabase.co/storage/v1/object/public/plz-post-bucket/static/demo-bot-pizza-store/drinks/4.jpg\",\n        \"price\": 4.29,\n        \"description\": \"Mirinda syrup.\"\n    },\n    {\n        \"itemId\": \"11ed7061bde4dbfd6cb4f645846fc710\",\n        \"itemName\": \"7UP 0.5 Draft\",\n        \"itemUrl\": \"https://hjzvmehimumkehfknjlw.supabase.co/storage/v1/object/public/plz-post-bucket/static/demo-bot-pizza-store/drinks/3.jpg\",\n        \"price\": 4.29,\n        \"description\": \"7Up syrup.\"\n    },\n    {\n        \"itemId\": \"11ef34dba5a839d2e4de07c244978e80\",\n        \"itemName\": \"Cherry Berry Juice\",\n        \"itemUrl\": \"https://hjzvmehimumkehfknjlw.supabase.co/storage/v1/object/public/plz-post-bucket/static/demo-bot-pizza-store/drinks/7.jpg\",\n        \"price\": 3.49,\n        \"description\": \"Signature berry juice made from natural ripe cherries: moderately sweet with a pleasant tartness. Product design may vary.\"\n    },\n    {\n        \"itemId\": \"11ef34ddba80b37aa4b0fdb2bc40b9f0\",\n        \"itemName\": \"Cranberry Berry Juice\",\n        \"itemUrl\": \"https://hjzvmehimumkehfknjlw.supabase.co/storage/v1/object/public/plz-post-bucket/static/demo-bot-pizza-store/drinks/8.jpg\",\n        \"price\": 3.70,\n        \"description\": \"Signature berry juice made from natural wild cranberries with a tart aftertaste.\"\n    }\n]\n",
+      "isPlatformVariable": false,
+      "arrayItemType": "object"
+    },
+    {
+      "id": "ba2d8c61-94fe-4db8-b860-102df212dc15",
+      "name": "total_price",
+      "type": "number",
+      "value": 0,
+      "isPlatformVariable": false
+    },
+    {
+      "id": "2c00703a-aa9f-4b4a-bb4a-7989c6c322a7",
+      "name": "actual_pizza_price",
+      "type": "number",
+      "value": "0",
+      "isPlatformVariable": false
+    },
+    {
+      "id": "d6bd601d-7d57-4f9b-9b86-29f8616cf2a4",
+      "name": "great_choice_gifs",
+      "type": "array",
+      "value": "[\n    \"https://media3.giphy.com/media/ByeYxURXxPyptxD2ta/giphy-downsized.gif?cid=42e3a184j7nns884krtcnvzpl078bcp3xprkzhmrqf0chb8u&ep=v1_gifs_search&rid=giphy-downsized.gif&ct=g\",\n    \"https://media1.giphy.com/media/xHMIDAy1qkzNS/giphy.gif?cid=42e3a1849mqg5amhwnehmvekiiyi442dseerv16ahp1719co&ep=v1_gifs_search&rid=giphy.gif&ct=g\",\n    \"https://media3.giphy.com/media/JoSiL3L4ON8DlyVxv0/giphy.gif?cid=42e3a184jixng8ziv00gnsa3vrgy00ewhpdcfj6c6dci7yfk&ep=v1_gifs_search&rid=giphy.gif&ct=g\",\n    \"https://media1.giphy.com/media/AiF8ZsTESrDwRjEcIU/giphy.gif?cid=42e3a184xw64jtgrub5oz75s5kpwsykhhqjvbhu5md9km4jv&ep=v1_gifs_search&rid=giphy.gif&ct=g\",\n    \"https://media4.giphy.com/media/qECS7IBgg7uLu/giphy.gif?cid=42e3a184xw64jtgrub5oz75s5kpwsykhhqjvbhu5md9km4jv&ep=v1_gifs_search&rid=giphy.gif&ct=g\",\n    \"https://media0.giphy.com/media/4GRRBtKrdiFDa/giphy.gif?cid=42e3a1847p085h16ukgxlcders406hqnywk0mz9cvq6u9gel&ep=v1_gifs_search&rid=giphy.gif&ct=g\",\n    \"https://media3.giphy.com/media/zvoYbtjvL5nm5pX6lp/giphy.gif?cid=42e3a184sevcnu9dait8rl8qdgjmygvfuc5fi6tbnbebxcca&ep=v1_gifs_search&rid=giphy.gif&ct=g\",\n    \"https://media1.giphy.com/media/l3q2LH45XElELRzRm/giphy.gif?cid=42e3a184sevcnu9dait8rl8qdgjmygvfuc5fi6tbnbebxcca&ep=v1_gifs_search&rid=giphy.gif&ct=g\",\n    \"https://media4.giphy.com/media/POZulBhYwuOI2Dg7oX/giphy.gif?cid=42e3a1849v9atrnn1ie79eb2usn0pxy3gvtp9n03urha36h2&ep=v1_gifs_search&rid=giphy.gif&ct=g\"\n]",
+      "isPlatformVariable": false,
+      "arrayItemType": "string"
+    },
+    {
+      "id": "11e30c86-6cd2-4190-ac4f-2a9485ef1caa",
+      "name": "great_choice_gif",
+      "type": "string",
+      "value": "default value",
+      "isPlatformVariable": false
+    },
+    {
+      "id": "ffda2ada-868b-48a6-b3c4-34744b4bebae",
+      "name": "new_order_description",
+      "type": "object",
+      "value": "{\n    \"cart\": \"unknown\",\n    \"total\": -1,\n    \"name\": \"unknown\",\n    \"time\": \"unknown\"\n}",
+      "isPlatformVariable": false,
+      "arrayItemType": "object"
+    },
+    {
+      "id": "d6a577a9-d266-4c79-84fd-1b1b0b714e4f",
+      "name": "customer_name",
+      "type": "string",
+      "value": "Unknown",
+      "isPlatformVariable": false
+    },
+    {
+      "id": "55e389c0-7553-4146-9ee0-ba7f75efde2d",
+      "name": "now_date_time",
+      "type": "string",
+      "value": "now",
+      "isPlatformVariable": false
+    }
+  ],
+  "transformDescription": {
+    "x": -58,
+    "y": -18,
+    "scale": 0.61
+  },
+  "templates": [
+    {
+      "id": "657e680b-88b1-47ae-8810-37656aea9b11",
+      "name": "google_cart_template",
+      "showContentWhenArrayIsEmpty": false,
+      "contextVariableId": "d994c214-7842-4dcb-ab47-7aef73aeeba8",
+      "json": "{\"blocks\":[{\"key\":\"79n43\",\"text\":\"<%index%>. <%itemName%> <%size%> - <%price%>$\",\"type\":\"unstyled\",\"depth\":0,\"inlineStyleRanges\":[],\"entityRanges\":[],\"data\":{}},{\"key\":\"cbgle\",\"text\":\"\",\"type\":\"unstyled\",\"depth\":0,\"inlineStyleRanges\":[],\"entityRanges\":[],\"data\":{}}],\"entityMap\":{}}",
+      "htmlContent": "<%index%>. <%itemName%> <%size%> - <%price%>$\n",
+      "isPlainText": true
+    }
+  ],
+  "connections": []
+}
