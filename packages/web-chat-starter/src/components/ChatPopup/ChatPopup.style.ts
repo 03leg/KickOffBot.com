@@ -19,7 +19,7 @@ export const useChatPopupStyles = makeStyles()(({ spacing, palette, breakpoints 
     height: "99vh",
     width: "900px",
     [breakpoints.down(900)]: {
-      width: "calc(100% - 50px)",
+      width: "calc(100% - 15px)",
     },
     display: "flex",
     flexDirection: "column",

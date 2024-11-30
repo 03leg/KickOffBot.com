@@ -1,11 +1,10 @@
 import ReactDOM from "react-dom/client";
-import React, { useCallback } from 'react';
+import React from 'react';
 import { EmbeddedChatButtonsInitOptions, PopupChatInitOptions } from "./initOptions";
 import createCache from "@emotion/cache";
 import { CacheProvider } from "@emotion/react";
-import { Box, Button, createTheme, CssBaseline, Portal, ThemeProvider } from "@mui/material";
+import { Box, Button, createTheme, ThemeProvider } from "@mui/material";
 import { ButtonDescription } from "./types";
-import { createChatTheme, customScrollbarStyle, defaultThemeObject, getChatTheme } from "@kickoffbot.com/web-chat";
 import { ChatPopup } from "./components/ChatPopup";
 
 
@@ -34,7 +33,7 @@ export class ButtonsChatRenderer {
         return { shadowContainer, shadowRootElement };
     }
 
-    public static async renderChatPopup({ botId, externalVariables }: PopupChatInitOptions) {
+    public static async renderChatPopup(options: PopupChatInitOptions) {
         const bodyElement = document.querySelector('body');
         if (!bodyElement) {
             throw new Error("Failed to find body element");
@@ -54,13 +53,6 @@ export class ButtonsChatRenderer {
             container: shadowContainer,
         });
 
-        let chatTheme = await getChatTheme(process.env.NEXT_PUBLIC_APP_URL!, botId);
-        if (!chatTheme) {
-            chatTheme = defaultThemeObject;
-        }
-
-        const shadowTheme = createChatTheme(shadowRootElement, chatTheme);
-
         const root = ReactDOM.createRoot(shadowRootElement);
 
         const handleClosePopup = () => {
@@ -76,20 +68,13 @@ export class ButtonsChatRenderer {
         root.render(
             <React.StrictMode>
                 <CacheProvider value={cache}>
-                    <ThemeProvider theme={shadowTheme}>
-                        <style type="text/css" data-csp="kickoffbot-chat-theme-css">
-                            {customScrollbarStyle}
-                        </style>
-                        <CssBaseline />
-                        <ChatPopup botId={botId} chatTheme={chatTheme} onClose={handleClosePopup} externalVariables={externalVariables} />
-                    </ThemeProvider>
+                    <ChatPopup options={options} onClose={handleClosePopup} shadowRootElement={shadowRootElement} />
                 </CacheProvider>
             </React.StrictMode>
         );
     }
 
     public static renderButtons({ containerId, buttonColor, buttonsOrientation, buttons, buttonStyle, buttonWidth, buttonCssClasses, externalVariables }: EmbeddedChatButtonsInitOptions) {
-
         if (buttonStyle === "default") {
             ButtonsChatRenderer.renderDefaultButtons(containerId, buttonsOrientation, buttons, buttonWidth, buttonCssClasses, externalVariables);
             return;
@@ -146,7 +131,7 @@ export class ButtonsChatRenderer {
         );
     }
 
-    static renderDefaultButtons(containerId: string, buttonsOrientation: string, buttons: ButtonDescription[], buttonWidth: string | undefined, 
+    static renderDefaultButtons(containerId: string, buttonsOrientation: string, buttons: ButtonDescription[], buttonWidth: string | undefined,
         buttonCssClasses: string | undefined, externalVariables?: Record<string, unknown>) {
         const rootContainer = document.querySelector('#' + containerId);
         if (!rootContainer) {

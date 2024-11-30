@@ -2,17 +2,16 @@ import React from 'react';
 import { useChatPopupStyles } from './ChatPopup.style';
 import { Box, IconButton } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
-import { ChatViewer, KickoffbotChatStoreProvider } from '@kickoffbot.com/web-chat';
-import { WebChatTheme } from '@kickoffbot.com/types';
+import { EmbeddedChat } from '../EmbeddedChat';
+import { PopupChatInitOptions } from '../../initOptions';
 
 interface Props {
-    botId: string;
-    chatTheme: WebChatTheme;
     onClose: () => void;
-    externalVariables?: Record<string, unknown>;
+    options: PopupChatInitOptions;
+    shadowRootElement: HTMLDivElement;
 }
 
-export const ChatPopup = ({ botId, chatTheme, onClose, externalVariables }: Props) => {
+export const ChatPopup = ({ options, onClose, shadowRootElement }: Props) => {
     const { classes } = useChatPopupStyles();
 
     return (
@@ -28,10 +27,7 @@ export const ChatPopup = ({ botId, chatTheme, onClose, externalVariables }: Prop
                     </IconButton>
                 </Box>
                 <Box className={classes.content}>
-                    <KickoffbotChatStoreProvider>
-                        <ChatViewer height={"100%"} projectId={botId} webViewOptions={chatTheme} runtimeUrl={process.env.NEXT_PUBLIC_WEB_BOT_RUNTIME_HOST!}
-                            externalVariables={externalVariables} />
-                    </KickoffbotChatStoreProvider>
+                    <EmbeddedChat initOptions={options} shadowRootElement={shadowRootElement} />
                 </Box>
             </Box>
         </Box>

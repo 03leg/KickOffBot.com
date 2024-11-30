@@ -26,7 +26,7 @@ export const Step1 = ({ onClose, onSelectPlatform }: Props) => {
                         <LanguageIcon />  web
                     </Box>
                 </Button>
-                <Button variant="outlined" className={classes.step1ButtonPlatform} onClick={() => onSelectPlatform(BotPlatform.Telegram)}>
+                <Button variant="outlined" color='info' className={classes.step1ButtonPlatform} onClick={() => onSelectPlatform(BotPlatform.Telegram)}>
                     <Box className={classes.step1ButtonPlatformContent}>
                         <TelegramIcon /> telegram
                     </Box>
