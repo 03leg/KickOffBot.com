@@ -191,11 +191,12 @@ export class RequestElementConverter {
   }
 
   private static getTextInputElement(
-    element: WebInputNumberUIElement,
+    element: WebInputTextUIElement,
   ): TextRequestElement {
     const result: TextRequestElement = {
       elementType: ElementType.WEB_INPUT_TEXT,
       placeholder: element.placeholder,
+      multiline: element.multiline,
     };
 
     return result;

@@ -10,7 +10,7 @@ interface Props {
 }
 
 export const TextBotRequest = ({ request }: Props) => {
-    const { placeholder } = request.element as TextRequestElement;
+    const { placeholder, multiline } = request.element as TextRequestElement;
     const { classes } = useTextBoxRequestStyles();
     const [currentValue, setCurrentValue] = useState<string>('');
 
@@ -33,7 +33,8 @@ export const TextBotRequest = ({ request }: Props) => {
         <Box className={classes.root}>
             <TextField
                 color='primary'
-                autoFocus /* multiline maxRows={4} */
+                autoFocus
+                {...(multiline ? { multiline, rows: 3 } : {})}
                 onKeyDown={handleTextFieldKeyDown}
                 className={classes.textField} fullWidth variant="outlined" value={currentValue} onChange={handleValueChange} placeholder={placeholder} />
             <SendResponseButton onSendResponse={handleSendResponse} />

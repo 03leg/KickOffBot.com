@@ -93,6 +93,7 @@ export interface WebInputTextUIElement extends UIElement {
   label: string;
   variableId?: string;
   placeholder?: string;
+  multiline?: boolean;
 }
 
 export interface WebInputNumberUIElement extends UIElement {
@@ -273,6 +274,7 @@ export interface RequestElementBase {
 
 export interface TextRequestElement extends RequestElementBase {
   placeholder?: string;
+  multiline?: boolean;
 }
 
 export interface OpinionScaleRequestElement extends RequestElementBase {
