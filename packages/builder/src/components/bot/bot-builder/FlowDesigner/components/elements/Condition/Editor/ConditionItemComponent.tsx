@@ -9,6 +9,7 @@ import { useFlowDesignerStore } from '~/components/bot/bot-builder/store'
 import { isEmpty, isNil } from 'lodash';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { PropertySelector } from '../../ChangeVariable/Editor/VariableValueSource/condition/PropertySelector'
+import { throwIfNil } from '~/utils/guard'
 
 
 interface Props {
@@ -85,7 +86,9 @@ export const ConditionItemComponent = ({ item, showLogicalOperatorSelector, next
         }
     }, [item])
 
-    const handleVariableChange = useCallback((selectedVariable: BotVariable) => {
+    const handleVariableChange = useCallback((selectedVariable?: BotVariable) => {
+        throwIfNil(selectedVariable);
+        
         setSelectedVariableId(selectedVariable.id);
         item.variableId = selectedVariable.id;
         setDefaultValue(selectedVariable.type);

@@ -22,7 +22,8 @@ export const DynamicCardsEditor = ({ element }: Props) => {
         getVariableById: state.getVariableById
     }));
 
-    const handleDataSourceVariableChange = useCallback((newVariable: BotVariable) => {
+    const handleDataSourceVariableChange = useCallback((newVariable?: BotVariable) => {
+        throwIfNil(newVariable);
         setDataSourceVariableId(newVariable.id);
         dynamicDataSourceDescription.cardsVariableId = newVariable.id;
     }, [dynamicDataSourceDescription]);

@@ -4,6 +4,7 @@ import React, { useCallback, useState } from "react";
 import { WebMultipleChoiceStaticEditor } from "./components/WebMultipleChoiceStaticEditor";
 import { VariableSelector } from "../../../../VariableSelector";
 import { WebMultipleChoiceDynamicEditor } from "./components/WebMultipleChoiceDynamicEditor";
+import { throwIfNil } from "~/utils/guard";
 
 interface Props {
   element: WebMultipleChoiceUIElement;
@@ -24,7 +25,8 @@ export const WebMultipleChoiceEditor = ({ element }: Props) => {
     element.shuffleOptions = event.target.checked;
   }, [element]);
 
-  const handleVariableChange = useCallback((newVariable: BotVariable) => {
+  const handleVariableChange = useCallback((newVariable?: BotVariable) => {
+    throwIfNil(newVariable);
     setSelectedVariableId(newVariable.id);
     element.variableId = newVariable.id;
   }, [element]);

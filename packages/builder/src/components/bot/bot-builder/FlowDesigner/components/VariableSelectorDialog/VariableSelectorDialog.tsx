@@ -52,8 +52,8 @@ export const VariableSelectorDialog = ({ onInsertVariable, availableVariableType
 
     }, [handleClose, onInsertVariable, path, selectedVariableInsert]);
 
-    const handleVariableChange = useCallback((selectedVariable: BotVariable) => {
-        setSelectedVariableInsert(selectedVariable);
+    const handleVariableChange = useCallback((selectedVariable?: BotVariable) => {
+        setSelectedVariableInsert(selectedVariable ?? null);
     }, []);
 
     const handlePathPropertyChange = useCallback((propertyName: string) => {

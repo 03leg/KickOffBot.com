@@ -8,6 +8,7 @@ import { EditorState, convertFromRaw } from 'draft-js';
 import { useFlowDesignerStore } from '../../store';
 import { WebTextEditor } from '~/components/commons/WebTextEditor';
 import { getTemplateContent } from './TemplateEditor.utils';
+import { throwIfNil } from '~/utils/guard';
 
 interface Props {
     template: BotTemplate;
@@ -49,7 +50,9 @@ export const TemplateEditor = ({ template, onTemplateChange }: Props) => {
         onTemplateChange(template); //?
     }, [isPlainText, onTemplateChange, template]);
 
-    const handleVariableChange = useCallback((newVariable: BotVariable) => {
+    const handleVariableChange = useCallback((newVariable?: BotVariable) => {
+        throwIfNil(newVariable);
+        
         template.contextVariableId = newVariable.id;
         setContextVariableId(newVariable.id);
         onTemplateChange(template);

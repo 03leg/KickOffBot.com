@@ -3,6 +3,7 @@ import { Box, Checkbox, FormControl, FormControlLabel, InputLabel, MenuItem, Sel
 import React, { useCallback, useMemo, useState } from 'react';
 import { useWebRatingEditorStyles } from './WebRatingEditor.style';
 import { VariableSelector } from '../../../../VariableSelector';
+import { throwIfNil } from '~/utils/guard';
 
 interface Props {
     element: WebRatingUIElement
@@ -57,7 +58,9 @@ export const WebRatingEditor = ({ element }: Props) => {
         element.showLabels = newValue;
     }, [element]);
 
-    const handleVariableChange = useCallback((newVariable: BotVariable) => {
+    const handleVariableChange = useCallback((newVariable?: BotVariable) => {
+        throwIfNil(newVariable);
+        
         setSelectedVariableId(newVariable.id);
         element.variableId = newVariable.id;
     }, [element]);

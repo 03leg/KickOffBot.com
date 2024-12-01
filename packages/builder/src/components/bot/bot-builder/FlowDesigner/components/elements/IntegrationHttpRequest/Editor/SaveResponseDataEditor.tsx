@@ -15,8 +15,8 @@ export const SaveResponseDataEditor = ({ saveResponseData, onSaveResponseDataCha
         onSaveResponseDataChange(event.target.checked);
     }, [onSaveResponseDataChange]);
 
-    const handleVariableChange = useCallback((newVariable: BotVariable) => {
-        onResponseDataVariableChange(newVariable.id);
+    const handleVariableChange = useCallback((newVariable?: BotVariable) => {
+        onResponseDataVariableChange(newVariable?.id);
     }, [onResponseDataVariableChange]);
 
     return (

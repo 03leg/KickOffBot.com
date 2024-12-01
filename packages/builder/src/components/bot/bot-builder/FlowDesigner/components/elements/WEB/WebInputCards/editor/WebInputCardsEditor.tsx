@@ -10,6 +10,7 @@ import { AppTextField } from '~/components/commons/AppTextField';
 import { CardsElementButtonsEditor } from './components/CardsElementButtonsEditor';
 import { VariableSelector } from '../../../../VariableSelector';
 import { v4 } from 'uuid';
+import { throwIfNil } from '~/utils/guard';
 
 interface Props {
     element: WebInputCardsUIElement;
@@ -88,7 +89,8 @@ export const WebInputCardsEditor = ({ element }: Props) => {
         element.sendButtonText = text;
     }, [element]);
 
-    const handleVariableChange = useCallback((newVariable: BotVariable) => {
+    const handleVariableChange = useCallback((newVariable?: BotVariable) => {
+        throwIfNil(newVariable);
         setSelectedVariableId(newVariable.id);
         element.variableId = newVariable.id;
     }, [element]);

@@ -9,6 +9,7 @@ import { ObjectTypeVariableEditor } from './ObjectTypeVariableEditor';
 import { ArrayTypeVariableEditor } from './ArrayTypeVariableEditor';
 import { makeStyles } from 'tss-react/mui';
 import { DateTimeTypeVariableEditor } from './DateTimeTypeVariableEditor';
+import { throwIfNil } from '~/utils/guard';
 
 interface Props {
     element: ChangeVariableUIElement;
@@ -37,7 +38,8 @@ export const ChangeVariableEditor = ({ element }: Props) => {
         return getVariableById(selectedVariableId)?.value ?? null;
     }, [getVariableById, selectedVariableId]);
 
-    const handleVariableChange = useCallback((variable: BotVariable) => {
+    const handleVariableChange = useCallback((variable?: BotVariable) => {
+        throwIfNil(variable);
         setSelectedVariableId(variable.id);
         element.selectedVariableId = variable.id;
 

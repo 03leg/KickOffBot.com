@@ -3,6 +3,7 @@ import { Box, Typography } from '@mui/material';
 import React, { useCallback, useState } from 'react';
 import { VariableSelector } from '../../../VariableSelector';
 import { RowsFilter } from './RowsFilter/RowsFilter';
+import { throwIfNil } from '~/utils/guard';
 
 interface Props {
     googleSheetHeaders: string[];
@@ -13,7 +14,9 @@ export const UpdateRowsFromVariableEditor = ({ element, googleSheetHeaders }: Pr
     const [selectedVariableId, setSelectedVariableId] = useState<BotVariable["id"]>(element.dataOperationDescription?.variableId ?? '');
     const updateRowsDescription = element?.dataOperationDescription as UpdateRowsFromObjectVariableDescription;
 
-    const handleVariableChange = useCallback((variable: BotVariable) => {
+    const handleVariableChange = useCallback((variable?: BotVariable) => {
+        throwIfNil(variable);
+        
         setSelectedVariableId(variable.id);
         element.dataOperationDescription = {
             variableId: variable.id,
