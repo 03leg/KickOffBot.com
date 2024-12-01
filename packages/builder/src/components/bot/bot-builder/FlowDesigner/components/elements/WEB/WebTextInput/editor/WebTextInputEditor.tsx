@@ -1,5 +1,5 @@
 import { BotVariable, VariableType, WebInputTextUIElement } from '@kickoffbot.com/types';
-import { Box, TextField, Typography } from '@mui/material';
+import { Box, Checkbox, FormControlLabel, TextField, Typography } from '@mui/material';
 import React, { useCallback, useState } from 'react';
 import { VariableSelector } from '../../../../VariableSelector';
 
@@ -10,6 +10,7 @@ interface Props {
 export const WebTextInputEditor = ({ element }: Props) => {
   const [selectedVariableId, setSelectedVariableId] = useState<string>(element.variableId ?? '');
   const [placeholder, setPlaceholder] = useState<string>(element.placeholder ?? '');
+  const [multiline, setMultiline] = useState<boolean>(element.multiline ?? false);
 
   const handleVariableChange = useCallback((newVariable: BotVariable) => {
     setSelectedVariableId(newVariable.id);
@@ -21,10 +22,14 @@ export const WebTextInputEditor = ({ element }: Props) => {
     element.placeholder = event.target.value;
   }, [element]);
 
-
+  const handleMultilineChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
+    setMultiline(event.target.checked);
+    element.multiline = event.target.checked
+  }, [element]);
 
   return (
     <Box>
+      <FormControlLabel control={<Checkbox checked={multiline} onChange={handleMultilineChange} />} label="Multiline" />
       <Typography>Placeholder:</Typography>
       <TextField sx={{ marginTop: 1, marginBottom: 3 }} fullWidth variant="outlined" value={placeholder} onChange={handlePlaceHolderChange} />
 
