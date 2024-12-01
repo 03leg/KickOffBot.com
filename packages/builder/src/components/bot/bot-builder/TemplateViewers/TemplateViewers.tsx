@@ -36,7 +36,7 @@ export const TemplateViewers = () => {
                     {templates.map(t =>
                     (
                         <ListItem key={t.id}>
-                            <ListItemIcon>
+                            <ListItemIcon sx={{ minWidth: '36px' }}>
                                 <AssignmentIcon />
                             </ListItemIcon>
                             <ListItemText
@@ -53,7 +53,7 @@ export const TemplateViewers = () => {
                             <Box sx={{ display: 'flex' }}>
                                 <EditTemplateButton template={t} />
 
-                                <IconButton sx={{ marginLeft: 2 }} edge="end" aria-label="delete" onClick={() => handleRemoveTemplate(t)}>
+                                <IconButton title='Delete' sx={{ marginLeft: 2, padding: 0.5 }} edge="end" aria-label="delete" onClick={() => handleRemoveTemplate(t)}>
                                     <DeleteIcon />
                                 </IconButton>
                             </Box>

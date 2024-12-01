@@ -40,7 +40,7 @@ export const EditTemplateButton = ({ template }: Props) => {
     const handleAddTemplate = useCallback((event: React.MouseEvent<HTMLElement>) => {
 
 
-        const newTemplate: BotTemplate = { id: v4(), name: getNewTemplateName(), showContentWhenArrayIsEmpty: false  }
+        const newTemplate: BotTemplate = { id: v4(), name: getNewTemplateName(), showContentWhenArrayIsEmpty: false }
         setCurrentTemplate(newTemplate);
         setOpen(true);
 
@@ -99,7 +99,7 @@ export const EditTemplateButton = ({ template }: Props) => {
                 </Button>
             ) :
                 (
-                    <IconButton edge="end" aria-label="edit" onClick={handleEditTemplate}>
+                    <IconButton sx={{ padding: 0.5 }} title="Edit template" edge="end" aria-label="edit" onClick={handleEditTemplate}>
                         <EditIcon />
                     </IconButton>
                 )
