@@ -1,18 +1,20 @@
-import { FormControl, MenuItem, Select, Typography, type SelectChangeEvent, InputLabel } from '@mui/material'
+import { FormControl, MenuItem, Select, Typography, type SelectChangeEvent, InputLabel, Box, IconButton } from '@mui/material'
 import React, { useCallback, useMemo } from 'react'
 import { type VariableType, type BotVariable } from '@kickoffbot.com/types';
 import { useFlowDesignerStore } from '../../../store';
 import { isNil } from 'lodash';
+import HistoryIcon from '@mui/icons-material/History';
 
 interface Props {
     valueId?: string;
     variableTypes?: VariableType[];
-    onVariableChange: (variable: BotVariable) => void;
+    onVariableChange: (variable?: BotVariable) => void;
     onCustomVariableFilter?: (variable: BotVariable) => boolean;
     label?: string;
+    showResetButton?: boolean;
 }
 
-export const VariableSelector = ({ valueId, variableTypes, onVariableChange, onCustomVariableFilter, label = 'Variable' }: Props) => {
+export const VariableSelector = ({ valueId, variableTypes, onVariableChange, onCustomVariableFilter, label = 'Variable', showResetButton = false }: Props) => {
     const { variables } = useFlowDesignerStore((state) => ({
         variables: state.project.variables,
     }));
@@ -49,19 +51,23 @@ export const VariableSelector = ({ valueId, variableTypes, onVariableChange, onC
                 </Typography>
             }
             {currentVariables.length > 0 &&
-                <FormControl fullWidth>
-                    <InputLabel id="variable-selector-label">{label}</InputLabel>
-                    <Select
-                        labelId="variable-selector-label"
-                        value={valueId ?? ''}
-                        label={label}
-                        onChange={handleVariableChange}
-                    >
-                        {currentVariables.map(v =>
-                            (<MenuItem key={v.id} value={v.id}>{v.name}</MenuItem>)
-                        )}
-                    </Select>
-                </FormControl>}
+                <Box sx={{ display: 'flex' }}>
+                    <FormControl fullWidth>
+                        <InputLabel id="variable-selector-label">{label}</InputLabel>
+                        <Select
+                            labelId="variable-selector-label"
+                            value={valueId ?? ''}
+                            label={label}
+                            onChange={handleVariableChange}
+                        >
+                            {currentVariables.map(v =>
+                                (<MenuItem key={v.id} value={v.id}>{v.name}</MenuItem>)
+                            )}
+                        </Select>
+                    </FormControl>
+                    {showResetButton && <IconButton disabled={isNil(valueId)} title='Reset' sx={{ ml: 1 }} onClick={() => onVariableChange(undefined)}><HistoryIcon /></IconButton>}
+                </Box>}
+
         </>
     )
 }

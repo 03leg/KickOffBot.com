@@ -15,12 +15,12 @@ export const WebDateTimeInputEditor = ({ element }: Props) => {
     const [useTime, setUseTime] = React.useState<boolean>(element.useTime);
     const [useAmPm, setUseAmPm] = React.useState<boolean>(element.useAmPm ?? false);
     const [availableDateTimes, setAvailableDateTimes] = React.useState<AvailableDateTimes>(element.availableDateTimes);
-    const [selectedVariableId, setSelectedVariableId] = useState<string>(element.variableId ?? '');
-    const [parkTimeVariableId, setParkTimeVariableId] = useState<string>(element.parkTimeVariableId ?? '');
-    const [availableDateTimesVariableId, setAvailableDateTimesVariableId] = useState<string>(element.availableDateTimesVariableId ?? '');
-    const [disabledDatesVariableId, setDisabledDatesVariableId] = useState<string>(element.disabledDatesVariableId ?? '');
-    const [disabledTimesVariableId, setDisabledTimesVariableId] = useState<string>(element.disabledTimesVariableId ?? '');
-    const [disabledDateAndTimesVariableId, setDisabledDateAndTimesVariableId] = useState<string>(element.disabledDateAndTimesVariableId ?? '');
+    const [selectedVariableId, setSelectedVariableId] = useState<string | undefined>(element.variableId);
+    const [parkTimeVariableId, setParkTimeVariableId] = useState<string | undefined>(element.parkTimeVariableId);
+    const [availableDateTimesVariableId, setAvailableDateTimesVariableId] = useState<string | undefined>(element.availableDateTimesVariableId);
+    const [disabledDatesVariableId, setDisabledDatesVariableId] = useState<string | undefined>(element.disabledDatesVariableId);
+    const [disabledTimesVariableId, setDisabledTimesVariableId] = useState<string | undefined>(element.disabledTimesVariableId);
+    const [disabledDateAndTimesVariableId, setDisabledDateAndTimesVariableId] = useState<string | undefined>(element.disabledDateAndTimesVariableId);
     const { classes } = useWebDateTimeInputEditorStyles();
     const [parkTimeType, setParkTimeType] = React.useState<TimeDurationUnit>(element.parkTimeType ?? TimeDurationUnit.MINUTES);
     const [maxTime, setMaxTime] = React.useState<undefined | string>(element.maxTime ?? '');
@@ -46,34 +46,34 @@ export const WebDateTimeInputEditor = ({ element }: Props) => {
         element.parkTimeType = event.target.value as TimeDurationUnit;
     }, [element]);
 
-    const handleVariableChange = useCallback((newVariable: BotVariable) => {
-        setSelectedVariableId(newVariable.id);
-        element.variableId = newVariable.id;
+    const handleVariableChange = useCallback((newVariable?: BotVariable) => {
+        setSelectedVariableId(newVariable?.id);
+        element.variableId = newVariable?.id;
     }, [element]);
 
-    const handleAvailableDateVariableChange = useCallback((newVariable: BotVariable) => {
-        setAvailableDateTimesVariableId(newVariable.id);
-        element.availableDateTimesVariableId = newVariable.id;
+    const handleAvailableDateVariableChange = useCallback((newVariable?: BotVariable) => {
+        setAvailableDateTimesVariableId(newVariable?.id);
+        element.availableDateTimesVariableId = newVariable?.id;
     }, [element]);
 
-    const handleParkTimeVariableChange = useCallback((newVariable: BotVariable) => {
-        setParkTimeVariableId(newVariable.id);
-        element.parkTimeVariableId = newVariable.id;
+    const handleParkTimeVariableChange = useCallback((newVariable?: BotVariable) => {
+        setParkTimeVariableId(newVariable?.id);
+        element.parkTimeVariableId = newVariable?.id;
     }, [element]);
 
-    const handleDisabledDatesVariableIdChange = useCallback((newVariable: BotVariable) => {
-        setDisabledDatesVariableId(newVariable.id);
-        element.disabledDatesVariableId = newVariable.id;
+    const handleDisabledDatesVariableIdChange = useCallback((newVariable?: BotVariable) => {
+        setDisabledDatesVariableId(newVariable?.id);
+        element.disabledDatesVariableId = newVariable?.id;
     }, [element]);
 
-    const handleDisabledTimesVariableIdChange = useCallback((newVariable: BotVariable) => {
-        setDisabledTimesVariableId(newVariable.id);
-        element.disabledTimesVariableId = newVariable.id;
+    const handleDisabledTimesVariableIdChange = useCallback((newVariable?: BotVariable) => {
+        setDisabledTimesVariableId(newVariable?.id);
+        element.disabledTimesVariableId = newVariable?.id;
     }, [element]);
 
-    const handleDisabledDateAndTimesVariableIdChange = useCallback((newVariable: BotVariable) => {
-        setDisabledDateAndTimesVariableId(newVariable.id);
-        element.disabledDateAndTimesVariableId = newVariable.id;
+    const handleDisabledDateAndTimesVariableIdChange = useCallback((newVariable?: BotVariable) => {
+        setDisabledDateAndTimesVariableId(newVariable?.id);
+        element.disabledDateAndTimesVariableId = newVariable?.id;
     }, [element]);
 
     const handleUseTimeChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
@@ -196,7 +196,7 @@ export const WebDateTimeInputEditor = ({ element }: Props) => {
                 <Typography className={classes.editorTitle}>The time required to fit without interfering with unavailable time:</Typography>
                 <Box className={classes.parkTimeContainer}>
                     <Box className={classes.variableSelectorContainer}>
-                        <VariableSelector valueId={parkTimeVariableId} variableTypes={[VariableType.NUMBER]} onVariableChange={handleParkTimeVariableChange} />
+                        <VariableSelector showResetButton={true} valueId={parkTimeVariableId} variableTypes={[VariableType.NUMBER]} onVariableChange={handleParkTimeVariableChange} />
                     </Box>
                     <Select
                         fullWidth
@@ -231,7 +231,7 @@ export const WebDateTimeInputEditor = ({ element }: Props) => {
                 <Box sx={{ ml: 4 }}>
                     <Typography className={classes.editorTitle}>Select variable:</Typography>
                     <Box className={classes.variableSelector}>
-                        <VariableSelector valueId={availableDateTimesVariableId} variableTypes={[VariableType.ARRAY]} onVariableChange={handleAvailableDateVariableChange} />
+                        <VariableSelector showResetButton={true} valueId={availableDateTimesVariableId} variableTypes={[VariableType.ARRAY]} onVariableChange={handleAvailableDateVariableChange} />
                     </Box>
                 </Box>
             }
@@ -241,7 +241,7 @@ export const WebDateTimeInputEditor = ({ element }: Props) => {
                     <Box sx={{ ml: 4 }}>
                         <Typography className={classes.editorTitle}>Disabled dates:</Typography>
                         <Box className={classes.variableSelector}>
-                            <VariableSelector valueId={disabledDatesVariableId} variableTypes={[VariableType.ARRAY]} onVariableChange={handleDisabledDatesVariableIdChange} />
+                            <VariableSelector showResetButton={true} valueId={disabledDatesVariableId} variableTypes={[VariableType.ARRAY]} onVariableChange={handleDisabledDatesVariableIdChange} />
                         </Box>
                     </Box>
                     {useTime &&
@@ -249,13 +249,13 @@ export const WebDateTimeInputEditor = ({ element }: Props) => {
                             <Box sx={{ ml: 4 }}>
                                 <Typography className={classes.editorTitle}>Disabled times (e.g. 18:00 or 06:00 PM):</Typography>
                                 <Box className={classes.variableSelector}>
-                                    <VariableSelector valueId={disabledTimesVariableId} variableTypes={[VariableType.ARRAY]} onVariableChange={handleDisabledTimesVariableIdChange} />
+                                    <VariableSelector showResetButton={true} valueId={disabledTimesVariableId} variableTypes={[VariableType.ARRAY]} onVariableChange={handleDisabledTimesVariableIdChange} />
                                 </Box>
                             </Box>
                             <Box sx={{ ml: 4 }}>
                                 <Typography className={classes.editorTitle}>Disabled date+times:</Typography>
                                 <Box className={classes.variableSelector}>
-                                    <VariableSelector valueId={disabledDateAndTimesVariableId} variableTypes={[VariableType.ARRAY]} onVariableChange={handleDisabledDateAndTimesVariableIdChange} />
+                                    <VariableSelector showResetButton={true} valueId={disabledDateAndTimesVariableId} variableTypes={[VariableType.ARRAY]} onVariableChange={handleDisabledDateAndTimesVariableIdChange} />
                                 </Box>
                             </Box>
                         </>}
@@ -280,7 +280,7 @@ export const WebDateTimeInputEditor = ({ element }: Props) => {
 
             <Typography className={classes.editorTitle}>Select variable to save user input:</Typography>
             <Box className={classes.variableSelector}>
-                <VariableSelector valueId={selectedVariableId} variableTypes={[VariableType.STRING, VariableType.DATE_TIME]} onVariableChange={handleVariableChange} />
+                <VariableSelector showResetButton={true} valueId={selectedVariableId} variableTypes={[VariableType.STRING, VariableType.DATE_TIME]} onVariableChange={handleVariableChange} />
             </Box>
         </Box>
     )

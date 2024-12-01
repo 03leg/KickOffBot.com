@@ -3,6 +3,7 @@ import { Box, Typography, TextField } from '@mui/material';
 import React, { useCallback, useState } from 'react';
 import { VariableSelector } from '../../../../VariableSelector';
 import { useWebNumberInputStyles } from './WebNumberInputEditor.style';
+import { throwIfNil } from '~/utils/guard';
 
 interface Props {
     element: WebInputNumberUIElement;
@@ -17,7 +18,9 @@ export const WebNumberInputEditor = ({ element }: Props) => {
     const [minValue, setMinValue] = useState<number | undefined>(element.min);
     const [stepValue, setStepValue] = useState<number | undefined>(element.step);
 
-    const handleVariableChange = useCallback((newVariable: BotVariable) => {
+    const handleVariableChange = useCallback((newVariable?: BotVariable) => {
+        throwIfNil(newVariable);
+        
         setSelectedVariableId(newVariable.id);
         element.variableId = newVariable.id;
     }, [element]);

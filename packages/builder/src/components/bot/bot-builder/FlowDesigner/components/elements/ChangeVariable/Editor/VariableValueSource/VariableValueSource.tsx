@@ -6,6 +6,7 @@ import { useFlowDesignerStore } from '~/components/bot/bot-builder/store';
 import { ArrayFilterComponent } from './ArrayFilterComponent';
 import { isEmpty, isNil } from 'lodash';
 import { PropertySelector } from './condition/PropertySelector';
+import { throwIfNil } from '~/utils/guard';
 
 interface Props {
     variableValueSource?: VariableValueSource;
@@ -16,7 +17,8 @@ interface Props {
 export const VariableValueSourceComponent = ({ variableValueSource, onVariableValueSourceChange, filterVariableType }: Props) => {
     const [variableValueSourceLocal, setVariableValueSourceLocal] = useState<VariableValueSource>(variableValueSource ?? {} as VariableValueSource);
 
-    const handleVariableChange = useCallback((variable: BotVariable) => {
+    const handleVariableChange = useCallback((variable?: BotVariable) => {
+        throwIfNil(variable);
         setVariableValueSourceLocal({ variableId: variable.id, });
     }, []);
 

@@ -3,7 +3,7 @@ import React, { useCallback, useMemo, useState } from 'react'
 import { useWebOpinionScaleEditorStyles } from './WebOpinionScaleEditor.style';
 import { Box, Checkbox, FormControl, FormControlLabel, InputLabel, MenuItem, Select, SelectChangeEvent, TextField, Typography } from '@mui/material';
 import { VariableSelector } from '../../../../VariableSelector';
-import { size } from 'lodash';
+import { throwIfNil } from '~/utils/guard';
 
 interface Props {
     element: WebOpinionScaleUIElement;
@@ -60,7 +60,8 @@ export const WebOpinionScaleEditor = ({ element }: Props) => {
         element.showLabels = newValue;
     }, [element]);
 
-    const handleVariableChange = useCallback((newVariable: BotVariable) => {
+    const handleVariableChange = useCallback((newVariable?: BotVariable) => {
+        throwIfNil(newVariable);
         setSelectedVariableId(newVariable.id);
         element.variableId = newVariable.id;
     }, [element]);

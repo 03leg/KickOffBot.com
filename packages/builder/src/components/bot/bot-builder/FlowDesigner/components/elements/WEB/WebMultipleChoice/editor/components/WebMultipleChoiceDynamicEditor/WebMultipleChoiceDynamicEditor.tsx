@@ -7,6 +7,7 @@ import { useFlowDesignerStore } from '~/components/bot/bot-builder/store';
 import { AppTextField } from '~/components/commons/AppTextField';
 import { isNil } from 'lodash';
 import DeleteIcon from '@mui/icons-material/Delete';
+import { throwIfNil } from '~/utils/guard';
 
 interface Props {
     element: WebMultipleChoiceUIElement;
@@ -23,7 +24,9 @@ export const WebMultipleChoiceDynamicEditor = ({ element }: Props) => {
     const [defaultOptionsVariableId, setDefaultOptionsVariableId] = React.useState(element.defaultOptionsVariableId);
 
 
-    const handleDataSourceVariableChange = useCallback((newVariable: BotVariable) => {
+    const handleDataSourceVariableChange = useCallback((newVariable?: BotVariable) => {
+        throwIfNil(newVariable);
+        
         setDataSourceVariableId(newVariable.id);
         element.dataSourceVariableId = newVariable.id;
     }, [element]);
@@ -71,7 +74,9 @@ export const WebMultipleChoiceDynamicEditor = ({ element }: Props) => {
         element.optionTitle = newValue;
     }, [element]);
 
-    const handleInsertDefaultOptionsVariable = useCallback((variable: BotVariable) => {
+    const handleInsertDefaultOptionsVariable = useCallback((variable?: BotVariable) => {
+        throwIfNil(variable);
+
         setDefaultOptionsVariableId(variable.id);
         element.defaultOptionsVariableId = variable.id;
         element.defaultOptions = undefined;

@@ -1,10 +1,10 @@
-import { Box, Checkbox, FormControlLabel } from '@mui/material'
+import { Box } from '@mui/material'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { VariableSelector } from '../../../../VariableSelector'
 import { BotVariable, ValuePathDescription, VariableType } from '@kickoffbot.com/types';
 import { useFlowDesignerStore } from '~/components/bot/bot-builder/store';
 import { PropertySelector } from '../VariableValueSource/condition/PropertySelector';
-import { isNil } from 'lodash';
+import { throwIfNil } from '~/utils/guard';
 
 interface Props {
     jsonTypeOfArrayItem: Omit<VariableType, VariableType.ARRAY>;
@@ -52,7 +52,8 @@ export const VariableSelectorForAddNewValueToArray = ({ value, onValueChange, js
         return false;
     }, [jsonTypeOfArrayItem]);
 
-    const handleVariableChange = useCallback((variable: BotVariable) => {
+    const handleVariableChange = useCallback((variable?: BotVariable) => {
+        throwIfNil(variable);
         setValuePathDescriptionValue({ variableId: variable.id, path: undefined });
     }, [])
 

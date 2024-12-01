@@ -3,6 +3,7 @@ import { Box, TextField, Typography } from '@mui/material';
 import React, { useCallback, useState } from 'react';
 import { VariableSelector } from '../../../../VariableSelector';
 import { useWebEmailInputEditorStyles } from './WebEmailInputEditor.style';
+import { throwIfNil } from '~/utils/guard';
 
 interface Props {
     element: WebInputEmailUIElement;
@@ -14,7 +15,8 @@ export const WebEmailInputEditor = ({ element }: Props) => {
     const [placeholder, setPlaceholder] = useState<string>(element.placeholder ?? '');
 
 
-    const handleVariableChange = useCallback((newVariable: BotVariable) => {
+    const handleVariableChange = useCallback((newVariable?: BotVariable) => {
+        throwIfNil(newVariable);
         setSelectedVariableId(newVariable.id);
         element.variableId = newVariable.id;
     }, [element]);

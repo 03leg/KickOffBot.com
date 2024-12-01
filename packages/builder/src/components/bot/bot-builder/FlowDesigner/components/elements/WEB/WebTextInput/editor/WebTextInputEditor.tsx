@@ -2,6 +2,7 @@ import { BotVariable, VariableType, WebInputTextUIElement } from '@kickoffbot.co
 import { Box, Checkbox, FormControlLabel, TextField, Typography } from '@mui/material';
 import React, { useCallback, useState } from 'react';
 import { VariableSelector } from '../../../../VariableSelector';
+import { throwIfNil } from '~/utils/guard';
 
 interface Props {
   element: WebInputTextUIElement;
@@ -12,7 +13,9 @@ export const WebTextInputEditor = ({ element }: Props) => {
   const [placeholder, setPlaceholder] = useState<string>(element.placeholder ?? '');
   const [multiline, setMultiline] = useState<boolean>(element.multiline ?? false);
 
-  const handleVariableChange = useCallback((newVariable: BotVariable) => {
+  const handleVariableChange = useCallback((newVariable?: BotVariable) => {
+    throwIfNil(newVariable);
+    
     setSelectedVariableId(newVariable.id);
     element.variableId = newVariable.id;
   }, [element]);

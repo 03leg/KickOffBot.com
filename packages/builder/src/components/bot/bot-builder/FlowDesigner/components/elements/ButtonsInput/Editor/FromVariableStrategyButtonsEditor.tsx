@@ -140,8 +140,8 @@ export const FromVariableStrategyButtonsEditor = ({ value: defaultValue, onValue
         return null;
     }, [getVariableById, value.variableSource]);
 
-    const handleAnswerVariableChange = useCallback(({ id }: BotVariable) => {
-        setValue((prevValue) => ({ ...prevValue, answerVariableId: id }));
+    const handleAnswerVariableChange = useCallback((variable?: BotVariable) => {
+        setValue((prevValue) => ({ ...prevValue, answerVariableId: variable?.id }));
     }, []);
 
     const handleCustomVariableFilter = useCallback((variable: BotVariable) => {

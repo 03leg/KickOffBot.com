@@ -1,10 +1,11 @@
-import { ArrayFilter, BotVariable, VariableType, VariableValueSource } from '@kickoffbot.com/types';
+import { BotVariable, VariableType, VariableValueSource } from '@kickoffbot.com/types';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Box } from '@mui/material';
 import { useFlowDesignerStore } from '~/components/bot/bot-builder/store';
 import { isEmpty, isNil } from 'lodash';
 import { VariableSelector } from '../VariableSelector';
 import { PropertySelector } from '../elements/ChangeVariable/Editor/VariableValueSource/condition/PropertySelector';
+import { throwIfNil } from '~/utils/guard';
 
 interface Props {
     variableValueSource?: VariableValueSource;
@@ -15,7 +16,8 @@ interface Props {
 export const ArrayPathSelectorComponent = ({ variableValueSource, onVariableValueSourceChange }: Props) => {
     const [variableValueSourceLocal, setVariableValueSourceLocal] = useState<VariableValueSource>(variableValueSource ?? {} as VariableValueSource);
 
-    const handleVariableChange = useCallback((variable: BotVariable) => {
+    const handleVariableChange = useCallback((variable?: BotVariable) => {
+        throwIfNil(variable);
         setVariableValueSourceLocal({ variableId: variable.id, });
     }, []);
 

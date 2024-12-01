@@ -4,6 +4,7 @@ import React, { useCallback, useMemo, useState } from 'react';
 import { VariableSelector } from '../../../../VariableSelector';
 import { useWebPhoneInputEditorStyles } from './WebPhoneInputEditor.style';
 import { MenuTextField } from '~/components/commons/MenuTextField';
+import { throwIfNil } from '~/utils/guard';
 
 interface Props {
     element: WebInputPhoneUIElement;
@@ -238,7 +239,9 @@ export const WebPhoneInputEditor = ({ element }: Props) => {
     }, []);
 
 
-    const handleVariableChange = useCallback((newVariable: BotVariable) => {
+    const handleVariableChange = useCallback((newVariable?: BotVariable) => {
+        throwIfNil(newVariable);
+        
         setSelectedVariableId(newVariable.id);
         element.variableId = newVariable.id;
     }, [element]);
