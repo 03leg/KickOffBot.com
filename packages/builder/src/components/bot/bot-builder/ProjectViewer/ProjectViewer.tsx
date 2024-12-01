@@ -9,7 +9,6 @@ import MuiAccordionDetails from '@mui/material/AccordionDetails';
 import Typography from '@mui/material/Typography';
 import { Box } from '@mui/material';
 import { VariableViewers } from '../VariablesViewer';
-import { EditVariableButton } from '../VariablesViewer/EditVariableButton';
 import { TemplateViewers } from '../TemplateViewers';
 import { useFlowDesignerStore } from '../store';
 

@@ -130,7 +130,7 @@ export const EditVariableButton = ({ variable }: Props) => {
                 </Button>
             ) :
                 (
-                    <IconButton edge="end" aria-label="edit" onClick={handleEditVariable}>
+                    <IconButton sx={{ padding: 0.5 }} edge="end" title='Edit variable' aria-label="edit" onClick={handleEditVariable}>
                         <EditIcon />
                     </IconButton>
                 )
