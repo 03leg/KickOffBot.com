@@ -59,7 +59,7 @@ export const Card1 = ({ card, selected, onSelectedChange, isLast, selectableCard
                     <Card1Image image={card.image} onImageLoaded={onContentHeightChange ?? (() => { })} />
 
                     {card.htmlDescription && <ChatCardContent>
-                        <div dangerouslySetInnerHTML={{ __html: card.htmlDescription }}>
+                        <div data-testid="Card1-description" dangerouslySetInnerHTML={{ __html: card.htmlDescription }}>
                         </div>
                     </ChatCardContent>}
                 </SelectableChatCard1>
@@ -69,7 +69,7 @@ export const Card1 = ({ card, selected, onSelectedChange, isLast, selectableCard
                     <Card1Image image={card.image} onImageLoaded={onContentHeightChange ?? (() => { })} />
 
                     {card.htmlDescription && <ChatCardContent>
-                        <div dangerouslySetInnerHTML={{ __html: card.htmlDescription }}>
+                        <div data-testid="Card1-description" dangerouslySetInnerHTML={{ __html: card.htmlDescription }}>
                         </div>
                     </ChatCardContent>}
                     {cardButtons && cardButtons.length > 0 &&

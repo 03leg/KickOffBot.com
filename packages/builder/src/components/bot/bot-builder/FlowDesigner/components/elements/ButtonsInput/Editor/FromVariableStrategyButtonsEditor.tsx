@@ -6,6 +6,7 @@ import { TextTemplateEditor } from './TextTemplateEditor';
 import { isNil } from 'lodash';
 import { useFlowDesignerStore } from '~/components/bot/bot-builder/store';
 import { VariableSelector } from '../../../VariableSelector';
+import { getNewVariableTemplateUserInput } from './getNewVariableTemplateUserInput';
 
 interface Props {
     value?: VariableButtonsSourceStrategyDescription;
@@ -29,8 +30,6 @@ const isTypeMatching = (arrayItemType: VariableType, variableType: string | null
 
 export const FromVariableStrategyButtonsEditor = ({ value: defaultValue, onValueChange }: Props) => {
     const [value, setValue] = React.useState<VariableButtonsSourceStrategyDescription>(defaultValue ?? {} as VariableButtonsSourceStrategyDescription);
-
-    console.log('value', value);
 
     const handleVariableValueSourceChange = useCallback((newValue: VariableValueSource) => {
         setValue((prevValue) => ({ ...prevValue, variableSource: newValue, customTextTemplate: undefined }));
@@ -64,8 +63,8 @@ export const FromVariableStrategyButtonsEditor = ({ value: defaultValue, onValue
         const getSuitableKeys = (obj: Record<string, unknown>) => {
             const result = [];
 
-            for(const key of Object.keys(obj)) {
-                if(obj[key] instanceof Object) {
+            for (const key of Object.keys(obj)) {
+                if (obj[key] instanceof Object) {
                     continue;
                 }
 
@@ -101,8 +100,7 @@ export const FromVariableStrategyButtonsEditor = ({ value: defaultValue, onValue
         return null;
     }, [getVariableById, value.variableSource]);
 
-
-    const arrayItemType = useMemo(() => {
+    const firstValueOfArray = useMemo(() => {
         if (isNil(value.variableSource)) {
             return null;
         }
@@ -121,7 +119,7 @@ export const FromVariableStrategyButtonsEditor = ({ value: defaultValue, onValue
                 return null;
             }
 
-            return typeof firstValueOfArray;
+            return firstValueOfArray;
         }
 
         if (variableDefaultValue instanceof Object && !isNil(path)) {
@@ -133,12 +131,22 @@ export const FromVariableStrategyButtonsEditor = ({ value: defaultValue, onValue
                     return null;
                 }
 
-                return typeof firstValueOfArray;
+                return firstValueOfArray;
             }
         }
 
         return null;
     }, [getVariableById, value.variableSource]);
+
+
+    const arrayItemType = useMemo(() => {
+        if (firstValueOfArray === null) {
+            return null;
+        }
+
+        return typeof firstValueOfArray;
+
+    }, [firstValueOfArray]);
 
     const handleAnswerVariableChange = useCallback((variable?: BotVariable) => {
         setValue((prevValue) => ({ ...prevValue, answerVariableId: variable?.id }));
@@ -160,7 +168,9 @@ export const FromVariableStrategyButtonsEditor = ({ value: defaultValue, onValue
                 <>
                     <TextTemplateEditor value={value.customTextTemplate} onValueChange={handleCustomTemplateChange} propertyNames={propertyNames} />
                     <Typography sx={{ marginTop: 2, marginBottom: 1.5 }}>Save user input to variable:</Typography>
-                    <VariableSelector valueId={value.answerVariableId} onVariableChange={handleAnswerVariableChange} onCustomVariableFilter={handleCustomVariableFilter} />
+                    <VariableSelector
+                        newVariableTemplate={getNewVariableTemplateUserInput(firstValueOfArray)}
+                        valueId={value.answerVariableId} onVariableChange={handleAnswerVariableChange} onCustomVariableFilter={handleCustomVariableFilter} />
                 </>
             }
         </Box>

@@ -33,7 +33,9 @@ export const WebEmailInputEditor = ({ element }: Props) => {
 
             <Typography className={classes.editorTitle}>Select variable to save user input:</Typography>
             <Box className={classes.variableSelector}>
-                <VariableSelector valueId={selectedVariableId} variableTypes={[VariableType.STRING]} onVariableChange={handleVariableChange} />
+                <VariableSelector 
+                newVariableTemplate={{ type: VariableType.STRING, value: 'email' }}
+                valueId={selectedVariableId} variableTypes={[VariableType.STRING]} onVariableChange={handleVariableChange} />
             </Box>
         </Box>
     )

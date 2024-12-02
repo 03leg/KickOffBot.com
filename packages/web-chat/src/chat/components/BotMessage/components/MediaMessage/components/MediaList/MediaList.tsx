@@ -14,8 +14,9 @@ interface Props {
 
 export const MediaList = ({ medias, wrapped = false, direction, onContentHeightChange }: Props) => {
     const { classes } = useMediaListStyles({ wrapped, direction });
+
     return (
-        <Box className={classes.root}>
+        <Box className={classes.root} data-testid="MediaList">
             {medias.map((media, index) => {
 
                 if (media.type === WebMediaType.IMAGE) {

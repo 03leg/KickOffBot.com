@@ -3,6 +3,7 @@ import React, { useCallback, useState } from 'react'
 import { VariableSelector } from '../../../VariableSelector'
 import { BotVariable, GoogleSheetsIntegrationUIElement, VariableType } from '@kickoffbot.com/types'
 import { throwIfNil } from '~/utils/guard';
+import { getImportNewVariableTemplate } from './newVariableTemplate.utils';
 
 interface Props {
     googleSheetHeaders: string[];
@@ -14,9 +15,9 @@ export const ReadRowsToArrayEditor = ({ googleSheetHeaders, element }: Props) =>
 
     const handleVariableChange = useCallback((variable?: BotVariable) => {
         throwIfNil(variable);
-        
+
         setSelectedVariableId(variable.id);
-        element.dataOperationDescription = { variableId : variable.id };
+        element.dataOperationDescription = { variableId: variable.id };
     }, [element]);
 
 
@@ -44,7 +45,9 @@ export const ReadRowsToArrayEditor = ({ googleSheetHeaders, element }: Props) =>
     return (
         <Box sx={{ mt: 2 }}>
             <Alert sx={{ mb: 2 }} severity="warning">You need to select an Array variable containing objects where the property names match the column headers from the Google Spreadsheet.</Alert>
-            <VariableSelector valueId={selectedVariableId} onVariableChange={handleVariableChange} onCustomVariableFilter={handleVariableFilter} />
+            <VariableSelector
+                newVariableTemplate={{ type: VariableType.ARRAY, arrayItemType: VariableType.OBJECT, value: getImportNewVariableTemplate(googleSheetHeaders) }}
+                valueId={selectedVariableId} onVariableChange={handleVariableChange} onCustomVariableFilter={handleVariableFilter} />
         </Box>
     )
 }

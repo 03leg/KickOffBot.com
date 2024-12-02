@@ -5,6 +5,7 @@ import React, { useCallback, useMemo, useState } from 'react';
 import { VariableSelector } from '../../../../VariableSelector';
 import { useWebDateTimeInputEditorStyles } from './WebDateTimeInputEditor.style';
 import { MenuTextField } from '~/components/commons/MenuTextField';
+import { getSomeDisabledDates, getSomeDisabledDateTimes } from './WebDateTimeInputEditor.utils';
 
 interface Props {
     element: WebInputDateTimeUIElement;
@@ -196,7 +197,7 @@ export const WebDateTimeInputEditor = ({ element }: Props) => {
                 <Typography className={classes.editorTitle}>The time required to fit without interfering with unavailable time:</Typography>
                 <Box className={classes.parkTimeContainer}>
                     <Box className={classes.variableSelectorContainer}>
-                        <VariableSelector showResetButton={true} valueId={parkTimeVariableId} variableTypes={[VariableType.NUMBER]} onVariableChange={handleParkTimeVariableChange} />
+                        <VariableSelector newVariableTemplate={{ type: VariableType.NUMBER, value: (useTime ? (minutesStep ? minutesStep : 0) : 0) }} showResetButton={true} valueId={parkTimeVariableId} variableTypes={[VariableType.NUMBER]} onVariableChange={handleParkTimeVariableChange} />
                     </Box>
                     <Select
                         fullWidth
@@ -241,7 +242,9 @@ export const WebDateTimeInputEditor = ({ element }: Props) => {
                     <Box sx={{ ml: 4 }}>
                         <Typography className={classes.editorTitle}>Disabled dates:</Typography>
                         <Box className={classes.variableSelector}>
-                            <VariableSelector showResetButton={true} valueId={disabledDatesVariableId} variableTypes={[VariableType.ARRAY]} onVariableChange={handleDisabledDatesVariableIdChange} />
+                            <VariableSelector
+                                newVariableTemplate={{ type: VariableType.ARRAY, arrayItemType: VariableType.DATE_TIME, value: getSomeDisabledDates(dateTimeFormat), dateTimeFormat: dateTimeFormat }}
+                                showResetButton={true} valueId={disabledDatesVariableId} variableTypes={[VariableType.ARRAY]} onVariableChange={handleDisabledDatesVariableIdChange} />
                         </Box>
                     </Box>
                     {useTime &&
@@ -249,13 +252,17 @@ export const WebDateTimeInputEditor = ({ element }: Props) => {
                             <Box sx={{ ml: 4 }}>
                                 <Typography className={classes.editorTitle}>Disabled times (e.g. 18:00 or 06:00 PM):</Typography>
                                 <Box className={classes.variableSelector}>
-                                    <VariableSelector showResetButton={true} valueId={disabledTimesVariableId} variableTypes={[VariableType.ARRAY]} onVariableChange={handleDisabledTimesVariableIdChange} />
+                                    <VariableSelector
+                                        newVariableTemplate={{ type: VariableType.ARRAY, arrayItemType: VariableType.STRING, value: useAmPm ? '["09:00 AM", "09:30 AM", "10:30 AM"]' : '["18:00", "18:30", "19:30"]' }}
+                                        showResetButton={true} valueId={disabledTimesVariableId} variableTypes={[VariableType.ARRAY]} onVariableChange={handleDisabledTimesVariableIdChange} />
                                 </Box>
                             </Box>
                             <Box sx={{ ml: 4 }}>
                                 <Typography className={classes.editorTitle}>Disabled date+times:</Typography>
                                 <Box className={classes.variableSelector}>
-                                    <VariableSelector showResetButton={true} valueId={disabledDateAndTimesVariableId} variableTypes={[VariableType.ARRAY]} onVariableChange={handleDisabledDateAndTimesVariableIdChange} />
+                                    <VariableSelector
+                                        newVariableTemplate={{ type: VariableType.ARRAY, arrayItemType: VariableType.DATE_TIME, value: getSomeDisabledDateTimes(dateTimeFormat), dateTimeFormat: dateTimeFormat }}
+                                        showResetButton={true} valueId={disabledDateAndTimesVariableId} variableTypes={[VariableType.ARRAY]} onVariableChange={handleDisabledDateAndTimesVariableIdChange} />
                                 </Box>
                             </Box>
                         </>}
@@ -280,7 +287,9 @@ export const WebDateTimeInputEditor = ({ element }: Props) => {
 
             <Typography className={classes.editorTitle}>Select variable to save user input:</Typography>
             <Box className={classes.variableSelector}>
-                <VariableSelector showResetButton={true} valueId={selectedVariableId} variableTypes={[VariableType.STRING, VariableType.DATE_TIME]} onVariableChange={handleVariableChange} />
+                <VariableSelector
+                    newVariableTemplate={{ type: VariableType.DATE_TIME, dateTimeFormat: dateTimeFormat, value: '' }}
+                    showResetButton={true} valueId={selectedVariableId} variableTypes={[VariableType.STRING, VariableType.DATE_TIME]} onVariableChange={handleVariableChange} />
             </Box>
         </Box>
     )

@@ -17,7 +17,8 @@ interface Props extends Pick<TextFieldProps, 'label'> {
     contextObjectProperties?: string[];
     showVariableSelector?: boolean;
     showTemplateSelector?: boolean;
-    onVariableFilter?: (variable: BotVariable) => boolean
+    onVariableFilter?: (variable: BotVariable) => boolean;
+    newVariableTemplate?: Partial<BotVariable>;
 }
 
 export const AppTextField = (props: Props) => {
@@ -39,7 +40,7 @@ export const AppTextField = (props: Props) => {
             <TextField fullWidth {...props} value={props.value} onChange={(e) => props.onValueChange(e.target.value)} inputRef={inputRef}
                 onSelect={updateSelectionStart} />
             <Box className={classes.buttons}>
-                {(props.showVariableSelector ?? true) && <VariableSelectorDialog onInsertVariable={handleInsertVariable} supportPathForObject={true} onCustomVariableFilter={onVariableFilter} />}
+                {(props.showVariableSelector ?? true) && <VariableSelectorDialog newVariableTemplate={props.newVariableTemplate} onInsertVariable={handleInsertVariable} supportPathForObject={true} onCustomVariableFilter={onVariableFilter} />}
                 {!isNil(contextObjectProperties) && <StringItemsMenu values={contextObjectProperties} onInsertItem={handleInsertContextPropertyInText} buttonIcon={<ControlPointIcon />} />}
                 {props.showTemplateSelector && <StringItemsMenu values={templates.map(t => t.name)} onInsertItem={handleInsertTemplateInText} buttonIcon={<AssignmentIcon />} />}
             </Box>

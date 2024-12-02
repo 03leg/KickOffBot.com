@@ -14,7 +14,8 @@ export const VideoProperties = ({ video }: Props) => {
     return (
         <Box className={classes.root}>
             <Box className={classes.videoPreview}>
-                <VideoPreview video={video.video} />
+               {!/<%variables.(.*?)%>/g.test(video.video.url) && <VideoPreview video={video.video} />} 
+               {/<%variables.(.*?)%>/g.test(video.video.url) && <Box className={classes.notVideoBox}>Video URL has variable references</Box>} 
             </Box>
             <Box className={classes.propsContainer}>
                 <VideoPropertyEditors video={video} />

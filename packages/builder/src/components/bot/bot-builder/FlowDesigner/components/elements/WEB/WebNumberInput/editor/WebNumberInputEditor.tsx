@@ -59,7 +59,7 @@ export const WebNumberInputEditor = ({ element }: Props) => {
 
             <Typography>Select variable to save user input:</Typography>
             <Box sx={{ marginTop: 1 }}>
-                <VariableSelector valueId={selectedVariableId} variableTypes={[VariableType.NUMBER]} onVariableChange={handleVariableChange} />
+                <VariableSelector newVariableTemplate={{ type: VariableType.NUMBER, value: 0 }} valueId={selectedVariableId} variableTypes={[VariableType.NUMBER]} onVariableChange={handleVariableChange} />
             </Box>
         </Box>
     )

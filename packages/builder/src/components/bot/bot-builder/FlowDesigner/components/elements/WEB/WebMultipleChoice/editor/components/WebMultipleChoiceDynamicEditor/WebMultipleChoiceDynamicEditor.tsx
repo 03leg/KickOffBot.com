@@ -26,7 +26,7 @@ export const WebMultipleChoiceDynamicEditor = ({ element }: Props) => {
 
     const handleDataSourceVariableChange = useCallback((newVariable?: BotVariable) => {
         throwIfNil(newVariable);
-        
+
         setDataSourceVariableId(newVariable.id);
         element.dataSourceVariableId = newVariable.id;
     }, [element]);
@@ -75,16 +75,10 @@ export const WebMultipleChoiceDynamicEditor = ({ element }: Props) => {
     }, [element]);
 
     const handleInsertDefaultOptionsVariable = useCallback((variable?: BotVariable) => {
-        throwIfNil(variable);
 
-        setDefaultOptionsVariableId(variable.id);
-        element.defaultOptionsVariableId = variable.id;
+        setDefaultOptionsVariableId(variable?.id);
+        element.defaultOptionsVariableId = variable?.id;
         element.defaultOptions = undefined;
-    }, [element]);
-
-    const handleDeleteDefaultOptionsVariable = useCallback(() => {
-        setDefaultOptionsVariableId(undefined);
-        element.defaultOptionsVariableId = undefined;
     }, [element]);
 
     return (
@@ -112,10 +106,7 @@ export const WebMultipleChoiceDynamicEditor = ({ element }: Props) => {
             </Typography>
 
             <Box sx={{ display: 'flex', alignItems: 'center', width: "100%" }}>
-                <VariableSelector valueId={defaultOptionsVariableId} variableTypes={[VariableType.ARRAY]} onVariableChange={handleInsertDefaultOptionsVariable} />
-                <IconButton sx={{ marginLeft: 1 }} onClick={handleDeleteDefaultOptionsVariable}>
-                    <DeleteIcon />
-                </IconButton>
+                <VariableSelector showResetButton={true} valueId={defaultOptionsVariableId} variableTypes={[VariableType.ARRAY]} onVariableChange={handleInsertDefaultOptionsVariable} />
             </Box>
 
         </Box>

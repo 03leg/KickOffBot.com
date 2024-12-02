@@ -1,7 +1,7 @@
 import React, { useCallback, useState } from 'react'
 import AppDialog from '~/components/commons/Dialog/AppDialog'
 import AddIcon from '@mui/icons-material/Add';
-import { Button, IconButton } from '@mui/material';
+import { Button, IconButton, IconButtonProps } from '@mui/material';
 import { type BotVariable, NOW_DATE_TIME_VARIABLE_NAME, VariableType } from '@kickoffbot.com/types';
 import { VariableEditor } from '../VariableEditor/VariableEditor';
 import { isNil } from 'lodash';
@@ -10,13 +10,17 @@ import { useFlowDesignerStore } from '../../store';
 import { v4 } from 'uuid';
 import dayjs from 'dayjs';
 
-
 interface Props {
     variable?: BotVariable;
+    editIconButtonProps?: IconButtonProps;
+    newIconButtonProps?: IconButtonProps;
+    newButtonView?: 'icon' | 'button';
+    newVariableTemplate?: Partial<BotVariable>;
+    onNewVariableCreate?: (variable: BotVariable) => void;
 }
 
 
-export const EditVariableButton = ({ variable }: Props) => {
+export const EditVariableButton = ({ variable, editIconButtonProps = {}, newIconButtonProps = {}, newButtonView = 'button', newVariableTemplate, onNewVariableCreate }: Props) => {
     const [open, setOpen] = useState(false);
     const [currentVariable, setCurrentVariable] = useState<BotVariable>();
     const [disabledConfirmationButton, setDisabledConfirmationButton] = useState(false);
@@ -39,14 +43,17 @@ export const EditVariableButton = ({ variable }: Props) => {
     }, [variables]);
 
     const handleAddVariable = useCallback((event: React.MouseEvent<HTMLElement>) => {
+        const variableTemplate = !isNil(newVariableTemplate) ? newVariableTemplate : {};
 
+        const newVariable: BotVariable = {
+            id: v4(), name: getNewVariableName(), type: VariableType.STRING, value: 'default value', isPlatformVariable: false, ...variableTemplate
+        }
 
-        const newVariable: BotVariable = { id: v4(), name: getNewVariableName(), type: VariableType.STRING, value: 'default value', isPlatformVariable: false }
         setCurrentVariable(newVariable);
         setOpen(true);
 
         event.stopPropagation();
-    }, [getNewVariableName]);
+    }, [getNewVariableName, newVariableTemplate]);
 
     const handleEditVariable = useCallback(() => {
         const copyVariable = { ...variable } as BotVariable;
@@ -69,13 +76,14 @@ export const EditVariableButton = ({ variable }: Props) => {
 
         if (isNil(variable)) {
             addVariable(currentVariable);
+            onNewVariableCreate?.(currentVariable);
         } else {
             updateVariable(currentVariable);
         }
 
 
         handleClose();
-    }, [addVariable, currentVariable, handleClose, updateVariable, variable]);
+    }, [addVariable, currentVariable, handleClose, onNewVariableCreate, updateVariable, variable]);
 
     const handleVariableChange = useCallback((variable: BotVariable) => {
         let disabled = false;
@@ -125,12 +133,17 @@ export const EditVariableButton = ({ variable }: Props) => {
     return (
         <>
             {isNil(variable) ? (
-                <Button sx={{ margin: 1 }} variant="contained" size='small' aria-label="add" onClick={handleAddVariable} endIcon={<AddIcon />}>
-                    Add new
-                </Button>
+                <>
+                    {newButtonView === 'button' && <Button sx={{ margin: 1 }} variant="contained" size='small' aria-label="add" onClick={handleAddVariable} endIcon={<AddIcon />}>
+                        Add new
+                    </Button>}
+                    {newButtonView === 'icon' && <IconButton title='New variable' onClick={handleAddVariable} {...newIconButtonProps}>
+                        <AddIcon />
+                    </IconButton>}
+                </>
             ) :
                 (
-                    <IconButton sx={{ padding: 0.5 }} edge="end" title='Edit variable' aria-label="edit" onClick={handleEditVariable}>
+                    <IconButton sx={{ padding: 0.5 }}  title='Edit variable' aria-label="edit" onClick={handleEditVariable} {...editIconButtonProps}>
                         <EditIcon />
                     </IconButton>
                 )

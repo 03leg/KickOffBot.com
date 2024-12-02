@@ -44,14 +44,14 @@ export const VideoMediaItem = ({ video, isLast }: Props) => {
 
     return (
         <>
-            {videoDescription.source === VideoSource.DIRECT_VIDEO_URL || videoDescription.source === VideoSource.UPLOADED && (
-                <video className={classes.video} controls={video.showVideoControls ?? true} autoPlay={video.autoPlay ?? false} muted={video.autoPlay ?? false} loop={video.loop ?? false} preload="metadata">
+            {(videoDescription.source === VideoSource.DIRECT_VIDEO_URL || videoDescription.source === VideoSource.UPLOADED) && (
+                <video data-testid="VideoMediaItem" className={classes.video} controls={video.showVideoControls ?? true} autoPlay={video.autoPlay ?? false} muted={video.autoPlay ?? false} loop={video.loop ?? false} preload="metadata">
                     <source src={videoDescription.url + '#t=0.1'} />
                 </video>
             )}
 
             {videoDescription.source === VideoSource.YOUTUBE && (
-                <iframe className={classes.video} src={youtubeVideoUrl} title="YouTube video player" frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share;" referrerPolicy="strict-origin-when-cross-origin" allowFullScreen></iframe>
+                <iframe data-testid="VideoMediaItem" className={classes.video} src={youtubeVideoUrl} title="YouTube video player" frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share;" referrerPolicy="strict-origin-when-cross-origin" allowFullScreen></iframe>
             )}
         </>
     )

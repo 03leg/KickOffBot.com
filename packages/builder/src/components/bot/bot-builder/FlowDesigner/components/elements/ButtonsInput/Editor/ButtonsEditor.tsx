@@ -28,7 +28,7 @@ export const ButtonsEditor = ({ element }: Props) => {
     }, [element]);
 
     return (<Box>
-        <RadioGroup sx={{ flex: 1 }} value={buttonsSourceStrategy} onChange={handleStrategyChange}>
+        <RadioGroup sx={{ flex: 1 }} row value={buttonsSourceStrategy} onChange={handleStrategyChange}>
             <FormControlLabel value={ButtonsSourceStrategy.Manual} control={<Radio />} label="Static buttons" />
             <FormControlLabel value={ButtonsSourceStrategy.FromVariable} control={<Radio />} label="Dynamic buttons" />
         </RadioGroup>

@@ -1,4 +1,4 @@
-import { VideoSource, WebVideoDescription } from '@kickoffbot.com/types';
+import { VariableType, VideoSource, WebVideoDescription } from '@kickoffbot.com/types';
 import { Box, Tabs, Tab } from '@mui/material';
 import React from 'react';
 import { AppTextField } from '../AppTextField';
@@ -60,7 +60,9 @@ export const VideoSelector = ({ onVideoSelect, onSaveAndClose }: Props) => {
                 <AppTextField label="Direct video link" onValueChange={(newValue: string) => {
                     onVideoSelect({ url: newValue, source: VideoSource.DIRECT_VIDEO_URL });
                     setDirectVideoUrl(newValue);
-                }} value={directVideoUrl} />
+                }} value={directVideoUrl}
+                    newVariableTemplate={{ type: VariableType.STRING, value: 'https://your-video-url' }}
+                />
             </CustomTabPanel>
             <CustomTabPanel value={value} index={1}>
                 <MediaUploader accept='video/*' onValueChange={(newValue: string) => {

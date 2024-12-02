@@ -4,7 +4,7 @@ import { AppTextField } from '../AppTextField';
 import { MediaUploader } from './components/MediaUploader';
 import { GiphySelector } from './components/GiphySelector';
 import { UnsplashSelector } from './components/UnsplashSelector';
-import { UnsplashPhoto } from '@kickoffbot.com/types';
+import { UnsplashPhoto, VariableType } from '@kickoffbot.com/types';
 
 interface TabPanelProps {
     children?: React.ReactNode;
@@ -42,7 +42,7 @@ interface Props {
     showVariableSelector?: boolean;
 }
 
-export const ImageSelector = ({ initImgUrl, onImageSelect, onSaveAndClose, showVariableSelector=true }: Props) => {
+export const ImageSelector = ({ initImgUrl, onImageSelect, onSaveAndClose, showVariableSelector = true }: Props) => {
     const [value, setValue] = React.useState(0);
     const [imageUrl, setImageUrl] = React.useState(initImgUrl ?? '');
 
@@ -64,7 +64,9 @@ export const ImageSelector = ({ initImgUrl, onImageSelect, onSaveAndClose, showV
                 <AppTextField showVariableSelector={showVariableSelector} label="Image URL" value={imageUrl ?? ''} onValueChange={(newValue: string) => {
                     setImageUrl(newValue);
                     onImageSelect(newValue);
-                }} />
+                }}
+                    newVariableTemplate={{ type: VariableType.STRING, value: 'https://media0.giphy.com/media/Z5xk7fGO5FjjTElnpT/giphy-downsized.gif?cid=42e3a184tmodxh861fhnlpd1azzp7yebg8g264vnhk38l7l5&ep=v1_gifs_trending&rid=giphy-downsized.gif&ct=g' }}
+                />
             </CustomTabPanel>
             <CustomTabPanel value={value} index={1}>
                 <MediaUploader accept='image/*' onValueChange={(newValue: string) => {

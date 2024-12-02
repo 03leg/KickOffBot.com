@@ -252,7 +252,9 @@ export const WebPhoneInputEditor = ({ element }: Props) => {
             <MenuTextField value={defaultCountry ?? ''} onChange={handleDefaultCountryChange} dataSource={countryCodes} />
             <Typography className={classes.editorTitle}>Select variable to save user input:</Typography>
             <Box className={classes.variableSelector}>
-                <VariableSelector valueId={selectedVariableId} variableTypes={[VariableType.STRING]} onVariableChange={handleVariableChange} />
+                <VariableSelector
+                newVariableTemplate={{ type: VariableType.STRING, value: 'phone number' }}
+                valueId={selectedVariableId} variableTypes={[VariableType.STRING]} onVariableChange={handleVariableChange} />
             </Box>
         </Box>
     )
