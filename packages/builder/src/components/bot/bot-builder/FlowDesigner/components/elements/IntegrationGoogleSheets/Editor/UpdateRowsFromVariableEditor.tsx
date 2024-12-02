@@ -4,6 +4,7 @@ import React, { useCallback, useState } from 'react';
 import { VariableSelector } from '../../../VariableSelector';
 import { RowsFilter } from './RowsFilter/RowsFilter';
 import { throwIfNil } from '~/utils/guard';
+import { getExportObjectNewVariableTemplate } from './newVariableTemplate.utils';
 
 interface Props {
     googleSheetHeaders: string[];
@@ -16,7 +17,7 @@ export const UpdateRowsFromVariableEditor = ({ element, googleSheetHeaders }: Pr
 
     const handleVariableChange = useCallback((variable?: BotVariable) => {
         throwIfNil(variable);
-        
+
         setSelectedVariableId(variable.id);
         element.dataOperationDescription = {
             variableId: variable.id,
@@ -56,7 +57,9 @@ export const UpdateRowsFromVariableEditor = ({ element, googleSheetHeaders }: Pr
     return (
         <Box>
             <Box sx={{ marginBottom: 2, marginTop: 3 }}>
-                <VariableSelector label="Variable with new values" valueId={selectedVariableId} onVariableChange={handleVariableChange} onCustomVariableFilter={handleVariableFilter} />
+                <VariableSelector
+                    newVariableTemplate={{ value: getExportObjectNewVariableTemplate(googleSheetHeaders), type: VariableType.OBJECT }}
+                    label="Variable with new values" valueId={selectedVariableId} onVariableChange={handleVariableChange} onCustomVariableFilter={handleVariableFilter} />
             </Box>
             <Typography variant='h6' sx={{ marginBottom: 2, }}>Set in rows:</Typography>
             <RowsFilter conditions={updateRowsDescription?.filter?.conditions} onFilterConditionsChange={handleFilterConditionsChange} googleSheetHeaders={googleSheetHeaders} />

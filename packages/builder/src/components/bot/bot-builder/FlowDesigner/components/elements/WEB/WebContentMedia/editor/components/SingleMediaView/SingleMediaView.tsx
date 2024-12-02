@@ -32,7 +32,8 @@ export const SingleMediaView = ({ media }: Props) => {
         <Box className={classes.root} data-testid="SingleMediaView">
             {media.type === WebMediaType.IMAGE && imageUrl && !/<%variables.(.*?)%>/g.test(imageUrl) && <img className={classes.img} src={imageUrl} />}
             {media.type === WebMediaType.IMAGE && imageUrl && /<%variables.(.*?)%>/g.test(imageUrl) && <Box className={classes.notImageBox}>Image URL has variable references</Box>}
-            {media.type === WebMediaType.VIDEO &&
+            {media.type === WebMediaType.VIDEO && /<%variables.(.*?)%>/g.test((media as WebVideoMediaDescription).video.url) && <Box className={classes.notImageBox}>Video URL has variable references</Box>}
+            {(media.type === WebMediaType.VIDEO && !/<%variables.(.*?)%>/g.test((media as WebVideoMediaDescription).video.url)) &&
                 <>
                     <VideoPreview video={(media as WebVideoMediaDescription).video} />
                 </>}

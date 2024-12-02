@@ -88,7 +88,13 @@ export const DynamicCardsEditor = ({ element }: Props) => {
             <Typography sx={{ marginBottom: 1 }}>
                 Select data source of cards:
             </Typography>
-            <VariableSelector valueId={dataSourceVariableId} variableTypes={[VariableType.ARRAY]} onVariableChange={handleDataSourceVariableChange} />
+            <VariableSelector
+                newVariableTemplate={{
+                    type: VariableType.ARRAY,
+                    value: '["card#1", "card#2"]',
+                    arrayItemType: VariableType.STRING
+                }}
+                valueId={dataSourceVariableId} variableTypes={[VariableType.ARRAY]} onVariableChange={handleDataSourceVariableChange} />
 
             {variable !== null &&
                 <Box sx={{ marginTop: 2 }}>

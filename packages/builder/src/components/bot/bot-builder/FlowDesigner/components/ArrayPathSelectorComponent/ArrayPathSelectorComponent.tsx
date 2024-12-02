@@ -35,7 +35,7 @@ export const ArrayPathSelectorComponent = ({ variableValueSource, onVariableValu
 
                 // check if object has properties with array type
                 const defaultValue = JSON.parse(variable.value as string) as Record<string, unknown>;
-                for(const propName of Object.keys(defaultValue)) {
+                for (const propName of Object.keys(defaultValue)) {
                     if (!isNil(defaultValue[propName]) && (defaultValue[propName] instanceof Array)) {
                         return true;
                     }
@@ -62,7 +62,7 @@ export const ArrayPathSelectorComponent = ({ variableValueSource, onVariableValu
 
     useEffect(() => {
         // const valueIsValid = isValid(variableValueSourceLocal);
-        if(variableValueSourceLocal !== variableValueSource){
+        if (variableValueSourceLocal !== variableValueSource) {
             onVariableValueSourceChange(variableValueSourceLocal, true);
         }
     }, [onVariableValueSourceChange, variableValueSource, variableValueSourceLocal]);
@@ -90,7 +90,13 @@ export const ArrayPathSelectorComponent = ({ variableValueSource, onVariableValu
 
     return (
         <Box sx={{ marginTop: 2 }}>
-            <VariableSelector valueId={variableValueSourceLocal.variableId} onVariableChange={handleVariableChange} onCustomVariableFilter={handleCustomVariableFilter} />
+            <VariableSelector
+                newVariableTemplate={{
+                    type: VariableType.ARRAY,
+                    value: '["button#1", "button#2"]',
+                    arrayItemType: VariableType.STRING
+                }}
+                valueId={variableValueSourceLocal.variableId} onVariableChange={handleVariableChange} onCustomVariableFilter={handleCustomVariableFilter} />
             {selectedVariable?.type === VariableType.OBJECT &&
                 <Box sx={{ marginTop: 2 }}>
                     <PropertySelector arrayObject={{}}

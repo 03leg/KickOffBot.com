@@ -11,6 +11,7 @@ import { CardsElementButtonsEditor } from './components/CardsElementButtonsEdito
 import { VariableSelector } from '../../../../VariableSelector';
 import { v4 } from 'uuid';
 import { throwIfNil } from '~/utils/guard';
+import { getCardNewVariableTemplate } from './getCardNewVariableTemplate';
 
 interface Props {
     element: WebInputCardsUIElement;
@@ -171,7 +172,9 @@ export const WebInputCardsEditor = ({ element }: Props) => {
                         <Typography sx={{ marginBottom: 1 }}>
                             Select variable to save user input:
                         </Typography>
-                        <VariableSelector valueId={selectedVariableId} onVariableChange={handleVariableChange} />
+                        <VariableSelector
+                            newVariableTemplate={getCardNewVariableTemplate(cardsSourceStrategy, multipleChoiceValue)}
+                            valueId={selectedVariableId} onVariableChange={handleVariableChange} />
                     </Box>
                 }
 

@@ -17,4 +17,7 @@ export const useVideoPropertiesStyles = makeStyles()(({ spacing }) => ({
   editorField: {
     marginTop: spacing(1.5),
   },
+  notVideoBox: {
+    textAlign: "center",
+  },
 }));

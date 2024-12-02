@@ -14,7 +14,7 @@ export const Card1Image = ({ image, onImageLoaded }: Props) => {
   const { classes } = useCard1Styles();
   const [showPhotoInfo, setShowPhotoInfo] = React.useState(false);
 
-  if (isNil(image)) {
+  if (isNil(image) || image === '') {
     return null;
   }
 

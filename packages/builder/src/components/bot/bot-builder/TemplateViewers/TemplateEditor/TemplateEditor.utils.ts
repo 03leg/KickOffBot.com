@@ -8,7 +8,7 @@ export function getTemplateContent(html: string, isPlainText: boolean): string {
   html = html
     .replaceAll("<p><br></p>", "<br>")
     .replaceAll("<p>", "")
-    .replaceAll("</p>", "<br>");
+    .replaceAll("</p>", "");
 
   if (!isPlainText) {
     return html;

@@ -3,6 +3,7 @@ import { Alert, Box } from '@mui/material';
 import React, { useCallback, useState } from 'react';
 import { VariableSelector } from '../../../VariableSelector';
 import { throwIfNil } from '~/utils/guard';
+import { getExportObjectNewVariableTemplate } from './newVariableTemplate.utils';
 
 interface Props {
     googleSheetHeaders: string[];
@@ -14,7 +15,7 @@ export const InsertRowsFromVariableEditor = ({ element, googleSheetHeaders }: Pr
 
     const handleVariableChange = useCallback((variable?: BotVariable) => {
         throwIfNil(variable);
-        
+
         setSelectedVariableId(variable.id);
         element.dataOperationDescription = { variableId: variable.id };
     }, [element]);
@@ -47,7 +48,9 @@ export const InsertRowsFromVariableEditor = ({ element, googleSheetHeaders }: Pr
     return (
         <Box>
             <Alert sx={{ mb: 2 }} severity="warning">You need to select an Array variable containing objects, or an object variable, where the property names match the column headers from the Google Spreadsheet.</Alert>
-            <VariableSelector valueId={selectedVariableId} onVariableChange={handleVariableChange} onCustomVariableFilter={handleVariableFilter} />
+            <VariableSelector
+                newVariableTemplate={{ type: VariableType.OBJECT, value: getExportObjectNewVariableTemplate(googleSheetHeaders) }}
+                valueId={selectedVariableId} onVariableChange={handleVariableChange} onCustomVariableFilter={handleVariableFilter} />
         </Box>
     )
 }
