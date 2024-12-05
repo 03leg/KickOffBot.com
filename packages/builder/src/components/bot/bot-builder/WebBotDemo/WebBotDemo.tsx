@@ -61,6 +61,7 @@ export const WebBotDemo = () => {
                             <ChatViewer height={containerRef.current?.clientHeight}
                                 project={project} projectId={projectIdFromQuery}
                                 webViewOptions={themeObject}
+                                showLogo={false}
                                 runtimeUrl={env.NEXT_PUBLIC_WEB_BOT_RUNTIME_HOST ?? ''}
                             />
                         </KickoffbotChatStoreProvider>
