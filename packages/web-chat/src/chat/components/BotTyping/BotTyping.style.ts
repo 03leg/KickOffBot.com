@@ -1,14 +1,12 @@
 import { makeStyles } from "tss-react/mui";
 
-export const useBotTypingStyles = makeStyles<
-  { hasAttachments: boolean } | undefined
->()(({ spacing, shape, palette }, options) => ({
+export const useBotTypingStyles = makeStyles<{ hasAttachments: boolean } | undefined>()(({ spacing, shape, palette }, options) => ({
   root: {
     display: "flex",
     flexDirection: "row",
     maxWidth: "90%",
     marginTop: spacing(1),
-    
+
     "& p": {
       margin: 0,
     },
@@ -27,5 +25,8 @@ export const useBotTypingStyles = makeStyles<
   },
   text: {
     marginBottom: options?.hasAttachments ? spacing(1) : undefined,
+  },
+  noAvatar: {
+    width: spacing(2),
   },
 }));
