@@ -9,6 +9,7 @@ import { BotTyping } from '../BotTyping';
 import { WebRuntimeConnector } from '../../connector/WebRuntimeConnector';
 import { ErrorMessages } from '../ErrorMessages';
 import { useChatViewerStyles } from './ChatViewer.style';
+import { Logo } from '../Logo';
 
 interface Props {
     project?: BotProject;
@@ -17,12 +18,13 @@ interface Props {
     webViewOptions?: WebChatTheme;
     runtimeUrl: string;
     externalVariables?: Record<string, unknown>;
+    showLogo?: boolean;
 }
 
 //eslint-disable-next-line @typescript-eslint/no-explicit-any
 // let handler: any = undefined;
 
-export const ChatViewer = ({ project, height, projectId, webViewOptions, runtimeUrl, externalVariables }: Props) => {
+export const ChatViewer = ({ project, height, projectId, webViewOptions, runtimeUrl, externalVariables, showLogo = true }: Props) => {
     const { classes, cx } = useChatViewerStyles({ height, webViewOptions });
     const runtimeConnector = useRef<WebRuntimeConnector | null>(null);
     const messageListRef = useRef<HTMLDivElement>(null);
@@ -83,6 +85,7 @@ export const ChatViewer = ({ project, height, projectId, webViewOptions, runtime
                 })}
                 {storeState.botIsTyping && <BotTyping webViewOptions={webViewOptions} />}
                 {storeState.errorMessages.length > 0 && <ErrorMessages errorMessages={storeState.errorMessages} />}
+                {showLogo && <Logo />}
             </Box>
         </Box>
     )
