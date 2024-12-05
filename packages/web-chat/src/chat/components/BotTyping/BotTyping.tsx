@@ -16,7 +16,9 @@ export const BotTyping = ({ webViewOptions }: Props) => {
     return (
         <Box className={classes.root}>
             {(webViewOptions?.botMessageAppearance.avatarSettings?.showAvatar ?? true) && <BotAvatar role='bot' avatarSettings={webViewOptions?.botMessageAppearance.avatarSettings} />}
-
+            {(webViewOptions?.botMessageAppearance.avatarSettings?.showAvatar === false) &&
+                <Box className={classes.noAvatar}></Box>
+            }
             <Box className={classes.message}>
                 <TypingLoading />
             </Box>

@@ -13,4 +13,7 @@ export const useBotMessageStyles = makeStyles()(({ spacing, palette }) => ({
       color: palette.botMessage.contrastText,
     },
   },
+  noAvatar: {
+    width: spacing(2),
+  },
 }));
