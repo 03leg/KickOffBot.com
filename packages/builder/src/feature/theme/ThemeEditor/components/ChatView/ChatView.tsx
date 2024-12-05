@@ -8,7 +8,7 @@ import { useThemeDesignerStore } from '../ThemeSelector/store/useThemeDesignerSt
 import { api } from '~/utils/api';
 import { useRouter } from 'next/router';
 import { env } from '~/env.mjs';
-import { ChatViewer, createChatTheme, KickoffbotChatStoreProvider, useUserChatStore } from '@kickoffbot.com/web-chat';
+import { ChatViewer, createChatTheme, useUserChatStore } from '@kickoffbot.com/web-chat';
 
 export default function ChatView() {
   const router = useRouter();

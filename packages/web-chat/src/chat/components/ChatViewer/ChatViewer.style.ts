@@ -18,6 +18,7 @@ export const useChatViewerStyles = makeStyles<
     display: "flex",
     justifyContent: "center",
     fontFamily: getFontFamily(),
+    position: "relative",
   },
   root: {
     height: options?.height,
