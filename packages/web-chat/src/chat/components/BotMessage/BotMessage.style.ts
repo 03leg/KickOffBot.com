@@ -14,6 +14,6 @@ export const useBotMessageStyles = makeStyles()(({ spacing, palette }) => ({
     },
   },
   noAvatar: {
-    width: spacing(2),
+    minWidth: spacing(1),
   },
 }));

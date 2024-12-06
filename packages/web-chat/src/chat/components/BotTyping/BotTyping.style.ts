@@ -27,6 +27,6 @@ export const useBotTypingStyles = makeStyles<{ hasAttachments: boolean } | undef
     marginBottom: options?.hasAttachments ? spacing(1) : undefined,
   },
   noAvatar: {
-    width: spacing(2),
+    minWidth: spacing(1),
   },
 }));
