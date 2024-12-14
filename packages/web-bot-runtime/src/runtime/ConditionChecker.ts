@@ -6,16 +6,17 @@ import {
   NOW_DATE_TIME_VARIABLE_NAME,
 } from '@kickoffbot.com/types';
 import { isEmpty, isNil } from 'lodash';
-import { throwIfNil } from 'src/utils/guard';
 import { WebUserContext } from './WebUserContext';
 import { WebBotRuntimeUtils } from './WebBotRuntimeUtils';
 import * as moment from 'moment';
+import { LogService } from './log/LogService';
 
 export class ConditionChecker {
   public static check(
     element: { items: ConditionItem[]; logicalOperator: LogicalOperator },
     utils: WebBotRuntimeUtils,
     userContext: WebUserContext,
+    logService: LogService,
   ): boolean {
     if (isNil(element.items) || element.items.length === 0) {
       return false;
@@ -23,7 +24,7 @@ export class ConditionChecker {
 
     const resultArray = [];
     for (const item of element.items) {
-      const itemResult = this.checkItem(item, utils, userContext);
+      const itemResult = this.checkItem(item, utils, userContext, logService);
       resultArray.push(itemResult);
     }
 
@@ -46,11 +47,30 @@ export class ConditionChecker {
     item: ConditionItem,
     utils: WebBotRuntimeUtils,
     userContext: WebUserContext,
+    logService: LogService,
   ): boolean {
-    throwIfNil(item.operator);
-    throwIfNil(item.variableId);
+    if (isNil(item.operator)) {
+      logService.error(
+        `Condition operator is not defined. Condition value is false for this item`,
+      );
+      return false;
+    }
+    if (isNil(item.variableId)) {
+      logService.error(
+        `Condition variable is not defined. Condition value is false for this item`,
+      );
+      return false;
+    }
 
     const variable = utils.getVariableById(item.variableId);
+
+    if (isNil(variable)) {
+      logService.error(
+        `Couldn't find variable. Condition value is false for this item`,
+      );
+      return false;
+    }
+
     const currentVariableValue = userContext.getVariableValueByName(
       variable.name,
     );
@@ -66,6 +86,13 @@ export class ConditionChecker {
       conditionValue = item.value;
     } else {
       const valueVariable = utils.getVariableById(item.variableIdValue);
+
+      if (isNil(valueVariable)) {
+        logService.error(
+          `Couldn't find variable to get condition value. Condition value is false for this item`,
+        );
+        return false;
+      }
 
       if (valueVariable.name === NOW_DATE_TIME_VARIABLE_NAME) {
         conditionValue = moment(new Date()).format(variable.dateTimeFormat);
@@ -105,6 +132,7 @@ export class ConditionChecker {
           item.path,
           conditionValue,
           item.operator,
+          logService,
         );
       }
       case VariableType.DATE_TIME: {
@@ -172,15 +200,30 @@ export class ConditionChecker {
       | unknown[]
       | Record<string, unknown>,
     operator: ConditionOperator,
+    logService: LogService,
   ): boolean {
-    throwIfNil(path);
-    throwIfNil(conditionValue);
-    throwIfNil(operator);
+    if (isNil(path)) {
+      logService.error(
+        `Condition path is not defined. It is required for object variable`,
+      );
+      return false;
+    }
+    if (isNil(conditionValue)) {
+      logService.error(
+        `Condition value is not defined. It is required for object variable`,
+      );
+      return false;
+    }
+    if (isNil(operator)) {
+      logService.error(
+        `Condition operator is not defined. It is required for object variable`,
+      );
+      return false;
+    }
 
     if (path in currentVariableValue === false) {
-      throw new Error(
-        'InvalidOperationError: path not in currentVariableValue',
-      );
+      logService.error(`Condition path not found in object variable`);
+      return false;
     }
 
     const actualValue = currentVariableValue[path];

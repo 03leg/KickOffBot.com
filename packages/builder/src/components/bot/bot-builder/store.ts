@@ -265,4 +265,9 @@ export const useFlowDesignerStore = create<FlowDesignerState>()((set, get) => ({
     set((state) => ({
       showPublishWebBotDialog: !state.showPublishWebBotDialog,
     })),
+  showChatLogs: false,
+  toggleShowChatLogs: () =>
+    set((state) => ({
+      showChatLogs: !state.showChatLogs,
+    })),
 }));

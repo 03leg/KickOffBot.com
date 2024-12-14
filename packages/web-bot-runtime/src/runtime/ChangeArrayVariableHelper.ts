@@ -10,10 +10,10 @@ import {
   ValuePathDescription,
 } from '@kickoffbot.com/types';
 import { isEmpty, isNil, isPlainObject } from 'lodash';
-import { throwIfNil } from 'src/utils/guard';
 import { WebUserContext } from './WebUserContext';
 import { WebBotRuntimeUtils } from './WebBotRuntimeUtils';
 import { ConditionChecker } from './ConditionChecker';
+import { LogService } from './log/LogService';
 
 export class ChangeArrayVariableHelper {
   public static getArrayValue(
@@ -21,28 +21,37 @@ export class ChangeArrayVariableHelper {
     variable: BotVariable,
     userContext: WebUserContext,
     utils: WebBotRuntimeUtils,
+    logService: LogService,
   ) {
     const sourceVariableValue = userContext.getVariableValueByName(
       variable.name,
     ) as unknown[];
 
     if (!Array.isArray(sourceVariableValue)) {
-      throw new Error(
-        'InvalidOperationError: sourceVariableValue is not array',
+      logService.error(
+        `Source variable ${variable.name} is not an array. It has type ${typeof sourceVariableValue}. Skipping...`,
       );
+      return [];
     }
 
     switch (workflow.operation) {
       case ChangeArrayOperation.Add: {
-        throwIfNil(workflow.addDescription?.variableSourceDescription?.path);
+        if (isNil(workflow.addDescription?.variableSourceDescription?.path)) {
+          logService.error(
+            `Add items. Path is not defined. Default value is empty array.`,
+          );
+          return [];
+        }
 
         let values = this.getArrayValueByPath(
           workflow.addDescription.variableSourceDescription.path,
           userContext,
           utils,
+          logService,
         );
 
         values = this.applyFilter(
+          logService,
           userContext,
           utils,
           values,
@@ -52,15 +61,22 @@ export class ChangeArrayVariableHelper {
         return [...sourceVariableValue, ...values];
       }
       case ChangeArrayOperation.Set: {
-        throwIfNil(workflow.setDescription?.variableSourceDescription?.path);
+        if (isNil(workflow.setDescription?.variableSourceDescription?.path)) {
+          logService.error(
+            `Set items. Path is not defined. Default value is empty array.`,
+          );
+          return [];
+        }
 
         let values = this.getArrayValueByPath(
           workflow.setDescription.variableSourceDescription.path,
           userContext,
           utils,
+          logService,
         );
 
         values = this.applyFilter(
+          logService,
           userContext,
           utils,
           values,
@@ -70,7 +86,12 @@ export class ChangeArrayVariableHelper {
         return [...values];
       }
       case ChangeArrayOperation.Remove: {
-        throwIfNil(workflow.removeDescription);
+        if (isNil(workflow.removeDescription)) {
+          logService.error(
+            `Remove items. Config is not defined. Default value is empty array.`,
+          );
+          return [];
+        }
 
         if (sourceVariableValue.length === 0) {
           return [];
@@ -83,7 +104,9 @@ export class ChangeArrayVariableHelper {
 
           for (const condition of workflow.removeDescription?.conditions ??
             []) {
-            checks.push(this.checkValue(userContext, utils, condition, value));
+            checks.push(
+              this.checkValue(userContext, utils, condition, value, logService),
+            );
           }
 
           if (
@@ -134,8 +157,6 @@ export class ChangeArrayVariableHelper {
             return [];
           }
         }
-
-        throw new Error('NotImplementedError. Not supported operation.');
       }
 
       default: {
@@ -145,6 +166,7 @@ export class ChangeArrayVariableHelper {
   }
 
   private static applyFilter(
+    logService: LogService,
     userContext: WebUserContext,
     utils: WebBotRuntimeUtils,
     values: unknown[],
@@ -155,6 +177,7 @@ export class ChangeArrayVariableHelper {
     }
 
     const result = this.checkConditions(
+      logService,
       userContext,
       utils,
       values,
@@ -166,6 +189,7 @@ export class ChangeArrayVariableHelper {
   }
 
   public static checkConditions(
+    logService: LogService,
     userContext: WebUserContext,
     utils: WebBotRuntimeUtils,
     values: unknown[],
@@ -182,7 +206,13 @@ export class ChangeArrayVariableHelper {
       const checkArray: boolean[] = [];
 
       for (const condition of conditions) {
-        const check = this.checkValue(userContext, utils, condition, value);
+        const check = this.checkValue(
+          userContext,
+          utils,
+          condition,
+          value,
+          logService,
+        );
         checkArray.push(check);
       }
 
@@ -209,13 +239,20 @@ export class ChangeArrayVariableHelper {
     utils: WebBotRuntimeUtils,
     condition: PropertyConditionItem,
     value: unknown,
+    logService: LogService,
   ): boolean {
-    throwIfNil(condition.operator);
+    if (isNil(condition.operator)) {
+      logService.error(
+        `Condition operator is not defined. Default value for condition is false.`,
+      );
+      return false;
+    }
 
     const conditionValue = this.getConditionValue(
       userContext,
       utils,
       condition,
+      logService,
     );
     let currentValue = value;
 
@@ -283,11 +320,19 @@ export class ChangeArrayVariableHelper {
     userContext: WebUserContext,
     utils: WebBotRuntimeUtils,
     condition: PropertyConditionItem,
+    logService: LogService,
   ): unknown {
     let conditionValue: unknown;
 
     if (!isNil(condition.variableIdValue)) {
       const variable = utils.getVariableById(condition.variableIdValue);
+      if (isNil(variable)) {
+        logService.error(
+          `Couldn't find variable in condition. Condition value is null`,
+        );
+        return null;
+      }
+
       const variableValue = userContext.getVariableValueByName(variable.name);
 
       if (
@@ -310,19 +355,32 @@ export class ChangeArrayVariableHelper {
     source: ValuePathDescription,
     userContext: WebUserContext,
     utils: WebBotRuntimeUtils,
+    logService: LogService,
   ): unknown[] {
     const values = this.getVariableValue(
       source,
       userContext,
       utils,
+      logService,
     ) as unknown[];
+
+    if (isNil(values)) {
+      logService.error(
+        'InvalidOperationError: it is not possible to get array. Variable value is null',
+      );
+      return [];
+    }
 
     if (!Array.isArray(values)) {
       if (isPlainObject(values)) {
         return [values];
       }
 
-      throw new Error('InvalidOperationError: values is not array');
+      logService.error(
+        'InvalidOperationError: it is not possible to get array',
+      );
+
+      return [];
     }
 
     return values;
@@ -332,15 +390,27 @@ export class ChangeArrayVariableHelper {
     source: ValuePathDescription,
     userContext: WebUserContext,
     utils: WebBotRuntimeUtils,
+    logService: LogService,
   ) {
     const sourceVariableId = source.variableId;
     const path = source.path;
 
     if (isNil(sourceVariableId)) {
-      throw new Error('InvalidOperationError: sourceVariableId is null');
+      logService.error(
+        "Please configure source variable. It's required for correct operation",
+      );
+      return null;
     }
 
     const sourceVariable = utils.getVariableById(sourceVariableId);
+
+    if (isNil(sourceVariable)) {
+      logService.error(
+        'Could not find variable for getting value. Default value is null',
+      );
+      return null;
+    }
+
     const variableValue = userContext.getVariableValueByName(
       sourceVariable.name,
     );
@@ -358,7 +428,8 @@ export class ChangeArrayVariableHelper {
     }
 
     if (isNil(value)) {
-      throw new Error('Variable value is null');
+      logService.error('Variable value is null. It is not correct value');
+      return null;
     }
 
     return value;

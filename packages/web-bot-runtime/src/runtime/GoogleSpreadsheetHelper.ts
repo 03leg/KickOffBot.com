@@ -10,13 +10,13 @@ import {
   DataSpreedSheetOperation,
 } from '@kickoffbot.com/types';
 import { OAuth2Client } from 'google-auth-library';
-import { throwIfNil } from 'src/utils/guard';
 import { WebUserContext } from './WebUserContext';
 import { isNil, isPlainObject } from 'lodash';
 import { GoogleSpreadsheet, GoogleSpreadsheetRow } from 'google-spreadsheet';
 import { WebBotRuntimeUtils } from './WebBotRuntimeUtils';
 import { ConditionChecker } from './ConditionChecker';
 import { BotStore } from './BotStore';
+import { LogService } from './log/LogService';
 
 export class GoogleSpreadsheetHelper {
   private _googleOAuthClient = new OAuth2Client(
@@ -28,6 +28,7 @@ export class GoogleSpreadsheetHelper {
     private _botProject: BotProject,
     private _userContext: WebUserContext,
     private _utils: WebBotRuntimeUtils,
+    private _logService: LogService,
   ) {}
 
   public async handleElement(element: GoogleSheetsIntegrationUIElement) {
@@ -36,12 +37,16 @@ export class GoogleSpreadsheetHelper {
       isNil(element.selectedSpreadSheet?.id) ||
       isNil(element.selectedSheet?.id)
     ) {
+      this._logService.error(
+        'Missing required data for Google Sheets integration. Please check connectionId/selectedSpreadSheet/selectedSheet',
+      );
       return;
     }
     const integrationAccount = await BotStore.getGoogleIntegrationAccount(
       element.connectionId,
     );
     if (isNil(integrationAccount)) {
+      this._logService.error(`Integration account not found`);
       return;
     }
     const { credentials } = integrationAccount;
@@ -66,8 +71,17 @@ export class GoogleSpreadsheetHelper {
   }
 
   private async readRowsToArray(element: GoogleSheetsIntegrationUIElement) {
-    throwIfNil(element.selectedSpreadSheet?.id);
-    throwIfNil(element.selectedSheet?.id);
+    if (
+      isNil(element.selectedSpreadSheet?.id) ||
+      isNil(element.selectedSheet?.id)
+    ) {
+      this._logService.error(
+        'Missing required data for Google Sheets integration. Please check selectedSpreadSheet/selectedSheet',
+      );
+      return;
+    }
+
+    this._logService.debug(`Read rows from Google Sheet`);
 
     const spreadSheet = new GoogleSpreadsheet(
       element.selectedSpreadSheet.id,
@@ -80,23 +94,39 @@ export class GoogleSpreadsheetHelper {
       (v) => v.id === element.dataOperationDescription?.variableId,
     );
 
+    if (isNil(variable)) {
+      this._logService.error('Cannot find variable to update. Skipping...');
+      return;
+    }
+
     if (
-      isNil(variable) ||
-      (variable.type !== VariableType.ARRAY &&
-        variable.arrayItemType !== VariableType.OBJECT)
+      variable.type !== VariableType.ARRAY &&
+      variable.arrayItemType !== VariableType.OBJECT
     ) {
-      throw new Error('InvalidOperationError: variable is not array of object');
+      this._logService.error(
+        'Variable is not an array of objects. Please check variable type. Skipping...',
+      );
+      return;
     }
 
     const variableValue = JSON.parse(variable.value as string);
 
     if (!Array.isArray(variableValue) && variableValue.length > 0) {
+      this._logService.error(
+        'Variable is not an array of objects. Please check variable type. Skipping...',
+      );
       return;
     }
+
+    this._logService.debug(`Read ${rows.length} rows from Google Sheet`);
 
     const arrayItemSample = variableValue[0];
     const props = Object.keys(arrayItemSample);
     const resultItems = [];
+
+    this._logService.debug(
+      `Converting rows to array of objects for variable ${variable.name}. Columns: ${props.join(',')}`,
+    );
 
     for (const row of rows) {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -113,14 +143,27 @@ export class GoogleSpreadsheetHelper {
       resultItems.push(obj);
     }
 
+    this._logService.debug(
+      `Updating variable ${variable.name} with ${resultItems.length} items.`,
+    );
+
     this._userContext.updateVariable(variable.name, resultItems);
   }
 
   private async insertRowsFromVariable(
     element: GoogleSheetsIntegrationUIElement,
   ) {
-    throwIfNil(element.selectedSpreadSheet?.id);
-    throwIfNil(element.selectedSheet?.id);
+    if (
+      isNil(element.selectedSpreadSheet?.id) ||
+      isNil(element.selectedSheet?.id)
+    ) {
+      this._logService.error(
+        'Missing required data for Google Sheets integration. Please check selectedSpreadSheet/selectedSheet',
+      );
+      return;
+    }
+
+    this._logService.debug(`Insert rows from variable to Google Sheet`);
 
     const spreadSheet = new GoogleSpreadsheet(
       element.selectedSpreadSheet.id,
@@ -134,7 +177,10 @@ export class GoogleSpreadsheetHelper {
     );
 
     if (isNil(variable)) {
-      throw new Error('InvalidOperationError: variable is not array of object');
+      this._logService.error(
+        'Cannot find variable with items to insert into Google Sheet. Skipping...',
+      );
+      return;
     }
 
     const actualVariableValue = this._userContext.getVariableValueByName(
@@ -146,21 +192,38 @@ export class GoogleSpreadsheetHelper {
       isPlainObject(actualVariableValue)
     ) {
       await sheet.addRow(actualVariableValue as Record<string, string>);
-    }
-
-    if (
+      this._logService.debug(
+        `Inserted row from variable ${variable.name} [object] to Google Sheet`,
+      );
+    } else if (
       variable.type === VariableType.ARRAY &&
       Array.isArray(actualVariableValue)
     ) {
       await sheet.addRows(actualVariableValue as Record<string, string>[]);
+      this._logService.debug(
+        `Inserted rows from variable ${variable.name} [array of objects] to Google Sheet`,
+      );
+    } else {
+      this._logService.error(
+        `Variable ${variable.name} is not an array of objects or object. Please check variable type / variable value. Skipping...`,
+      );
     }
   }
 
   private async updateRowsFromObjectVariable(
     element: GoogleSheetsIntegrationUIElement,
   ) {
-    throwIfNil(element.selectedSpreadSheet?.id);
-    throwIfNil(element.selectedSheet?.id);
+    if (
+      isNil(element.selectedSpreadSheet?.id) ||
+      isNil(element.selectedSheet?.id)
+    ) {
+      this._logService.error(
+        'Missing required data for Google Sheets integration. Please check selectedSpreadSheet/selectedSheet',
+      );
+      return;
+    }
+
+    this._logService.debug(`Update rows from variable to Google Sheet`);
 
     const operationDescription =
       element.dataOperationDescription as UpdateRowsFromObjectVariableDescription;
@@ -176,6 +239,9 @@ export class GoogleSpreadsheetHelper {
       (v) => v.id === element.dataOperationDescription?.variableId,
     );
     if (isNil(variable)) {
+      this._logService.error(
+        `Cannot find variable with items to update in Google Sheet. Skipping...`,
+      );
       return;
     }
 
@@ -187,14 +253,27 @@ export class GoogleSpreadsheetHelper {
       variable.type !== VariableType.OBJECT ||
       !isPlainObject(actualVariableValue)
     ) {
+      this._logService.error(
+        `Variable ${variable.name} is not an object. Please check variable type / variable value. Skipping...`,
+      );
       return;
     }
 
+    let rowIndex = 1;
     const rows = await sheet.getRows();
     for (const row of rows) {
+      rowIndex += 1;
+
       if (!this.isTargetRow(row, operationDescription.filter)) {
+        this._logService.debug(
+          `Skipping row ${rowIndex} as it does not match filter`,
+        );
         continue;
       }
+
+      this._logService.debug(
+        `Updating row ${rowIndex} with variable ${variable.name} value`,
+      );
 
       row.assign({ ...(actualVariableValue as object) });
 
@@ -303,6 +382,12 @@ export class GoogleSpreadsheetHelper {
   private getConditionValue(item: SpreadSheetRowsFilterConditionItem) {
     if (!isNil(item.variableIdValue)) {
       const variable = this._utils.getVariableById(item.variableIdValue);
+      if (isNil(variable)) {
+        this._logService.error(
+          `Couldn't get variable value for getting condition value. Default value is null`,
+        );
+        return null;
+      }
       const currentVariableValue = this._userContext.getVariableValueByName(
         variable.name,
       );

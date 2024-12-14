@@ -1,6 +1,7 @@
 import { isNil } from 'lodash';
 import { BotProject, BotVariable } from '@kickoffbot.com/types';
 import { WordpressVariableChecker } from './helper/WordpressVariableChecker';
+import { LogService } from './log/LogService';
 
 export interface NextBotStep {
   blockId: string;
@@ -16,10 +17,11 @@ export class WebUserContext {
   }
 
   constructor(
-    project: BotProject,
+    private _project: BotProject,
+    private _logService: LogService,
     externalVariables?: Record<string, unknown>,
   ) {
-    this.initVariables(project.variables);
+    this.initVariables(_project.variables);
 
     if (externalVariables) {
       this.setExternalVariables(externalVariables);
@@ -56,7 +58,6 @@ export class WebUserContext {
   }
 
   public setNextStep(nextStep: NextBotStep | null) {
-    // console.log("next step", nextStep);
     this._nextStep = nextStep;
   }
 
@@ -64,30 +65,30 @@ export class WebUserContext {
     name: string,
     newValue: string | number | boolean | unknown[] | object | unknown,
   ) {
+    this._logService.logChangeVariable(name, newValue);
+
     this._variables.set(name, newValue);
   }
-
-  //   public getVariableValueById(
-  //     variableId: string,
-  //   ): ReturnType<typeof this.getVariableValueByName> {
-  //     const variable = this._utils.getVariableById(variableId);
-
-  //     return this.getVariableValueByName(variable.name);
-  //   }
 
   public getVariableValueByName(
     name: string,
   ): string | number | boolean | unknown[] | Record<string, unknown> {
-    const result = this._variables.get(name);
+    let result = this._variables.get(name);
 
     if (isNil(result)) {
       if (WordpressVariableChecker.isWordpressVariable(name)) {
-        return 'N/A';
+        result = 'N/A';
+      } else {
+        result = `Variable '${name}' not found`;
       }
-
-      return `Variable '${name}' not found`;
     }
 
+    this._logService.logRequestVariable(name, result);
+
     return result as string;
+  }
+
+  public getCurrentState() {
+    return this._variables;
   }
 }

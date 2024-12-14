@@ -65,4 +65,7 @@ export interface FlowDesignerState {
 
   showPublishWebBotDialog: boolean;
   togglePublishWebBotDialog: VoidFunction;
+
+  toggleShowChatLogs: VoidFunction;
+  showChatLogs: boolean;
 }

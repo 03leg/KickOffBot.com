@@ -7,6 +7,7 @@ import {
 import { WebBotRuntimeUtils } from '../WebBotRuntimeUtils';
 import { WebUserContext } from '../WebUserContext';
 import * as moment from 'moment';
+import { LogService } from '../log/LogService';
 
 export class ChangeDateTimeVariableHelper {
   private static getDurationType(durationType: TimeDurationUnit) {
@@ -27,12 +28,18 @@ export class ChangeDateTimeVariableHelper {
     element: ChangeVariableUIElement,
     userContext: WebUserContext,
     utils: WebBotRuntimeUtils,
+    logService: LogService,
   ) {
     const workflow =
       element.workflowDescription as ChangeDateTimeVariableWorkflow;
 
-    let newValue = '';
+    let newValue = null;
     const sourceVariable = utils.getVariableById(element.selectedVariableId);
+
+    if (sourceVariable === null) {
+      logService.error('Could not find variable for updating. Skipping...');
+      return null;
+    }
 
     switch (workflow.operation) {
       case ChangeDateTimeVariableOperation.SET_NEW_VALUE: {
@@ -44,16 +51,18 @@ export class ChangeDateTimeVariableHelper {
 
       case ChangeDateTimeVariableOperation.REMOVE_DURATION:
       case ChangeDateTimeVariableOperation.ADD_DURATION: {
-        const durationNumber = Number(
-          utils.getParsedText(workflow.duration, userContext),
+        const durationText = utils.getParsedText(
+          workflow.duration,
+          userContext,
         );
+        const durationNumber = Number(durationText);
         const variableCurrentValue = userContext.getVariableValueByName(
           sourceVariable.name,
         ) as string;
 
         if (isNaN(durationNumber)) {
-          console.warn(
-            `ADD_DURATION or REMOVE_DURATION: durationNumber is not a number`,
+          logService.error(
+            `DurationNumber is not a number. Value is "${durationText}" and it's not parsable to number. It does not support in this operation (${workflow.operation}). Skipping...`,
           );
           break;
         }
@@ -73,7 +82,9 @@ export class ChangeDateTimeVariableHelper {
       }
 
       default: {
-        throw new Error('NotImplementedError');
+        logService.error(
+          `Service does not support this operation (${workflow.operation}). Skipping...`,
+        );
       }
     }
 

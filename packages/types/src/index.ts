@@ -7,3 +7,4 @@ export * from "./WebBotTypes";
 export * from "./WebBotDto";
 export * from "./WebBotThemeType";
 export * from "./constants";
+export * from "./WebBotLogsType";

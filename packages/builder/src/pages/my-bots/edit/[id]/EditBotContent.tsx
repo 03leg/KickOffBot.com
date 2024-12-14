@@ -25,6 +25,7 @@ import ShareIcon from '@mui/icons-material/Share';
 import { PublishWebBotDialog } from '~/components/bot/bot-builder/PublishWebBotDialog';
 import SaveIcon from '@mui/icons-material/Save';
 import BiotechIcon from '@mui/icons-material/Biotech';
+import { ChatLogsDialog } from '~/components/bot/bot-builder/ChatLogsDialog';
 
 
 export default function EditBotContent() {
@@ -404,6 +405,7 @@ export default function EditBotContent() {
                         <RuntimeEditor projectId={projectIdFromQuery} />
                         {platform === BotPlatform.WEB && <PublishWebBotDialog projectId={projectIdFromQuery} />}
                         {platform === BotPlatform.WEB && <WebBotDemo />}
+                        <ChatLogsDialog />
                     </Box>
 
                 </Box>

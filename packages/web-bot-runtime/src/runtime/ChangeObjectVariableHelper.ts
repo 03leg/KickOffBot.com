@@ -5,16 +5,18 @@ import {
   ChangeVariableUIElement,
   NOW_DATE_TIME_VARIABLE_NAME,
 } from '@kickoffbot.com/types';
-import { throwIfNil } from 'src/utils/guard';
 import { ChangeArrayVariableHelper } from './ChangeArrayVariableHelper';
 import { WebUserContext } from './WebUserContext';
 import { WebBotRuntimeUtils } from './WebBotRuntimeUtils';
+import { LogService } from './log/LogService';
+import { isNil } from 'lodash';
 
 export class ChangeObjectVariableHelper {
   public static getObjectValue(
     element: ChangeVariableUIElement,
     userContext: WebUserContext,
     utils: WebBotRuntimeUtils,
+    logService: LogService,
   ) {
     const workflow =
       element.workflowDescription as ChangeObjectVariableWorkflow;
@@ -24,14 +26,29 @@ export class ChangeObjectVariableHelper {
     }
 
     if (workflow.source === ChangeObjectVariableDataSource.INSERT_PROPERTY) {
-      return this.handleInsertPropertyToObject(element, userContext, utils);
+      return this.handleInsertPropertyToObject(
+        element,
+        userContext,
+        utils,
+        logService,
+      );
     }
 
     if (workflow.source === ChangeObjectVariableDataSource.REMOVE_PROPERTY) {
-      return this.handleRemovePropertyFromObject(element, userContext, utils);
+      return this.handleRemovePropertyFromObject(
+        element,
+        userContext,
+        utils,
+        logService,
+      );
     }
 
-    throwIfNil(workflow.variableSource?.variableId);
+    if (isNil(workflow.variableSource?.variableId)) {
+      logService.error(
+        'Please configure source variable. It is required for correct operation. Skipping...',
+      );
+      return null;
+    }
 
     const value = ChangeArrayVariableHelper.getVariableValue(
       {
@@ -40,6 +57,7 @@ export class ChangeObjectVariableHelper {
       },
       userContext,
       utils,
+      logService,
     );
 
     if (typeof value === 'object' && !Array.isArray(value)) {
@@ -51,7 +69,12 @@ export class ChangeObjectVariableHelper {
       workflow,
       userContext,
       utils,
+      logService,
     );
+
+    if (!Array.isArray(arrayFromVariable)) {
+      return null;
+    }
 
     switch (workflow.variableSource.arrayFilter?.mode) {
       case ArrayFilterType.FIRST: {
@@ -77,6 +100,7 @@ export class ChangeObjectVariableHelper {
 
     userContext: WebUserContext,
     utils: WebBotRuntimeUtils,
+    logService: LogService,
   ) {
     const workflow =
       element.workflowDescription as ChangeObjectVariableWorkflow;
@@ -86,6 +110,7 @@ export class ChangeObjectVariableHelper {
       },
       userContext,
       utils,
+      logService,
     );
 
     if (!value || typeof value !== 'object' || Array.isArray(value)) {
@@ -123,6 +148,7 @@ export class ChangeObjectVariableHelper {
     element: ChangeVariableUIElement,
     userContext: WebUserContext,
     utils: WebBotRuntimeUtils,
+    logService: LogService,
   ) {
     const workflow =
       element.workflowDescription as ChangeObjectVariableWorkflow;
@@ -132,6 +158,7 @@ export class ChangeObjectVariableHelper {
       },
       userContext,
       utils,
+      logService,
     );
 
     if (!value || typeof value !== 'object' || Array.isArray(value)) {
@@ -154,14 +181,21 @@ export class ChangeObjectVariableHelper {
     workflow: ChangeObjectVariableWorkflow,
     userContext: WebUserContext,
     utils: WebBotRuntimeUtils,
+    logService: LogService,
   ) {
-    throwIfNil(workflow.variableSource?.variableId);
+    if (isNil(workflow.variableSource?.variableId)) {
+      logService.error(
+        'Variable source is not defined. Please configure source variable. It is required for correct operation',
+      );
+      return null;
+    }
 
     if ((workflow.variableSource.arrayFilter?.conditions?.length ?? -1) === 0) {
       return value;
     }
 
     const filteredArray = ChangeArrayVariableHelper.checkConditions(
+      logService,
       userContext,
       utils,
       value,

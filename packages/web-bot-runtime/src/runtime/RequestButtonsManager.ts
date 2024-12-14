@@ -6,11 +6,11 @@ import {
   ElementType,
   RequestButtonDescription,
 } from '@kickoffbot.com/types';
-import { throwIfNil } from 'src/utils/guard';
 import { WebUserContext } from './WebUserContext';
 import { WebBotRuntimeUtils } from './WebBotRuntimeUtils';
 import { isNil } from 'lodash';
 import { ChangeArrayVariableHelper } from './ChangeArrayVariableHelper';
+import { LogService } from './log/LogService';
 
 export class RequestButtonsManager {
   public static getButtonsForMessage(
@@ -18,6 +18,7 @@ export class RequestButtonsManager {
     elementId: string,
     messageButtonsDescription: WebInputButtonsUIElement,
     utils: WebBotRuntimeUtils,
+    logService: LogService,
   ): RequestButtonDescription[] | null {
     let result: RequestButtonDescription[] = [];
 
@@ -35,6 +36,7 @@ export class RequestButtonsManager {
         messageButtonsDescription,
         utils,
         userContext,
+        logService,
       );
     }
 
@@ -50,22 +52,26 @@ export class RequestButtonsManager {
     buttonsDescription: WebInputButtonsUIElement,
     utils: WebBotRuntimeUtils,
     userContext: WebUserContext,
+    logService: LogService,
   ) {
     const result: RequestButtonDescription[] = [];
 
     if (isNil(buttonsDescription.variableButtonsSource?.variableSource)) {
-      throw new Error('InvalidOperationError: variableSource is null');
+      logService.error('Please specify variable source for buttons generation');
+      return [];
     }
 
     const items = ChangeArrayVariableHelper.getArrayValueByPath(
       buttonsDescription.variableButtonsSource?.variableSource,
       userContext,
       utils,
+      logService,
     );
 
     for (const item of items) {
       if (isNil(buttonsDescription.variableButtonsSource.customTextTemplate)) {
-        throw new Error('InvalidOperationError: customTextTemplate is null');
+        logService.error('Please specify text template for buttons generation');
+        return [];
       }
 
       result.push({
@@ -161,6 +167,7 @@ export class RequestButtonsManager {
     botProject: BotProject,
     userContext: WebUserContext,
     utils: WebBotRuntimeUtils,
+    logService: LogService,
   ) {
     const callbackDataArray = callbackData.split('_');
     const elementId = callbackDataArray[1];
@@ -182,21 +189,38 @@ export class RequestButtonsManager {
     ).find((e) => e.id === elementId);
 
     if (isNil(buttonsElement)) {
-      throw new Error('ButtonsElement not found');
+      logService.error('Could not find buttons element. Skipping...');
+      return null;
     }
 
-    // TODO: When variable to save answer is not set we have runtime error here
-    throwIfNil(buttonsElement.variableButtonsSource?.variableSource);
-    throwIfNil(buttonsElement.variableButtonsSource?.answerVariableId);
+    if (isNil(buttonsElement.variableButtonsSource?.variableSource)) {
+      logService.error('Could not find variable buttons source. Skipping...');
+      return null;
+    }
+
+    if (isNil(buttonsElement.variableButtonsSource?.answerVariableId)) {
+      logService.error(
+        'Could not find variable to save user clicked button. Skipping...',
+      );
+      return null;
+    }
 
     const items = ChangeArrayVariableHelper.getArrayValueByPath(
       buttonsElement.variableButtonsSource?.variableSource,
       userContext,
       utils,
+      logService,
     );
     const answerVariable = utils.getVariableById(
       buttonsElement.variableButtonsSource?.answerVariableId,
     );
+
+    if (isNil(answerVariable)) {
+      logService.error(
+        'Could not find variable to save user clicked button. Skipping...',
+      );
+      return defaultButtonLink;
+    }
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     userContext.updateVariable(answerVariable.name, items[buttonIndex] as any);
