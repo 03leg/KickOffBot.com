@@ -1,0 +1,5 @@
+export enum ResponseErrorCode {
+  NO_FOUND_RUNTIME_CONTEXT = 1000,
+  UNKNOWN_APP_ERROR = 1001,
+  NO_FOUND_BOT_PROJECT = 1002,
+}
