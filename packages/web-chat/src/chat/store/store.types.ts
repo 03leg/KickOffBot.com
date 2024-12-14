@@ -4,10 +4,15 @@ import {
   UIElement,
 } from "@kickoffbot.com/types";
 
+export interface ChatErrorDescription {
+  message: string;
+  showRestartButton?: boolean;
+}
+
 export interface ChatStoreState {
   botIsTyping: boolean;
   chatItems: ChatItemWebRuntime[];
-  errorMessages: string[];
+  chatError: ChatErrorDescription | null;
   sendBotMessage: (item: ChatItemWebRuntime) => Promise<void>;
   sendBotRequest: (item: ChatItemWebRuntime) => void;
   sendUserResponse: (
@@ -21,7 +26,7 @@ export interface ChatStoreState {
   removeChatItemByUIElementId: (elementId: UIElement["id"][]) => void;
   setLoadingValue: (value: boolean) => void;
 
-  showError: (message: string) => void;
+  showError: (message: string, showRestartButton?: boolean) => void;
 
   setChatItems: (items: ChatItemWebRuntime[]) => void;
 }

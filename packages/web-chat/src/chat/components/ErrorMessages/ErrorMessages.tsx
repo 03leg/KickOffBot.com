@@ -1,16 +1,20 @@
-import { Alert, Box } from '@mui/material';
+import { Alert, Box, Button } from '@mui/material';
 import React from 'react';
 import { useErrorMessagesStyles } from './ErrorMessages.style';
+import { ChatErrorDescription } from '../../store/store.types';
 
 interface Props {
-    errorMessages: string[];
+    error: ChatErrorDescription;
+    onRetry: () => void
 }
 
-export const ErrorMessages = ({ errorMessages }: Props) => {
+export const ErrorMessages = ({ error, onRetry }: Props) => {
     const { classes } = useErrorMessagesStyles();
     return (
         <Box className={classes.root}>
-            {errorMessages.map(m => <Alert key={m} className={classes.error} severity="error">{m}</Alert>)}
+            <Alert className={classes.error} severity="error">{error.message}
+                {error.showRestartButton === true && <Button color='error' className={classes.button} variant="contained" onClick={onRetry}>Restart bot</Button>}
+            </Alert>
         </Box>
     )
 }

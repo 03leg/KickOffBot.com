@@ -16,6 +16,7 @@ import { ChatStoreState } from "../store/store.types";
 import { WebRuntimeService } from "./WebRuntimeService";
 import { throwIfNil } from "../utils/guard";
 import { ClientCodeExecutor } from "./ClientCodeExecutor";
+import { getResponseErrorConfig } from "../utils/getResponseErrorConfig";
 
 export class WebRuntimeConnector {
   private _storeApi: ChatStoreState;
@@ -60,8 +61,9 @@ export class WebRuntimeConnector {
 
       await this.toStore(response);
     } catch (e) {
+      const { message, showRestartButton } = getResponseErrorConfig(e, "Failed to start the bot. Please try again.");
       console.error(e);
-      this._storeApi.showError("Failed to start the bot. Please try again.");
+      this._storeApi.showError(message, showRestartButton);
     } finally {
       this._storeApi.setLoadingValue(false);
     }
@@ -96,7 +98,7 @@ export class WebRuntimeConnector {
 
             await this.handleClientCodeExecuted(item, result);
           } catch (error) {
-            this._storeApi.showError("Failed to execute client code. Please contact with bot developer.");
+            this._storeApi.showError("Failed to execute client code. Please contact with bot developer.", true);
           } finally {
             this._storeApi.setLoadingValue(false);
           }
@@ -150,8 +152,12 @@ export class WebRuntimeConnector {
       const response = await this._httpService.sendUserResponse(this._runtimeProjectId, chatItemRequest, userData.data);
 
       await this.toStore(response);
-    } catch {
-      this._storeApi.showError("Failed to send your response. Please try to use bot later.");
+    } catch (e) {
+      console.error(e);
+
+      const { message, showRestartButton } = getResponseErrorConfig(e, "Failed to send your response. Please try to use bot later.");
+
+      this._storeApi.showError(message, showRestartButton);
     } finally {
       this._storeApi.setLoadingValue(false);
     }
@@ -166,8 +172,12 @@ export class WebRuntimeConnector {
       const response = await this._httpService.sendUserResponse(this._runtimeProjectId, chatItemRequest, codeResult);
 
       await this.toStore(response);
-    } catch {
-      this._storeApi.showError("Failed to send client code result. Please try to use bot later.");
+    } catch (e) {
+      console.error(e);
+
+      const { message, showRestartButton } = getResponseErrorConfig(e, "Failed to send client code result. Please try to use bot later.");
+
+      this._storeApi.showError(message, showRestartButton);
     } finally {
       this._storeApi.setLoadingValue(false);
     }

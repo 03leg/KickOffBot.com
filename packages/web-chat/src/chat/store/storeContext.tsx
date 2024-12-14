@@ -11,7 +11,7 @@ export const KickoffbotChatStoreProvider = ({ children }: React.PropsWithChildre
   const [store] = React.useState(() =>
     create<ChatStoreState>()((set, get) => ({
       chatItems: [],
-      errorMessages: [],
+      chatError: null,
       botIsTyping: false,
       setLoadingValue: (value: boolean) => set(() => ({ botIsTyping: value })),
       sendBotMessage: async (item: ChatItemWebRuntime) => {
@@ -32,7 +32,7 @@ export const KickoffbotChatStoreProvider = ({ children }: React.PropsWithChildre
           return { chatItems: messages };
         });
       },
-      clearHistory: () => set(() => ({ chatItems: [], errorMessages: [] })),
+      clearHistory: () => set(() => ({ chatItems: [], chatError: null })),
       removeChatItemByUIElementId: (elementIds: UIElement["id"][]) =>
         set((state) => ({
           chatItems: state.chatItems.filter((m) => !elementIds.includes(m.uiElementId ?? "")),
@@ -41,9 +41,9 @@ export const KickoffbotChatStoreProvider = ({ children }: React.PropsWithChildre
         set((state) => ({
           chatItems: state.chatItems.filter((m) => m.id !== id),
         })),
-      showError: (message: string) =>
+      showError: (message: string, showRestartButton?: boolean) =>
         set((state) => ({
-          errorMessages: [...state.errorMessages, message],
+          chatError: { message, showRestartButton },
         })),
       sendUserResponse: (elementId: string, userResponse: MessageDescriptionWebRuntime) =>
         set((state) => ({

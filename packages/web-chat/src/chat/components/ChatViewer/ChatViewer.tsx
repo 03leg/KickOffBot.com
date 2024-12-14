@@ -57,6 +57,12 @@ export const ChatViewer = ({ project, height, projectId, webViewOptions, runtime
         goToBottom();
     }, [storeState.chatItems, storeState.botIsTyping, goToBottom]);
 
+    const handleClickRestart = useCallback(() => {
+        runtimeConnector.current = new WebRuntimeConnector(project, projectId, runtimeUrl, { ...storeState }, externalVariables);
+
+        void runtimeConnector.current.connect();
+    }, []);
+
     // useEffect(() => {
 
     //     clearTimeout(handler);
@@ -84,7 +90,7 @@ export const ChatViewer = ({ project, height, projectId, webViewOptions, runtime
                     }
                 })}
                 {storeState.botIsTyping && <BotTyping webViewOptions={webViewOptions} />}
-                {storeState.errorMessages.length > 0 && <ErrorMessages errorMessages={storeState.errorMessages} />}
+                {storeState.chatError && <ErrorMessages error={storeState.chatError} onRetry={handleClickRestart} />}
                 {showLogo && <Logo />}
             </Box>
         </Box>
