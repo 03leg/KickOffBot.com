@@ -1,9 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import {
-  BotProject,
-  ElementType,
-  WebBotLogItemBase,
-} from '@kickoffbot.com/types';
+import { ElementType } from '@kickoffbot.com/types';
 import { WebUserContext } from '../WebUserContext';
 import { LogService, MessageOptions } from './LogService';
 import * as moment from 'moment';
