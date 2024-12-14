@@ -199,13 +199,25 @@ export function getWebIntegrationsElements() {
     ];
 }
 
-export function getIconByType(type: ElementType) {
+function getDescriptionByType(type: ElementType) {
     const description = [...getInputElements(), ...getTelegramContentElements(), ...getLogicElements(), ...getIntegrationsElements(),
     ...getWebContentElements(), ...getWebInputElements(), ...getWebLogicElements()].find(d => d.type === type);
 
     if (isNil(description)) {
         throw new Error('Property "description" can not be null here');
     }
+
+    return description;
+}
+
+export function getTitleByType(type: ElementType) {
+    const description = getDescriptionByType(type);
+
+    return description.title;
+}
+
+export function getIconByType(type: ElementType) {
+    const description = getDescriptionByType(type);
 
     return description.icon;
 }

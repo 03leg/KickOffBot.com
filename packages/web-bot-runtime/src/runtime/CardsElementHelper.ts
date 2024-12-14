@@ -17,6 +17,7 @@ import { WebBotRuntimeUtils } from './WebBotRuntimeUtils';
 import { WebUserContext } from './WebUserContext';
 import { isNil, isEmpty } from 'lodash';
 import { ConditionChecker } from './ConditionChecker';
+import { LogService } from './log/LogService';
 
 export class CardsElementHelper {
   constructor(
@@ -24,6 +25,7 @@ export class CardsElementHelper {
     private _utils: WebBotRuntimeUtils,
     private _userContext: WebUserContext,
     private _botProject: BotProject,
+    private _logService: LogService,
   ) {}
 
   private getParsedText(text?: string): string | undefined {
@@ -84,6 +86,13 @@ export class CardsElementHelper {
     const dataSourceVariable = this._utils.getVariableById(
       dataSourceDescription.cardsVariableId,
     );
+
+    if (dataSourceVariable === null) {
+      this._logService.error(
+        'No cards variable found in dynamic cards element. Return empty cards',
+      );
+      return result;
+    }
 
     const currentValue: Array<unknown> =
       this._userContext.getVariableValueByName(
@@ -155,6 +164,7 @@ export class CardsElementHelper {
             cardDescription.visibilityConditionsDescription,
             this._utils,
             this._userContext,
+            this._logService,
           )
         ) {
           continue;
@@ -195,7 +205,12 @@ export class CardsElementHelper {
     }
 
     if (this._element.useCardButtons && userResponse.clickedCardButton?.id) {
+      this._logService.debug('Clicked card button');
       const link = this.getButtonLink(userResponse.clickedCardButton.id);
+
+      if (isNil(link)) {
+        this._logService.warn('No link found for clicked card button');
+      }
       return link;
     }
 
@@ -203,7 +218,11 @@ export class CardsElementHelper {
       this._element.useGeneralButtons &&
       userResponse.clickedGeneralButton?.id
     ) {
+      this._logService.debug('Clicked general button');
       const link = this.getButtonLink(userResponse.clickedGeneralButton.id);
+      if (isNil(link)) {
+        this._logService.warn('No link found for clicked general button');
+      }
       return link;
     }
   }
@@ -236,12 +255,22 @@ export class CardsElementHelper {
       sourceDescription.cardsVariableId,
     );
 
+    if (dataSourceVariable === null) {
+      this._logService.error(
+        'No cards variable found in dynamic cards element. Skipping...',
+      );
+      return;
+    }
+
     const dataSourceVariableValue: Array<unknown> =
       this._userContext.getVariableValueByName(
         dataSourceVariable.name,
       ) as Array<unknown>;
 
     if (isNil(this._element.variableId)) {
+      this._logService.warn(
+        `Variable for store user response is not set. Please set variable or remove selectable cards. Skipping...`,
+      );
       return;
     }
 
@@ -249,9 +278,17 @@ export class CardsElementHelper {
       this._element.variableId,
     );
 
+    if (storeUserResponseVariable === null) {
+      this._logService.error(
+        'Not found variable for store user response. Skipping...',
+      );
+      return;
+    }
+
     if (this._element.selectableCards || this._element.useCardButtons) {
       if (!this._element.multipleChoice || this._element.useCardButtons) {
         if (userResponse.selectedCards.length === 0) {
+          this._logService.debug('No cards selected. Skipping...');
           return;
         }
 
@@ -308,13 +345,24 @@ export class CardsElementHelper {
 
     if (this._element.selectableCards || this._element.useCardButtons) {
       if (isNil(this._element.variableId)) {
+        this._logService.warn(
+          `Variable for store user response is not set. Please set variable or remove selectable cards. Skipping...`,
+        );
         return;
       }
 
       const variable = this._utils.getVariableById(this._element.variableId);
 
+      if (variable === null) {
+        this._logService.error(
+          'Not found variable for store user response. Skipping...',
+        );
+        return;
+      }
+
       if (!this._element.multipleChoice || this._element.useCardButtons) {
         if (userResponse.selectedCards.length === 0) {
+          this._logService.warn(`No cards selected. Skipping...`);
           return;
         }
 

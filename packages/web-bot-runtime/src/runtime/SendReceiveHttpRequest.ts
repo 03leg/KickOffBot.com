@@ -5,6 +5,7 @@ import {
 } from '@kickoffbot.com/types';
 import axios from 'axios';
 import { isEmpty } from 'lodash';
+import { LogService } from './log/LogService';
 
 export interface IParsedTextStrategy {
   parse(text: string): string;
@@ -19,12 +20,14 @@ export class SendReceiveHttpRequest {
 
   constructor(
     private element: HTTPRequestIntegrationUIElement,
+    private _logService: LogService,
     private parseTextStrategy?: IParsedTextStrategy,
   ) {}
 
   async send(): Promise<void> {
     if (isEmpty(this.element.url)) {
-      throw new Error('Property "url" can not be null here');
+      this._logService.error('The url is empty.');
+      return;
     }
 
     const url = this.getParsedValue(this.element.url);
@@ -88,7 +91,9 @@ export class SendReceiveHttpRequest {
 
       try {
         body = JSON.parse(body);
-      } catch {}
+      } catch {
+        this._logService.warn('The request body is not a valid JSON.');
+      }
 
       return body;
     }

@@ -1,7 +1,7 @@
 import React, { useCallback, useLayoutEffect, useRef } from 'react'
 import * as ReactDOM from "react-dom/client";
 import { useFlowDesignerStore } from '../store';
-import { Box, Button, LinearProgress } from '@mui/material';
+import { Box, Button, IconButton, LinearProgress } from '@mui/material';
 import {
     ThemeProvider
 } from "@mui/material/styles";
@@ -14,14 +14,16 @@ import { EditThemeToolbarButton } from '../FlowDesigner/components/EditThemeTool
 import RestartAltIcon from '@mui/icons-material/RestartAlt';
 import { env } from '~/env.mjs';
 import { ChatViewer, createChatTheme, KickoffbotChatStoreProvider } from '@kickoffbot.com/web-chat';
+import ListAltIcon from '@mui/icons-material/ListAlt';
 
 
 export const WebBotDemo = () => {
     const router = useRouter();
-    const { showWebBotDemo, project, toggleShowWebBotDemo } = useFlowDesignerStore((state) => ({
+    const { showWebBotDemo, project, toggleShowWebBotDemo, toggleShowChatLogs } = useFlowDesignerStore((state) => ({
         showWebBotDemo: state.showWebBotDemo,
         project: state.project,
-        toggleShowWebBotDemo: state.toggleShowWebBotDemo
+        toggleShowWebBotDemo: state.toggleShowWebBotDemo,
+        toggleShowChatLogs: state.toggleShowChatLogs
     }));
     const containerRef = useRef<HTMLDivElement>(null);
     const projectIdFromQuery = router.query.id as string;
@@ -85,6 +87,10 @@ export const WebBotDemo = () => {
 
     }, [toggleShowWebBotDemo]);
 
+    const handleShowLog = useCallback(() => {
+        toggleShowChatLogs();
+    }, [toggleShowChatLogs]);
+
     if (!showWebBotDemo) {
         return null;
     }
@@ -96,9 +102,19 @@ export const WebBotDemo = () => {
     return (
         <Box sx={{ display: 'flex', flexDirection: 'column', width: '480px', border: `1px solid ${Colors.BORDER}`, backgroundColor: 'white', height: '100%', minWidth: 480, marginLeft: ({ spacing }) => spacing(2), }}>
             <Box sx={{ borderBottom: `1px solid ${Colors.BORDER}`, height: 48, backgroundColor: '#f7f7f7', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                <Button variant="outlined" sx={{ textTransform: 'none', ml: 1 }} startIcon={<RestartAltIcon />} onClick={handleRestartBot}>
-                    Restart
-                </Button>
+                <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                    <Button variant="outlined" sx={{ textTransform: 'none', ml: 1 }} startIcon={<RestartAltIcon />} onClick={handleRestartBot}>
+                        Restart
+                    </Button>
+                    <IconButton
+                        color='default'
+                        onClick={handleShowLog}
+                        title='Log'
+                        sx={{ ml: 1 }}
+                    >
+                        <ListAltIcon />
+                    </IconButton>
+                </Box>
                 <EditThemeToolbarButton botProjectId={projectIdFromQuery} />
             </Box>
 

@@ -1,4 +1,4 @@
-import { Body, Controller, Post, Query } from '@nestjs/common';
+import { Body, Controller, Get, Post, Query } from '@nestjs/common';
 import { WebBotRuntimeService } from './web-bot-runtime.service';
 import { BotProject } from '@kickoffbot.com/types';
 
@@ -14,6 +14,13 @@ export class WebBotRuntimeController {
       response.projectId,
       response.project,
     );
+  }
+
+  @Get('get-bot-logs')
+  async getBotLogs(@Query('projectId') demoProjectId: string) {
+    const logs = this.botRuntimeService.getBotLogs(demoProjectId);
+
+    return logs;
   }
 
   @Post('start-demo-bot')

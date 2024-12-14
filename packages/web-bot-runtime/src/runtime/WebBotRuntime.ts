@@ -19,7 +19,6 @@ import {
   ChangeArrayVariableWorkflow,
   ChangeBooleanVariableWorkflow,
   ChangeNumberStringVariableWorkflow,
-  ChangeObjectVariableWorkflow,
   VariableType,
   WebLogicRemoveMessagesUIElement,
   ConditionUIElement,
@@ -39,10 +38,8 @@ import {
   WebMultipleChoiceUIElement,
   MultipleChoiceOptionDescription,
   WebLogicBrowserCodeUIElement,
-  ClientCodeDescriptionRuntime,
   CodeResultDescription,
   NOW_DATE_TIME_VARIABLE_NAME,
-  BotVariable,
 } from '@kickoffbot.com/types';
 import { WebBotRuntimeUtils } from './WebBotRuntimeUtils';
 import { WebUserContext } from './WebUserContext';
@@ -61,28 +58,44 @@ import { CardsElementHelper } from './CardsElementHelper';
 import { MediaMessageHelper } from './MediaMessageHelper';
 import { MultipleChoiceElementHelper } from './helper/MultipleChoiceElementHelper';
 import { ChangeDateTimeVariableHelper } from './helper/ChangeDateTimeVariableHelper';
+import { LogService } from './log/LogService';
 
 export class WebBotRuntime {
   private _utils: WebBotRuntimeUtils;
   private _userContext: WebUserContext;
   private _requestElementConverter: RequestElementConverter;
+  private _logService: LogService;
 
   constructor(
     private _project: BotProject,
+    logService: LogService,
     externalVariables?: Record<string, unknown>,
   ) {
-    this._utils = new WebBotRuntimeUtils(_project);
-    this._userContext = new WebUserContext(_project, externalVariables);
+    this._logService = logService;
+
+    this._logService.debug('Initializing runtime');
+
+    this._utils = new WebBotRuntimeUtils(_project, this._logService);
+    this._userContext = new WebUserContext(
+      _project,
+      this._logService,
+      externalVariables,
+    );
     this._requestElementConverter = new RequestElementConverter(
       this._utils,
       this._userContext,
+      this._logService,
     );
+
+    this._logService.debug('Runtime initialized');
   }
 
   async startBot() {
+    this._logService.debug('Starting bot');
     const startLink = this._utils.getLinkByBlockId('/start');
 
     if (isNil(startLink)) {
+      this._logService.warn('No start block found.');
       return [
         this.getServiceMessageToChat(
           'It looks like your bot is missing a start block! 😊 Please add one to get things going. 😊',
@@ -91,6 +104,16 @@ export class WebBotRuntime {
     }
 
     const block = this._utils.getBlockById(startLink.input.blockId);
+
+    if (isNil(block)) {
+      this._logService.error('No start block found.');
+      return [
+        this.getServiceMessageToChat(
+          'Could not find start block. Please check your configuration.',
+        ),
+      ];
+    }
+
     const firstElement = block.elements[0];
     const response = await this.handleElement(block, firstElement);
 
@@ -116,6 +139,15 @@ export class WebBotRuntime {
     block: FlowDesignerUIBlockDescription,
     element: UIElement,
   ) {
+    this._logService.logCurrentState(this._userContext);
+
+    this._logService.debug(`<>`, {
+      elementPoint: {
+        blockId: block.id,
+        elementId: element.id,
+      },
+    });
+
     let shouldCalcNextStep = true;
     let shouldHandleNextElement = true;
 
@@ -129,6 +161,13 @@ export class WebBotRuntime {
           typedElement.htmlContent ?? '',
           this._userContext,
         );
+
+        this._logService.debug(`Got parsed message.`, {
+          botMessage: {
+            attachmentsCount: typedElement.attachments.length,
+            message: messageText,
+          },
+        });
 
         chatItems.push({
           content: {
@@ -164,10 +203,12 @@ export class WebBotRuntime {
           | WebMultipleChoiceUIElement
           | WebInputDateTimeUIElement;
 
+        const requestElement =
+          this._requestElementConverter.getRequestElement(typedElement);
+
         const request: ChatItemWebRuntime = {
           content: {
-            element:
-              this._requestElementConverter.getRequestElement(typedElement),
+            element: requestElement,
           },
           uiElementId: typedElement.id,
           id: v4(),
@@ -271,6 +312,13 @@ export class WebBotRuntime {
       this.calcNextStep(block, element);
     }
 
+    this._logService.debug(`</>`, {
+      elementPoint: {
+        blockId: block.id,
+        elementId: element.id,
+      },
+    });
+
     if (shouldHandleNextElement) {
       const newItems = await this.checkNextElement();
       chatItems.push(...newItems);
@@ -285,17 +333,10 @@ export class WebBotRuntime {
     const getRequestedVariables = () => {
       const result: Record<string, unknown> = {};
       for (const variableId of element.requiredVariableIds) {
-        let variable: BotVariable | null = null;
-        try {
-          variable = this._utils.getVariableById(variableId);
-        } catch (error) {
-          console.error(
-            "Requested variable doesn't exist: " + variableId,
-            error,
-          );
-        }
+        const variable = this._utils.getVariableById(variableId);
 
         if (isNil(variable)) {
+          this._logService.error('Could not find variable to send to browser');
           continue;
         }
 
@@ -331,6 +372,7 @@ export class WebBotRuntime {
       this._utils,
       this._userContext,
       this._project,
+      this._logService,
     );
 
     const requestElement = helper.getRequestElement();
@@ -453,7 +495,7 @@ export class WebBotRuntime {
   }
 
   public async handleUserResponse(elementId: string, value: unknown) {
-    throwIfNil(elementId);
+    this._logService.logCurrentState(this._userContext);
 
     const typedElement = this._utils.getElementById(elementId) as
       | WebInputTextUIElement
@@ -467,6 +509,15 @@ export class WebBotRuntime {
       // | WebLogicBrowserCodeUIElement
       | WebInputDateTimeUIElement;
 
+    if (isNil(typedElement)) {
+      this._logService.error(
+        'Could not find element by id. Please check your configuration',
+      );
+      return;
+    }
+
+    this._logService.logUserInput(typedElement.type, value);
+
     if (typedElement.type === ElementType.WEB_LOGIC_BROWSER_CODE) {
       await this.handleUserBrowserCodeResponse(
         typedElement as WebLogicBrowserCodeUIElement,
@@ -477,6 +528,7 @@ export class WebBotRuntime {
 
     if (typedElement.type === ElementType.WEB_INPUT_BUTTONS) {
       const localResult = await this.handleUserButtonsResponse(
+        typedElement.id,
         value as RequestButtonDescription,
       );
 
@@ -502,8 +554,18 @@ export class WebBotRuntime {
     }
 
     if (typedElement.variableId) {
+      this._logService.logStartPointById(typedElement.id);
+
       const variable = this._utils.getVariableById(typedElement.variableId);
+
+      if (isNil(variable)) {
+        this._logService.error('Could not find variable to update. Skipping.');
+        return;
+      }
+
       this._userContext.updateVariable(variable.name, value);
+
+      this._logService.logFinishPointById(typedElement.id);
     }
 
     return await this.checkNextElement();
@@ -513,37 +575,50 @@ export class WebBotRuntime {
     typedElement: WebLogicBrowserCodeUIElement,
     result: CodeResultDescription,
   ) {
+    this._logService.logStartPointById(typedElement.id);
+
     if (
       isNil(result.updatedVariables) ||
       typeof result.updatedVariables !== 'object' ||
       Object.keys(result.updatedVariables).length === 0
     ) {
+      this._logService.warn(`No variables were updated`);
       return;
     }
 
     const modifiedVariableNames = typedElement.modifiedVariableIds.map(
-      (v) => this._utils.getVariableById(v).name,
+      (v) => this._utils.getVariableById(v)?.name ?? '',
     );
 
     for (const [key, value] of Object.entries(result.updatedVariables)) {
-      if (!modifiedVariableNames.includes(key)) continue;
+      if (!modifiedVariableNames.includes(key)) {
+        this._logService.warn(
+          `Variable with name '${key}' not found for update`,
+        );
+        continue;
+      }
 
       this._userContext.updateVariable(key, value);
     }
+
+    this._logService.logFinishPointById(typedElement.id);
   }
 
   private async handleUserMultipleChoiceResponse(
     element: WebMultipleChoiceUIElement,
     value: MultipleChoiceOptionDescription[],
   ) {
+    this._logService.logStartPointById(element.id);
     const helper = new MultipleChoiceElementHelper(
       element,
       this._utils,
       this._userContext,
+      this._logService,
     );
 
     helper.handleUserResponse(value);
 
+    this._logService.logFinishPointById(element.id);
     return await this.checkNextElement();
   }
 
@@ -551,28 +626,47 @@ export class WebBotRuntime {
     element: WebInputCardsUIElement,
     value: CardsUserResponse,
   ) {
+    this._logService.logStartPointById(element.id);
     const helper = new CardsElementHelper(
       element,
       this._utils,
       this._userContext,
       this._project,
+      this._logService,
     );
 
     const link = helper.handleUserResponse(value);
 
     if (!isNil(link)) {
       const block = this._utils.getBlockById(link.input.blockId);
-      const element = block.elements[0];
+      if (isNil(block)) {
+        this._logService.error('Could not find block by link. Skipping...');
+        return;
+      }
+      const nextElement = block.elements[0];
 
-      throwIfNil(element);
+      if (isNil(nextElement)) {
+        this._logService.error(
+          'Could not find next element by link. Skipping.',
+        );
+        return;
+      }
 
-      return await this.handleElement(block, element);
+      this._logService.logFinishPointById(element.id);
+
+      return await this.handleElement(block, nextElement);
     }
+
+    this._logService.logFinishPointById(element.id);
 
     return await this.checkNextElement();
   }
 
-  public async handleUserButtonsResponse(btn: RequestButtonDescription) {
+  public async handleUserButtonsResponse(
+    elementId: string,
+    btn: RequestButtonDescription,
+  ) {
+    this._logService.logStartPointById(elementId);
     const callbackData = btn.id;
 
     const buttonsSourceStrategy =
@@ -585,6 +679,7 @@ export class WebBotRuntime {
         this._project,
         this._userContext,
         this._utils,
+        this._logService,
       );
     } else if (buttonsSourceStrategy === ButtonsSourceStrategy.Manual) {
       link = RequestButtonsManager.handleCallbackQueryManual(
@@ -594,26 +689,45 @@ export class WebBotRuntime {
     }
 
     if (isNil(link)) {
-      console.log('Link is empty');
+      this._logService.warn(
+        `No link found for the clicked button. Skipping...`,
+      );
+      this._logService.logFinishPointById(elementId);
       return;
     }
 
     const block = this._utils.getBlockById(link.input.blockId);
+    if (isNil(block)) {
+      this._logService.error('Could not find block by link. Skipping...');
+      return;
+    }
     const element = block.elements[0];
 
     throwIfNil(element);
+
+    this._logService.debug('Found next element to process by link');
+    this._logService.logFinishPointById(elementId);
 
     return await this.handleElement(block, element);
   }
 
   private handleChangeVariableElement(element: ChangeVariableUIElement) {
     if (!element.selectedVariableId) {
+      this._logService.error(
+        'No selected variable in change variable element. You need to select variable to change or remove useless element.',
+      );
       return;
     }
 
     const userContext = this._userContext;
 
     const variable = this._utils.getVariableById(element.selectedVariableId);
+
+    if (isNil(variable)) {
+      this._logService.error('Could not find variable to update. Skipping.');
+      return;
+    }
+
     if (element.restoreInitialValue) {
       try {
         userContext.updateVariable(
@@ -623,6 +737,9 @@ export class WebBotRuntime {
       } catch {
         userContext.updateVariable(variable.name, variable.value as string);
       }
+      this._logService.debug(
+        `Restored initial value of variable with name: ${variable.name}`,
+      );
       return;
     }
 
@@ -689,6 +806,7 @@ export class WebBotRuntime {
           variable,
           userContext,
           this._utils,
+          this._logService,
         );
 
         break;
@@ -703,6 +821,7 @@ export class WebBotRuntime {
           element,
           userContext,
           this._utils,
+          this._logService,
         ) as object;
         break;
       }
@@ -716,7 +835,9 @@ export class WebBotRuntime {
           element,
           userContext,
           this._utils,
+          this._logService,
         );
+
         break;
       }
 
@@ -751,6 +872,7 @@ export class WebBotRuntime {
       element,
       this._utils,
       this._userContext,
+      this._logService,
     );
 
     if (conditionIsTrue) {
@@ -762,6 +884,12 @@ export class WebBotRuntime {
       }
 
       const block = this._utils.getBlockById(link.input.blockId);
+
+      if (isNil(block)) {
+        this._logService.error(
+          'Could not find block by link to continue. Skipping.',
+        );
+      }
 
       this._userContext.setNextStep({
         blockId: block.id,
@@ -781,6 +909,7 @@ export class WebBotRuntime {
       this._project,
       this._userContext,
       this._utils,
+      this._logService,
     );
 
     await helper.handleElement(element);
@@ -793,7 +922,7 @@ export class WebBotRuntime {
       return this._utils.getParsedText(text, this._userContext);
     };
 
-    const instance = new SendReceiveHttpRequest(element, {
+    const instance = new SendReceiveHttpRequest(element, this._logService, {
       parse: parseText,
     });
 
@@ -809,10 +938,16 @@ export class WebBotRuntime {
         const variable = this._utils.getVariableById(
           element.responseDataVariableId,
         );
+        if (isNil(variable)) {
+          this._logService.error(
+            'Could not find variable to update. Skipping.',
+          );
+          return;
+        }
         this._userContext.updateVariable(variable.name, responseData);
       }
     } catch (err) {
-      console.error('handleHttpRequestElement', err);
+      this._logService.realError('Failed to send request', err);
     }
   }
 

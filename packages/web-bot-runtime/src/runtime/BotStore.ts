@@ -15,10 +15,10 @@ export class BotStore {
 
   public static async getActualBotProjectById(
     projectId: string,
-  ): Promise<BotProject | null> {
+  ): Promise<{ project: BotProject; botName: string; author: string } | null> {
     const botDescription = await this._prisma.botDescription.findUnique({
       where: { deleted: false, id: projectId },
-      select: { contentId: true, botType: true },
+      select: { contentId: true, botType: true, name: true, user: true },
     });
 
     if (!botDescription || !botDescription.contentId) {
@@ -34,6 +34,10 @@ export class BotStore {
       return null;
     }
 
-    return JSON.parse(botContent.content.toString()) as BotProject;
+    return {
+      project: JSON.parse(botContent.content.toString()) as BotProject,
+      botName: botDescription.name,
+      author: botDescription.user.email,
+    };
   }
 }

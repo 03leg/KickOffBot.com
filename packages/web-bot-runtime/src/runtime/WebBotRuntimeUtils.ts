@@ -13,13 +13,15 @@ import {
 import { isNil, isPlainObject } from 'lodash';
 import { Parser } from 'expr-eval';
 import { WebUserContext } from './WebUserContext';
-import { throwIfNil } from 'src/utils/guard';
 import * as moment from 'moment';
+import { LogService } from './log/LogService';
 
 export class WebBotRuntimeUtils {
   private _botProject: BotProject;
+  private _logService: LogService;
 
-  public constructor(project: BotProject) {
+  public constructor(project: BotProject, logService: LogService) {
+    this._logService = logService;
     this._botProject = project;
   }
 
@@ -41,7 +43,8 @@ export class WebBotRuntimeUtils {
     );
 
     if (isNil(currentBlock)) {
-      throw new Error('InvalidOperationError: block is null');
+      this._logService.error(`Could not find block by id`);
+      return null;
     }
 
     return currentBlock;
@@ -138,9 +141,16 @@ export class WebBotRuntimeUtils {
             return variableValue.length.toString();
           }
 
-          throwIfNil(path);
+          if (isNil(path)) {
+            this._logService.error(
+              `Cannot convert an array of objects to a string without a path`,
+            );
+            return '';
+          }
+
           const valueForArrayOfObjects =
             WebBotRuntimeUtils.getValueForArrayOfNumbersOrString(
+              this._logService,
               // eslint-disable-next-line @typescript-eslint/no-explicit-any
               variableValue.map((v: any) => v[path] as number),
               converter,
@@ -154,6 +164,7 @@ export class WebBotRuntimeUtils {
         ) {
           const valueForArrayOfNumbers =
             WebBotRuntimeUtils.getValueForArrayOfNumbersOrString(
+              this._logService,
               variableValue as number[],
               converter,
               converterParams,
@@ -193,6 +204,7 @@ export class WebBotRuntimeUtils {
   }
 
   private static getValueForArrayOfNumbersOrString(
+    logService: LogService,
     arrayOfItems: number[],
     converter: VariableConverter,
     converterParams?: (string | number)[],
@@ -234,7 +246,10 @@ export class WebBotRuntimeUtils {
           .toString();
       }
       default: {
-        throw new Error('InvalidOperationError: converter is not supported');
+        logService.error(
+          `InvalidOperationError: converter ${converter} is not supported. Returning empty string`,
+        );
+        return '';
       }
     }
   }
@@ -281,11 +296,14 @@ export class WebBotRuntimeUtils {
   ): string {
     const defaultResult = '';
 
+    this._logService.debug(`Get template value ${templateName}`);
+
     const template = (this._botProject.templates ?? []).find(
       (t) => t.name === templateName,
     );
 
     if (isNil(template)) {
+      this._logService.error(`Template ${templateName} not found`);
       return defaultResult;
     }
 
@@ -294,6 +312,9 @@ export class WebBotRuntimeUtils {
     )?.name;
 
     if (isNil(variableName)) {
+      this._logService.error(
+        `Variable ${template.contextVariableId} not found`,
+      );
       return defaultResult;
     }
 
@@ -301,6 +322,8 @@ export class WebBotRuntimeUtils {
       variableName,
     ) as unknown[];
     let result = '';
+
+    this._logService.debug(`Template items count = ${arrayItems.length} `);
 
     for (let index = 0; index < arrayItems.length; index++) {
       const item = arrayItems[index];
@@ -313,6 +336,7 @@ export class WebBotRuntimeUtils {
     }
 
     if (arrayItems.length === 0 && template.showContentWhenArrayIsEmpty) {
+      this._logService.debug(`Show template content when array is empty`);
       result = this.getParsedText(
         template.emptyArrayHtmlContent ?? defaultResult,
         userContext,
@@ -405,13 +429,14 @@ export class WebBotRuntimeUtils {
     return currentLink;
   }
 
-  public getVariableById(variableId: string): BotVariable {
+  public getVariableById(variableId: string): BotVariable | null {
     const currentVariable = this._botProject.variables.find(
       (v) => v.id === variableId,
     );
 
     if (isNil(currentVariable)) {
-      throw new Error('InvalidOperationError: variable is null');
+      this._logService.error("Variable not found. It's very bad! 😰");
+      return null;
     }
 
     return currentVariable;
@@ -489,7 +514,7 @@ export class WebBotRuntimeUtils {
     const currentElement = elements.find((e) => e.id === elementId);
 
     if (isNil(currentElement)) {
-      throw new Error('InvalidOperationError: element is null');
+      this._logService.error('Could not find element by id');
     }
 
     return currentElement;

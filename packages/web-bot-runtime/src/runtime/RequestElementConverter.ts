@@ -27,11 +27,13 @@ import {
 import { WebBotRuntimeUtils } from './WebBotRuntimeUtils';
 import { WebUserContext } from './WebUserContext';
 import { RequestButtonsManager } from './RequestButtonsManager';
+import { LogService } from './log/LogService';
 
 export class RequestElementConverter {
   constructor(
     private _utils: WebBotRuntimeUtils,
     private _userContext: WebUserContext,
+    private _logService: LogService,
   ) {}
 
   public getRequestElement(typedElement: UIElement): RequestElementBase {
@@ -109,11 +111,21 @@ export class RequestElementConverter {
       const variable = this._utils.getVariableById(
         element.availableDateTimesVariableId,
       );
-      const availableDatesVariableValue =
-        this._userContext.getVariableValueByName(variable.name) as string[];
+      if (variable === null) {
+        this._logService.error(
+          'Could not find variable with available date times.',
+        );
+      } else {
+        const availableDatesVariableValue =
+          this._userContext.getVariableValueByName(variable.name) as string[];
 
-      if (Array.isArray(availableDatesVariableValue)) {
-        result.variableAvailableDateTimes = availableDatesVariableValue;
+        if (Array.isArray(availableDatesVariableValue)) {
+          result.variableAvailableDateTimes = availableDatesVariableValue;
+        } else {
+          this._logService.error(
+            `Available dates variable value is not an array. It's not supported.`,
+          );
+        }
       }
     }
 
@@ -124,11 +136,19 @@ export class RequestElementConverter {
       const variable = this._utils.getVariableById(
         element.disabledDatesVariableId,
       );
-      const disabledDatesVariableValue =
-        this._userContext.getVariableValueByName(variable.name) as string[];
+      if (variable === null) {
+        this._logService.error('Could not find variable with disabled dates.');
+      } else {
+        const disabledDatesVariableValue =
+          this._userContext.getVariableValueByName(variable.name) as string[];
 
-      if (Array.isArray(disabledDatesVariableValue)) {
-        result.disabledDates = disabledDatesVariableValue;
+        if (Array.isArray(disabledDatesVariableValue)) {
+          result.disabledDates = disabledDatesVariableValue;
+        } else {
+          this._logService.error(
+            `Disabled dates variable value is not an array. It's not supported.`,
+          );
+        }
       }
     }
 
@@ -139,11 +159,19 @@ export class RequestElementConverter {
       const variable = this._utils.getVariableById(
         element.disabledTimesVariableId,
       );
-      const disabledTimesVariableValue =
-        this._userContext.getVariableValueByName(variable.name) as string[];
+      if (variable === null) {
+        this._logService.error('Could not find variable with disabled times.');
+      } else {
+        const disabledTimesVariableValue =
+          this._userContext.getVariableValueByName(variable.name) as string[];
 
-      if (Array.isArray(disabledTimesVariableValue)) {
-        result.disabledTimes = disabledTimesVariableValue;
+        if (Array.isArray(disabledTimesVariableValue)) {
+          result.disabledTimes = disabledTimesVariableValue;
+        } else {
+          this._logService.error(
+            `Disabled times variable value is not an array. It's not supported.`,
+          );
+        }
       }
     }
 
@@ -154,11 +182,21 @@ export class RequestElementConverter {
       const variable = this._utils.getVariableById(
         element.disabledDateAndTimesVariableId,
       );
-      const disabledDateAndTimesVariableValue =
-        this._userContext.getVariableValueByName(variable.name) as string[];
+      if (variable === null) {
+        this._logService.error(
+          'Could not find variable with disabled date and times.',
+        );
+      } else {
+        const disabledDateAndTimesVariableValue =
+          this._userContext.getVariableValueByName(variable.name) as string[];
 
-      if (Array.isArray(disabledDateAndTimesVariableValue)) {
-        result.disabledDateAndTimes = disabledDateAndTimesVariableValue;
+        if (Array.isArray(disabledDateAndTimesVariableValue)) {
+          result.disabledDateAndTimes = disabledDateAndTimesVariableValue;
+        } else {
+          this._logService.error(
+            `Disabled date and times variable value is not an array. It's not supported.`,
+          );
+        }
       }
     }
 
@@ -170,20 +208,28 @@ export class RequestElementConverter {
         element.availableDateTimes === AvailableDateTimes.FutureDatesAndToday)
     ) {
       const variable = this._utils.getVariableById(element.parkTimeVariableId);
-      let parkTimeVariableValue = this._userContext.getVariableValueByName(
-        variable.name,
-      ) as number;
+      if (variable === null) {
+        this._logService.error('Could not find variable with park time.');
+      } else {
+        let parkTimeVariableValue = this._userContext.getVariableValueByName(
+          variable.name,
+        ) as number;
 
-      if (typeof parkTimeVariableValue === 'string') {
-        parkTimeVariableValue = Number(parkTimeVariableValue);
-      }
+        if (typeof parkTimeVariableValue === 'string') {
+          parkTimeVariableValue = Number(parkTimeVariableValue);
+        }
 
-      if (
-        typeof parkTimeVariableValue === 'number' &&
-        !isNaN(parkTimeVariableValue)
-      ) {
-        result.parkTime = parkTimeVariableValue;
-        result.parkTimeType = element.parkTimeType;
+        if (
+          typeof parkTimeVariableValue === 'number' &&
+          !isNaN(parkTimeVariableValue)
+        ) {
+          result.parkTime = parkTimeVariableValue;
+          result.parkTimeType = element.parkTimeType;
+        } else {
+          this._logService.error(
+            `Could not parse variable value as number: ${parkTimeVariableValue} (${typeof parkTimeVariableValue}).`,
+          );
+        }
       }
     }
 
@@ -248,6 +294,7 @@ export class RequestElementConverter {
         element.id,
         element,
         this._utils,
+        this._logService,
       ),
     };
 
@@ -315,10 +362,20 @@ export class RequestElementConverter {
         const variable = this._utils.getVariableById(
           element.defaultOptionsVariableId,
         );
-        const defaultOptionsVariableValue =
-          this._userContext.getVariableValueByName(variable.name) as string[];
-        if (Array.isArray(defaultOptionsVariableValue)) {
-          selectedOptions = defaultOptionsVariableValue;
+        if (variable === null) {
+          this._logService.error(
+            'Could not find variable with default options.',
+          );
+        } else {
+          const defaultOptionsVariableValue =
+            this._userContext.getVariableValueByName(variable.name) as string[];
+          if (Array.isArray(defaultOptionsVariableValue)) {
+            selectedOptions = defaultOptionsVariableValue;
+          } else {
+            this._logService.error(
+              "Could not parse variable value as array for default options. It's not supported.",
+            );
+          }
         }
       } else if (Array.isArray(element.defaultOptions)) {
         selectedOptions = element.defaultOptions;
@@ -328,57 +385,78 @@ export class RequestElementConverter {
         element.dataSourceVariableId,
       );
 
-      const dataSourceVariableValue = this._userContext.getVariableValueByName(
-        dataSourceVariable.name,
-      );
+      if (dataSourceVariable === null) {
+        this._logService.error('Could not find variable with data source.');
+      } else {
+        const dataSourceVariableValue =
+          this._userContext.getVariableValueByName(dataSourceVariable.name);
 
-      if (Array.isArray(dataSourceVariableValue)) {
-        for (let i = 0; i < dataSourceVariableValue.length; i++) {
-          const optionValue = this._utils.getTextForContextObject(
-            dataSourceVariableValue[i],
-            element.optionValue,
-            i,
-          );
-
-          let optionTitle = optionValue;
-
-          if (element.optionTitle) {
-            optionTitle = this._utils.getTextForContextObject(
+        if (Array.isArray(dataSourceVariableValue)) {
+          for (let i = 0; i < dataSourceVariableValue.length; i++) {
+            const optionValue = this._utils.getTextForContextObject(
               dataSourceVariableValue[i],
-              element.optionTitle,
+              element.optionValue,
               i,
             );
-          }
 
-          options.push({
-            title: optionTitle,
-            value: optionValue,
-            autoId: i.toString(),
-          });
-        }
-      }
+            let optionTitle = optionValue;
 
-      if (element.defaultOptionsVariableId) {
-        const variable = this._utils.getVariableById(
-          element.defaultOptionsVariableId,
-        );
-        const defaultOptionsVariableValue =
-          this._userContext.getVariableValueByName(variable.name) as string[];
-        if (Array.isArray(defaultOptionsVariableValue)) {
-          if (
-            defaultOptionsVariableValue.length > 0 &&
-            typeof defaultOptionsVariableValue[0] === 'object'
-          ) {
-            selectedOptions = defaultOptionsVariableValue.map((o, index) => {
-              const optionValue = this._utils.getTextForContextObject(
-                o,
-                element.optionValue,
-                index,
+            if (element.optionTitle) {
+              optionTitle = this._utils.getTextForContextObject(
+                dataSourceVariableValue[i],
+                element.optionTitle,
+                i,
               );
-              return optionValue;
+            }
+
+            options.push({
+              title: optionTitle,
+              value: optionValue,
+              autoId: i.toString(),
             });
+          }
+        } else {
+          this._logService.error(
+            `Could not parse variable ${dataSourceVariable.name} value as array for data source. It's not supported.`,
+          );
+        }
+
+        if (element.defaultOptionsVariableId) {
+          const variable = this._utils.getVariableById(
+            element.defaultOptionsVariableId,
+          );
+          if (variable === null) {
+            this._logService.error(
+              'Could not find variable with default options.',
+            );
           } else {
-            selectedOptions = defaultOptionsVariableValue;
+            const defaultOptionsVariableValue =
+              this._userContext.getVariableValueByName(
+                variable.name,
+              ) as string[];
+            if (Array.isArray(defaultOptionsVariableValue)) {
+              if (
+                defaultOptionsVariableValue.length > 0 &&
+                typeof defaultOptionsVariableValue[0] === 'object'
+              ) {
+                selectedOptions = defaultOptionsVariableValue.map(
+                  (o, index) => {
+                    const optionValue = this._utils.getTextForContextObject(
+                      o,
+                      element.optionValue,
+                      index,
+                    );
+                    return optionValue;
+                  },
+                );
+              } else {
+                selectedOptions = defaultOptionsVariableValue;
+              }
+            } else {
+              this._logService.error(
+                `Could not parse variable ${variable.name} value as array for data source. It's not supported.`,
+              );
+            }
           }
         }
       }
