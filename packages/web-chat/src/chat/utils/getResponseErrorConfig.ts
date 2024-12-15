@@ -8,7 +8,7 @@ enum ResponseErrorCode {
 }
 
 export function getResponseErrorConfig(error: unknown, defaultMessage: string) {
-  if (axios.isAxiosError(error) && Object.hasOwnProperty.call(error.response?.data, "errorCode")) {
+  if (axios.isAxiosError(error) && Object.hasOwnProperty.call(error.response?.data ?? {}, "errorCode")) {
     switch (error.response?.data.errorCode) {
       case ResponseErrorCode.NO_FOUND_RUNTIME_CONTEXT:
         return {

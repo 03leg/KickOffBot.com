@@ -26,7 +26,8 @@ export class WebBotRuntimeController {
     );
 
     if (Object.hasOwnProperty.call(result, 'errorCode')) {
-      return nestResponse.status(HttpStatus.INTERNAL_SERVER_ERROR).json(result);
+      nestResponse.status(HttpStatus.INTERNAL_SERVER_ERROR).json(result);
+      return;
     }
 
     return result;
@@ -51,7 +52,8 @@ export class WebBotRuntimeController {
     );
 
     if (Object.hasOwnProperty.call(result, 'errorCode')) {
-      return nestResponse.status(HttpStatus.INTERNAL_SERVER_ERROR).json(result);
+      nestResponse.status(HttpStatus.INTERNAL_SERVER_ERROR).json(result);
+      return;
     }
 
     return result;
@@ -69,7 +71,8 @@ export class WebBotRuntimeController {
     );
 
     if (Object.hasOwnProperty.call(result, 'errorCode')) {
-      return nestResponse.status(HttpStatus.INTERNAL_SERVER_ERROR).json(result);
+      nestResponse.status(HttpStatus.INTERNAL_SERVER_ERROR).json(result);
+      return;
     }
 
     return result;
@@ -88,7 +91,8 @@ export class WebBotRuntimeController {
     );
 
     if (Object.hasOwnProperty.call(result, 'errorCode')) {
-      return nestResponse.status(HttpStatus.INTERNAL_SERVER_ERROR).json(result);
+      nestResponse.status(HttpStatus.INTERNAL_SERVER_ERROR).json(result);
+      return;
     }
 
     return result;
